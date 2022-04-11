@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Firebase } from "../utils/firebase";
 
 const MessageContent = styled.div`
   width: 70%;
@@ -25,6 +26,7 @@ const MessageInput = styled.input`
   background: #f2f2f2;
   border-radius: 20px;
   padding-left: 20px;
+  font-size: 16px;
 
   &:focus {
     outline: none;
@@ -49,6 +51,7 @@ const MessageSentByMe = styled.div`
   display: flex;
   align-items: center;
   max-width: 40%;
+  margin-bottom: 5px;
 `;
 
 const MessageSentByOthers = styled.div`
@@ -59,28 +62,53 @@ const MessageSentByOthers = styled.div`
   display: flex;
   align-items: center;
   max-width: 40%;
+  margin-bottom: 5px;
 `;
 
 function Detail({ chats, uid, chatId, setChatId }) {
+  const [message, setMessage] = React.useState("");
+  const selectedChat = chats.find((chat) => chat.id === chatId);
+  const myRole = selectedChat
+    ? selectedChat.members.find((member) => member.uid === uid).role
+    : 0;
+
+  async function updateChat() {
+    console.log(message);
+    Firebase.updateDoc(Firebase.doc(Firebase.db, "chats", chatId), {
+      messages: [
+        ...selectedChat.messages,
+        {
+          content: message,
+          sender: myRole,
+          timestamp: Firebase.Timestamp.fromDate(new Date()),
+        },
+      ],
+      updateTime: Firebase.Timestamp.fromDate(new Date()),
+    });
+    setMessage("");
+    setChatId(selectedChat.id);
+  }
   return (
     <MessageContent>
       {chatId
-        ? chats
-            .filter((chat) => chat.id === chatId)[0]
-            .messages.map((detail, index) => (
-              <React.Fragment key={index}>
-                {detail.sender === uid ? (
-                  <MessageSentByMe>{detail.content}</MessageSentByMe>
-                ) : (
-                  <MessageSentByOthers>{detail.content}</MessageSentByOthers>
-                )}
-                <SendMessageBlock>
-                  <MessageInput placeholder="Aa" />
-                  <SendMessageButton />
-                </SendMessageBlock>
-              </React.Fragment>
-            ))
-        : ""}
+        ? selectedChat.messages.map((detail, index) => (
+            <React.Fragment key={index}>
+              {detail.sender === myRole ? (
+                <MessageSentByMe>{detail.content}</MessageSentByMe>
+              ) : (
+                <MessageSentByOthers>{detail.content}</MessageSentByOthers>
+              )}
+              <SendMessageBlock>
+                <MessageInput
+                  placeholder="Aa"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                />
+                <SendMessageButton onClick={updateChat} />
+              </SendMessageBlock>
+            </React.Fragment>
+          ))
+        : "loading..."}
     </MessageContent>
   );
 }

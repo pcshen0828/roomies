@@ -1,5 +1,7 @@
-import React from "react";
+import { Firestore } from "firebase/firestore";
+import React, { Fragment } from "react";
 import styled from "styled-components";
+import { Firebase } from "../utils/firebase";
 
 const MessageList = styled.div`
   width: 30%;
@@ -16,6 +18,7 @@ const MessageItem = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  background: ${(props) => (props.active ? "#f2f5f7" : "fff")};
 
   &:hover {
     background: #f2f5f7;
@@ -26,7 +29,6 @@ const MessageImg = styled.img`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 1px solid #000;
   margin-right: 10px;
 `;
 
@@ -44,7 +46,29 @@ const LastMessage = styled.div`
   color: #505d68;
 `;
 
-function List({ chats, uid, chatId, setChatId }) {
+function List({ chats, uid, setChatId }) {
+  const [chatUserData, setChatUserData] = React.useState([]);
+
+  React.useEffect(() => {
+    const chatMates = chats
+      .map((chat) => chat.userIDs)
+      .map((uids) => uids.find((userid) => userid !== uid));
+    async function getUserData() {
+      const query = Firebase.query(
+        Firebase.collection(Firebase.db, "users"),
+        Firebase.where("uid", "in", chatMates)
+      );
+      const querySnapshot = await Firebase.getDocs(query);
+      const userData = querySnapshot.docs.map((doc) => doc.data());
+      setChatUserData(userData);
+    }
+    if (chatMates.length) {
+      getUserData();
+    }
+
+    return function cleanup() {};
+  }, [chats]);
+
   function calcTimeGap(time) {
     const ObjectTime = Date.parse(new Date(time));
     const now = Date.parse(new Date());
@@ -68,16 +92,29 @@ function List({ chats, uid, chatId, setChatId }) {
   return (
     <MessageList>
       {chats.map((chat, index) => (
-        <MessageItem key={index} onClick={() => setChatId(chat.id)}>
+        <MessageItem
+          key={index}
+          onClick={() => {
+            setChatId(chat.id);
+          }}
+        >
           <MessageImg
             src={
-              chat.members.filter((member) => member.uid !== uid)[0]
-                .profileImageUrl
+              chatUserData.length &&
+              chatUserData.find(
+                (userData) =>
+                  userData.uid === chat.userIDs.find((userID) => userID !== uid)
+              ).profileImage
             }
           />
           <MessageOverview>
             <MessageObjectName>
-              {chat.members.filter((member) => member.uid !== uid)[0].name}
+              {chatUserData.length &&
+                chatUserData.find(
+                  (userData) =>
+                    userData.uid ===
+                    chat.userIDs.find((userID) => userID !== uid)
+                ).alias}
             </MessageObjectName>
             <LastMessage>
               {`${chat.messages.at(-1).content.slice(0, 10)}`}

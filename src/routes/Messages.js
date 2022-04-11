@@ -23,19 +23,22 @@ const InnerWrapper = styled.div`
 
 function Messages() {
   const [chats, setChats] = React.useState([]);
-  const uid = "WsCusZrITBV9gnZd4u91";
+  const uid = "fDtyceocFJwdyVakq25h";
   const [chatId, setChatId] = React.useState("");
 
   React.useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "chats"),
-      Firebase.where("uid", "array-contains", uid),
+      Firebase.where("userIDs", "array-contains", uid),
       Firebase.orderBy("updateTime", "desc")
     );
 
     const unsubscribe = Firebase.onSnapshot(query, (querySnapshot) => {
       console.log(querySnapshot.docs.map((doc) => doc.data()));
-      setChats(querySnapshot.docs.map((doc) => doc.data()));
+      const data = querySnapshot.docs.map((doc) => doc.data());
+      setChats(data);
+      // modify me
+      setChatId(data[0].id);
     });
 
     return function cleanup() {
