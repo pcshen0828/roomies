@@ -17,7 +17,7 @@ function NavBar() {
     <Wrapper>
       <StyledNavLink to="/about">關於</StyledNavLink>
       <StyledNavLink to="/apartments">所有房源</StyledNavLink>
-      <StyledNavLink to="explore">探索</StyledNavLink>
+      <StyledNavLink to="/explore">探索</StyledNavLink>
     </Wrapper>
   );
 }

@@ -73,7 +73,6 @@ function Detail({ chats, uid, chatId, setChatId }) {
     : 0;
 
   async function updateChat() {
-    console.log(message);
     Firebase.updateDoc(Firebase.doc(Firebase.db, "chats", chatId), {
       messages: [
         ...selectedChat.messages,

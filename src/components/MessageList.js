@@ -2,6 +2,7 @@ import { Firestore } from "firebase/firestore";
 import React, { Fragment } from "react";
 import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
+import defaulImage from "../images/default.png";
 
 const MessageList = styled.div`
   width: 30%;
@@ -100,11 +101,13 @@ function List({ chats, uid, setChatId }) {
         >
           <MessageImg
             src={
-              chatUserData.length &&
-              chatUserData.find(
-                (userData) =>
-                  userData.uid === chat.userIDs.find((userID) => userID !== uid)
-              ).profileImage
+              chatUserData.length
+                ? chatUserData.find(
+                    (userData) =>
+                      userData.uid ===
+                      chat.userIDs.find((userID) => userID !== uid)
+                  ).profileImage
+                : defaulImage
             }
           />
           <MessageOverview>

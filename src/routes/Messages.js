@@ -34,7 +34,7 @@ function Messages() {
     );
 
     const unsubscribe = Firebase.onSnapshot(query, (querySnapshot) => {
-      console.log(querySnapshot.docs.map((doc) => doc.data()));
+      // console.log(querySnapshot.docs.map((doc) => doc.data()));
       const data = querySnapshot.docs.map((doc) => doc.data());
       setChats(data);
       // modify me
