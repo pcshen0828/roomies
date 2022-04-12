@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import Carousel from "../components/ApartmentCarousel";
-import JoinConfirmModal from "./modals/joinGroupConfirm";
+import JoinConfirmModal from "./modals/JoinGroupConfirm";
 
 const Head = styled.div`
   width: calc(100% - 48px);
