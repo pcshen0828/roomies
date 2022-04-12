@@ -4,7 +4,7 @@ import { Firebase } from "../utils/firebase";
 import switcher from "../images/send.svg";
 
 const Wrapper = styled.div`
-  width: 55%;
+  width: calc(55% - 20px);
   height: 450px;
   overflow: hidden;
   position: relative;

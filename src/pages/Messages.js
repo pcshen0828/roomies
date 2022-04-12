@@ -21,9 +21,8 @@ const InnerWrapper = styled.div`
   display: flex;
 `;
 
-function Messages() {
+function Messages({ uid }) {
   const [chats, setChats] = React.useState([]);
-  const uid = "fDtyceocFJwdyVakq25h";
   const [chatId, setChatId] = React.useState("");
 
   React.useEffect(() => {
