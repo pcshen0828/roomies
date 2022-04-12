@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
+import userContext from "../context/userContext";
 import { Firebase } from "../utils/firebase";
 import Carousel from "../components/ApartmentCarousel";
 import JoinConfirmModal from "./modals/JoinGroupConfirm";
@@ -42,11 +43,13 @@ const StyledLink = styled(Link)`
   }
 `;
 
-function ApartmentDetail({ uid }) {
+function ApartmentDetail() {
+  const context = React.useContext(userContext);
   const { id } = useParams();
   const [details, setDetails] = React.useState([]);
   const [isActive, setIsActive] = React.useState(false);
   const [hasJoined, setHasJoined] = React.useState(false);
+  const [groupId, setGroupId] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -70,10 +73,11 @@ function ApartmentDetail({ uid }) {
       );
       const querySnapShot = await Firebase.getDocs(query);
       const groupData = querySnapShot.docs.map((doc) => doc.data())[0];
-      setHasJoined(groupData.members.includes(uid));
+      setGroupId(groupData.id);
+      setHasJoined(groupData.members.includes(context.id));
     }
     getDetailData();
-    if (uid) {
+    if (context.id) {
       checkHasJoinedGroupOrNot();
     }
 
@@ -83,7 +87,7 @@ function ApartmentDetail({ uid }) {
   }, []);
 
   function openConfirmModal() {
-    if (!uid) {
+    if (!context.id) {
       // 如果沒有登入的話，請先登入
       // fix me
       console.log("未登入");
@@ -98,7 +102,6 @@ function ApartmentDetail({ uid }) {
         <JoinConfirmModal
           apartmentId={details[0].id}
           setIsActive={setIsActive}
-          uid={uid}
         />
       )}
       <Head>
@@ -107,7 +110,7 @@ function ApartmentDetail({ uid }) {
           <DetailInfo>
             <Title>{details[0].title}</Title>
             {hasJoined ? (
-              <StyledLink to="/groups">查看社團</StyledLink>
+              <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
             ) : (
               <button onClick={openConfirmModal}>加入租屋</button>
             )}

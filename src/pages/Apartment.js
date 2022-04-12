@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import ApartmentDetail from "../components/ApartmentDetail";
 
-function Apartment({ uid }) {
+function Apartment() {
   return (
     <>
       <Header />
-      <ApartmentDetail uid={uid}></ApartmentDetail>
+      <ApartmentDetail></ApartmentDetail>
     </>
   );
 }

@@ -1,5 +1,5 @@
-import { Firestore } from "firebase/firestore";
-import React, { Fragment } from "react";
+import React from "react";
+import userContext from "../context/userContext";
 import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
 import defaulImage from "../images/default.png";
@@ -47,7 +47,8 @@ const LastMessage = styled.div`
   color: #505d68;
 `;
 
-function List({ chats, uid, chatId, setChatId }) {
+function List({ chats, chatId, setChatId }) {
+  const context = React.useContext(userContext);
   const [chatUserData, setChatUserData] = React.useState([]);
   const stringLimit = 6;
 
@@ -55,7 +56,7 @@ function List({ chats, uid, chatId, setChatId }) {
     let mounted = true;
     const chatMates = chats
       .map((chat) => chat.userIDs)
-      .map((uids) => uids.find((userid) => userid !== uid));
+      .map((uids) => uids.find((userid) => userid !== context.id));
 
     async function getUserData() {
       if (!mounted) return;
@@ -113,7 +114,7 @@ function List({ chats, uid, chatId, setChatId }) {
                 ? chatUserData.find(
                     (userData) =>
                       userData.uid ===
-                      chat.userIDs.find((userID) => userID !== uid)
+                      chat.userIDs.find((userID) => userID !== context.id)
                   ).profileImage
                 : defaulImage
             }
@@ -124,12 +125,12 @@ function List({ chats, uid, chatId, setChatId }) {
                 chatUserData.find(
                   (userData) =>
                     userData.uid ===
-                    chat.userIDs.find((userID) => userID !== uid)
+                    chat.userIDs.find((userID) => userID !== context.id)
                 ).alias}
             </MessageObjectName>
             <LastMessage>
               {chat.latestMessage.sender ===
-              chat.members.find((member) => member.uid === uid).role
+              chat.members.find((member) => member.uid === context.id).role
                 ? "你："
                 : ""}
               {`${chat.latestMessage.content.slice(0, stringLimit)}`}

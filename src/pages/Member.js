@@ -1,9 +1,21 @@
+import Header from "../components/Header";
+
 function Tenant() {
-  return <div>tenant</div>;
+  return (
+    <>
+      <Header />
+      tenant
+    </>
+  );
 }
 
 function Landlord() {
-  return <div>landlord</div>;
+  return (
+    <>
+      <Header />
+      landlord
+    </>
+  );
 }
 
 export { Tenant, Landlord };

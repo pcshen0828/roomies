@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import userContext from "../../context/userContext";
 import { Firebase } from "../../utils/firebase";
+import { QuerySnapshot } from "firebase/firestore";
 
 const Overlay = styled.div`
   position: fixed;
@@ -71,8 +71,7 @@ const ConfirmJoinButton = styled.button`
   margin: 20px 20px 40px 0;
 `;
 
-function JoinConfirmModal({ setIsActive, apartmentId }) {
-  const context = React.useContext(userContext);
+function JoinConfirmModal({ setIsActive, apartmentId, uid }) {
   const [isConfirmed, setIsConfirmed] = React.useState(false);
 
   async function joinGroup() {
@@ -86,7 +85,7 @@ function JoinConfirmModal({ setIsActive, apartmentId }) {
     const groupData = querySnapShot.docs.map((doc) => doc.data())[0];
 
     Firebase.updateDoc(Firebase.doc(Firebase.db, "groups", groupData.id), {
-      members: [...groupData.members, context.id],
+      members: [...groupData.members, uid],
     });
   }
 

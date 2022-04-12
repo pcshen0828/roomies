@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
+import userContext from "../context/userContext";
 import Header from "../components/Header";
 import List from "../components/MessageList";
 import MessageDetail from "../components/MessageDetail";
@@ -21,14 +22,15 @@ const InnerWrapper = styled.div`
   display: flex;
 `;
 
-function Messages({ uid }) {
+function Messages() {
+  const context = React.useContext(userContext);
   const [chats, setChats] = React.useState([]);
   const [chatId, setChatId] = React.useState("");
 
   React.useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "chats"),
-      Firebase.where("userIDs", "array-contains", uid),
+      Firebase.where("userIDs", "array-contains", context.id),
       Firebase.orderBy("updateTime", "desc")
     );
 
@@ -50,13 +52,8 @@ function Messages({ uid }) {
       <Header />
       <Wrapper>
         <InnerWrapper>
-          <List chats={chats} uid={uid} chatId={chatId} setChatId={setChatId} />
-          <MessageDetail
-            chats={chats}
-            uid={uid}
-            chatId={chatId}
-            setChatId={setChatId}
-          />
+          <List chats={chats} chatId={chatId} setChatId={setChatId} />
+          <MessageDetail chats={chats} chatId={chatId} setChatId={setChatId} />
         </InnerWrapper>
       </Wrapper>
     </>

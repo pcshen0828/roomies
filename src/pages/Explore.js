@@ -1,5 +1,12 @@
+import Header from "../components/Header";
+
 function Explore() {
-  return <div>explore</div>;
+  return (
+    <>
+      <Header />
+      explore
+    </>
+  );
 }
 
 export default Explore;

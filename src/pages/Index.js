@@ -1,7 +1,13 @@
 import React from "react";
+import Header from "../components/Header";
 
 function Index() {
-  return <div>index</div>;
+  return (
+    <>
+      <Header />
+      index
+    </>
+  );
 }
 
 export default Index;

@@ -12,27 +12,24 @@ import Messages from "./pages/Messages";
 function App() {
   // fix me
   let isTenant = true;
-  const uid = "fDtyceocFJwdyVakq25h";
 
   return (
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>
       <Routes>
-        <Route path="/" element={<Index uid={uid} />}></Route>
-        <Route path="/about" element={<About uid={uid} />}></Route>
-        <Route path="/apartments" element={<Apartments uid={uid} />}></Route>
-        <Route
-          path={`/apartment/:id`}
-          element={<Apartment uid={uid} />}
-        ></Route>
-        <Route path="/groups" element={<Groups uid={uid} />}></Route>
-        <Route path="/explore" element={<Explore uid={uid} />}></Route>
+        <Route path="/" element={<Index />}></Route>
+        <Route path="/about" element={<About />}></Route>
+        <Route path="/apartments" element={<Apartments />}></Route>
+        <Route path={`/apartment/:id`} element={<Apartment />}></Route>
+        <Route path="/groups/:id" element={<Groups />}></Route>
+        <Route path="/explore" element={<Explore />}></Route>
         <Route
           path="/member"
-          element={isTenant ? <Tenant uid={uid} /> : <Landlord uid={uid} />}
+          element={isTenant ? <Tenant /> : <Landlord />}
         ></Route>
-        <Route path="/messages" element={<Messages uid={uid} />}></Route>
+        <Route path="/messages" element={<Messages />}></Route>
       </Routes>
+      ;
     </BrowserRouter>
   );
 }
