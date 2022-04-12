@@ -1,12 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "./styles/GlobalStyle";
-import Index from "./routes/Index";
-import About from "./routes/About";
-import Apartments from "./routes/Apartments";
-import Groups from "./routes/Groups";
-import Explore from "./routes/Explore";
-import {Tenant, Landlord} from "./routes/Member";
-import Messages from "./routes/Messages";
+import Index from "./pages/Index";
+import About from "./pages/About";
+import Apartments from "./pages/Apartments";
+import Apartment from "./pages/Apartment";
+import Groups from "./pages/Groups";
+import Explore from "./pages/Explore";
+import { Tenant, Landlord } from "./pages/Member";
+import Messages from "./pages/Messages";
 
 function App() {
   let isTenant = true;
@@ -14,13 +15,17 @@ function App() {
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>
       <Routes>
-        <Route path="/" element={<Index/>}></Route>
-        <Route path="/about" element={<About/>}></Route>
-        <Route path="/apartments" element={<Apartments/>}></Route>
-        <Route path="/groups" element={<Groups/>}></Route>
-        <Route path="/explore" element={<Explore/>}></Route>
-        <Route path="/member" element={isTenant ? <Tenant/> : <Landlord/>}></Route>
-        <Route path="/messages" element={<Messages/>}></Route>
+        <Route path="/" element={<Index />}></Route>
+        <Route path="/about" element={<About />}></Route>
+        <Route path="/apartments" element={<Apartments />}></Route>
+        <Route path={`/apartment/:id`} element={<Apartment />}></Route>
+        <Route path="/groups" element={<Groups />}></Route>
+        <Route path="/explore" element={<Explore />}></Route>
+        <Route
+          path="/member"
+          element={isTenant ? <Tenant /> : <Landlord />}
+        ></Route>
+        <Route path="/messages" element={<Messages />}></Route>
       </Routes>
     </BrowserRouter>
   );

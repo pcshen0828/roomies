@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
 import Header from "../components/Header";
 import List from "../components/MessageList";
-import Detail from "../components/MessageDetail";
+import MessageDetail from "../components/MessageDetail";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,8 +34,8 @@ function Messages() {
     );
 
     const unsubscribe = Firebase.onSnapshot(query, (querySnapshot) => {
-      // console.log(querySnapshot.docs.map((doc) => doc.data()));
       const data = querySnapshot.docs.map((doc) => doc.data());
+      console.log(data);
       setChats(data);
       // modify me
       setChatId(data[0].id);
@@ -52,7 +52,7 @@ function Messages() {
       <Wrapper>
         <InnerWrapper>
           <List chats={chats} uid={uid} chatId={chatId} setChatId={setChatId} />
-          <Detail
+          <MessageDetail
             chats={chats}
             uid={uid}
             chatId={chatId}

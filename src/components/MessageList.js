@@ -30,7 +30,7 @@ const MessageImg = styled.img`
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin: 0 10px;
 `;
 
 const MessageOverview = styled.div`
@@ -47,14 +47,18 @@ const LastMessage = styled.div`
   color: #505d68;
 `;
 
-function List({ chats, uid, setChatId }) {
+function List({ chats, uid, chatId, setChatId }) {
   const [chatUserData, setChatUserData] = React.useState([]);
+  const stringLimit = 6;
 
   React.useEffect(() => {
+    let mounted = true;
     const chatMates = chats
       .map((chat) => chat.userIDs)
       .map((uids) => uids.find((userid) => userid !== uid));
+
     async function getUserData() {
+      if (!mounted) return;
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "users"),
         Firebase.where("uid", "in", chatMates)
@@ -63,11 +67,14 @@ function List({ chats, uid, setChatId }) {
       const userData = querySnapshot.docs.map((doc) => doc.data());
       setChatUserData(userData);
     }
+
     if (chatMates.length) {
       getUserData();
     }
 
-    return function cleanup() {};
+    return function cleanup() {
+      mounted = false;
+    };
   }, [chats]);
 
   function calcTimeGap(time) {
@@ -98,6 +105,7 @@ function List({ chats, uid, setChatId }) {
           onClick={() => {
             setChatId(chat.id);
           }}
+          active={chat.id === chatId}
         >
           <MessageImg
             src={
@@ -120,7 +128,12 @@ function List({ chats, uid, setChatId }) {
                 ).alias}
             </MessageObjectName>
             <LastMessage>
-              {`${chat.messages.at(-1).content.slice(0, 10)}`}
+              {chat.latestMessage.sender ===
+              chat.members.find((member) => member.uid === uid).role
+                ? "你："
+                : ""}
+              {`${chat.latestMessage.content.slice(0, stringLimit)}`}
+              {chat.latestMessage.content.length > stringLimit ? "..." : ""}
               <span> · {calcTimeGap(chat.updateTime.toDate())}</span>
             </LastMessage>
           </MessageOverview>
