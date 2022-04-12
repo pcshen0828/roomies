@@ -71,13 +71,13 @@ const ConfirmJoinButton = styled.button`
   margin: 20px 20px 40px 0;
 `;
 
-function JoinConfirmModal({ setIsActive, apartmentId }) {
+function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
   const context = React.useContext(userContext);
   const [isConfirmed, setIsConfirmed] = React.useState(false);
+  const navigate = useNavigate();
 
   async function joinGroup() {
     if (!isConfirmed) return;
-    // 2. redirect to the group page
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "groups"),
       Firebase.where("apartmentId", "==", apartmentId)
@@ -88,6 +88,7 @@ function JoinConfirmModal({ setIsActive, apartmentId }) {
     Firebase.updateDoc(Firebase.doc(Firebase.db, "groups", groupData.id), {
       members: [...groupData.members, context.id],
     });
+    navigate(`/groups/${groupId}`);
   }
 
   return (

@@ -29,7 +29,6 @@ function App() {
         ></Route>
         <Route path="/messages" element={<Messages />}></Route>
       </Routes>
-      ;
     </BrowserRouter>
   );
 }

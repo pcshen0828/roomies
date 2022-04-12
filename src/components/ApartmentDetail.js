@@ -102,6 +102,7 @@ function ApartmentDetail() {
         <JoinConfirmModal
           apartmentId={details[0].id}
           setIsActive={setIsActive}
+          groupId={groupId}
         />
       )}
       <Head>
