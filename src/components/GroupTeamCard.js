@@ -1,8 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import CheckTeamMembersModal from "./modals/CheckTeamMembers";
 import ApplyJoinModal from "./modals/ApplyToJoinTeam";
 import userContext from "../context/userContext";
+import { Firebase } from "../utils/firebase";
 
 const Wrapper = styled.div`
   width: 200px;
@@ -63,10 +64,16 @@ function TeamCard({ team }) {
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
   const context = React.useContext(userContext);
 
-  function joinTeam() {
-    // fix me
+  async function joinTeam() {
+    Firebase.updateDoc(Firebase.doc(Firebase.db, "teams", team.id), {
+      members: [...team.members, { uid: context.id, status: 3 }],
+    });
     setOpenAppliedModal(true);
   }
+
+  const userStatus = team.members.find(
+    (member) => member.uid === context.id
+  ).status;
 
   return (
     <>
@@ -85,8 +92,12 @@ function TeamCard({ team }) {
           <div>{team.members.length}</div>
         </Top>
         <Bottom>
-          {team.members.find((member) => member.uid === context.id) ? (
+          {userStatus === 0 || userStatus === 1 ? (
             <ShowStatus>已加入</ShowStatus>
+          ) : userStatus === 2 ? (
+            <ShowStatus>邀請中</ShowStatus>
+          ) : userStatus === 3 ? (
+            <ShowStatus>待核准</ShowStatus>
           ) : (
             <JoinButton onClick={joinTeam}>申請加入</JoinButton>
           )}

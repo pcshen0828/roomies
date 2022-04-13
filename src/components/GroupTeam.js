@@ -77,7 +77,7 @@ function GroupTeam({ aid }) {
           <CreateTeam aid={aid} />
           {teams.length
             ? teams.map((team, index) => <TeamCard key={index} team={team} />)
-            : "loading..."}
+            : ""}
         </TeamBlockCards>
       </TeamBlockWrapper>
     </TeamsBlock>
