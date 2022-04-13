@@ -24,6 +24,5 @@ export const GlobalStyle = createGlobalStyle`
     &:hover {
       background: #c1b18a;
     }
-
   }
 `;

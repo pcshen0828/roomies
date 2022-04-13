@@ -70,10 +70,10 @@ function TeamCard({ team }) {
     });
     setOpenAppliedModal(true);
   }
-
-  const userStatus = team.members.find(
+  const ifUserincludes = team.members.find(
     (member) => member.uid === context.id
-  ).status;
+  );
+  const userStatus = ifUserincludes ? ifUserincludes.status : 4;
 
   return (
     <>
@@ -82,6 +82,7 @@ function TeamCard({ team }) {
         <CheckTeamMembersModal
           toggle={setOpenMemberListModal}
           members={team.members}
+          teamId={team.id}
         />
       )}
       <Wrapper>

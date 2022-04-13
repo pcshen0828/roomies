@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import NavBar from "./Nav";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -16,11 +17,15 @@ const InnerWrapper = styled.div`
   align-items: center;
 `;
 
+const IndexLink = styled(Link)`
+  color: #424b5a;
+`;
+
 function Header() {
   return (
     <Wrapper>
       <InnerWrapper>
-        logo
+        <IndexLink to="/">logo</IndexLink>
         <NavBar />
       </InnerWrapper>
     </Wrapper>
