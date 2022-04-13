@@ -5,8 +5,9 @@ import About from "./pages/About";
 import Apartments from "./pages/Apartments";
 import Apartment from "./pages/Apartment";
 import Groups from "./pages/Groups";
+import User from "./pages/Users";
 import Explore from "./pages/Explore";
-import { Tenant, Landlord } from "./pages/Member";
+import { Tenant, Landlord } from "./pages/Profile";
 import Messages from "./pages/Messages";
 
 function App() {
@@ -22,9 +23,10 @@ function App() {
         <Route path="/apartments" element={<Apartments />}></Route>
         <Route path={`/apartment/:id`} element={<Apartment />}></Route>
         <Route path="/groups/:id" element={<Groups />}></Route>
+        <Route path="/users/:id" element={<User />}></Route>
         <Route path="/explore" element={<Explore />}></Route>
         <Route
-          path="/member"
+          path="/profile"
           element={isTenant ? <Tenant /> : <Landlord />}
         ></Route>
         <Route path="/messages" element={<Messages />}></Route>
