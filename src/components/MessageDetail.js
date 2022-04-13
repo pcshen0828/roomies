@@ -76,7 +76,9 @@ function MessageDetail({ chats, chatId, setChatId }) {
     : 0;
 
   React.useEffect(() => {
+    let mounted = true;
     if (chatId) {
+      if (!mounted) return;
       const snapRef2 = Firebase.collection(
         Firebase.db,
         "chats/" + chatId + "/messages"
@@ -87,7 +89,9 @@ function MessageDetail({ chats, chatId, setChatId }) {
       });
     }
 
-    return function cleaup() {};
+    return function cleaup() {
+      mounted = false;
+    };
   }, [chatId]);
 
   async function updateChat() {

@@ -44,7 +44,9 @@ function Carousel({ id }) {
   const [images, setImages] = React.useState([]);
 
   React.useEffect(() => {
+    let mounted = true;
     async function getImages() {
+      if (!mounted) return;
       const subColRef = Firebase.doc(
         Firebase.db,
         "apartments",
@@ -57,6 +59,10 @@ function Carousel({ id }) {
       setImages(qSnap.data().list);
     }
     getImages();
+
+    return function cleanup() {
+      mounted = false;
+    };
   }, []);
 
   return (

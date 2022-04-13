@@ -1,15 +1,8 @@
-import React, { Fragment } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 import userContext from "../../context/userContext";
-import {
-  Overlay,
-  Modal,
-  Header,
-  CloseButton,
-  Title,
-  Body,
-} from "./ModalElements";
+import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
 
 const MessageInput = styled.textarea`
   width: calc(100% - 40px);
@@ -57,8 +50,8 @@ function SendMessageModal({ setOpenModal, objectId }) {
   const [message, setMessage] = React.useState("");
 
   async function sendMyMessage() {
-    console.log(message);
-    // 先去找 firebase 是否存在特定條件的 docRef
+    if (!message.trim()) return;
+
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "chats"),
       Firebase.where("userIDs", "array-contains", objectId)
@@ -69,11 +62,13 @@ function SendMessageModal({ setOpenModal, objectId }) {
     const targetChat = receivedData.filter((data) =>
       data.userIDs.includes(context.id)
     )[0];
+
+    const time = Firebase.Timestamp.fromDate(new Date());
     if (targetChat) {
-      const time = Firebase.Timestamp.fromDate(new Date());
       const newMessage = {
         content: message,
-        sender: context.role,
+        sender: targetChat.members.find((member) => member.uid === context.id)
+          .role,
         timestamp: time,
       };
       Firebase.updateDoc(Firebase.doc(Firebase.db, "chats", targetChat.id), {
@@ -90,7 +85,35 @@ function SendMessageModal({ setOpenModal, objectId }) {
       setMessage("");
       setOpenModal(false);
     } else {
-      // 如果是新的聊天對象，則在 chats 下新增一個 document，儲存所有需要的資料
+      const newMessage = {
+        content: message,
+        sender: 0,
+        timestamp: time,
+      };
+      const newChatRef = Firebase.doc(
+        Firebase.collection(Firebase.db, "chats")
+      );
+
+      await Firebase.setDoc(newChatRef, {
+        id: newChatRef.id,
+        createTime: time,
+        latestMessage: newMessage,
+        members: [
+          { role: 0, uid: context.id },
+          { role: 1, uid: objectId },
+        ],
+        updateTime: time,
+        userIDs: [context.id, objectId],
+      });
+      Firebase.addDoc(
+        Firebase.collection(
+          Firebase.db,
+          "chats/" + newChatRef.id + "/messages"
+        ),
+        newMessage
+      );
+      setMessage("");
+      setOpenModal(false);
     }
   }
 

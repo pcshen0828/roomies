@@ -10,7 +10,6 @@ const Wrapper = styled.div`
   width: calc(100% - 48px);
   max-width: 1200px;
   margin: 20px auto;
-  border: 1px solid #000;
 `;
 
 const Banner = styled.div`
@@ -28,6 +27,7 @@ const GroupHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.div`
@@ -67,6 +67,8 @@ const ExitButton = styled.button`
 
 const GroupBody = styled.div`
   display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
 `;
 
 function Groups() {
@@ -75,7 +77,9 @@ function Groups() {
   const [members, setMembers] = React.useState([]);
 
   React.useEffect(() => {
+    let mounted = true;
     async function getGroupData() {
+      if (!mounted) return;
       // refactor me by creating api functions
       const groupQuery = Firebase.query(
         Firebase.collection(Firebase.db, "groups"),
@@ -101,6 +105,10 @@ function Groups() {
       setMembers(usersQSnap.docs.map((doc) => doc.data()));
     }
     getGroupData();
+
+    return function cleanup() {
+      mounted = false;
+    };
   }, []);
 
   return (
@@ -121,7 +129,7 @@ function Groups() {
         </GroupHeader>
         <GroupBody>
           <GroupMember members={members} />
-          <GroupTeam />
+          <GroupTeam aid={apartmentData.id} />
         </GroupBody>
       </Wrapper>
     </>

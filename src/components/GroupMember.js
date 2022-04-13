@@ -3,23 +3,36 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SendMessageModal from "./modals/SendMessage";
 import { Firebase } from "../utils/firebase";
+import userContext from "../context/userContext";
 
-const MembersBlock = styled.div`
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 35%;
 `;
+
 const defaultCardStyle = `
   width: 100%;
   border: 1px solid #c1b18a;
   border-radius: 10px;
   display: flex;
 `;
+const MemberBlockWrapper = styled.div`
+  ${defaultCardStyle}
+  overflow: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 300px;
+`;
+
+const MembersBlock = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`;
 
 const MemberBlockCard = styled.div`
-  ${defaultCardStyle}
   flex-direction: column;
-  overflow-y: scroll;
 `;
 
 const Member = styled.div`
@@ -61,6 +74,7 @@ const MessageButton = styled.button`
 const SubtitlesSmall = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const TitleSmall = styled.div`
@@ -72,44 +86,54 @@ const SubtitleSmall = styled.div`
   color: #a1aeb7;
 `;
 
+const Myself = styled.div``;
+
 function GroupMember({ members }) {
   const [openModal, setOpenModal] = React.useState(false);
   const [objectId, setObjectId] = React.useState("");
+  const context = React.useContext(userContext);
 
   return (
-    <>
+    <Wrapper>
       {openModal && (
         <SendMessageModal setOpenModal={setOpenModal} objectId={objectId} />
       )}
-      <MembersBlock>
-        <SubtitlesSmall>
-          <TitleSmall>成員</TitleSmall>
-          <SubtitleSmall></SubtitleSmall>
-        </SubtitlesSmall>
-        <MemberBlockCard>
-          {members.map((member, index) => (
-            // 如果是自己的話，渲染另外的 component
-            <Member key={index}>
-              <MemberLink to={`/members/${member.uid}`}>
-                <MemberImage src={member.profileImage} />
-              </MemberLink>
-              <MemberInfo>
-                <MemberName>{member.alias}</MemberName>
-                <MemberJobTitle>{member.jobTitle}</MemberJobTitle>
-              </MemberInfo>
-              <MessageButton
-                onClick={() => {
-                  setOpenModal(true);
-                  setObjectId(member.uid);
-                }}
-              >
-                發送訊息
-              </MessageButton>
-            </Member>
-          ))}
-        </MemberBlockCard>
-      </MembersBlock>
-    </>
+      <SubtitlesSmall>
+        <TitleSmall>成員</TitleSmall>
+        <SubtitleSmall></SubtitleSmall>
+      </SubtitlesSmall>
+      <MemberBlockWrapper>
+        <MembersBlock>
+          <MemberBlockCard>
+            {members.find((member) => member.uid === context.id) && (
+              <>☑︎已加入</>
+            )}
+            {members
+              .filter((member) => member.uid !== context.id)
+              .map((member, index) => (
+                <Member key={index}>
+                  <MemberLink to={`/users/${member.uid}`}>
+                    <MemberImage src={member.profileImage} />
+                  </MemberLink>
+                  <MemberInfo>
+                    <MemberName>{member.alias}</MemberName>
+                    <MemberJobTitle>{member.jobTitle}</MemberJobTitle>
+                  </MemberInfo>
+
+                  <MessageButton
+                    onClick={() => {
+                      setOpenModal(true);
+                      setObjectId(member.uid);
+                    }}
+                  >
+                    發送訊息
+                  </MessageButton>
+                </Member>
+              ))}
+          </MemberBlockCard>
+        </MembersBlock>
+      </MemberBlockWrapper>
+    </Wrapper>
   );
 }
 
