@@ -9,7 +9,7 @@ import {
   BodyLeft,
   BodyRight,
 } from "../components/common/Components";
-import ExploreMap from "../components/explore/ExploreMap";
+import MyComponent from "../components/explore/Map";
 
 function Explore() {
   return (
@@ -22,7 +22,7 @@ function Explore() {
       <BodyWrapper>
         <BodyLeft>left</BodyLeft>
         <BodyRight>
-          <ExploreMap />
+          <MyComponent />
         </BodyRight>
       </BodyWrapper>
     </>

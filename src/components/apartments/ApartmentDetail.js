@@ -105,19 +105,23 @@ function ApartmentDetail() {
           groupId={groupId}
         />
       )}
-      <Head>
-        <Carousel id={id} />
-        {details.length && (
-          <DetailInfo>
-            <Title>{details[0].title}</Title>
-            {hasJoined ? (
-              <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
-            ) : (
-              <button onClick={openConfirmModal}>加入租屋</button>
-            )}
-          </DetailInfo>
-        )}
-      </Head>
+      {details.length ? (
+        <Head>
+          <Carousel id={id} />
+          {details.length && (
+            <DetailInfo>
+              <Title>{details[0].title}</Title>
+              {hasJoined ? (
+                <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
+              ) : (
+                <button onClick={openConfirmModal}>加入租屋</button>
+              )}
+            </DetailInfo>
+          )}
+        </Head>
+      ) : (
+        <>無此房源</>
+      )}
     </>
   );
 }
