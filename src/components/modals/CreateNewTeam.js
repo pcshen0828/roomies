@@ -131,6 +131,7 @@ function NewTeamModal({ toggle, aid }) {
   }
 
   async function createTeam() {
+    if (!queryName.trim()) return;
     const newTeamRef = Firebase.doc(Firebase.collection(Firebase.db, "teams"));
     const time = Firebase.Timestamp.fromDate(new Date());
     const newList = inviteList.map(({ name, ...rest }) => {
