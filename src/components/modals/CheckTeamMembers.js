@@ -68,11 +68,6 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
   const [teamMembers, setTeamMembers] = React.useState([]);
   const context = React.useContext(userContext);
 
-  // fix me
-  // 如果使用者是團主的話，可以核准申請中的團員加入
-  // 如果使用者被邀請中的話，可以同意加入
-  // 如果使用者待核准的話，可以取消申請
-
   React.useEffect(() => {
     let mounted = true;
     async function getTeamsMembers() {
@@ -102,7 +97,6 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
   const checkUserInTeamStatus = condition ? condition.status : "";
 
   function addToTeam(id) {
-    //  change user's status to 1
     members.find((member) => member.uid === id).status = 1;
     Firebase.updateDoc(Firebase.doc(Firebase.db, "teams", teamId), {
       members,

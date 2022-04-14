@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import TeamCard from "./GroupTeamCard";
 import CreateTeam from "./GroupCreateTeam";
-import { Firebase } from "../utils/firebase";
+import { Firebase } from "../../utils/firebase";
 
 const TeamsBlock = styled.div`
   display: flex;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import heart from "../images/heart.svg";
+import heart from "../../images/heart.svg";
 
 const Wrapper = styled.div`
   border: 1px solid #e8e8e8;

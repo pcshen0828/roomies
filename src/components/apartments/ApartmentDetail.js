@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
-import userContext from "../context/userContext";
-import { Firebase } from "../utils/firebase";
-import Carousel from "../components/ApartmentCarousel";
-import JoinConfirmModal from "./modals/JoinGroupConfirm";
+import userContext from "../../context/userContext";
+import { Firebase } from "../../utils/firebase";
+import Carousel from "./ApartmentCarousel";
+import JoinConfirmModal from "../modals/JoinGroupConfirm";
 
 const Head = styled.div`
   width: calc(100% - 48px);

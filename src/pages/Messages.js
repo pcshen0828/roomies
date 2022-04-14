@@ -2,9 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
 import userContext from "../context/userContext";
-import Header from "../components/Header";
-import List from "../components/MessageList";
-import MessageDetail from "../components/MessageDetail";
+import Header from "../components/layout/Header";
+import List from "../components/messages/MessageList";
+import MessageDetail from "../components/messages/MessageDetail";
 
 const Wrapper = styled.div`
   width: 100%;

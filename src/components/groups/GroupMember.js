@@ -1,9 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import SendMessageModal from "./modals/SendMessage";
-import { Firebase } from "../utils/firebase";
-import userContext from "../context/userContext";
+import SendMessageModal from "../modals/SendMessage";
+import userContext from "../../context/userContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -85,8 +84,6 @@ const SubtitleSmall = styled.div`
   font-size: 14px;
   color: #a1aeb7;
 `;
-
-const Myself = styled.div``;
 
 function GroupMember({ members }) {
   const [openModal, setOpenModal] = React.useState(false);

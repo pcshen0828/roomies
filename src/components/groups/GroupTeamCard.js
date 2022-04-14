@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import CheckTeamMembersModal from "./modals/CheckTeamMembers";
-import ApplyJoinModal from "./modals/ApplyToJoinTeam";
-import userContext from "../context/userContext";
-import { Firebase } from "../utils/firebase";
+import CheckTeamMembersModal from "../modals/CheckTeamMembers";
+import ApplyJoinModal from "../modals/ApplyToJoinTeam";
+import userContext from "../../context/userContext";
+import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled.div`
   width: 200px;

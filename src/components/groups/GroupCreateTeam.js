@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import NewTeamModal from "./modals/CreateNewTeam";
+import NewTeamModal from "../modals/CreateNewTeam";
 
 const Wrapper = styled.div`
   width: 200px;

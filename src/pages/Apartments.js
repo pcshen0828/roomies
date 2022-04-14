@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../components/Header";
-import Selector from "../components/ApartmentSelector";
-import Card from "../components/ApartmentCard";
+import Header from "../components/layout/Header";
+import Selector from "../components/apartments/ApartmentSelector";
+import Card from "../components/apartments/ApartmentCard";
 import { Firebase } from "../utils/firebase";
 
 const Cards = styled.div`

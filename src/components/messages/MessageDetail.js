@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import userContext from "../context/userContext";
-import { Firebase } from "../utils/firebase";
-import send from "../images/send.svg";
+import userContext from "../../context/userContext";
+import { Firebase } from "../../utils/firebase";
+import send from "../../images/send.svg";
 
 const MessageContent = styled.div`
   width: 70%;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { Firebase } from "../utils/firebase";
-import switcher from "../images/send.svg";
+import { Firebase } from "../../utils/firebase";
+import switcher from "../../images/send.svg";
 
 const Wrapper = styled.div`
   width: calc(55% - 20px);

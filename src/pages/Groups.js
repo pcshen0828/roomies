@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
-import Header from "../components/Header";
-import GroupMember from "../components/GroupMember";
-import GroupTeam from "../components/GroupTeam";
+import Header from "../components/layout/Header";
+import GroupMember from "../components/groups/GroupMember";
+import GroupTeam from "../components/groups/GroupTeam";
 
 const Wrapper = styled.div`
   width: calc(100% - 48px);

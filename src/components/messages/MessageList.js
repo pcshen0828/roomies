@@ -1,8 +1,8 @@
 import React from "react";
-import userContext from "../context/userContext";
+import userContext from "../../context/userContext";
 import styled from "styled-components";
-import { Firebase } from "../utils/firebase";
-import defaulImage from "../images/default.png";
+import { Firebase } from "../../utils/firebase";
+import defaulImage from "../../images/default.png";
 
 const MessageList = styled.div`
   width: 30%;
