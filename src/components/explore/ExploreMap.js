@@ -5,7 +5,7 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import AppKey from "../../context/googlemaps";
+import AppKey from "../../googlemaps";
 
 const containerStyle = {
   width: "100%",
