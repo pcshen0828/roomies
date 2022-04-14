@@ -5,6 +5,7 @@ import { Firebase } from "../utils/firebase";
 import Header from "../components/layout/Header";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
+import api from "../utils/api";
 
 const Wrapper = styled.div`
   width: calc(100% - 48px);
@@ -80,29 +81,19 @@ function Groups() {
     let mounted = true;
     async function getGroupData() {
       if (!mounted) return;
-      // refactor me by creating api functions
-      const groupQuery = Firebase.query(
-        Firebase.collection(Firebase.db, "groups"),
-        Firebase.where("id", "==", id)
-      );
-      const groupQSnap = await Firebase.getDocs(groupQuery);
-      const groupData = groupQSnap.docs.map((doc) => doc.data())[0];
-
-      const { apartmentId } = groupData;
-      const apartmentQuery = Firebase.query(
-        Firebase.collection(Firebase.db, "apartments"),
-        Firebase.where("id", "==", apartmentId)
-      );
-      const apartmentQSnap = await Firebase.getDocs(apartmentQuery);
-      setApartmentData(apartmentQSnap.docs.map((doc) => doc.data())[0]);
-
-      const users = groupData.members;
-      const userQuery = Firebase.query(
-        Firebase.collection(Firebase.db, "users"),
-        Firebase.where("uid", "in", users)
-      );
-      const usersQSnap = await Firebase.getDocs(userQuery);
-      setMembers(usersQSnap.docs.map((doc) => doc.data()));
+      api
+        .getDataWithSingleQuery("groups", "id", "==", id)
+        .then((res) => {
+          return res[0];
+        })
+        .then((res) => {
+          api
+            .getDataWithSingleQuery("apartments", "id", "==", res.apartmentId)
+            .then((res) => setApartmentData(res[0]));
+          api
+            .getDataWithSingleQuery("users", "uid", "in", res.members)
+            .then((res) => setMembers(res));
+        });
     }
     getGroupData();
 

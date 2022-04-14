@@ -5,6 +5,7 @@ import userContext from "../../context/userContext";
 import { Firebase } from "../../utils/firebase";
 import Carousel from "./ApartmentCarousel";
 import JoinConfirmModal from "../modals/JoinGroupConfirm";
+import api from "../../utils/api";
 
 const Head = styled.div`
   width: calc(100% - 48px);
@@ -56,25 +57,19 @@ function ApartmentDetail() {
 
     async function getDetailData() {
       if (!mounted) return;
-      const query = Firebase.query(
-        Firebase.collection(Firebase.db, "apartments"),
-        Firebase.where("id", "==", id)
-      );
-      const querySnapShot = await Firebase.getDocs(query);
-      const detail = querySnapShot.docs.map((doc) => doc.data());
-      setDetails(detail);
+      api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
+        setDetails(res);
+      });
     }
 
     async function checkHasJoinedGroupOrNot() {
       if (!mounted) return;
-      const query = Firebase.query(
-        Firebase.collection(Firebase.db, "groups"),
-        Firebase.where("apartmentId", "==", id)
-      );
-      const querySnapShot = await Firebase.getDocs(query);
-      const groupData = querySnapShot.docs.map((doc) => doc.data())[0];
-      setGroupId(groupData.id);
-      setHasJoined(groupData.members.includes(context.id));
+      api
+        .getDataWithSingleQuery("groups", "apartmentId", "==", id)
+        .then((res) => {
+          setGroupId(res[0].id);
+          setHasJoined(res[0].members.includes(context.id));
+        });
     }
     getDetailData();
     if (context.id) {

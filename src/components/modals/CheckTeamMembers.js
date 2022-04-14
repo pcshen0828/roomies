@@ -11,6 +11,7 @@ import {
 } from "./ModalElements";
 import { Firebase } from "../../utils/firebase";
 import userContext from "../../context/userContext";
+import api from "../../utils/api";
 
 const Members = styled.div`
   display: flex;
@@ -72,17 +73,14 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
     let mounted = true;
     async function getTeamsMembers() {
       if (!mounted) return;
-      const query = Firebase.query(
-        Firebase.collection(Firebase.db, "users"),
-        Firebase.where(
+      api
+        .getDataWithSingleQuery(
+          "users",
           "uid",
           "in",
           members.map((member) => member.uid)
         )
-      );
-      const querySnapShot = await Firebase.getDocs(query);
-      const memberData = querySnapShot.docs.map((doc) => doc.data());
-      setTeamMembers(memberData);
+        .then((res) => setTeamMembers(res));
     }
     getTeamsMembers();
     return function cleanup() {
@@ -98,7 +96,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
 
   function addToTeam(id) {
     members.find((member) => member.uid === id).status = 1;
-    Firebase.updateDoc(Firebase.doc(Firebase.db, "teams", teamId), {
+    api.updateDocData("teams", teamId, {
       members,
     });
   }

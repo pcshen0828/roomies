@@ -3,6 +3,7 @@ import userContext from "../../context/userContext";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 import defaulImage from "../../images/default.png";
+import api from "../../utils/api";
 
 const MessageList = styled.div`
   width: 30%;
@@ -60,13 +61,9 @@ function List({ chats, chatId, setChatId }) {
 
     async function getUserData() {
       if (!mounted) return;
-      const query = Firebase.query(
-        Firebase.collection(Firebase.db, "users"),
-        Firebase.where("uid", "in", chatMates)
-      );
-      const querySnapshot = await Firebase.getDocs(query);
-      const userData = querySnapshot.docs.map((doc) => doc.data());
-      setChatUserData(userData);
+      api
+        .getDataWithSingleQuery("users", "uid", "in", chatMates)
+        .then((res) => setChatUserData(res));
     }
 
     if (chatMates.length) {

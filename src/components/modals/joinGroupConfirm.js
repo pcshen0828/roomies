@@ -12,6 +12,7 @@ import {
   Body,
   Button,
 } from "./ModalElements";
+import api from "../../utils/api";
 
 const ContentList = styled.ol`
   line-height: 150%;
@@ -34,17 +35,14 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
 
   async function joinGroup() {
     if (!isConfirmed) return;
-    const query = Firebase.query(
-      Firebase.collection(Firebase.db, "groups"),
-      Firebase.where("apartmentId", "==", apartmentId)
-    );
-    const querySnapShot = await Firebase.getDocs(query);
-    const groupData = querySnapShot.docs.map((doc) => doc.data())[0];
-
-    Firebase.updateDoc(Firebase.doc(Firebase.db, "groups", groupData.id), {
-      members: [...groupData.members, context.id],
-    });
-    navigate(`/groups/${groupId}`);
+    api
+      .getDataWithSingleQuery("groups", "apartmentId", "==", apartmentId)
+      .then((res) => {
+        api.updateDocData("groups", res[0].id, {
+          members: [...res[0].members, context.id],
+        });
+        navigate(`/groups/${groupId}`);
+      });
   }
 
   return (

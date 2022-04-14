@@ -49,13 +49,13 @@ function GroupTeam({ aid }) {
   React.useEffect(() => {
     let mounted = true;
     async function getTeams() {
-      if (!mounted) return;
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "teams"),
         Firebase.where("apartmentID", "==", aid ? aid : "")
       );
 
       Firebase.onSnapshot(query, (snapshot) => {
+        if (!mounted) return;
         setTeams(snapshot.docs.map((doc) => doc.data()));
       });
     }

@@ -4,6 +4,7 @@ import CheckTeamMembersModal from "../modals/CheckTeamMembers";
 import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import userContext from "../../context/userContext";
 import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
 
 const Wrapper = styled.div`
   width: 200px;
@@ -65,7 +66,7 @@ function TeamCard({ team }) {
   const context = React.useContext(userContext);
 
   async function joinTeam() {
-    Firebase.updateDoc(Firebase.doc(Firebase.db, "teams", team.id), {
+    api.updateDocData("teams", team.id, {
       members: [...team.members, { uid: context.id, status: 3 }],
     });
     setOpenAppliedModal(true);

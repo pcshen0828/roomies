@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 import userContext from "../../context/userContext";
 import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
+import api from "../../utils/api";
 
 const MessageInput = styled.textarea`
   width: calc(100% - 40px);
@@ -51,70 +52,52 @@ function SendMessageModal({ setOpenModal, objectId }) {
 
   async function sendMyMessage() {
     if (!message.trim()) return;
-
-    const query = Firebase.query(
-      Firebase.collection(Firebase.db, "chats"),
-      Firebase.where("userIDs", "array-contains", objectId)
-    );
-
-    const querySnapShot = await Firebase.getDocs(query);
-    const receivedData = querySnapShot.docs.map((doc) => doc.data());
-    const targetChat = receivedData.filter((data) =>
-      data.userIDs.includes(context.id)
-    )[0];
-
     const time = Firebase.Timestamp.fromDate(new Date());
-    if (targetChat) {
-      const newMessage = {
-        content: message,
-        sender: targetChat.members.find((member) => member.uid === context.id)
-          .role,
-        timestamp: time,
-      };
-      Firebase.updateDoc(Firebase.doc(Firebase.db, "chats", targetChat.id), {
-        latestMessage: newMessage,
-        updateTime: time,
-      });
-      Firebase.addDoc(
-        Firebase.collection(
-          Firebase.db,
-          "chats/" + targetChat.id + "/messages"
-        ),
-        newMessage
-      );
-      setMessage("");
-      setOpenModal(false);
-    } else {
-      const newMessage = {
-        content: message,
-        sender: 0,
-        timestamp: time,
-      };
-      const newChatRef = Firebase.doc(
-        Firebase.collection(Firebase.db, "chats")
-      );
-
-      await Firebase.setDoc(newChatRef, {
-        id: newChatRef.id,
-        createTime: time,
-        latestMessage: newMessage,
-        members: [
-          { role: 0, uid: context.id },
-          { role: 1, uid: objectId },
-        ],
-        updateTime: time,
-        userIDs: [context.id, objectId],
-      });
-      Firebase.addDoc(
-        Firebase.collection(
-          Firebase.db,
-          "chats/" + newChatRef.id + "/messages"
-        ),
-        newMessage
-      );
+    function clearMessageAndCloseModal() {
       setMessage("");
       setOpenModal(false);
     }
+    api
+      .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
+      .then((res) => {
+        return res.filter((data) => data.userIDs.includes(context.id))[0];
+      })
+      .then((res) => {
+        if (res) {
+          const newMessage = {
+            content: message,
+            sender: res.members.find((member) => member.uid === context.id)
+              .role,
+            timestamp: time,
+          };
+          api.updateDocData("chats", res.id, {
+            latestMessage: newMessage,
+            updateTime: time,
+          });
+          api.addNewDoc("chats/" + res.id + "/messages", newMessage);
+          clearMessageAndCloseModal();
+        } else {
+          const newMessage = {
+            content: message,
+            sender: 0,
+            timestamp: time,
+          };
+          const newChatRef = api.createNewDocRef("chats");
+          api.setNewDoc(newChatRef, {
+            id: newChatRef.id,
+            createTime: time,
+            latestMessage: newMessage,
+            members: [
+              { role: 0, uid: context.id },
+              { role: 1, uid: objectId },
+            ],
+            updateTime: time,
+            userIDs: [context.id, objectId],
+          });
+          api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
+          clearMessageAndCloseModal();
+        }
+      });
   }
 
   return (

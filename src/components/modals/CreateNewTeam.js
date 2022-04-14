@@ -12,6 +12,7 @@ import {
 import { Firebase } from "../../utils/firebase";
 import search from "../../images/search.svg";
 import userContext from "../../context/userContext";
+import api from "../../utils/api";
 
 const NewBody = styled(Body)`
   border: none;
@@ -132,14 +133,13 @@ function NewTeamModal({ toggle, aid }) {
 
   async function createTeam() {
     if (!queryName.trim()) return;
-    const newTeamRef = Firebase.doc(Firebase.collection(Firebase.db, "teams"));
+    const newTeamRef = api.createNewDocRef("teams");
     const time = Firebase.Timestamp.fromDate(new Date());
     const newList = inviteList.map(({ name, ...rest }) => {
       return rest;
     });
     newList.push({ uid: context.id, status: 0 });
-
-    await Firebase.setDoc(newTeamRef, {
+    api.setNewDoc(newTeamRef, {
       id: newTeamRef.id,
       apartmentID: aid,
       name: teamName,

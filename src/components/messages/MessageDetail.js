@@ -3,6 +3,7 @@ import styled from "styled-components";
 import userContext from "../../context/userContext";
 import { Firebase } from "../../utils/firebase";
 import send from "../../images/send.svg";
+import api from "../../utils/api";
 
 const MessageContent = styled.div`
   width: 70%;
@@ -78,13 +79,13 @@ function MessageDetail({ chats, chatId, setChatId }) {
   React.useEffect(() => {
     let mounted = true;
     if (chatId) {
-      if (!mounted) return;
       const snapRef2 = Firebase.collection(
         Firebase.db,
         "chats/" + chatId + "/messages"
       );
       const query = Firebase.query(snapRef2, Firebase.orderBy("timestamp"));
       Firebase.onSnapshot(query, (snapshot) => {
+        if (!mounted) return;
         setMessages(snapshot.docs.map((doc) => doc.data()));
       });
     }
@@ -102,14 +103,11 @@ function MessageDetail({ chats, chatId, setChatId }) {
       sender: myRole,
       timestamp: time,
     };
-    Firebase.updateDoc(Firebase.doc(Firebase.db, "chats", chatId), {
+    api.updateDocData("chats", chatId, {
       latestMessage: newMessage,
       updateTime: time,
     });
-    Firebase.addDoc(
-      Firebase.collection(Firebase.db, "chats/" + chatId + "/messages"),
-      newMessage
-    );
+    api.addNewDoc("chats/" + chatId + "/messages", newMessage);
     setMessage("");
     setChatId(selectedChat.id);
   }
