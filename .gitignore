@@ -2,7 +2,10 @@
 
 # Firebase cache
 .firebase
-/src/googlemaps.js
+
+# Google maps app key
+/src/appkeys.js
+
 
 # dependencies
 /node_modules

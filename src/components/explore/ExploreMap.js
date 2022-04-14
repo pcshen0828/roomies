@@ -5,7 +5,7 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
-import AppKey from "../../googlemaps";
+import { googleMapsAppKey } from "../../appkeys";
 
 const containerStyle = {
   width: "100%",
@@ -42,7 +42,7 @@ function ExploreMap() {
   // when marker was clicked, show its info window
   // when info window on close click, close itself
   return (
-    <LoadScript googleMapsApiKey={AppKey}>
+    <LoadScript googleMapsApiKey={googleMapsAppKey}>
       <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={17}>
         {/* Child components, such as markers, info windows, etc. */}
         {positions.map((position, index) => (
