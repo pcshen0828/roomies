@@ -50,4 +50,44 @@ const BodyRight = styled.div`
   }
 `;
 
-export { Wrapper, Title, SubTitle, BodyWrapper, BodyLeft, BodyRight };
+const FlexWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Input = styled.input`
+  width: 90%;
+  height: 30px;
+  border: 1px solid #dadada;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  color: #424b5a;
+  flex-shrink: 0;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #c1b18a;
+  }
+`;
+
+const SmallTitle = styled(Title)`
+  font-size: 14px;
+  margin-bottom: 10px;
+`;
+
+const SmallText = styled.div`
+  font-size: 14px;
+`;
+
+export {
+  Wrapper,
+  Title,
+  SubTitle,
+  BodyWrapper,
+  BodyLeft,
+  BodyRight,
+  FlexWrapper,
+  Input,
+  SmallTitle,
+  SmallText,
+};

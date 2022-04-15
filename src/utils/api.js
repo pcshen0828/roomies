@@ -10,6 +10,7 @@ const api = {
   Doc: Firebase.doc,
   AddDoc: Firebase.addDoc,
   SetDoc: Firebase.setDoc,
+  auth: Firebase.getAuth(),
 
   async getDataWithSingleQuery(collectionName, columnName, compare, value) {
     const query = this.Query(
@@ -36,6 +37,16 @@ const api = {
   setNewDoc(docRef, data) {
     this.SetDoc(docRef, data);
   },
+  signIn(auth, email, password) {
+    Firebase.signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        return userCredential.user;
+      })
+      .catch((error) => {
+        return error;
+      });
+  },
+  signUP() {},
 };
 
 export default api;

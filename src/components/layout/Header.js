@@ -1,6 +1,11 @@
+import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import NavBar from "./Nav";
-import { Link } from "react-router-dom";
+import LoggedIn from "./LoggenIn";
+import NotLoggedIn from "./NotLoggedIn";
+import userContext from "../../context/userContext";
+import { FlexWrapper } from "../common/Components";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -14,6 +19,7 @@ const InnerWrapper = styled.div`
   width: calc(100% - 48px);
   max-width: 1200px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 `;
 
@@ -22,11 +28,15 @@ const IndexLink = styled(Link)`
 `;
 
 function Header() {
+  const context = React.useContext(userContext);
   return (
     <Wrapper>
       <InnerWrapper>
-        <IndexLink to="/">logo</IndexLink>
-        <NavBar />
+        <FlexWrapper>
+          <IndexLink to="/">logo</IndexLink>
+          <NavBar />
+        </FlexWrapper>
+        {!context.id ? <LoggedIn /> : <NotLoggedIn />}
       </InnerWrapper>
     </Wrapper>
   );

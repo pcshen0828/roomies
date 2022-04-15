@@ -6,7 +6,7 @@ const Wrapper = styled.div`
 `;
 
 const StyledNavLink = styled(NavLink)`
-  color: #000;
+  color: #424b5a;
   display: flex;
   align-items: center;
   margin-left: 30px;
