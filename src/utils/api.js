@@ -19,6 +19,11 @@ const api = {
     const querySnapShot = await this.GetDocs(query);
     return querySnapShot.docs.map((doc) => doc.data());
   },
+  async getAllDocsFromCollection(collectionName) {
+    const query = this.Query(this.Collection(this.DB, collectionName));
+    const querySnapShot = await this.GetDocs(query);
+    return querySnapShot.docs.map((doc) => doc.data());
+  },
   updateDocData(collectionName, docID, data) {
     this.UpdateDoc(this.Doc(this.DB, collectionName, docID), data);
   },
