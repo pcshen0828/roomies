@@ -16,6 +16,7 @@ import {
   FlexWrapper,
 } from "../common/Components";
 import api from "../../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const NewBody = styled(Body)`
   border: none;
@@ -54,6 +55,7 @@ function SignUpModal({ setOpenSignUp }) {
   const [confirmPwd, setCofirmPwd] = React.useState("");
   const [errMessage, setErrMessage] = React.useState("");
   const [role, setRole] = React.useState(1);
+  const navigate = useNavigate();
 
   return (
     <Overlay>
@@ -122,6 +124,11 @@ function SignUpModal({ setOpenSignUp }) {
               return;
             }
             api.signUp(email, password, role);
+            setEmail("");
+            setPassword("");
+            setCofirmPwd("");
+            setOpenSignUp(false);
+            navigate("/profile");
           }}
         >
           註冊

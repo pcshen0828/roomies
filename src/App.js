@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GlobalStyle } from "./styles/GlobalStyle";
 import Index from "./pages/Index";
@@ -9,10 +10,10 @@ import User from "./pages/Users";
 import Explore from "./pages/Explore";
 import { Tenant, Landlord } from "./pages/Profile";
 import Messages from "./pages/Messages";
+import userContext from "./context/userContext";
 
 function App() {
-  // fix me
-  let isTenant = true;
+  const context = React.useContext(userContext);
 
   return (
     <BrowserRouter>
@@ -27,7 +28,7 @@ function App() {
         <Route path="/explore" element={<Explore />}></Route>
         <Route
           path="/profile"
-          element={isTenant ? <Tenant /> : <Landlord />}
+          element={context.role === 1 ? <Tenant /> : <Landlord />}
         ></Route>
         <Route path="/messages" element={<Messages />}></Route>
       </Routes>
