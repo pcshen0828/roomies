@@ -9,7 +9,8 @@ import {
   BodyLeft,
   BodyRight,
 } from "../components/common/Components";
-import MyComponent from "../components/explore/Map";
+import MyMap from "../components/explore/Map";
+// import SearchBox from "../components/explore/SearchInput";
 
 function Explore() {
   return (
@@ -20,10 +21,10 @@ function Explore() {
         <SubTitle>看看誰也在尋找附近的租屋</SubTitle>
       </Wrapper>
       <BodyWrapper>
-        <BodyLeft>left</BodyLeft>
-        <BodyRight>
-          <MyComponent />
-        </BodyRight>
+        <MyMap />
+        {/* <BodyLeft></BodyLeft> */}
+        {/* <BodyRight> */}
+        {/* </BodyRight> */}
       </BodyWrapper>
     </>
   );

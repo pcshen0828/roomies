@@ -1,37 +1,45 @@
 import React from "react";
 import {
   GoogleMap,
-  useJsApiLoader,
+  useLoadScript,
   Marker,
   InfoWindow,
+  StandaloneSearchBox,
+  Circle,
 } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../appkeys";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { BodyLeft, BodyRight } from "../common/Components";
+import api from "../../utils/api";
+import { getSuggestedQuery } from "@testing-library/react";
 
-///////////////////////////////////////////
+const libraries = ["places"];
 
-const lib = ["places"];
+const defaultCenter = {
+  lat: 25.0384803,
+  lng: 121.5323711,
+};
+
+const options = {
+  strokeColor: "#fff",
+  strokeOpacity: 0.8,
+  strokeWeight: 2,
+  fillColor: "#c1b18a",
+  fillOpacity: 0.35,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: true,
+  radius: 30,
+  zIndex: 1,
+};
 
 const containerStyle = {
   width: "100%",
   height: "700px",
+  border: "1px solid #dadada",
 };
-
-const center = {
-  lat: 25.0384803,
-  lng: 121.5301824,
-};
-
-const places = [
-  { name: "AppWorks School", location: { lat: 25.0384803, lng: 121.5301824 } },
-  {
-    name: "捷運芝山站二樓採光窗景公寓",
-    location: { lat: 25.1023664, lng: 121.5212715 },
-  },
-];
-
-///////////////////////////////////////////
 
 const InfoModal = styled.div`
   width: 200px;
@@ -58,16 +66,33 @@ const StyledLink = styled(Link)`
   font-weight: 400;
 `;
 
-///////////////////////////////////////////
+const SearchBox = styled.input`
+  height: 30px;
+  border: 1px solid #dadada;
+  padding: 0;
+  width: 100%;
 
-function MyComponent() {
+  &:focus {
+    outline: none;
+    border: 1px solid #c1b18a;
+  }
+`;
+
+function MyMap() {
   const [map, setMap] = React.useState(null);
+  const [center, setCenter] = React.useState(defaultCenter);
+  const [circleCenter, setCircleCenter] = React.useState(defaultCenter);
+  const [zoom, setZoom] = React.useState(12);
   const [marker, setMarker] = React.useState(center);
-  const [apartment, setApartment] = React.useState({ id: "test", name: "" });
+  const [apartments, setApartments] = React.useState([]);
+  const [searchBox, setSearchBox] = React.useState(null);
+  const [query, setQuery] = React.useState("");
 
-  const { isLoaded, loadError } = useJsApiLoader({
+  const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: googleMapsAppKey,
+    libraries,
+    language: "zh-TW",
   });
 
   const onLoad = React.useCallback(function callback(map) {
@@ -78,36 +103,75 @@ function MyComponent() {
     setMap(null);
   }, []);
 
+  const searchBoxOnLoad = (ref) => {
+    setSearchBox(ref);
+  };
+  const onPlacesChanged = () => {
+    console.log(searchBox.getPlaces());
+    const place = searchBox.getPlaces()[0];
+    const newCenter = {
+      lat: place.geometry.location.lat(),
+      lng: place.geometry.location.lng(),
+    };
+    setCenter(newCenter);
+    setCircleCenter(newCenter);
+    setZoom(18);
+    setQuery("");
+  };
+
+  React.useEffect(() => {
+    api
+      .getAllDocsFromCollection("apartments")
+      .then((res) => setApartments(res));
+  }, []);
+
   const renderMap = () => {
     return (
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        libraries={lib}
-        center={center}
-        zoom={17}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-      >
-        {places.map((place, index) => (
-          <div key={place.location.lat + place.location.lng}>
-            <Marker
-              position={place.location}
-              onClick={() => setMarker(place.location)}
-            >
-              {marker === place.location ? (
-                <InfoWindow onCloseClick={() => setMarker(null)}>
-                  <InfoModal>
-                    {place.name}
-                    <StyledLink to={`/apartment/${apartment.id}`}>
-                      查看房源
-                    </StyledLink>
-                  </InfoModal>
-                </InfoWindow>
-              ) : null}
-            </Marker>
-          </div>
-        ))}
-      </GoogleMap>
+      <>
+        <BodyLeft>
+          <StandaloneSearchBox
+            onLoad={searchBoxOnLoad}
+            onPlacesChanged={onPlacesChanged}
+          >
+            <SearchBox
+              type="text"
+              placeholder="Customized your placeholder"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </StandaloneSearchBox>
+        </BodyLeft>
+        <BodyRight>
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={zoom}
+            onLoad={onLoad}
+            onUnmount={onUnmount}
+          >
+            {apartments.map((apartment, index) => (
+              <div key={index}>
+                <Marker
+                  position={apartment.geoLocation}
+                  onClick={() => setMarker(apartment.geoLocation)}
+                >
+                  {marker === apartment.geoLocation ? (
+                    <InfoWindow onCloseClick={() => setMarker(null)}>
+                      <InfoModal>
+                        {apartment.title}
+                        <StyledLink to={`/apartment/${apartment.id}`}>
+                          查看房源
+                        </StyledLink>
+                      </InfoModal>
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+              </div>
+            ))}
+            {<Circle center={circleCenter} options={options} />}
+          </GoogleMap>
+        </BodyRight>
+      </>
     );
   };
 
@@ -118,4 +182,4 @@ function MyComponent() {
   return isLoaded ? renderMap() : <></>;
 }
 
-export default React.memo(MyComponent);
+export default React.memo(MyMap);

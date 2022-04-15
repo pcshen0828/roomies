@@ -37,7 +37,6 @@ const BodyWrapper = styled.div`
 
 const BodyLeft = styled.div`
   width: 35%;
-  border: 1px solid blue;
   @media screen and (max-width: 1280px) {
     margin-bottom: 20px;
     width: 100%;
@@ -46,7 +45,6 @@ const BodyLeft = styled.div`
 
 const BodyRight = styled.div`
   width: 63%;
-  border: 1px solid red;
   @media screen and (max-width: 1280px) {
     width: 100%;
   }
