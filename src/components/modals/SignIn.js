@@ -10,7 +10,8 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { Input, SmallTitle } from "../common/Components";
+import { Input, SmallLabel } from "../common/Components";
+import api from "../../utils/api";
 
 const NewBody = styled(Body)`
   border: none;
@@ -22,8 +23,8 @@ const NewButton = styled(Button)`
 `;
 
 function SignInModal({ setOpenSignIn }) {
-  function signIn() {}
-
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
   return (
     <Overlay>
       <Modal>
@@ -32,12 +33,19 @@ function SignInModal({ setOpenSignIn }) {
           <CloseButton onClick={() => setOpenSignIn(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SmallTitle>帳號</SmallTitle>
+          <SmallLabel>帳號</SmallLabel>
           <Input placeholder="請輸入信箱" />
-          <SmallTitle>密碼</SmallTitle>
+          <SmallLabel>密碼</SmallLabel>
           <Input placeholder="請輸入密碼" />
         </NewBody>
-        <NewButton onClick={signIn}>登入</NewButton>
+        <NewButton
+          onClick={() => {
+            if (!email.trim() || !password.trim()) return;
+            api.signIn();
+          }}
+        >
+          登入
+        </NewButton>
       </Modal>
     </Overlay>
   );

@@ -75,6 +75,13 @@ const SmallTitle = styled(Title)`
   margin-bottom: 10px;
 `;
 
+const SmallLabel = styled.label`
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: block;
+`;
+
 const SmallText = styled.div`
   font-size: 14px;
 `;
@@ -89,5 +96,6 @@ export {
   FlexWrapper,
   Input,
   SmallTitle,
+  SmallLabel,
   SmallText,
 };

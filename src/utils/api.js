@@ -37,8 +37,8 @@ const api = {
   setNewDoc(docRef, data) {
     this.SetDoc(docRef, data);
   },
-  signIn(auth, email, password) {
-    Firebase.signInWithEmailAndPassword(auth, email, password)
+  signIn(email, password) {
+    Firebase.signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         return userCredential.user;
       })
@@ -46,7 +46,22 @@ const api = {
         return error;
       });
   },
-  signUP() {},
+  signUp(email, password, role) {
+    Firebase.createUserWithEmailAndPassword(this.auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential.user);
+        const userId = userCredential.user.uid;
+        this.SetDoc(this.Doc(this.DB, "users", userId), {
+          uid: userId,
+          role,
+          email,
+          password,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
 };
 
 export default api;
