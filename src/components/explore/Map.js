@@ -12,10 +12,6 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { BodyLeft, BodyRight } from "../common/Components";
 import api from "../../utils/api";
-<<<<<<< HEAD
-=======
-import { getSuggestedQuery } from "@testing-library/react";
->>>>>>> d4dbcf6c39e94b7059300c7028852650097c13b7
 
 const libraries = ["places"];
 
@@ -28,22 +24,13 @@ const options = {
   strokeColor: "#fff",
   strokeOpacity: 0.8,
   strokeWeight: 2,
-<<<<<<< HEAD
   fillColor: "#424B5A",
   fillOpacity: 0.2,
-=======
-  fillColor: "#c1b18a",
-  fillOpacity: 0.35,
->>>>>>> d4dbcf6c39e94b7059300c7028852650097c13b7
   clickable: false,
   draggable: false,
   editable: false,
   visible: true,
-<<<<<<< HEAD
   radius: 450,
-=======
-  radius: 30,
->>>>>>> d4dbcf6c39e94b7059300c7028852650097c13b7
   zIndex: 1,
 };
 
@@ -82,12 +69,8 @@ const SearchBox = styled.input`
   height: 30px;
   border: 1px solid #dadada;
   padding: 0;
-<<<<<<< HEAD
   padding-left: 10px;
   width: calc(100% - 10px);
-=======
-  width: 100%;
->>>>>>> d4dbcf6c39e94b7059300c7028852650097c13b7
 
   &:focus {
     outline: none;
@@ -132,11 +115,7 @@ function MyMap() {
     };
     setCenter(newCenter);
     setCircleCenter(newCenter);
-<<<<<<< HEAD
     setZoom(16);
-=======
-    setZoom(18);
->>>>>>> d4dbcf6c39e94b7059300c7028852650097c13b7
     setQuery("");
   };
 
@@ -156,11 +135,7 @@ function MyMap() {
           >
             <SearchBox
               type="text"
-<<<<<<< HEAD
               placeholder="請輸入地點"
-=======
-              placeholder="Customized your placeholder"
->>>>>>> d4dbcf6c39e94b7059300c7028852650097c13b7
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
