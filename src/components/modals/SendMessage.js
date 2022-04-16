@@ -57,6 +57,8 @@ function SendMessageModal({ setOpenModal, objectId }) {
       setMessage("");
       setOpenModal(false);
     }
+    // 如果使用者都還沒有聊天記錄的話，要先建立一個 chat document
+    // 同理，如果聊天頁沒有紀錄的話，重新設計 UI
     api
       .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
       .then((res) => {

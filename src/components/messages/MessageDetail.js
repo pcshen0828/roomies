@@ -67,8 +67,7 @@ const MessageSentByOthers = styled.div`
   margin-bottom: 5px;
 `;
 
-function MessageDetail({ chats, chatId, setChatId }) {
-  const { currentUser } = useAuth();
+function MessageDetail({ currentUser, chats, chatId, setChatId }) {
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
   const selectedChat = chats.find((chat) => chat.id === chatId);
@@ -113,25 +112,24 @@ function MessageDetail({ chats, chatId, setChatId }) {
   }
   return (
     <MessageContent>
-      {chatId
-        ? messages.map((detail, index) => (
-            <React.Fragment key={index}>
-              {detail.sender === myRole ? (
-                <MessageSentByMe>{detail.content}</MessageSentByMe>
-              ) : (
-                <MessageSentByOthers>{detail.content}</MessageSentByOthers>
-              )}
-              <SendMessageBlock>
-                <MessageInput
-                  placeholder="Aa"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                />
-                <SendMessageButton onClick={updateChat} src={send} />
-              </SendMessageBlock>
-            </React.Fragment>
-          ))
-        : "loading..."}
+      {chatId &&
+        messages.map((detail, index) => (
+          <React.Fragment key={index}>
+            {detail.sender === myRole ? (
+              <MessageSentByMe>{detail.content}</MessageSentByMe>
+            ) : (
+              <MessageSentByOthers>{detail.content}</MessageSentByOthers>
+            )}
+            <SendMessageBlock>
+              <MessageInput
+                placeholder="Aa"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <SendMessageButton onClick={updateChat} src={send} />
+            </SendMessageBlock>
+          </React.Fragment>
+        ))}
     </MessageContent>
   );
 }

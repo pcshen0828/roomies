@@ -14,7 +14,6 @@ import { useAuth } from "./context/AuthContext";
 
 function App() {
   const { currentUser } = useAuth();
-  console.log(currentUser);
   return (
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>

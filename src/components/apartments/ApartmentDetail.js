@@ -80,7 +80,7 @@ function ApartmentDetail() {
     return function cleanup() {
       mounted = false;
     };
-  }, []);
+  }, [currentUser]);
 
   function openConfirmModal() {
     if (!currentUser) {

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 const icons = [
   { src: member, link: "/profile" },
-  { src: message, link: "" },
+  { src: message, link: "/messages" },
   { src: notice, link: "" },
 ];
 

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import defaulImage from "../../images/default.png";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const MessageList = styled.div`
   width: 30%;
@@ -48,7 +49,7 @@ const LastMessage = styled.div`
 `;
 
 function List({ chats, chatId, setChatId }) {
-  const { currentUser } = useAuth();
+  const { currentUser, user, loading, error } = useAuth();
   const [chatUserData, setChatUserData] = React.useState([]);
   const stringLimit = 6;
 
