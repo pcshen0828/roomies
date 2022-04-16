@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
-import userContext from "../context/userContext";
 import Header from "../components/layout/Header";
 import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
+import { useAuth } from "../context/AuthContext";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -23,20 +23,19 @@ const InnerWrapper = styled.div`
 `;
 
 function Messages() {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   const [chats, setChats] = React.useState([]);
   const [chatId, setChatId] = React.useState("");
 
   React.useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "chats"),
-      Firebase.where("userIDs", "array-contains", context.id),
+      Firebase.where("userIDs", "array-contains", currentUser.uid),
       Firebase.orderBy("updateTime", "desc")
     );
 
     const unsubscribe = Firebase.onSnapshot(query, (querySnapshot) => {
       const data = querySnapshot.docs.map((doc) => doc.data());
-      console.log(data);
       setChats(data);
       // modify me
       setChatId(data[0].id);

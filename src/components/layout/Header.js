@@ -4,8 +4,8 @@ import styled from "styled-components";
 import NavBar from "./Nav";
 import LoggedIn from "./LoggenIn";
 import NotLoggedIn from "./NotLoggedIn";
-import userContext from "../../context/userContext";
 import { FlexWrapper } from "../common/Components";
+import { useAuth } from "../../context/AuthContext";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -28,7 +28,7 @@ const IndexLink = styled(Link)`
 `;
 
 function Header() {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   return (
     <Wrapper>
       <InnerWrapper>
@@ -36,7 +36,7 @@ function Header() {
           <IndexLink to="/">logo</IndexLink>
           <NavBar />
         </FlexWrapper>
-        {!context.id ? <LoggedIn /> : <NotLoggedIn />}
+        {currentUser.uid ? <LoggedIn /> : <NotLoggedIn />}
       </InnerWrapper>
     </Wrapper>
   );

@@ -10,11 +10,11 @@ import User from "./pages/Users";
 import Explore from "./pages/Explore";
 import { Tenant, Landlord } from "./pages/Profile";
 import Messages from "./pages/Messages";
-import userContext from "./context/userContext";
+import { useAuth } from "./context/AuthContext";
 
 function App() {
-  const context = React.useContext(userContext);
-
+  const { currentUser } = useAuth();
+  console.log(currentUser);
   return (
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>
@@ -28,7 +28,7 @@ function App() {
         <Route path="/explore" element={<Explore />}></Route>
         <Route
           path="/profile"
-          element={context.role === 1 ? <Tenant /> : <Landlord />}
+          element={currentUser.role === 1 ? <Tenant /> : <Landlord />}
         ></Route>
         <Route path="/messages" element={<Messages />}></Route>
       </Routes>

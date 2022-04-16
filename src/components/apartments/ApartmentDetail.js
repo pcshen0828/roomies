@@ -1,11 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
-import userContext from "../../context/userContext";
-import { Firebase } from "../../utils/firebase";
 import Carousel from "./ApartmentCarousel";
 import JoinConfirmModal from "../modals/JoinGroupConfirm";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const Head = styled.div`
   width: calc(100% - 48px);
@@ -45,7 +44,7 @@ const StyledLink = styled(Link)`
 `;
 
 function ApartmentDetail() {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   const { id } = useParams();
   const [details, setDetails] = React.useState([]);
   const [isActive, setIsActive] = React.useState(false);
@@ -68,11 +67,11 @@ function ApartmentDetail() {
         .getDataWithSingleQuery("groups", "apartmentId", "==", id)
         .then((res) => {
           setGroupId(res[0].id);
-          setHasJoined(res[0].members.includes(context.id));
+          setHasJoined(res[0].members.includes(currentUser.uid));
         });
     }
     getDetailData();
-    if (context.id) {
+    if (currentUser.uid) {
       checkHasJoinedGroupOrNot();
     }
 
@@ -82,7 +81,7 @@ function ApartmentDetail() {
   }, []);
 
   function openConfirmModal() {
-    if (!context.id) {
+    if (!currentUser.uid) {
       // 如果沒有登入的話，請先登入
       // fix me
       console.log("未登入");

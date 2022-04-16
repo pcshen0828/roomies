@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SendMessageModal from "../modals/SendMessage";
-import userContext from "../../context/userContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Wrapper = styled.div`
   display: flex;
@@ -88,7 +88,7 @@ const SubtitleSmall = styled.div`
 function GroupMember({ members }) {
   const [openModal, setOpenModal] = React.useState(false);
   const [objectId, setObjectId] = React.useState("");
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
 
   return (
     <Wrapper>
@@ -102,11 +102,11 @@ function GroupMember({ members }) {
       <MemberBlockWrapper>
         <MembersBlock>
           <MemberBlockCard>
-            {members.find((member) => member.uid === context.id) && (
+            {members.find((member) => member.uid === currentUser.uid) && (
               <>☑︎已加入</>
             )}
             {members
-              .filter((member) => member.uid !== context.id)
+              .filter((member) => member.uid !== currentUser.uid)
               .map((member, index) => (
                 <Member key={index}>
                   <MemberLink to={`/users/${member.uid}`}>

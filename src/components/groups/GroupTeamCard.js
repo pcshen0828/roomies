@@ -2,8 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import CheckTeamMembersModal from "../modals/CheckTeamMembers";
 import ApplyJoinModal from "../modals/ApplyToJoinTeam";
-import userContext from "../../context/userContext";
-import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 
 const Wrapper = styled.div`
@@ -63,16 +62,16 @@ const ShowStatus = styled.button`
 function TeamCard({ team }) {
   const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
 
   async function joinTeam() {
     api.updateDocData("teams", team.id, {
-      members: [...team.members, { uid: context.id, status: 3 }],
+      members: [...team.members, { uid: currentUser.uid, status: 3 }],
     });
     setOpenAppliedModal(true);
   }
   const ifUserincludes = team.members.find(
-    (member) => member.uid === context.id
+    (member) => member.uid === currentUser.uid
   );
   const userStatus = ifUserincludes ? ifUserincludes.status : 4;
 

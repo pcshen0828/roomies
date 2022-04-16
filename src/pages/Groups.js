@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import { Firebase } from "../utils/firebase";
 import Header from "../components/layout/Header";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import api from "../utils/api";
+import { StyledLink } from "../components/common/Components";
 
 const Wrapper = styled.div`
   width: calc(100% - 48px);
@@ -109,7 +109,9 @@ function Groups() {
         <Banner src={apartmentData.coverImage} />
         <GroupHeader>
           <SubTitles>
-            <Title>{apartmentData.title}</Title>
+            <StyledLink to={`/apartment/${apartmentData.id}`}>
+              <Title>{apartmentData.title}</Title>
+            </StyledLink>
             <SubTitle>{`成團人數：${apartmentData.roomiesCount}人`}</SubTitle>
             <SubTitle>{`${members.length}人已加入`}</SubTitle>
           </SubTitles>

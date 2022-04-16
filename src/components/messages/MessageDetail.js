@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import userContext from "../../context/userContext";
 import { Firebase } from "../../utils/firebase";
 import send from "../../images/send.svg";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const MessageContent = styled.div`
   width: 70%;
@@ -68,12 +68,12 @@ const MessageSentByOthers = styled.div`
 `;
 
 function MessageDetail({ chats, chatId, setChatId }) {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
   const selectedChat = chats.find((chat) => chat.id === chatId);
   const myRole = selectedChat
-    ? selectedChat.members.find((member) => member.uid === context.id).role
+    ? selectedChat.members.find((member) => member.uid === currentUser.uid).role
     : 0;
 
   React.useEffect(() => {

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link, NavLink } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: calc(100% - 48px);
@@ -86,6 +87,26 @@ const SmallText = styled.div`
   font-size: 14px;
 `;
 
+const StyledLink = styled(Link)`
+  color: #424b5a;
+  display: block;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    border-bottom: 1px solid #424b5a;
+  }
+`;
+
+const StyledNavLink = styled(NavLink)`
+  color: #424b5a;
+  display: block;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    border-bottom: 1px solid #424b5a;
+  }
+`;
+
 export {
   Wrapper,
   Title,
@@ -98,4 +119,6 @@ export {
   SmallTitle,
   SmallLabel,
   SmallText,
+  StyledLink,
+  StyledNavLink,
 };

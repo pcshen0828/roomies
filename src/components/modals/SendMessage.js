@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
-import userContext from "../../context/userContext";
 import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const MessageInput = styled.textarea`
   width: calc(100% - 40px);
@@ -46,7 +46,7 @@ const Button = styled.button`
 `;
 
 function SendMessageModal({ setOpenModal, objectId }) {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   const defaultmessages = ["Hi，你好！", "我正在尋找室友"];
   const [message, setMessage] = React.useState("");
 
@@ -60,13 +60,13 @@ function SendMessageModal({ setOpenModal, objectId }) {
     api
       .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
       .then((res) => {
-        return res.filter((data) => data.userIDs.includes(context.id))[0];
+        return res.filter((data) => data.userIDs.includes(currentUser.uid))[0];
       })
       .then((res) => {
         if (res) {
           const newMessage = {
             content: message,
-            sender: res.members.find((member) => member.uid === context.id)
+            sender: res.members.find((member) => member.uid === currentUser.uid)
               .role,
             timestamp: time,
           };
@@ -88,11 +88,11 @@ function SendMessageModal({ setOpenModal, objectId }) {
             createTime: time,
             latestMessage: newMessage,
             members: [
-              { role: 0, uid: context.id },
+              { role: 0, uid: currentUser.uid },
               { role: 1, uid: objectId },
             ],
             updateTime: time,
-            userIDs: [context.id, objectId],
+            userIDs: [currentUser.uid, objectId],
           });
           api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
           clearMessageAndCloseModal();

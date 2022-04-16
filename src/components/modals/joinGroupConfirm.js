@@ -1,8 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import userContext from "../../context/userContext";
-import { Firebase } from "../../utils/firebase";
 import {
   Overlay,
   Modal,
@@ -13,6 +11,7 @@ import {
   Button,
 } from "./ModalElements";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const ContentList = styled.ol`
   line-height: 150%;
@@ -29,7 +28,7 @@ const Checkbox = styled.input`
 `;
 
 function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   const [isConfirmed, setIsConfirmed] = React.useState(false);
   const navigate = useNavigate();
 
@@ -39,7 +38,7 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
       .getDataWithSingleQuery("groups", "apartmentId", "==", apartmentId)
       .then((res) => {
         api.updateDocData("groups", res[0].id, {
-          members: [...res[0].members, context.id],
+          members: [...res[0].members, currentUser.uid],
         });
         navigate(`/groups/${groupId}`);
       });

@@ -1,9 +1,8 @@
 import React from "react";
-import userContext from "../../context/userContext";
 import styled from "styled-components";
-import { Firebase } from "../../utils/firebase";
 import defaulImage from "../../images/default.png";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const MessageList = styled.div`
   width: 30%;
@@ -49,7 +48,7 @@ const LastMessage = styled.div`
 `;
 
 function List({ chats, chatId, setChatId }) {
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
   const [chatUserData, setChatUserData] = React.useState([]);
   const stringLimit = 6;
 
@@ -57,7 +56,7 @@ function List({ chats, chatId, setChatId }) {
     let mounted = true;
     const chatMates = chats
       .map((chat) => chat.userIDs)
-      .map((uids) => uids.find((userid) => userid !== context.id));
+      .map((uids) => uids.find((userid) => userid !== currentUser.uid));
 
     async function getUserData() {
       if (!mounted) return;
@@ -111,7 +110,7 @@ function List({ chats, chatId, setChatId }) {
                 ? chatUserData.find(
                     (userData) =>
                       userData.uid ===
-                      chat.userIDs.find((userID) => userID !== context.id)
+                      chat.userIDs.find((userID) => userID !== currentUser.uid)
                   ).profileImage
                 : defaulImage
             }
@@ -122,12 +121,12 @@ function List({ chats, chatId, setChatId }) {
                 chatUserData.find(
                   (userData) =>
                     userData.uid ===
-                    chat.userIDs.find((userID) => userID !== context.id)
+                    chat.userIDs.find((userID) => userID !== currentUser.uid)
                 ).alias}
             </MessageObjectName>
             <LastMessage>
               {chat.latestMessage.sender ===
-              chat.members.find((member) => member.uid === context.id).role
+              chat.members.find((member) => member.uid === currentUser.uid).role
                 ? "你："
                 : ""}
               {`${chat.latestMessage.content.slice(0, stringLimit)}`}

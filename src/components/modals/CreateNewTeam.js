@@ -11,8 +11,8 @@ import {
 } from "./ModalElements";
 import { Firebase } from "../../utils/firebase";
 import search from "../../images/search.svg";
-import userContext from "../../context/userContext";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const NewBody = styled(Body)`
   border: none;
@@ -110,7 +110,7 @@ function NewTeamModal({ toggle, aid }) {
   const [queriedUsers, setQueriedUsers] = React.useState([]);
   const [defaultResponse, setDefaultResponse] = React.useState("");
   const [inviteList, setInviteList] = React.useState([]);
-  const context = React.useContext(userContext);
+  const { currentUser } = useAuth();
 
   async function seachUsers() {
     if (!queryName.trim()) return;
@@ -124,7 +124,7 @@ function NewTeamModal({ toggle, aid }) {
     const querySnapShot = await Firebase.getDocs(query);
     const result = querySnapShot.docs.map((doc) => doc.data());
     if (result.length) {
-      const theUsers = result.filter((user) => user.uid !== context.id);
+      const theUsers = result.filter((user) => user.uid !== currentUser.uid);
       setQueriedUsers(theUsers);
     } else {
       setDefaultResponse("查無結果");
@@ -138,7 +138,7 @@ function NewTeamModal({ toggle, aid }) {
     const newList = inviteList.map(({ name, ...rest }) => {
       return rest;
     });
-    newList.push({ uid: context.id, status: 0 });
+    newList.push({ uid: currentUser.uid, status: 0 });
     api.setNewDoc(newTeamRef, {
       id: newTeamRef.id,
       apartmentID: aid,

@@ -9,9 +9,8 @@ import {
   Title,
   Body,
 } from "./ModalElements";
-import { Firebase } from "../../utils/firebase";
-import userContext from "../../context/userContext";
 import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const Members = styled.div`
   display: flex;
@@ -66,8 +65,8 @@ const ActionButton = styled.button`
 `;
 
 function CheckTeamMembersModal({ toggle, members, teamId }) {
+  const { currentUser } = useAuth();
   const [teamMembers, setTeamMembers] = React.useState([]);
-  const context = React.useContext(userContext);
 
   React.useEffect(() => {
     let mounted = true;
@@ -91,7 +90,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
   function checkMemberStatus(id, statusCode) {
     return members.find((member) => member.uid === id).status === statusCode;
   }
-  const condition = members.find((member) => member.uid === context.id);
+  const condition = members.find((member) => member.uid === currentUser.uid);
   const checkUserInTeamStatus = condition ? condition.status : "";
 
   function addToTeam(id) {
