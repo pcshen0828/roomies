@@ -10,6 +10,7 @@ import User from "./pages/Users";
 import Explore from "./pages/Explore";
 import { Tenant, Landlord } from "./pages/Profile";
 import Messages from "./pages/Messages";
+import PageNotFound from "./pages/NotFound";
 import { useAuth } from "./context/AuthContext";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
           }
         ></Route>
         <Route path="/messages" element={<Messages />}></Route>
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

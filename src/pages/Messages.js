@@ -6,7 +6,7 @@ import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
 import { useAuth } from "../context/AuthContext";
 import { Navigate, Link } from "react-router-dom";
-import { Wrapper, SmallTitle } from "../components/common/Components";
+import { Wrapper } from "../components/common/Components";
 
 const FullWrapper = styled.div`
   width: 100%;

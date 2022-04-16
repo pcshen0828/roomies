@@ -35,7 +35,12 @@ function NavBar() {
       </StyledNavLink>
       <StyledNavLink
         to="/apartments"
-        style={location.pathname === "/apartments" ? activeStyle : {}}
+        style={
+          location.pathname === "/apartments" ||
+          location.pathname.startsWith("/apartment/")
+            ? activeStyle
+            : {}
+        }
       >
         所有房源
       </StyledNavLink>
