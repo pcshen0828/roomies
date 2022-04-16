@@ -6,6 +6,7 @@ import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import api from "../utils/api";
 import { StyledLink } from "../components/common/Components";
+import { Firebase } from "../utils/firebase";
 
 const Wrapper = styled.div`
   width: calc(100% - 48px);
@@ -76,24 +77,28 @@ function Groups() {
   const { id } = useParams();
   const [apartmentData, setApartmentData] = React.useState([]);
   const [members, setMembers] = React.useState([]);
+  const [groupMembers, setGroupMembers] = React.useState([]);
 
   React.useEffect(() => {
     let mounted = true;
     async function getGroupData() {
-      if (!mounted) return;
-      api
-        .getDataWithSingleQuery("groups", "id", "==", id)
-        .then((res) => {
-          return res[0];
-        })
-        .then((res) => {
-          api
-            .getDataWithSingleQuery("apartments", "id", "==", res.apartmentId)
-            .then((res) => setApartmentData(res[0]));
-          api
-            .getDataWithSingleQuery("users", "uid", "in", res.members)
-            .then((res) => setMembers(res));
-        });
+      const query = api.createQuery("groups", "id", "==", id);
+      Firebase.onSnapshot(query, (snapshot) => {
+        if (!mounted) return;
+        const groupData = snapshot.docs.map((doc) => doc.data())[0];
+        setGroupMembers(groupData.members);
+        api
+          .getDataWithSingleQuery(
+            "apartments",
+            "id",
+            "==",
+            groupData.apartmentId
+          )
+          .then((res) => setApartmentData(res[0]));
+        api
+          .getDataWithSingleQuery("users", "uid", "in", groupData.members)
+          .then((res) => setMembers(res));
+      });
     }
     getGroupData();
 
@@ -122,7 +127,11 @@ function Groups() {
         </GroupHeader>
         <GroupBody>
           <GroupMember members={members} />
-          <GroupTeam aid={apartmentData.id} />
+          <GroupTeam
+            aid={apartmentData.id}
+            members={groupMembers}
+            groupId={id}
+          />
         </GroupBody>
       </Wrapper>
     </>

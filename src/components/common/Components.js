@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1279.98px) {
     margin: 30px auto;
   }
 `;
@@ -31,14 +31,14 @@ const BodyWrapper = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1279.98px) {
     flex-direction: column;
   }
 `;
 
 const BodyLeft = styled.div`
   width: 35%;
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1279.98px) {
     margin-bottom: 20px;
     width: 100%;
   }
@@ -46,7 +46,7 @@ const BodyLeft = styled.div`
 
 const BodyRight = styled.div`
   width: 63%;
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1279.98px) {
     width: 100%;
   }
 `;

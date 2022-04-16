@@ -12,6 +12,12 @@ const api = {
   SetDoc: Firebase.setDoc,
   auth: Firebase.getAuth(),
 
+  createQuery(collectionName, columnName, compare, value) {
+    return this.Query(
+      this.Collection(this.DB, collectionName),
+      this.Where(columnName, compare, value)
+    );
+  },
   async getDataWithSingleQuery(collectionName, columnName, compare, value) {
     const query = this.Query(
       this.Collection(this.DB, collectionName),

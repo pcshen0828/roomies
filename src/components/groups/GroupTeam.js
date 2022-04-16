@@ -43,7 +43,7 @@ const SubtitleSmall = styled.div`
   color: #a1aeb7;
 `;
 
-function GroupTeam({ aid }) {
+function GroupTeam({ aid, members, groupId }) {
   const [teams, setTeams] = React.useState([]);
 
   React.useEffect(() => {
@@ -74,7 +74,7 @@ function GroupTeam({ aid }) {
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>
-          <CreateTeam aid={aid} />
+          <CreateTeam aid={aid} members={members} groupId={groupId} />
           {teams.length
             ? teams.map((team, index) => <TeamCard key={index} team={team} />)
             : ""}

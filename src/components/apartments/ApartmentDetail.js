@@ -5,6 +5,7 @@ import Carousel from "./ApartmentCarousel";
 import JoinConfirmModal from "../modals/JoinGroupConfirm";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import SignInFirstModal from "../modals/SignInFirst";
 
 const Head = styled.div`
   width: calc(100% - 48px);
@@ -49,7 +50,8 @@ function ApartmentDetail() {
   const [details, setDetails] = React.useState([]);
   const [isActive, setIsActive] = React.useState(false);
   const [hasJoined, setHasJoined] = React.useState(false);
-  const [groupId, setGroupId] = React.useState(false);
+  const [groupId, setGroupId] = React.useState();
+  const [hasNotSignIn, setHasNotSignIn] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -71,7 +73,7 @@ function ApartmentDetail() {
         });
     }
     getDetailData();
-    if (currentUser.uid) {
+    if (currentUser) {
       checkHasJoinedGroupOrNot();
     }
 
@@ -81,10 +83,8 @@ function ApartmentDetail() {
   }, []);
 
   function openConfirmModal() {
-    if (!currentUser.uid) {
-      // 如果沒有登入的話，請先登入
-      // fix me
-      console.log("未登入");
+    if (!currentUser) {
+      setHasNotSignIn(true);
       return;
     }
     setIsActive(true);
@@ -92,6 +92,7 @@ function ApartmentDetail() {
 
   return (
     <>
+      {hasNotSignIn && <SignInFirstModal setToggle={setHasNotSignIn} />}
       {isActive && (
         <JoinConfirmModal
           apartmentId={details[0].id}

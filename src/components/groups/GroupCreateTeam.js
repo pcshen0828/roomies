@@ -17,13 +17,18 @@ const Wrapper = styled.div`
   cursor: pointer;
 `;
 
-function CreateTeam({ aid }) {
+function CreateTeam({ aid, members, groupId }) {
   const [openNewTeamModal, setOpenNewTeamModal] = React.useState(false);
 
   return (
     <>
       {openNewTeamModal && (
-        <NewTeamModal aid={aid} toggle={setOpenNewTeamModal} />
+        <NewTeamModal
+          aid={aid}
+          toggle={setOpenNewTeamModal}
+          members={members}
+          groupId={groupId}
+        />
       )}
       <Wrapper onClick={() => setOpenNewTeamModal(true)}>+</Wrapper>
     </>

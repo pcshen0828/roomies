@@ -104,7 +104,7 @@ const CancelButton = styled.div`
   cursor: pointer;
 `;
 
-function NewTeamModal({ toggle, aid }) {
+function NewTeamModal({ toggle, aid, members, groupId }) {
   const [teamName, setTeamName] = React.useState("");
   const [queryName, setQueryName] = React.useState("");
   const [queriedUsers, setQueriedUsers] = React.useState([]);
@@ -132,7 +132,7 @@ function NewTeamModal({ toggle, aid }) {
   }
 
   async function createTeam() {
-    if (!queryName.trim()) return;
+    if (!teamName.trim()) return;
     const newTeamRef = api.createNewDocRef("teams");
     const time = Firebase.Timestamp.fromDate(new Date());
     const newList = inviteList.map(({ name, ...rest }) => {
@@ -147,6 +147,14 @@ function NewTeamModal({ toggle, aid }) {
       createTime: time,
       updateTime: time,
     });
+    const newToGroupList = newList
+      .filter((user) => !members.includes(user.uid))
+      .map((user) => user.uid);
+    if (newToGroupList.length) {
+      api.updateDocData("groups", groupId, {
+        members: [...members, ...newToGroupList],
+      });
+    }
     toggle(false);
   }
 
