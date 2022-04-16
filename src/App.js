@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { GlobalStyle } from "./styles/GlobalStyle";
 import Index from "./pages/Index";
 import About from "./pages/About";
@@ -28,7 +28,15 @@ function App() {
         <Route path="/explore" element={<Explore />}></Route>
         <Route
           path="/profile"
-          element={currentUser.role === 1 ? <Tenant /> : <Landlord />}
+          element={
+            (currentUser ? currentUser.role : "") === 1 ? (
+              <Tenant />
+            ) : (currentUser ? currentUser.role : "") === 2 ? (
+              <Landlord />
+            ) : (
+              <Navigate replace to="/" />
+            )
+          }
         ></Route>
         <Route path="/messages" element={<Messages />}></Route>
       </Routes>

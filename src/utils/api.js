@@ -56,6 +56,8 @@ const api = {
           role,
           email,
           password,
+          profileImage:
+            "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/users%2Fdefault%2Fdefault?alt=media&token=381e1e3a-523e-4b92-b09e-871f4e0ca48e",
         });
       })
       .catch((error) => {

@@ -36,7 +36,7 @@ function Header() {
           <IndexLink to="/">logo</IndexLink>
           <NavBar />
         </FlexWrapper>
-        {currentUser.uid ? <LoggedIn /> : <NotLoggedIn />}
+        {(currentUser ? currentUser.uid : "") ? <LoggedIn /> : <NotLoggedIn />}
       </InnerWrapper>
     </Wrapper>
   );

@@ -29,6 +29,7 @@ import {
 import {
   getStorage,
   ref,
+  uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
 } from "firebase/storage";
@@ -59,6 +60,7 @@ const Firebase = {
   db: getFirestore(app),
   storage,
   ref,
+  uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
 };

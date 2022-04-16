@@ -10,16 +10,18 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = React.useState();
-  const [loading, setLoading] = React.useState(true);
+  // const [loading, setLoading] = React.useState(true);
   const auth = Firebase.getAuth();
 
   async function signOut() {
     return Firebase.signOut(auth)
-      .then(() => {
+      .then((res) => {
         // Sign-out successful.
+        console.log(res);
       })
       .catch((error) => {
         // An error happened.
+        console.log(error);
       });
   }
 
@@ -29,7 +31,7 @@ export function AuthProvider({ children }) {
         const id = user.uid;
         api.getDataWithSingleQuery("users", "uid", "==", id).then((res) => {
           setCurrentUser(res[0]);
-          setLoading(false);
+          // setLoading(false);
         });
       }
     });
@@ -44,7 +46,8 @@ export function AuthProvider({ children }) {
 
   return (
     <AuthContext.Provider value={value}>
-      {!loading && children}
+      {/* {!loading && children} */}
+      {children}
     </AuthContext.Provider>
   );
 }
