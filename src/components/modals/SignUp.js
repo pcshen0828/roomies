@@ -56,6 +56,10 @@ function SignUpModal({ setOpenSignUp }) {
   const [errMessage, setErrMessage] = React.useState("");
   const [role, setRole] = React.useState(1);
   const navigate = useNavigate();
+  const userRoles = [
+    { no: 1, name: "房客" },
+    { no: 2, name: "屋主" },
+  ];
 
   return (
     <Overlay>
@@ -68,12 +72,15 @@ function SignUpModal({ setOpenSignUp }) {
           <form>
             <SmallTitle>選擇註冊身份</SmallTitle>
             <FlexWrapper>
-              <Role active={role === 1} onClick={() => setRole(1)}>
-                房客
-              </Role>
-              <Role active={role === 2} onClick={() => setRole(2)}>
-                屋主
-              </Role>
+              {userRoles.map((userRole) => (
+                <Role
+                  key={userRole.name}
+                  active={role === userRole.no}
+                  onClick={() => setRole(userRole.no)}
+                >
+                  {userRole.name}
+                </Role>
+              ))}
             </FlexWrapper>
             <SmallLabel htmlFor="email">帳號</SmallLabel>
             <Input

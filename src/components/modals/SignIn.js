@@ -25,6 +25,8 @@ const NewButton = styled(Button)`
 function SignInModal({ setOpenSignIn }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [errMessage, setErrMessage] = React.useState("");
+
   return (
     <Overlay>
       <Modal>
@@ -33,15 +35,33 @@ function SignInModal({ setOpenSignIn }) {
           <CloseButton onClick={() => setOpenSignIn(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SmallLabel>帳號</SmallLabel>
-          <Input placeholder="請輸入信箱" />
-          <SmallLabel>密碼</SmallLabel>
-          <Input placeholder="請輸入密碼" />
+          <form>
+            <SmallLabel>帳號</SmallLabel>
+            <Input
+              placeholder="請輸入信箱"
+              type="email"
+              id="email"
+              value={email}
+              autoComplete="true"
+              onChange={(e) => setEmail(e.target.value)}
+              onFocus={() => setErrMessage("")}
+            />
+            <SmallLabel>密碼</SmallLabel>
+            <Input
+              placeholder="請輸入密碼"
+              type="password"
+              id="password"
+              value={password}
+              autoComplete="true"
+              onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setErrMessage("")}
+            />
+          </form>
         </NewBody>
         <NewButton
           onClick={() => {
             if (!email.trim() || !password.trim()) return;
-            api.signIn();
+            api.signIn(email, password);
           }}
         >
           登入

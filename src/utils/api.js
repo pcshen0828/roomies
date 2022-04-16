@@ -40,10 +40,10 @@ const api = {
   signIn(email, password) {
     Firebase.signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        return userCredential.user;
+        console.log(userCredential.user);
       })
       .catch((error) => {
-        return error;
+        console.log(error);
       });
   },
   signUp(email, password, role) {

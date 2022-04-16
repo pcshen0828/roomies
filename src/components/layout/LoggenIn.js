@@ -4,8 +4,13 @@ import member from "../../images/member.svg";
 import notice from "../../images/notice.svg";
 import message from "../../images/message.svg";
 import { FlexWrapper } from "../common/Components";
+import { Link } from "react-router-dom";
 
-const icons = [member, message, notice];
+const icons = [
+  { src: member, link: "/profile" },
+  { src: message, link: "" },
+  { src: notice, link: "" },
+];
 
 const Icon = styled.img`
   width: 30px;
@@ -18,7 +23,9 @@ function LoggedIn() {
   return (
     <FlexWrapper>
       {icons.map((icon, index) => (
-        <Icon src={icon} key={index} />
+        <Link to={icon.link} key={index}>
+          <Icon src={icon.src} />
+        </Link>
       ))}
     </FlexWrapper>
   );
