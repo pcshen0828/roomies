@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { BodyWrapper } from "../common/Components";
+import {
+  BodyWrapper,
+  ProfileList,
+  ProfileItem,
+  ProfileContent,
+} from "../common/Components";
 import TenantInfo from "./TenantInfo";
 
 const Wrapper = styled(BodyWrapper)`
@@ -12,32 +17,6 @@ const profilelist = [
   { name: "我的收藏", id: 2 },
   { name: "房源管理", id: 3 },
 ];
-
-const ProfileList = styled.div`
-  width: 20%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const ProfileItem = styled.div`
-  font-size: 14px;
-  padding: 10px 0 5px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  border-bottom: ${(props) =>
-    props.active ? "1px solid #c1b18a" : "1px solid transparent"};
-  &:hover {
-    border-bottom: 1px solid #c1b18a;
-  }
-`;
-
-const ProfileContent = styled.div`
-  width: 78%;
-  @media screen and (max-width: 1279.98px) {
-    width: 100%;
-  }
-`;
 
 function Tenant() {
   const [listIndex, setListIndex] = React.useState(1);

@@ -138,6 +138,32 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const ProfileList = styled.div`
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const ProfileItem = styled.div`
+  font-size: 14px;
+  padding: 10px 0 5px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-bottom: ${(props) =>
+    props.active ? "1px solid #c1b18a" : "1px solid transparent"};
+  &:hover {
+    border-bottom: 1px solid #c1b18a;
+  }
+`;
+
+const ProfileContent = styled.div`
+  width: 78%;
+  @media screen and (max-width: 1279.98px) {
+    width: 100%;
+  }
+`;
+
 export {
   Wrapper,
   Title,
@@ -154,4 +180,7 @@ export {
   SmallText,
   StyledLink,
   StyledNavLink,
+  ProfileList,
+  ProfileItem,
+  ProfileContent,
 };

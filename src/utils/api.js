@@ -57,7 +57,7 @@ const api = {
       .then((userCredential) => {
         console.log(userCredential.user);
         const userId = userCredential.user.uid;
-        this.SetDoc(this.Doc(this.DB, "users", userId), {
+        const basicInfo = {
           uid: userId,
           role,
           email,
@@ -67,14 +67,24 @@ const api = {
           name: "",
           alias: "",
           phone: "",
-          jobTitle: "",
-          hobbies: [],
           evaluation: [],
-          employment: 1,
           selfIntro: "",
           birthday: "",
           gender: 0,
-        });
+        };
+        this.SetDoc(
+          this.Doc(this.DB, "users", userId),
+          role === 1
+            ? {
+                ...basicInfo,
+                jobTitle: "",
+                hobbies: [],
+                employment: 1,
+              }
+            : {
+                ...basicInfo,
+              }
+        );
       })
       .catch((error) => {
         console.log(error);

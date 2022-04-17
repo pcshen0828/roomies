@@ -86,7 +86,7 @@ const Loading = styled.button`
   }
 `;
 
-function TenantInfo() {
+function LandlordInfo() {
   const { currentUser } = useAuth();
   const [openModal, setOpenModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -97,21 +97,11 @@ function TenantInfo() {
   const [gender, setGender] = React.useState(currentUser.gender);
   const [birthday, setBirthday] = React.useState(currentUser.birthday);
   const [phone, setPhone] = React.useState(currentUser.phone);
-  const [jobTitle, setJobTitle] = React.useState(currentUser.jobTitle);
-  const [employment, setEmployment] = React.useState(currentUser.employment);
   const [selfIntro, setSelfIntro] = React.useState(currentUser.selfIntro);
-  const [hobbies, setHobbies] = React.useState(currentUser.hobbies);
   const [profileImage, setProfileImage] = React.useState(
     currentUser.profileImage
   );
 
-  const employments = [
-    { name: "待業中", value: 0 },
-    { name: "上班族", value: 1 },
-    { name: "兼職", value: 2 },
-    { name: "自由工作者", value: 3 },
-    { name: "自僱者", value: 4 },
-  ];
   const genders = [
     { name: "女", value: 0 },
     { name: "男", value: 1 },
@@ -119,16 +109,6 @@ function TenantInfo() {
 
   function updateUserData() {
     setIsLoading(true);
-    const basicInfo = {
-      name,
-      alias,
-      gender,
-      birthday,
-      phone,
-      jobTitle,
-      employment,
-      selfIntro,
-    };
     if (file) {
       const storageRef = Firebase.ref(
         Firebase.storage,
@@ -138,9 +118,13 @@ function TenantInfo() {
         Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
           api.updateDocData("users", currentUser.uid, {
             ...currentUser,
-            ...basicInfo,
+            name,
+            alias,
+            gender,
+            birthday,
+            phone,
+            selfIntro,
             profileImage: downloadURL,
-            // hobbies,
           });
           setIsLoading(false);
         });
@@ -148,8 +132,12 @@ function TenantInfo() {
     } else {
       api.updateDocData("users", currentUser.uid, {
         ...currentUser,
-        ...basicInfo,
-        // hobbies,
+        name,
+        alias,
+        gender,
+        birthday,
+        phone,
+        selfIntro,
       });
       setIsLoading(false);
     }
@@ -184,7 +172,7 @@ function TenantInfo() {
                 id="fullname"
                 placeholder="請填寫中文或英文全名"
                 value={name}
-                onChange={(e) => setName(e.target.value.trim())}
+                onChange={(e) => setName(e.target.value)}
               />
               <SmallLabel htmlFor="alias">
                 暱稱<Required>*</Required>
@@ -193,7 +181,7 @@ function TenantInfo() {
                 id="alias"
                 placeholder="顯示在社群上的名字"
                 value={alias}
-                onChange={(e) => setAlias(e.target.value.trim())}
+                onChange={(e) => setAlias(e.target.value)}
               />
               <SmallLabel htmlFor="gender">
                 生理性別<Required>*</Required>
@@ -225,41 +213,17 @@ function TenantInfo() {
                 id="phone"
                 placeholder="0987654321"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value.trim())}
+                onChange={(e) => setPhone(e.target.value)}
               />
             </Block>
             <Block>
               <NewTitle>進階資訊</NewTitle>
-              <SmallLabel htmlFor="hobbies">興趣標籤</SmallLabel>
-              <Input id="hobbies" placeholder="" />
-              <SmallLabel htmlFor="job">職稱</SmallLabel>
-              <Input
-                id="job"
-                placeholder={
-                  currentUser.jobTitle ? currentUser.jobTitle : "工程師"
-                }
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-              />
-              <SmallLabel htmlFor="emplyment">工作型態</SmallLabel>
-              <Select
-                id="emplyment"
-                name="emplyment"
-                value={employment}
-                onChange={(e) => setEmployment(parseInt(e.target.value))}
-              >
-                {employments.map((e, index) => (
-                  <option key={index} value={e.value}>
-                    {e.name}
-                  </option>
-                ))}
-              </Select>
               <SmallLabel htmlFor="intro">社群簡介</SmallLabel>
               <Textarea
                 id="intro"
                 placeholder="介紹自己，讓其他人更認識你！"
                 value={selfIntro}
-                onChange={(e) => setSelfIntro(e.target.value.trim())}
+                onChange={(e) => setSelfIntro(e.target.value)}
               />
             </Block>
           </InnerWrapper>
@@ -276,4 +240,4 @@ function TenantInfo() {
   return Render();
 }
 
-export default TenantInfo;
+export default LandlordInfo;

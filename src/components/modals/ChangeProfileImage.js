@@ -9,17 +9,41 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallLabel, Input } from "../common/Components";
-import { Firebase } from "../../utils/firebase";
+import { SmallLabel } from "../common/Components";
+import { useAuth } from "../../context/AuthContext";
 
-function ChangeProfileImageModal({ toggle }) {
-  const [file, setFile] = React.useState();
-  function uploadImage() {
-    const storageRef = Firebase.ref(Firebase.storage, "users/default/default");
-    Firebase.uploadBytes(storageRef, file).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
-  }
+const NewBody = styled(Body)`
+  height: auto;
+`;
+
+const FileWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FileImage = styled.img`
+  width: 50%;
+  margin-bottom: 10px;
+`;
+
+const FileCancelButton = styled.button`
+  width: 90px;
+  height: 35px;
+  font-size: 14px;
+`;
+
+const Error = styled.div`
+  font-size: 14px;
+  color: #ed3636;
+  margin-top: 10px;
+`;
+
+function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
+  const { currentUser } = useAuth();
+  const [url, setUrl] = React.useState("");
+  const [error, setError] = React.useState("");
+  const fileRef = React.useRef(null);
+
   return (
     <Overlay>
       <Modal>
@@ -27,17 +51,48 @@ function ChangeProfileImageModal({ toggle }) {
           <Title>更換大頭照</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
-        <Body>
+        <NewBody>
           <SmallLabel htmlFor="profile">選擇照片</SmallLabel>
           <input
+            ref={fileRef}
             id="profile"
             type="file"
             accept="image/*"
-            value={file}
-            onChange={(e) => setFile(e.target.files[0])}
+            onChange={(e) => {
+              if ((e.target.files[0].size / 1024 / 1024).toFixed(4) >= 1) {
+                setError("檔案大小過大，請重新上傳");
+                return;
+              }
+              setError("");
+              setFile(e.target.files[0]);
+              const objectUrl = URL.createObjectURL(e.target.files[0]);
+              setUrl(objectUrl);
+            }}
           />
-        </Body>
-        <Button>確認</Button>
+          {error && <Error>{error}</Error>}
+          {url && (
+            <FileWrapper>
+              <FileImage src={url} alt="" />
+              <FileCancelButton
+                onClick={() => {
+                  setFile(null);
+                  setUrl("");
+                  fileRef.current.value = null;
+                }}
+              >
+                重新選擇
+              </FileCancelButton>
+            </FileWrapper>
+          )}
+        </NewBody>
+        <Button
+          onClick={() => {
+            setProfileImage(url ? url : currentUser.profileImage);
+            toggle(false);
+          }}
+        >
+          確認
+        </Button>
       </Modal>
     </Overlay>
   );
