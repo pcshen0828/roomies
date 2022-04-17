@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Wrapper, FlexWrapper, SmallTitle } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import EditPropertyModal from "../modals/EditProperty";
 
 const NewWrapper = styled(Wrapper)`
   margin: 0;
@@ -55,6 +56,9 @@ const CardBody = styled.div`
 function LandlordProperty() {
   const { currentUser } = useAuth();
   const [properties, setProperties] = React.useState([]);
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [apartment, setApartment] = React.useState("");
+
   React.useEffect(() => {
     let mounted = true;
     api
@@ -70,20 +74,32 @@ function LandlordProperty() {
   }, [currentUser]);
 
   return (
-    <NewWrapper>
-      <NewButton>新增房源</NewButton>
-      <NewFlexWrapper>
-        {properties.map((item, index) => (
-          <Card key={index}>
-            <CardImage src={item.coverImage}></CardImage>
-            <CardBody>
-              <SmallTitle>{item.title}</SmallTitle>
-              <button>編輯</button>
-            </CardBody>
-          </Card>
-        ))}
-      </NewFlexWrapper>
-    </NewWrapper>
+    <>
+      {openEdit && (
+        <EditPropertyModal toggle={setOpenEdit} apartment={apartment} />
+      )}
+      <NewWrapper>
+        <NewButton>新增房源</NewButton>
+        <NewFlexWrapper>
+          {properties.map((item, index) => (
+            <Card key={index}>
+              <CardImage src={item.coverImage}></CardImage>
+              <CardBody>
+                <SmallTitle>{item.title}</SmallTitle>
+                <button
+                  onClick={() => {
+                    setOpenEdit(true);
+                    setApartment(item);
+                  }}
+                >
+                  編輯
+                </button>
+              </CardBody>
+            </Card>
+          ))}
+        </NewFlexWrapper>
+      </NewWrapper>
+    </>
   );
 }
 
