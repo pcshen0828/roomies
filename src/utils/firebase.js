@@ -13,6 +13,7 @@ import {
 import {
   getFirestore,
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,
@@ -46,6 +47,7 @@ const Firebase = {
   onAuthStateChanged,
   signOut,
   collection,
+  collectionGroup,
   doc,
   getDoc,
   getDocs,

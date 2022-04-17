@@ -22,6 +22,11 @@ const NewButton = styled(Button)`
   align-self: center;
 `;
 
+const ErrorMessage = styled.div`
+  color: #ed3636;
+  font-size: 14px;
+`;
+
 function SignInModal({ setOpenSignIn }) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -57,11 +62,12 @@ function SignInModal({ setOpenSignIn }) {
               onFocus={() => setErrMessage("")}
             />
           </form>
+          {errMessage && <ErrorMessage>{errMessage}</ErrorMessage>}
         </NewBody>
         <NewButton
           onClick={() => {
             if (!email.trim() || !password.trim()) return;
-            api.signIn(email, password);
+            api.signIn(email, password, setErrMessage);
           }}
         >
           登入

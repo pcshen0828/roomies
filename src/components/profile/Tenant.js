@@ -16,6 +16,7 @@ const profilelist = [
   { name: "會員基本資料", id: 1 },
   { name: "我的收藏", id: 2 },
   { name: "房源管理", id: 3 },
+  { name: "預約看房", id: 4 },
 ];
 
 function Tenant() {

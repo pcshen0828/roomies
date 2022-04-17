@@ -18,6 +18,14 @@ const api = {
       this.Where(columnName, compare, value)
     );
   },
+  async getCollectionGroup(subCollectionName, columnName, compare, value) {
+    const query = this.Query(
+      Firebase.collectionGroup(this.DB, subCollectionName),
+      this.Where(columnName, compare, value)
+    );
+    const querySnapshot = await this.GetDocs(query);
+    return querySnapshot.docs.map((doc) => doc.data());
+  },
   async getDataWithSingleQuery(collectionName, columnName, compare, value) {
     const query = this.Query(
       this.Collection(this.DB, collectionName),
@@ -43,16 +51,32 @@ const api = {
   setNewDoc(docRef, data) {
     this.SetDoc(docRef, data);
   },
-  signIn(email, password) {
+  handleError(err) {
+    console.log(err);
+    return err.code === "auth/invalid-email"
+      ? "信箱格式錯誤"
+      : err.code === "auth/wrong-password"
+      ? "密碼錯誤"
+      : err.code === "auth/weak-password"
+      ? "密碼至少要有六位元"
+      : err.code === "auth/email-already-in-use"
+      ? "此信箱已註冊過，請使用另一信箱"
+      : err.code === "auth/user-not-found"
+      ? "查無用戶，請確認資料輸入正確"
+      : err.code === "auth/internal-error"
+      ? "系統錯誤，請重新再試一次"
+      : "";
+  },
+  signIn(email, password, setError) {
     Firebase.signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         console.log(userCredential.user);
       })
       .catch((error) => {
-        console.log(error);
+        setError(this.handleError(error));
       });
   },
-  signUp(email, password, role) {
+  signUp(email, password, role, setError) {
     Firebase.createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         console.log(userCredential.user);
@@ -87,7 +111,7 @@ const api = {
         );
       })
       .catch((error) => {
-        console.log(error);
+        setError(this.handleError(error));
       });
   },
 };

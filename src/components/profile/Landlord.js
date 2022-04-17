@@ -7,6 +7,7 @@ import {
   ProfileContent,
 } from "../common/Components";
 import LandlordInfo from "./LandlordInfo";
+import LandlordProperty from "./LandlordProperty";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
@@ -15,7 +16,7 @@ const Wrapper = styled(BodyWrapper)`
 const profilelist = [
   { name: "會員基本資料", id: 1 },
   { name: "房源管理", id: 2 },
-  { name: "預約看房管理", id: 3 },
+  { name: "行程管理", id: 3 },
 ];
 
 function Landlord() {
@@ -36,7 +37,7 @@ function Landlord() {
       {listIndex && (
         <ProfileContent>
           {listIndex === 1 && <LandlordInfo />}
-          {listIndex === 2 && <>房源管理</>}
+          {listIndex === 2 && <LandlordProperty />}
           {listIndex === 3 && <>預約看房管理</>}
         </ProfileContent>
       )}

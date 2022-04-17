@@ -130,7 +130,7 @@ function SignUpModal({ setOpenSignUp }) {
               setErrMessage("請再次確認密碼");
               return;
             }
-            api.signUp(email, password, role);
+            api.signUp(email, password, role, setErrMessage);
             setEmail("");
             setPassword("");
             setCofirmPwd("");

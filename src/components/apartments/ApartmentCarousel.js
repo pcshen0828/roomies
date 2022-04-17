@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 import switcher from "../../images/send.svg";
+import api from "../../utils/api";
 
 const Wrapper = styled.div`
   width: calc(55% - 20px);
@@ -47,16 +48,14 @@ function Carousel({ id }) {
     let mounted = true;
     async function getImages() {
       if (!mounted) return;
-      const subColRef = Firebase.doc(
+      const subColRef = Firebase.collection(
         Firebase.db,
         "apartments",
         id,
-        "details",
         "images"
       );
-
-      const qSnap = await Firebase.getDoc(subColRef);
-      setImages(qSnap.data().list);
+      const qSnap = await Firebase.getDocs(subColRef);
+      setImages(qSnap.docs.map((doc) => doc.data().url));
     }
     getImages();
 
