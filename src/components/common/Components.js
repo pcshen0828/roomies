@@ -71,6 +71,37 @@ const Input = styled.input`
   }
 `;
 
+const Select = styled.select`
+  width: 90%;
+  height: 30px;
+  border: 1px solid #dadada;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  color: #424b5a;
+  flex-shrink: 0;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #c1b18a;
+  }
+`;
+
+const Textarea = styled.textarea`
+  width: 90%;
+  height: 120px;
+  border: 1px solid #dadada;
+  margin-bottom: 20px;
+  padding: 10px;
+  color: #424b5a;
+  flex-shrink: 0;
+  font-family: "Noto Sans TC", sans-serif;
+
+  &:focus {
+    outline: none;
+    border: 1px solid #c1b18a;
+  }
+`;
+
 const SmallTitle = styled(Title)`
   font-size: 14px;
   margin-bottom: 10px;
@@ -116,6 +147,8 @@ export {
   BodyRight,
   FlexWrapper,
   Input,
+  Select,
+  Textarea,
   SmallTitle,
   SmallLabel,
   SmallText,
