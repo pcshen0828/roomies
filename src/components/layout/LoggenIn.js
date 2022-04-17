@@ -1,15 +1,32 @@
 import React from "react";
 import styled from "styled-components";
 import member from "../../images/member.svg";
+import memberActive from "../../images/member-active.svg";
 import notice from "../../images/notice.svg";
+import noticeActive from "../../images/notice-active.svg";
 import message from "../../images/message.svg";
+import messageActive from "../../images/message-active.svg";
 import { FlexWrapper } from "../common/Components";
-import { Link } from "react-router-dom";
+import MemberModal from "../modals/MemberModal";
+import MessageModal from "../modals/MessageModal";
+import NoticeModal from "../modals/NoticeModal";
 
 const icons = [
-  { src: member, link: "/profile" },
-  { src: message, link: "/messages" },
-  { src: notice, link: "" },
+  {
+    name: "member",
+    src: member,
+    activeSrc: memberActive,
+  },
+  {
+    name: "message",
+    src: message,
+    activeSrc: messageActive,
+  },
+  {
+    name: "notice",
+    src: notice,
+    activeSrc: noticeActive,
+  },
 ];
 
 const Icon = styled.img`
@@ -20,14 +37,25 @@ const Icon = styled.img`
 `;
 
 function LoggedIn() {
+  const [activeicon, setActiveIcon] = React.useState("");
   return (
-    <FlexWrapper>
-      {icons.map((icon, index) => (
-        <Link to={icon.link} key={index}>
-          <Icon src={icon.src} />
-        </Link>
-      ))}
-    </FlexWrapper>
+    <>
+      {activeicon === "member" && <MemberModal setActiveIcon={setActiveIcon} />}
+      {activeicon === "message" && (
+        <MessageModal setActiveIcon={setActiveIcon} />
+      )}
+      {activeicon === "notice" && <NoticeModal setActiveIcon={setActiveIcon} />}
+      <FlexWrapper>
+        {icons.map((icon, index) => (
+          <React.Fragment key={index}>
+            <Icon
+              src={activeicon === icon.name ? icon.activeSrc : icon.src}
+              onClick={() => setActiveIcon(icon.name)}
+            />
+          </React.Fragment>
+        ))}
+      </FlexWrapper>
+    </>
   );
 }
 

@@ -53,4 +53,37 @@ const Button = styled.button`
   margin: 20px 20px 40px 0;
 `;
 
-export { Overlay, Modal, Header, CloseButton, Title, Body, Button };
+const NavModalOverlay = styled.div`
+  position: fixed;
+  left: 0;
+  top: 85px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+`;
+
+const NavModal = styled.div`
+  width: 250px;
+  position: absolute;
+  top: 0;
+  right: 20px;
+  background: #ffffff;
+  box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+`;
+
+export {
+  Overlay,
+  Modal,
+  Header,
+  CloseButton,
+  Title,
+  Body,
+  Button,
+  NavModalOverlay,
+  NavModal,
+};

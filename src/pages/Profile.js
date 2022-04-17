@@ -1,46 +1,27 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import Header from "../components/layout/Header";
-import { Firebase } from "../utils/firebase";
+import Tenant from "../components/profile/Tenant";
+import Landlord from "../components/profile/Landlord";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Wrapper } from "../components/common/Components";
 
-function Tenant() {
-  const { signOut } = useAuth();
-  const navigate = useNavigate();
-  const [file, setFile] = React.useState(null);
-  function uploadImage() {
-    const storageRef = Firebase.ref(Firebase.storage, "users/default/default");
-    Firebase.uploadBytes(storageRef, file).then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-    });
-  }
+function Profile() {
+  const { currentUser } = useAuth();
   return (
     <>
       <Header />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFile(e.target.files[0])}
-      />
-      <button onClick={uploadImage}>上傳</button>
-      <button
-        onClick={() => {
-          signOut().then(navigate("/"));
-        }}
-      >
-        登出
-      </button>
+      <Wrapper>
+        {(currentUser ? currentUser.role : "") === 1 ? (
+          <Tenant />
+        ) : (currentUser ? currentUser.role : "") === 2 ? (
+          <Landlord />
+        ) : (
+          <Navigate replace to="/" />
+        )}
+      </Wrapper>
     </>
   );
 }
 
-function Landlord() {
-  return (
-    <>
-      <Header />
-      landlord
-    </>
-  );
-}
-
-export { Tenant, Landlord };
+export default Profile;
