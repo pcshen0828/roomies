@@ -116,20 +116,20 @@ function EditPropertyModal({ toggle, apartment }) {
     api
       .getAllDocsFromCollection("apartments/" + apartment.id + "/conditions")
       .then((res) => {
-        console.log(res[0]);
-        setConditions(res[0].content);
+        console.log(res);
+        setConditions(res);
       });
     api
       .getAllDocsFromCollection("apartments/" + apartment.id + "/facilities")
       .then((res) => {
-        console.log(res[0]);
-        setFacilities(res[0].content);
+        console.log(res);
+        setFacilities(res);
       });
     api
       .getAllDocsFromCollection("apartments/" + apartment.id + "/furnitures")
       .then((res) => {
-        console.log(res[0]);
-        setFurnitures(res[0].content);
+        console.log(res);
+        setFurnitures(res);
       });
     api
       .getAllDocsFromCollection("apartments/" + apartment.id + "/images")
@@ -140,8 +140,8 @@ function EditPropertyModal({ toggle, apartment }) {
     api
       .getAllDocsFromCollection("apartments/" + apartment.id + "/otherInfo")
       .then((res) => {
-        console.log(res[0]);
-        setOtherInfo(res[0].content);
+        console.log(res);
+        setOtherInfo(res);
       });
   }, []);
 
@@ -315,8 +315,9 @@ function EditPropertyModal({ toggle, apartment }) {
                       <input
                         id={`${info.id}${index}`}
                         name={info.id}
+                        checked={info.value === choice.value}
                         type="radio"
-                        value={stringToBoolean(choice.value)}
+                        value={choice.value}
                         onChange={(e) => {
                           setOtherInfo((prev) =>
                             prev.map((item) =>

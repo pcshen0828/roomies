@@ -13,6 +13,7 @@ import Messages from "./pages/Messages";
 import PageNotFound from "./pages/NotFound";
 
 function App() {
+  // 網址不要用大寫
   return (
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>
