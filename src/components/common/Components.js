@@ -164,6 +164,12 @@ const ProfileContent = styled.div`
   }
 `;
 
+const Error = styled.div`
+  font-size: 14px;
+  color: #ed3636;
+  margin-top: 10px;
+`;
+
 export {
   Wrapper,
   Title,
@@ -183,4 +189,5 @@ export {
   ProfileList,
   ProfileItem,
   ProfileContent,
+  Error,
 };
