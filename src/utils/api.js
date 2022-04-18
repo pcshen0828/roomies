@@ -39,16 +39,32 @@ const api = {
     const querySnapShot = await this.GetDocs(query);
     return querySnapShot.docs.map((doc) => doc.data());
   },
-  updateDocData(collectionName, docID, data) {
+  async updateDocData(collectionName, docID, data) {
     this.UpdateDoc(this.Doc(this.DB, collectionName, docID), data);
   },
-  addNewDoc(docRef, data) {
+  async updateSubCollectionDocData(
+    collectionName,
+    docID,
+    subCollectionName,
+    subDocID,
+    data
+  ) {
+    this.UpdateDoc(
+      this.Doc(this.DB, collectionName, docID, subCollectionName, subDocID),
+      data
+    );
+  },
+  async uploadFileAndGetDownloadUrl(storagePath, file) {
+    const storageRef = Firebase.ref(Firebase.storage, storagePath);
+    return Firebase.uploadBytes(storageRef, file);
+  },
+  async addNewDoc(docRef, data) {
     this.AddDoc(this.Collection(this.DB, docRef), data);
   },
-  createNewDocRef(collectionName) {
+  async createNewDocRef(collectionName) {
     return this.Doc(this.Collection(this.DB, collectionName));
   },
-  setNewDoc(docRef, data) {
+  async setNewDoc(docRef, data) {
     this.SetDoc(docRef, data);
   },
   handleError(err) {
@@ -67,7 +83,7 @@ const api = {
       ? "系統錯誤，請重新再試一次"
       : "";
   },
-  signIn(email, password, setError) {
+  async signIn(email, password, setError) {
     Firebase.signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         console.log(userCredential.user);
@@ -76,7 +92,7 @@ const api = {
         setError(this.handleError(error));
       });
   },
-  signUp(email, password, role, setError) {
+  async signUp(email, password, role, setError) {
     Firebase.createUserWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
         console.log(userCredential.user);

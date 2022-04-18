@@ -33,6 +33,7 @@ import {
   uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
+  listAll,
 } from "firebase/storage";
 
 const app = firebase.initializeApp(firebaseConfig);
@@ -65,6 +66,7 @@ const Firebase = {
   uploadBytes,
   uploadBytesResumable,
   getDownloadURL,
+  listAll,
 };
 
 export { Firebase };

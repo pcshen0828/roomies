@@ -170,6 +170,33 @@ const Error = styled.div`
   margin-top: 10px;
 `;
 
+const LoadingButton = styled.button`
+  align-self: end;
+  margin: 20px;
+  cursor: not-allowed;
+  background: #dadada;
+  color: #424b5a;
+  &:hover {
+    background: #dadada;
+  }
+`;
+
+const PagingList = styled(FlexWrapper)`
+  margin: 20px 14px 0 0;
+  justify-content: flex-end;
+`;
+
+const PagingItem = styled.div`
+  width: 30px;
+  height: 30px;
+  border: 1px solid #dadada;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: ${(props) => (props.active ? "#dadada" : "")};
+`;
+
 export {
   Wrapper,
   Title,
@@ -190,4 +217,7 @@ export {
   ProfileItem,
   ProfileContent,
   Error,
+  LoadingButton,
+  PagingList,
+  PagingItem,
 };

@@ -4,6 +4,7 @@ import { Wrapper, FlexWrapper, SmallTitle } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
+import { Firebase } from "../../utils/firebase";
 
 const NewWrapper = styled(Wrapper)`
   margin: 0;
@@ -60,17 +61,13 @@ function LandlordProperty() {
   const [apartment, setApartment] = React.useState("");
 
   React.useEffect(() => {
-    let mounted = true;
-    api
-      .getDataWithSingleQuery("apartments", "owner", "==", currentUser.uid)
-      .then((res) => {
-        if (!mounted) return;
-        console.log(res);
-        setProperties(res);
-      });
-    return function cleanup() {
-      mounted = false;
-    };
+    const query = api.createQuery("apartments", "owner", "==", currentUser.uid);
+    const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
+      console.log(querySnapShot.docs.map((doc) => doc.data()));
+      setProperties(querySnapShot.docs.map((doc) => doc.data()));
+    });
+
+    return unsubscribe;
   }, [currentUser]);
 
   return (
