@@ -121,7 +121,7 @@ function MyMap() {
 
   React.useEffect(() => {
     api
-      .getAllDocsFromCollection("apartments")
+      .getDataWithSingleQuery("apartments", "status", "==", 1)
       .then((res) => setApartments(res));
   }, []);
 

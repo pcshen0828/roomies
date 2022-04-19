@@ -55,22 +55,27 @@ const UploadNewImage = styled.label`
   font-size: 60px;
 `;
 
-function CreatePropertyPage4({ id, paging, setPaging, toggle }) {
+function CreatePropertyPage4({ id, paging, setPaging, toggle, apartment }) {
   const [isLoading, setIsLoading] = React.useState(false);
   const fileRef = React.useRef(null);
   const [error, setError] = React.useState("");
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = React.useState(
+    apartment.images ? apartment.images : []
+  );
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => {
+    console.log(apartment);
+  }, [apartment]);
 
   function updateApartmentInfo() {
-    // setIsLoading(true);
-    // const time = Firebase.Timestamp.fromDate(new Date());
-    // api.updateDocData("apartments", id, {
-    //   images,
-    //   updateTime: time,
-    // });
-    // setIsLoading(false);
+    setIsLoading(true);
+    const time = Firebase.Timestamp.fromDate(new Date());
+    api.updateDocData("apartments", id, {
+      images,
+      updateTime: time,
+      status: 1,
+    });
+    setIsLoading(false);
     toggle(false);
   }
 
@@ -133,26 +138,6 @@ function CreatePropertyPage4({ id, paging, setPaging, toggle }) {
         </FlexWrapper>
       </ImagesDisplayer>
       <PagingList>
-        {paging > 1 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <button
-              onClick={() => setPaging((prev) => (prev > 1 ? prev - 1 : 1))}
-            >
-              上一頁
-            </button>
-          ))}
-        {paging < 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <button
-              onClick={() => setPaging((prev) => (prev < 4 ? prev + 1 : 4))}
-            >
-              儲存並繼續
-            </button>
-          ))}
         {paging === 4 &&
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>

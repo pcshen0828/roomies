@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { Wrapper, FlexWrapper, SmallTitle } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
@@ -8,8 +9,7 @@ import CreatePropertyModal from "../modals/CreateProperty";
 import { Firebase } from "../../utils/firebase";
 
 const NewWrapper = styled(Wrapper)`
-  margin: 0;
-  margin-top: 10px;
+  margin: 10px 0 20px;
 `;
 
 const NewFlexWrapper = styled(FlexWrapper)`
@@ -24,9 +24,19 @@ const NewButton = styled.button`
   border-radius: 5px;
   background: none;
   color: #424b5a;
+  margin-bottom: 30px;
 
   &:hover {
     background: #dadada;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #424b5a;
+  display: block;
+  margin: 5px 0 20px;
+  &:hover {
+    text-decoration: underline;
   }
 `;
 
@@ -63,7 +73,11 @@ function LandlordProperty() {
   const [apartment, setApartment] = React.useState("");
 
   React.useEffect(() => {
-    const query = api.createQuery("apartments", "owner", "==", currentUser.uid);
+    const query = Firebase.query(
+      Firebase.collection(Firebase.db, "apartments"),
+      Firebase.where("owner", "==", currentUser.uid),
+      Firebase.orderBy("updateTime", "desc")
+    );
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
       console.log(querySnapShot.docs.map((doc) => doc.data()));
       setProperties(querySnapShot.docs.map((doc) => doc.data()));
@@ -82,23 +96,49 @@ function LandlordProperty() {
       )}
       <NewWrapper>
         <NewButton onClick={() => setOpenCreate(true)}>新增房源</NewButton>
+        <SmallTitle>待上架</SmallTitle>
         <NewFlexWrapper>
-          {properties.map((item, index) => (
-            <Card key={index}>
-              <CardImage src={item.coverImage}></CardImage>
-              <CardBody>
-                <SmallTitle>{item.title}</SmallTitle>
-                <button
-                  onClick={() => {
-                    setOpenEdit(true);
-                    setApartment(item);
-                  }}
-                >
-                  編輯
-                </button>
-              </CardBody>
-            </Card>
-          ))}
+          {properties
+            .filter((property) => property.status === 0)
+            .map((item, index) => (
+              <Card key={index}>
+                <CardImage src={item.coverImage}></CardImage>
+                <CardBody>
+                  <SmallTitle>{item.title}</SmallTitle>
+                  <button
+                    onClick={() => {
+                      setOpenEdit(true);
+                      setApartment(item);
+                    }}
+                  >
+                    編輯
+                  </button>
+                </CardBody>
+              </Card>
+            ))}
+        </NewFlexWrapper>
+        <SmallTitle>已上架</SmallTitle>
+        <NewFlexWrapper>
+          {properties
+            .filter((property) => property.status === 1)
+            .map((item, index) => (
+              <Card key={index}>
+                <CardImage src={item.coverImage}></CardImage>
+                <CardBody>
+                  <StyledLink to={`/apartment/${item.id}`}>
+                    <SmallTitle>{item.title}</SmallTitle>
+                  </StyledLink>
+                  <button
+                    onClick={() => {
+                      setOpenEdit(true);
+                      setApartment(item);
+                    }}
+                  >
+                    編輯
+                  </button>
+                </CardBody>
+              </Card>
+            ))}
         </NewFlexWrapper>
       </NewWrapper>
     </>

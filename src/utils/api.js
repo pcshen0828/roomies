@@ -42,7 +42,7 @@ const api = {
   async updateDocData(collectionName, docID, data) {
     this.UpdateDoc(this.Doc(this.DB, collectionName, docID), data);
   },
-  async updateSubCollectionDocData(
+  updateSubCollectionDocData(
     collectionName,
     docID,
     subCollectionName,
@@ -58,13 +58,13 @@ const api = {
     const storageRef = Firebase.ref(Firebase.storage, storagePath);
     return Firebase.uploadBytes(storageRef, file);
   },
-  async addNewDoc(docRef, data) {
+  addNewDoc(docRef, data) {
     this.AddDoc(this.Collection(this.DB, docRef), data);
   },
-  async createNewDocRef(collectionName) {
+  createNewDocRef(collectionName) {
     return this.Doc(this.Collection(this.DB, collectionName));
   },
-  async setNewDoc(docRef, data) {
+  setNewDoc(docRef, data) {
     this.SetDoc(docRef, data);
   },
   handleError(err) {

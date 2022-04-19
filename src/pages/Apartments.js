@@ -4,6 +4,7 @@ import Header from "../components/layout/Header";
 import Selector from "../components/apartments/ApartmentSelector";
 import Card from "../components/apartments/ApartmentCard";
 import { Firebase } from "../utils/firebase";
+import api from "../utils/api";
 
 const Cards = styled.div`
   width: calc(100% - 48px);
@@ -25,7 +26,7 @@ const Cards = styled.div`
 
 function Apartments() {
   const [apartments, setApartments] = React.useState([]);
-  const query = Firebase.query(Firebase.collection(Firebase.db, "apartments"));
+  const query = api.createQuery("apartments", "status", "==", 1);
   React.useEffect(() => {
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
       setApartments(querySnapShot.docs.map((doc) => doc.data()));

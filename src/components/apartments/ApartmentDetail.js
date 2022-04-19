@@ -14,6 +14,10 @@ const Head = styled.div`
   border: 1px solid red;
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 1279.98px) {
+    flex-direction: column;
+  }
 `;
 
 const DetailInfo = styled.div`
@@ -21,6 +25,10 @@ const DetailInfo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media screen and (max-width: 1279.98px) {
+    width: 100%;
+  }
 `;
 
 const Title = styled.div`
@@ -68,8 +76,10 @@ function ApartmentDetail() {
       api
         .getDataWithSingleQuery("groups", "apartmentId", "==", id)
         .then((res) => {
-          setGroupId(res[0].id);
-          setHasJoined(res[0].members.includes(currentUser.uid));
+          if (res.length) {
+            setGroupId(res[0].id);
+            setHasJoined(res[0].members.includes(currentUser.uid));
+          }
         });
     }
     getDetailData();
@@ -108,6 +118,8 @@ function ApartmentDetail() {
               <Title>{details[0].title}</Title>
               {hasJoined ? (
                 <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
+              ) : (currentUser && currentUser.role) === 2 ? (
+                ""
               ) : (
                 <button onClick={openConfirmModal}>加入租屋</button>
               )}

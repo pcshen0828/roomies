@@ -14,6 +14,8 @@ import CreatePropertyPage1 from "../propertyCreateModal/CreatePropertyPage1";
 import CreatePropertyPage2 from "../propertyCreateModal/CreatePropertyPage2";
 import CreatePropertyPage3 from "../propertyCreateModal/CreatePropertyPage3";
 import CreatePropertyPage4 from "../propertyCreateModal/CreatePropertyPage4";
+import ConfirmBeforeQuitModal from "./ConfirmBeforeQuit";
+import { useAuth } from "../../context/AuthContext";
 
 const NewBody = styled(Body)`
   height: auto;
@@ -27,7 +29,10 @@ const NewModal = styled(Modal)`
 `;
 
 function CreatePropertyModal({ toggle }) {
+  const { currentUser } = useAuth();
+  const [openConfirm, setOpenConfirm] = React.useState(false);
   const [apartmentId, setApartmentId] = React.useState("");
+  const [apartment, setApartment] = React.useState({});
   const [paging, setPaging] = React.useState(1);
   const pages = [
     {
@@ -38,6 +43,7 @@ function CreatePropertyModal({ toggle }) {
           paging={paging}
           setPaging={setPaging}
           id={apartmentId}
+          apartment={apartment}
         />
       ),
     },
@@ -49,6 +55,7 @@ function CreatePropertyModal({ toggle }) {
           paging={paging}
           setPaging={setPaging}
           id={apartmentId}
+          apartment={apartment}
         />
       ),
     },
@@ -60,6 +67,7 @@ function CreatePropertyModal({ toggle }) {
           paging={paging}
           setPaging={setPaging}
           id={apartmentId}
+          apartment={apartment}
         />
       ),
     },
@@ -72,49 +80,58 @@ function CreatePropertyModal({ toggle }) {
           setPaging={setPaging}
           toggle={toggle}
           id={apartmentId}
+          apartment={apartment}
         />
       ),
     },
   ];
 
   React.useEffect(() => {
-    // 一開始 mounted 的時候先建立一個 apartment document reference 並取得 id
-    // 然後之後的 page 都更新到這一個 reference
     const newTeamRef = api.createNewDocRef("apartments");
     const time = Firebase.Timestamp.fromDate(new Date());
     api.setNewDoc(newTeamRef, {
       id: newTeamRef.id,
       createTime: time,
       updateTime: time,
+      status: 0,
+      owner: currentUser.uid,
     });
     setApartmentId(newTeamRef.id);
   }, []);
 
-  async function CloseAndDeleteDoc() {
-    // await Firebase.deleteDoc(
-    //   Firebase.doc(Firebase.db, "apartments", apartmentId)
-    // );
-    toggle(false);
-  }
+  React.useEffect(() => {
+    const query = api.createQuery("apartments", "id", "==", apartmentId);
+    const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
+      console.log(querySnapShot.docs.map((doc) => doc.data())[0]);
+      setApartment(querySnapShot.docs.map((doc) => doc.data())[0]);
+    });
+
+    return unsubscribe;
+  }, [apartmentId]);
 
   return (
-    <Overlay>
-      <NewModal>
-        <Header>
-          <Title>上架房源</Title>
-          <CloseButton
-            onClick={() => {
-              toggle(false);
-            }}
-          >
-            ×
-          </CloseButton>
-        </Header>
-        <NewBody>
-          {pages.map((page) => page.number === paging && page.component)}
-        </NewBody>
-      </NewModal>
-    </Overlay>
+    <>
+      {openConfirm && (
+        <ConfirmBeforeQuitModal toggle={toggle} apartmentId={apartmentId} />
+      )}
+      <Overlay>
+        <NewModal>
+          <Header>
+            <Title>上架房源</Title>
+            <CloseButton
+              onClick={() => {
+                setOpenConfirm(true);
+              }}
+            >
+              ×
+            </CloseButton>
+          </Header>
+          <NewBody>
+            {pages.map((page) => page.number === paging && page.component)}
+          </NewBody>
+        </NewModal>
+      </Overlay>
+    </>
   );
 }
 

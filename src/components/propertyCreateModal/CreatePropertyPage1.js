@@ -69,25 +69,35 @@ const SearchBox = styled.input`
 
 const libraries = ["places"];
 
-function CreatePropertyPage1({ id, paging, setPaging }) {
+function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
   const [isLoading, setIsLoading] = React.useState(false);
+  const [title, setTitle] = React.useState(
+    apartment.title ? apartment.title : ""
+  );
+  const [monthlyRent, setMonthlyRent] = React.useState(
+    apartment.monthlyRent ? apartment.monthlyRent : ""
+  );
+  const [rooms, setRooms] = React.useState(
+    apartment.rooms ? apartment.rooms : ""
+  );
+  const [roomiesCount, setRoomiesCount] = React.useState(
+    apartment.roomiesCount ? apartment.roomiesCount : ""
+  );
 
-  // 在第一層 document 的基本資訊
-  const [title, setTitle] = React.useState("");
-  const [monthlyRent, setMonthlyRent] = React.useState(0);
-  const [rooms, setRooms] = React.useState(0);
-  const [roomiesCount, setRoomiesCount] = React.useState(0);
-
-  // 以下與上傳圖片相關：
-  const [coverImage, setCoverImage] = React.useState("");
-  const [coverFile, setCoverFile] = React.useState();
+  const [coverImage, setCoverImage] = React.useState(
+    apartment.coverFile ? apartment.coverFile : ""
+  );
+  const [coverFile, setCoverFile] = React.useState(null);
   const coverFileRef = React.useRef(null);
 
   const [error, setError] = React.useState("");
 
-  //  以下與地圖相關：
-  const [geoLocation, setGeoLocation] = React.useState({});
-  const [address, setAddress] = React.useState("");
+  const [geoLocation, setGeoLocation] = React.useState(
+    apartment.geoLocation ? apartment.geoLocation : {}
+  );
+  const [address, setAddress] = React.useState(
+    apartment.address ? apartment.address : ""
+  );
   const [searchBox, setSearchBox] = React.useState(null);
   const [map, setMap] = React.useState(null);
   const [query, setQuery] = React.useState("");
@@ -123,44 +133,44 @@ function CreatePropertyPage1({ id, paging, setPaging }) {
   };
 
   function updateApartmentInfo() {
-    // setIsLoading(true);
-    // const time = Firebase.Timestamp.fromDate(new Date());
-    // if (coverFile) {
-    //   api
-    //     .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, coverFile)
-    //     .then((snapshot) => {
-    //       Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-    //         api.updateDocData("apartments", id, {
-    //           address,
-    //           geoLocation,
-    //           coverImage: downloadURL,
-    //           monthlyRent,
-    //           roomiesCount,
-    //           rooms,
-    //           title,
-    //           updateTime: time,
-    //         });
-    //         setIsLoading(false);
-    //         setPaging((prev) => (prev < 4 ? prev + 1 : 4));
-    //       });
-    //     });
-    // } else {
-    //   api
-    //     .updateDocData("apartments", id, {
-    //       address,
-    //       geoLocation,
-    //       coverImage,
-    //       monthlyRent,
-    //       roomiesCount,
-    //       rooms,
-    //       title,
-    //       updateTime: time,
-    //     })
-    //     .then(() => {
-    //       setIsLoading(false);
-    setPaging((prev) => (prev < 4 ? prev + 1 : 4));
-    //     });
-    // }
+    setIsLoading(true);
+    const time = Firebase.Timestamp.fromDate(new Date());
+    if (coverFile) {
+      api
+        .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, coverFile)
+        .then((snapshot) => {
+          Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
+            api.updateDocData("apartments", id, {
+              address,
+              geoLocation,
+              coverImage: downloadURL,
+              monthlyRent: parseInt(monthlyRent),
+              roomiesCount: parseInt(roomiesCount),
+              rooms: parseInt(rooms),
+              title,
+              updateTime: time,
+            });
+            setIsLoading(false);
+            setPaging((prev) => (prev < 4 ? prev + 1 : 4));
+          });
+        });
+    } else {
+      api
+        .updateDocData("apartments", id, {
+          address,
+          geoLocation,
+          coverImage,
+          monthlyRent: parseInt(monthlyRent),
+          roomiesCount: parseInt(roomiesCount),
+          rooms: parseInt(rooms),
+          title,
+          updateTime: time,
+        })
+        .then(() => {
+          setIsLoading(false);
+          setPaging((prev) => (prev < 4 ? prev + 1 : 4));
+        });
+    }
   }
 
   return (
@@ -252,27 +262,11 @@ function CreatePropertyPage1({ id, paging, setPaging }) {
         onChange={(e) => setRooms(e.target.value)}
       />
       <PagingList>
-        {paging > 1 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <button
-              onClick={() => setPaging((prev) => (prev > 1 ? prev - 1 : 1))}
-            >
-              上一頁
-            </button>
-          ))}
         {paging < 4 &&
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
             <button onClick={updateApartmentInfo}>儲存並繼續</button>
-          ))}
-        {paging === 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <button>儲存並完成</button>
           ))}
       </PagingList>
     </>
