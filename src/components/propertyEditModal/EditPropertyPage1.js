@@ -119,7 +119,6 @@ function EditPropertyPage1({ apartment, paging, setPaging }) {
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng(),
     };
-    console.log(newCenter);
     setAddress(place.formatted_address);
     setGeoLocation(newCenter);
     setQuery("");
@@ -131,15 +130,15 @@ function EditPropertyPage1({ apartment, paging, setPaging }) {
     if (coverFile) {
       api
         .uploadFileAndGetDownloadUrl(
-          `apartments/${apartment.id}/cover`,
+          `apartments/${apartment.id}/cover/cover`,
           coverFile
         )
         .then((snapshot) => {
           Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
             api.updateDocData("apartments", apartment.id, {
               ...apartment,
-              address, //
-              geoLocation, //
+              address,
+              geoLocation,
               coverImage: downloadURL,
               monthlyRent,
               roomiesCount,
@@ -147,7 +146,6 @@ function EditPropertyPage1({ apartment, paging, setPaging }) {
               title,
               updateTime: time,
             });
-            // 完成後再
             setIsLoading(false);
             setPaging((prev) => (prev < 4 ? prev + 1 : 4));
           });
@@ -156,9 +154,9 @@ function EditPropertyPage1({ apartment, paging, setPaging }) {
       api
         .updateDocData("apartments", apartment.id, {
           ...apartment,
-          address, //
-          geoLocation, //
-          coverImage, //
+          address,
+          geoLocation,
+          coverImage,
           monthlyRent,
           roomiesCount,
           rooms,
@@ -166,7 +164,6 @@ function EditPropertyPage1({ apartment, paging, setPaging }) {
           updateTime: time,
         })
         .then(() => {
-          // 完成後再
           setIsLoading(false);
           setPaging((prev) => (prev < 4 ? prev + 1 : 4));
         });

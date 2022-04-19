@@ -72,6 +72,7 @@ function EditPropertyModal({ toggle, apartment }) {
           apartment={snapApartment}
           paging={paging}
           setPaging={setPaging}
+          toggle={toggle}
         />
       ),
     },

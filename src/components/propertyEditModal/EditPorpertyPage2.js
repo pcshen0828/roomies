@@ -8,6 +8,7 @@ import {
   PagingList,
 } from "../common/Components";
 import api from "../../utils/api";
+import { Firebase } from "../../utils/firebase";
 
 const CheckboxWrapper = styled(FlexWrapper)`
   align-items: center;
@@ -49,6 +50,7 @@ function EditPropertyPage2({ apartment, paging, setPaging }) {
   }, [apartment]);
 
   function updateApartmentInfo() {
+    setIsLoading(true);
     conditions.forEach((condition) => {
       api.updateSubCollectionDocData(
         "apartments",
@@ -88,6 +90,13 @@ function EditPropertyPage2({ apartment, paging, setPaging }) {
         }
       );
     });
+    const time = Firebase.Timestamp.fromDate(new Date());
+    api.updateDocData("apartments", apartment.id, {
+      ...apartment,
+      updateTime: time,
+    });
+    setIsLoading(false);
+    setPaging((prev) => (prev < 4 ? prev + 1 : 4));
   }
 
   return (
@@ -177,11 +186,7 @@ function EditPropertyPage2({ apartment, paging, setPaging }) {
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button
-              onClick={() => setPaging((prev) => (prev < 4 ? prev + 1 : 4))}
-            >
-              儲存並繼續
-            </button>
+            <button onClick={updateApartmentInfo}>儲存並繼續</button>
           ))}
         {paging === 4 &&
           (isLoading ? (
