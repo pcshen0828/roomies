@@ -4,6 +4,7 @@ import { Wrapper, FlexWrapper, SmallTitle } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
+import CreatePropertyModal from "../modals/CreateProperty";
 import { Firebase } from "../../utils/firebase";
 
 const NewWrapper = styled(Wrapper)`
@@ -58,6 +59,7 @@ function LandlordProperty() {
   const { currentUser } = useAuth();
   const [properties, setProperties] = React.useState([]);
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [openCreate, setOpenCreate] = React.useState(false);
   const [apartment, setApartment] = React.useState("");
 
   React.useEffect(() => {
@@ -75,8 +77,11 @@ function LandlordProperty() {
       {openEdit && (
         <EditPropertyModal toggle={setOpenEdit} apartment={apartment} />
       )}
+      {openCreate && (
+        <CreatePropertyModal toggle={setOpenCreate} apartment={apartment} />
+      )}
       <NewWrapper>
-        <NewButton>新增房源</NewButton>
+        <NewButton onClick={() => setOpenCreate(true)}>新增房源</NewButton>
         <NewFlexWrapper>
           {properties.map((item, index) => (
             <Card key={index}>

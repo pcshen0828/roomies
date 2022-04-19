@@ -7,10 +7,9 @@ import {
   Title,
   CloseButton,
   Body,
-  // Button,
 } from "./ModalElements";
 import EditPropertyPage1 from "../propertyEditModal/EditPropertyPage1";
-import EditPropertyPage2 from "../propertyEditModal/EditPorpertyPage2";
+import EditPropertyPage2 from "../propertyEditModal/EditPropertyPage2";
 import EditPropertyPage3 from "../propertyEditModal/EditPropertyPage3";
 import EditPropertyPage4 from "../propertyEditModal/EditPropertyPage4";
 import api from "../../utils/api";
@@ -77,7 +76,6 @@ function EditPropertyModal({ toggle, apartment }) {
       ),
     },
   ];
-  // 想要解決畫面沒有即時同步的問題
   React.useEffect(() => {
     const query = api.createQuery("apartments", "id", "==", apartment.id);
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
