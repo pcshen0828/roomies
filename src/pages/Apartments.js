@@ -31,43 +31,39 @@ const Cards = styled.div`
 
 function Apartments() {
   const [apartments, setApartments] = React.useState([]);
+  const [allData, setAllData] = React.useState([]);
   const query = api.createQuery("apartments", "status", "==", 1);
+
   React.useEffect(() => {
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
       const apartmentDocs = querySnapShot.docs.map((doc) => doc.data());
+
       let apartmentArray = [];
       apartmentDocs.forEach((apartment) => {
-        let newData = { basic: apartment };
-        api
-          .getAllDocsFromCollection(
-            "apartments/" + apartment.id + "/conditions"
-          )
-          .then((res) => {
-            newData.conditions = res;
-          });
-        api
-          .getAllDocsFromCollection(
-            "apartments/" + apartment.id + "/facilities"
-          )
-          .then((res) => {
-            newData.facilities = res;
-          });
-        api
-          .getAllDocsFromCollection(
-            "apartments/" + apartment.id + "/furnitures"
-          )
-          .then((res) => {
-            newData.furnitures = res;
-          });
-        api
-          .getAllDocsFromCollection("apartments/" + apartment.id + "/otherInfo")
-          .then((res) => {
-            newData.otherInfo = res;
-          });
+        let newData = { basic: apartment, conditions: [] };
+        const subCollections = [
+          "conditions",
+          "facilities",
+          "furnitures",
+          "otherInfo",
+        ];
+        subCollections.forEach((subCollection) => {
+          api
+            .getAllDocsFromCollection(
+              "apartments/" + apartment.id + `/${subCollection}`
+            )
+            .then((res) => {
+              const properties = res
+                .filter((property) => property.value === true)
+                .map((item) => item.id);
+              newData.conditions.push(...properties);
+            });
+        });
         apartmentArray.push(newData);
       });
       console.log(apartmentArray);
       setApartments(apartmentArray);
+      setAllData(apartmentArray);
     });
     return function cleanup() {
       unsubscribe();
@@ -77,13 +73,13 @@ function Apartments() {
   return (
     <>
       <Header />
-      <Selector apartments={apartments} setApartments={setApartments} />
+      <Selector allData={allData} setApartments={setApartments} />
       <Cards>
         {apartments.length
           ? apartments.map((apartment, index) => (
               <Card key={index} detail={apartment.basic} />
             ))
-          : "目前沒有房源"}
+          : "查無資料"}
       </Cards>
     </>
   );

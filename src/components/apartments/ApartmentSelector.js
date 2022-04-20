@@ -82,116 +82,64 @@ const furnitureList = {
 const otherInfoList = {
   id: "otherInfo",
   content: [
-    // { en: "floor", zh: "所在樓層" },
     { en: "isRentIncludeUtilities", zh: "房租含水電雜費" },
     { en: "managementFee", zh: "管理費" },
-    // { en: "minLeaseTerm", zh: "最短租期" },
-    // { en: "squareFeet", zh: "坪數" },
   ],
 };
 
-function Selector({ apartments, setApartments }) {
-  const [checkboxQueryList, setCheckboxQueryList] = React.useState([]);
+let queryList = [];
 
-  async function ShowMatchedApartments({ e, docID, subCollectionName }) {
+function Selector({ allData, setApartments }) {
+  const toFilterData = allData; // 所有房源不會被改動的完整資料
+
+  function ShowMatchedApartments({ e, name }) {
+    console.log(name);
     const value = e.target.checked;
-    console.log(value, docID, subCollectionName);
+    if (!value) {
+      queryList = queryList.filter((item) => item !== name);
+      console.log(queryList);
+    } else {
+      queryList.push(name);
+    }
+    const filteredData = toFilterData.filter((item) =>
+      queryList.every((value) => item.conditions.includes(value))
+    );
+    console.log(`符合條件的房源數：${filteredData.length}`);
+    console.log(filteredData);
+    setApartments(filteredData);
   }
 
+  const renderList = [
+    { list: conditionList, name: "設施條件" },
+    { list: facilityList, name: "室內設備" },
+    { list: furnitureList, name: "家具" },
+  ];
   return (
     <Wrapper>
-      <SelectItemWrapper>
-        <FlexWrapper>
-          <NewTitle>設施條件</NewTitle>
-        </FlexWrapper>
-        <FlexWrapper>
-          {conditionList.content.map((condition, index) => (
-            <InputWrapper key={index}>
-              <HiddenInput
-                type="checkbox"
-                id={condition.en}
-                onChange={(event) =>
-                  ShowMatchedApartments({
-                    e: event,
-                    docID: condition.en,
-                    subCollectionName: conditionList.id,
-                  })
-                }
-              />
-              <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
-            </InputWrapper>
-          ))}
-        </FlexWrapper>
-      </SelectItemWrapper>
-      <SelectItemWrapper>
-        <FlexWrapper>
-          <NewTitle>室內設備</NewTitle>
-        </FlexWrapper>
-        <FlexWrapper>
-          {facilityList.content.map((condition, index) => (
-            <InputWrapper key={index}>
-              <HiddenInput
-                type="checkbox"
-                id={condition.en}
-                onChange={(event) =>
-                  ShowMatchedApartments({
-                    e: event,
-                    docID: condition.en,
-                    subCollectionName: facilityList.id,
-                  })
-                }
-              />
-              <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
-            </InputWrapper>
-          ))}
-        </FlexWrapper>
-      </SelectItemWrapper>
-      <SelectItemWrapper>
-        <FlexWrapper>
-          <NewTitle>家具</NewTitle>
-        </FlexWrapper>
-        <FlexWrapper>
-          {furnitureList.content.map((condition, index) => (
-            <InputWrapper key={index}>
-              <HiddenInput
-                type="checkbox"
-                id={condition.en}
-                onChange={(event) =>
-                  ShowMatchedApartments({
-                    e: event,
-                    docID: condition.en,
-                    subCollectionName: furnitureList.id,
-                  })
-                }
-              />
-              <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
-            </InputWrapper>
-          ))}
-        </FlexWrapper>
-      </SelectItemWrapper>
-      <SelectItemWrapper>
-        <FlexWrapper>
-          <NewTitle>其他資訊</NewTitle>
-        </FlexWrapper>
-        <FlexWrapper>
-          {otherInfoList.content.map((condition, index) => (
-            <InputWrapper key={index}>
-              <HiddenInput
-                type="checkbox"
-                id={condition.en}
-                onChange={(event) =>
-                  ShowMatchedApartments({
-                    e: event,
-                    docID: condition.en,
-                    subCollectionName: otherInfoList.id,
-                  })
-                }
-              />
-              <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
-            </InputWrapper>
-          ))}
-        </FlexWrapper>
-      </SelectItemWrapper>
+      {renderList.map((selector, index) => (
+        <SelectItemWrapper key={index}>
+          <FlexWrapper>
+            <NewTitle>{selector.name}</NewTitle>
+          </FlexWrapper>
+          <FlexWrapper>
+            {selector.list.content.map((condition, index) => (
+              <InputWrapper key={index}>
+                <HiddenInput
+                  type="checkbox"
+                  id={condition.en}
+                  onChange={(event) =>
+                    ShowMatchedApartments({
+                      e: event,
+                      name: condition.en,
+                    })
+                  }
+                />
+                <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
+              </InputWrapper>
+            ))}
+          </FlexWrapper>
+        </SelectItemWrapper>
+      ))}
     </Wrapper>
   );
 }
