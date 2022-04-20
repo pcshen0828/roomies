@@ -37,7 +37,7 @@ function Apartments() {
   const [allData, setAllData] = React.useState([]);
   const query = api.createQuery("apartments", "status", "==", 1);
   const [paging, setPaging] = React.useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
 
   React.useEffect(() => {
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {

@@ -37,10 +37,22 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
     api
       .getDataWithSingleQuery("groups", "apartmentId", "==", apartmentId)
       .then((res) => {
-        api.updateDocData("groups", res[0].id, {
-          members: [...res[0].members, currentUser.uid],
-        });
-        navigate(`/groups/${groupId}`);
+        console.log(res);
+        if (res.length) {
+          api.updateDocData("groups", res[0].id, {
+            members: [...res[0].members, currentUser.uid],
+          });
+          navigate(`/groups/${groupId}`);
+        } else {
+          //建立 group 資料
+          const newGroupRef = api.createNewDocRef("groups");
+          api.setNewDoc(newGroupRef, {
+            id: newGroupRef.id,
+            apartmentId,
+            members: [currentUser.uid],
+          });
+          navigate(`/groups/${newGroupRef.id}`);
+        }
       });
   }
 

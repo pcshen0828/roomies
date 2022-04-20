@@ -19,9 +19,18 @@ const Title = styled.div`
   margin-bottom: 10px;
 `;
 
+const MediumTitle = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+`;
+
 const SubTitle = styled.div`
   font-size: 14px;
   color: #505d68;
+`;
+
+const Bold = styled.div`
+  font-weight: 700;
 `;
 
 const BodyWrapper = styled.div`
@@ -201,7 +210,9 @@ const PagingItem = styled.div`
 export {
   Wrapper,
   Title,
+  MediumTitle,
   SubTitle,
+  Bold,
   BodyWrapper,
   BodyLeft,
   BodyRight,
