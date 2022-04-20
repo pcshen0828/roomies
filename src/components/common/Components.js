@@ -182,18 +182,19 @@ const LoadingButton = styled.button`
 `;
 
 const PagingList = styled(FlexWrapper)`
-  margin: 20px 14px 0 0;
   justify-content: flex-end;
+  align-self: end;
 `;
 
 const PagingItem = styled.div`
   width: 30px;
   height: 30px;
   border: 1px solid #dadada;
-  margin-right: 10px;
+  margin-left: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   background: ${(props) => (props.active ? "#dadada" : "")};
 `;
 

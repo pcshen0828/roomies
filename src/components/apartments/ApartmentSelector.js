@@ -1,16 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { FlexWrapper, SmallLabel, SmallTitle } from "../common/Components";
-import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
+import SearchBox from "./SearchBox";
 
 const Wrapper = styled(FlexWrapper)`
-  width: calc(100% - 48px);
-  max-width: 1200px;
+  width: 100%;
   margin: 20px auto;
-  border: 1px solid #ccc;
+  border: 1px solid #dadada;
   align-items: flex-start;
   flex-direction: column;
+  border-radius: 5px;
 `;
 
 const SelectItemWrapper = styled(FlexWrapper)`
@@ -89,23 +88,19 @@ const otherInfoList = {
 
 let queryList = [];
 
-function Selector({ allData, setApartments }) {
-  const toFilterData = allData; // 所有房源不會被改動的完整資料
+function Selector({ allData, setApartments, setPaging }) {
+  const toFilterData = allData;
 
   function ShowMatchedApartments({ e, name }) {
-    console.log(name);
     const value = e.target.checked;
     if (!value) {
       queryList = queryList.filter((item) => item !== name);
-      console.log(queryList);
     } else {
       queryList.push(name);
     }
     const filteredData = toFilterData.filter((item) =>
       queryList.every((value) => item.conditions.includes(value))
     );
-    console.log(`符合條件的房源數：${filteredData.length}`);
-    console.log(filteredData);
     setApartments(filteredData);
   }
 
@@ -115,32 +110,39 @@ function Selector({ allData, setApartments }) {
     { list: furnitureList, name: "家具" },
   ];
   return (
-    <Wrapper>
-      {renderList.map((selector, index) => (
-        <SelectItemWrapper key={index}>
-          <FlexWrapper>
-            <NewTitle>{selector.name}</NewTitle>
-          </FlexWrapper>
-          <FlexWrapper>
-            {selector.list.content.map((condition, index) => (
-              <InputWrapper key={index}>
-                <HiddenInput
-                  type="checkbox"
-                  id={condition.en}
-                  onChange={(event) =>
-                    ShowMatchedApartments({
-                      e: event,
-                      name: condition.en,
-                    })
-                  }
-                />
-                <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
-              </InputWrapper>
-            ))}
-          </FlexWrapper>
-        </SelectItemWrapper>
-      ))}
-    </Wrapper>
+    <>
+      <SearchBox
+        apartments={toFilterData}
+        setApartments={setApartments}
+        setPaging={setPaging}
+      />
+      <Wrapper>
+        {renderList.map((selector, index) => (
+          <SelectItemWrapper key={index}>
+            <FlexWrapper>
+              <NewTitle>{selector.name}</NewTitle>
+            </FlexWrapper>
+            <FlexWrapper>
+              {selector.list.content.map((condition, index) => (
+                <InputWrapper key={index}>
+                  <HiddenInput
+                    type="checkbox"
+                    id={condition.en}
+                    onChange={(event) =>
+                      ShowMatchedApartments({
+                        e: event,
+                        name: condition.en,
+                      })
+                    }
+                  />
+                  <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
+                </InputWrapper>
+              ))}
+            </FlexWrapper>
+          </SelectItemWrapper>
+        ))}
+      </Wrapper>
+    </>
   );
 }
 

@@ -58,7 +58,7 @@ const Price = styled.div`
 function Card({ detail }) {
   return (
     <Wrapper>
-      <Heart src={heart} />
+      <Heart src={heart} onClick={() => console.log(detail.title)} />
       <StyledLink to={`/apartment/${detail.id}`}>
         <CoverImage src={detail.coverImage} />
         <CardContent>
