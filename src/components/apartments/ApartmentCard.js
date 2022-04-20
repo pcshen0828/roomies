@@ -5,8 +5,8 @@ import heart from "../../images/heart.svg";
 
 const Wrapper = styled.div`
   border: 1px solid #e8e8e8;
-  height: 400px;
-  margin-bottom: 20px;
+  height: 350px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   border-radius: 20px;
