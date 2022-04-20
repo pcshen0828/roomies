@@ -17,6 +17,7 @@ const NewModal = styled(Modal)`
 function ConfirmBeforeQuitModal({ toggle, apartmentId }) {
   async function closeAndDeleteDoc() {
     toggle(false);
+    // fix me
     await Firebase.deleteDoc(
       Firebase.doc(Firebase.db, "apartments", apartmentId)
     );

@@ -46,6 +46,7 @@ function CreatePropertyPage2({ id, paging, setPaging, apartment }) {
     { en: "laundry", zh: "洗衣機" },
     { en: "naturalGas", zh: "天然氣" },
     { en: "waterHeater", zh: "熱水器" },
+    { en: "payCable", zh: "第四台" },
     { en: "wifi", zh: "Wi-Fi" },
   ].map((item) => ({
     docName: item.en,
