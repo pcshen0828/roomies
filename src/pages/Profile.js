@@ -27,12 +27,10 @@ function Profile() {
       );
     }
     if (error) {
-      return <Navigate replace to="/" />;
+      return <>error</>;
     }
+    return <Navigate replace to="/" />;
   }
-  React.useEffect(() => {
-    Render();
-  }, [currentUser]);
 
   return (
     <>

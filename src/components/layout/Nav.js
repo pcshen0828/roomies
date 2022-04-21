@@ -1,5 +1,9 @@
+import React from "react";
 import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Wrapper = styled.div`
   display: flex;
@@ -24,6 +28,28 @@ const activeStyle = {
 
 function NavBar() {
   const location = useLocation();
+  const auth = Firebase.getAuth();
+  const { currentUser } = useAuth();
+  const [user, loading, error] = useAuthState(auth);
+
+  function Render() {
+    if (loading) {
+      return null;
+    }
+    if (user) {
+      return (
+        <StyledNavLink
+          to="/community"
+          style={location.pathname === "/community" ? activeStyle : {}}
+        >
+          社群
+        </StyledNavLink>
+      );
+    }
+    if (error) {
+      return null;
+    }
+  }
 
   return (
     <Wrapper>
@@ -50,6 +76,7 @@ function NavBar() {
       >
         探索
       </StyledNavLink>
+      {Render()}
     </Wrapper>
   );
 }

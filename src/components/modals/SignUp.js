@@ -55,11 +55,67 @@ function SignUpModal({ setOpenSignUp }) {
   const [confirmPwd, setCofirmPwd] = React.useState("");
   const [errMessage, setErrMessage] = React.useState("");
   const [role, setRole] = React.useState(1);
-  const navigate = useNavigate();
   const userRoles = [
     { no: 1, name: "房客" },
     { no: 2, name: "屋主" },
   ];
+  const navigate = useNavigate();
+
+  const defaultImageUrl =
+    "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/users%2Fdefault%2Fdefault?alt=media&token=381e1e3a-523e-4b92-b09e-871f4e0ca48e";
+
+  function SignupAndQuickSetUp() {
+    if (!email.trim() || !password.trim()) {
+      setErrMessage("每一欄位都需要輸入喔！");
+      return;
+    } else if (password.length < 6) {
+      setErrMessage("密碼長度不足");
+      return;
+    } else if (!confirmPwd) {
+      setErrMessage("請確認密碼");
+      return;
+    } else if (password !== confirmPwd) {
+      setErrMessage("請再次確認密碼");
+      return;
+    }
+    api
+      .signUp(email, password)
+      .then((userCredential) => {
+        console.log(userCredential.user);
+        const userId = userCredential.user.uid;
+        const basicInfo = {
+          uid: userId,
+          role,
+          email,
+          password,
+          profileImage: defaultImageUrl,
+          name: "",
+          alias: "",
+          phone: "",
+          evaluation: [],
+          selfIntro: "",
+          birthday: "",
+          gender: 0,
+        };
+        api.SetDoc(
+          api.Doc(api.DB, "users", userId),
+          role === 1
+            ? {
+                ...basicInfo,
+                jobTitle: "",
+                hobbies: [],
+                employment: 1,
+              }
+            : {
+                ...basicInfo,
+              }
+        );
+        navigate("/profile");
+      })
+      .catch((error) => {
+        setErrMessage(api.handleError(error));
+      });
+  }
 
   return (
     <Overlay>
@@ -115,31 +171,7 @@ function SignUpModal({ setOpenSignUp }) {
           </form>
           {errMessage && <ErrorMessage>{errMessage}</ErrorMessage>}
         </NewBody>
-        <NewButton
-          onClick={() => {
-            if (!email.trim() || !password.trim()) {
-              setErrMessage("每一欄位都需要輸入喔！");
-              return;
-            } else if (password.length < 6) {
-              setErrMessage("密碼長度不足");
-              return;
-            } else if (!confirmPwd) {
-              setErrMessage("請確認密碼");
-              return;
-            } else if (password !== confirmPwd) {
-              setErrMessage("請再次確認密碼");
-              return;
-            }
-            api.signUp(email, password, role, setErrMessage);
-            setEmail("");
-            setPassword("");
-            setCofirmPwd("");
-            setOpenSignUp(false);
-            navigate("/profile");
-          }}
-        >
-          註冊
-        </NewButton>
+        <NewButton onClick={SignupAndQuickSetUp}>註冊</NewButton>
       </Modal>
     </Overlay>
   );

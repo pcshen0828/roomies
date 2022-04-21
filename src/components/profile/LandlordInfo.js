@@ -11,6 +11,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
+import { LandlordBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled.div`
@@ -146,6 +147,19 @@ function LandlordInfo() {
   function Render() {
     return (
       <>
+        {(!currentUser.name || !currentUser.alias) && (
+          <LandlordBasicInfoModal
+            user={currentUser}
+            name={name}
+            setName={setName}
+            alias={alias}
+            setAlias={setAlias}
+            gender={gender}
+            setGender={setGender}
+            selfIntro={selfIntro}
+            setSelfIntro={setSelfIntro}
+          />
+        )}
         {openModal && (
           <ChangeProfileImageModal
             toggle={setOpenModal}

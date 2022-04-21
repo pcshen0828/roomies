@@ -92,43 +92,8 @@ const api = {
         setError(this.handleError(error));
       });
   },
-  async signUp(email, password, role, setError) {
-    Firebase.createUserWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        console.log(userCredential.user);
-        const userId = userCredential.user.uid;
-        const basicInfo = {
-          uid: userId,
-          role,
-          email,
-          password,
-          profileImage:
-            "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/users%2Fdefault%2Fdefault?alt=media&token=381e1e3a-523e-4b92-b09e-871f4e0ca48e",
-          name: "",
-          alias: "",
-          phone: "",
-          evaluation: [],
-          selfIntro: "",
-          birthday: "",
-          gender: 0,
-        };
-        this.SetDoc(
-          this.Doc(this.DB, "users", userId),
-          role === 1
-            ? {
-                ...basicInfo,
-                jobTitle: "",
-                hobbies: [],
-                employment: 1,
-              }
-            : {
-                ...basicInfo,
-              }
-        );
-      })
-      .catch((error) => {
-        setError(this.handleError(error));
-      });
+  async signUp(email, password) {
+    return Firebase.createUserWithEmailAndPassword(this.auth, email, password);
   },
 };
 

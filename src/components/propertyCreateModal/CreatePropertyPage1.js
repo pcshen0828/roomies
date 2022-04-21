@@ -35,8 +35,8 @@ const Image = styled.div`
 `;
 
 const ChooseImageButton = styled.label`
-  width: 90px;
-  height: 30px;
+  width: 120px;
+  height: 35px;
   border: 1px solid #dadada;
   display: flex;
   justify-content: center;
@@ -178,7 +178,7 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
       <SmallTitle htmlFor="title">封面照片（建議比例：16:9）</SmallTitle>
       <CoverImageDisplayer>
         <Image src={coverImage} />
-        <ChooseImageButton htmlFor="coverImage">重新選擇</ChooseImageButton>
+        <ChooseImageButton htmlFor="coverImage">上傳封面照片</ChooseImageButton>
         <HiddenInputFilePicker
           id="coverImage"
           ref={coverFileRef}

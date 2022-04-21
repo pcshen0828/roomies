@@ -11,6 +11,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
+import { TenantBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled.div`
@@ -158,6 +159,21 @@ function TenantInfo() {
   function Render() {
     return (
       <>
+        {(!currentUser.name || !currentUser.alias || !currentUser.jobTitle) && (
+          <TenantBasicInfoModal
+            user={currentUser}
+            name={name}
+            setName={setName}
+            alias={alias}
+            setAlias={setAlias}
+            gender={gender}
+            setGender={setGender}
+            jobTitle={jobTitle}
+            setJobTitle={setJobTitle}
+            selfIntro={selfIntro}
+            setSelfIntro={setSelfIntro}
+          />
+        )}
         {openModal && (
           <ChangeProfileImageModal
             toggle={setOpenModal}
@@ -184,7 +200,7 @@ function TenantInfo() {
                 id="fullname"
                 placeholder="請填寫中文或英文全名"
                 value={name}
-                onChange={(e) => setName(e.target.value.trim())}
+                onChange={(e) => setName(e.target.value)}
               />
               <SmallLabel htmlFor="alias">
                 暱稱<Required>*</Required>
@@ -193,7 +209,7 @@ function TenantInfo() {
                 id="alias"
                 placeholder="顯示在社群上的名字"
                 value={alias}
-                onChange={(e) => setAlias(e.target.value.trim())}
+                onChange={(e) => setAlias(e.target.value)}
               />
               <SmallLabel htmlFor="gender">
                 生理性別<Required>*</Required>
@@ -259,7 +275,7 @@ function TenantInfo() {
                 id="intro"
                 placeholder="介紹自己，讓其他人更認識你！"
                 value={selfIntro}
-                onChange={(e) => setSelfIntro(e.target.value.trim())}
+                onChange={(e) => setSelfIntro(e.target.value)}
               />
             </Block>
           </InnerWrapper>

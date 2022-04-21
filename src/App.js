@@ -11,6 +11,7 @@ import Explore from "./pages/Explore";
 import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import PageNotFound from "./pages/NotFound";
+import Community from "./pages/Community";
 
 function App() {
   // 網址不要用大寫
@@ -24,6 +25,7 @@ function App() {
         <Route path={`/apartment/:id`} element={<Apartment />}></Route>
         <Route path="/groups/:id" element={<Groups />}></Route>
         <Route path="/users/:id" element={<User />}></Route>
+        <Route path="/community" element={<Community />}></Route>
         <Route path="/explore" element={<Explore />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
         <Route path="/messages" element={<Messages />}></Route>
