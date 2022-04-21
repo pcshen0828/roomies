@@ -1,12 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import Header from "../components/layout/Header";
-import { Wrapper } from "../components/common/Components";
+import { Wrapper, Title } from "../components/common/Components";
 import api from "../utils/api";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Navigate } from "react-router-dom";
+
+const NewWrapper = styled(Wrapper)`
+  align-items: flex-start;
+`;
+
+const NewTitle = styled(Title)`
+  margin: 20px 0 30px;
+`;
 
 function Community() {
   const { currentUser } = useAuth();
@@ -19,7 +27,11 @@ function Community() {
       return <>loading...</>;
     }
     if (user) {
-      return <>welcome to community</>;
+      return (
+        <NewWrapper>
+          <NewTitle>在這裡，找到適合共居的夥伴</NewTitle>
+        </NewWrapper>
+      );
     }
     if (error) {
       return <>error</>;
@@ -42,7 +54,7 @@ function Community() {
   return (
     <>
       <Header />
-      <Wrapper>{Render()}</Wrapper>
+      {Render()}
     </>
   );
 }

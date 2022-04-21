@@ -17,6 +17,10 @@ const Title = styled.div`
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 10px;
+
+  @media screen and (max-width: 1279.98px) {
+    font-size: 20px;
+  }
 `;
 
 const MediumTitle = styled.div`

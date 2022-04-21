@@ -7,12 +7,17 @@ import {
   Wrapper,
   PagingList,
   PagingItem,
+  Title,
 } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
+`;
+
+const NewTitle = styled(Title)`
+  margin: 20px 0 30px;
 `;
 
 const Cards = styled.div`
@@ -81,6 +86,7 @@ function Apartments() {
     <>
       <Header />
       <NewWrapper>
+        <NewTitle>立即開始，搜尋理想房源</NewTitle>
         <Selector
           allData={allData}
           setApartments={setApartments}

@@ -128,12 +128,13 @@ function Selector({ allData, setApartments, setPaging }) {
                   <HiddenInput
                     type="checkbox"
                     id={condition.en}
-                    onChange={(event) =>
+                    onChange={(event) => {
+                      setPaging(1);
                       ShowMatchedApartments({
                         e: event,
                         name: condition.en,
-                      })
-                    }
+                      });
+                    }}
                   />
                   <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
                 </InputWrapper>

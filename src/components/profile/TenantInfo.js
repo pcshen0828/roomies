@@ -120,6 +120,7 @@ function TenantInfo() {
   const [openModal, setOpenModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [openPicker, setOpenPicker] = React.useState(false);
+  const [allHobbies, setAllHobbies] = React.useState(false);
   const [hobbyList, setHobbyList] = React.useState([]);
   const [query, setQuery] = React.useState("");
 
@@ -203,7 +204,7 @@ function TenantInfo() {
       const allData = res
         .map((item) => item.name)
         .filter((name) => !hobbies.includes(name));
-      allHobbies = allData;
+      setAllHobbies(allData);
       setHobbyList(allData);
     });
   }, []);

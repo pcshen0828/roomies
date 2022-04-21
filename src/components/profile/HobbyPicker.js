@@ -26,6 +26,7 @@ const HobbyItem = styled(FlexWrapper)`
 
 function HobbyPicker({ hobbyList, toggle, setHobbies, setHobbyList }) {
   React.useEffect(() => {
+    console.log("mounted");
     Render();
   }, [hobbyList]);
 

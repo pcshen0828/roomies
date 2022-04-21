@@ -12,11 +12,12 @@ const SignoutButton = styled.button`
 `;
 
 function MemberModal({ setActiveIcon }) {
-  const { signOut } = useAuth();
+  const { signOut, currentUser } = useAuth();
   const navigate = useNavigate();
   return (
     <NavModalOverlay onClick={() => setActiveIcon("")}>
       <NavModal onClick={(e) => e.stopPropagation()}>
+        <>{currentUser.email}</>
         <StyledLink to="/profile">會員專區</StyledLink>
         <SignoutButton
           onClick={() => {

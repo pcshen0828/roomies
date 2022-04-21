@@ -88,7 +88,7 @@ function Messages() {
       ) : (
         <CenterWrapper>
           <Reminder>沒有對話紀錄喔！趕快開啟對話吧</Reminder>
-          <Link to="/explore">
+          <Link to="/community">
             <button>前往探索</button>
           </Link>
         </CenterWrapper>

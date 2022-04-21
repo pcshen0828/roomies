@@ -82,7 +82,7 @@ function MyMap() {
   const [map, setMap] = React.useState(null);
   const [center, setCenter] = React.useState(defaultCenter);
   const [circleCenter, setCircleCenter] = React.useState(defaultCenter);
-  const [zoom, setZoom] = React.useState(12);
+  const [zoom, setZoom] = React.useState(11);
   const [marker, setMarker] = React.useState(center);
   const [apartments, setApartments] = React.useState([]);
   const [searchBox, setSearchBox] = React.useState(null);
