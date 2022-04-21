@@ -13,6 +13,7 @@ import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import { TenantBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
+import HobbyPicker from "./HobbyPicker";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -87,10 +88,30 @@ const Loading = styled.button`
   }
 `;
 
+const HobbyDisplayer = styled(FlexWrapper)`
+  flex-wrap: wrap;
+  width: 90%;
+  padding: 10px 6px 10px 0;
+`;
+
+const HobbyTag = styled(FlexWrapper)`
+  padding: 5px;
+  border-radius: 5px;
+  background: #dadada;
+  font-size: 14px;
+  margin: 0 5px 5px 0;
+  cursor: pointer;
+`;
+
+let allHobbies = [];
+
 function TenantInfo() {
   const { currentUser } = useAuth();
   const [openModal, setOpenModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [openPicker, setOpenPicker] = React.useState(false);
+  const [hobbyList, setHobbyList] = React.useState([]);
+  const [query, setQuery] = React.useState("");
 
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState(currentUser.name);
@@ -129,7 +150,18 @@ function TenantInfo() {
       jobTitle,
       employment,
       selfIntro,
+      hobbies,
     };
+    const newHobbies = hobbies.filter((item) => !allHobbies.includes(item));
+    if (newHobbies.length) {
+      newHobbies.forEach((name) => {
+        const newDocRef = api.createNewDocRef("hobbies");
+        api.setNewDoc(newDocRef, {
+          id: newDocRef.id,
+          name,
+        });
+      });
+    }
     if (file) {
       const storageRef = Firebase.ref(
         Firebase.storage,
@@ -141,7 +173,6 @@ function TenantInfo() {
             ...currentUser,
             ...basicInfo,
             profileImage: downloadURL,
-            // hobbies,
           });
           setIsLoading(false);
         });
@@ -150,11 +181,21 @@ function TenantInfo() {
       api.updateDocData("users", currentUser.uid, {
         ...currentUser,
         ...basicInfo,
-        // hobbies,
       });
       setIsLoading(false);
     }
   }
+
+  React.useEffect(() => {
+    api.getAllDocsFromCollection("hobbies").then((res) => {
+      console.log(res);
+      const allData = res
+        .map((item) => item.name)
+        .filter((name) => !hobbies.includes(name));
+      allHobbies = allData;
+      setHobbyList(allData);
+    });
+  }, []);
 
   function Render() {
     return (
@@ -193,6 +234,7 @@ function TenantInfo() {
           <InnerWrapper>
             <Block>
               <NewTitle>基本資訊</NewTitle>
+
               <SmallLabel htmlFor="fullname">
                 姓名全名<Required>*</Required>
               </SmallLabel>
@@ -202,6 +244,7 @@ function TenantInfo() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
+
               <SmallLabel htmlFor="alias">
                 暱稱<Required>*</Required>
               </SmallLabel>
@@ -211,6 +254,7 @@ function TenantInfo() {
                 value={alias}
                 onChange={(e) => setAlias(e.target.value)}
               />
+
               <SmallLabel htmlFor="gender">
                 生理性別<Required>*</Required>
               </SmallLabel>
@@ -225,6 +269,7 @@ function TenantInfo() {
                   </option>
                 ))}
               </Select>
+
               <SmallLabel htmlFor="birth">
                 生日<Required>*</Required>
               </SmallLabel>
@@ -234,6 +279,7 @@ function TenantInfo() {
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
               />
+
               <SmallLabel htmlFor="phone">
                 聯絡電話<Required>*</Required>
               </SmallLabel>
@@ -246,8 +292,64 @@ function TenantInfo() {
             </Block>
             <Block>
               <NewTitle>進階資訊</NewTitle>
+
               <SmallLabel htmlFor="hobbies">興趣標籤</SmallLabel>
-              <Input id="hobbies" placeholder="" />
+              {hobbies.length ? (
+                <HobbyDisplayer
+                  onClick={() => {
+                    setOpenPicker(false);
+                  }}
+                >
+                  {hobbies.map((hobby, index) => (
+                    <HobbyTag
+                      key={index}
+                      onClick={() => {
+                        setHobbies((prev) =>
+                          prev.filter((item) => item !== hobby)
+                        );
+                        setHobbyList((prev) => [...prev, hobby]);
+                      }}
+                    >
+                      {hobby}
+                    </HobbyTag>
+                  ))}
+                </HobbyDisplayer>
+              ) : (
+                ""
+              )}
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  console.log(e.target[0].value);
+                  setHobbies((prev) => [...prev, e.target[0].value]);
+                  setQuery("");
+                  setHobbyList(allHobbies);
+                }}
+              >
+                <Input
+                  id="hobbies"
+                  placeholder="請選擇興趣"
+                  value={query}
+                  onFocus={() => {
+                    setOpenPicker(true);
+                  }}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setHobbyList(
+                      allHobbies.filter((item) => item.includes(e.target.value))
+                    );
+                  }}
+                />
+              </form>
+              {openPicker && (
+                <HobbyPicker
+                  hobbyList={hobbyList}
+                  toggle={setOpenPicker}
+                  setHobbies={setHobbies}
+                  setHobbyList={setHobbyList}
+                />
+              )}
+
               <SmallLabel htmlFor="job">職稱</SmallLabel>
               <Input
                 id="job"
@@ -257,6 +359,7 @@ function TenantInfo() {
                 value={jobTitle}
                 onChange={(e) => setJobTitle(e.target.value)}
               />
+
               <SmallLabel htmlFor="emplyment">工作型態</SmallLabel>
               <Select
                 id="emplyment"
@@ -270,6 +373,7 @@ function TenantInfo() {
                   </option>
                 ))}
               </Select>
+
               <SmallLabel htmlFor="intro">社群簡介</SmallLabel>
               <Textarea
                 id="intro"
