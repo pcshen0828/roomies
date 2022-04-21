@@ -25,22 +25,29 @@ const HobbyItem = styled(FlexWrapper)`
 `;
 
 function HobbyPicker({ hobbyList, toggle, setHobbies, setHobbyList }) {
-  return (
-    <HobbyList>
-      {hobbyList.map((item, index) => (
-        <HobbyItem
-          key={index}
-          onClick={() => {
-            setHobbies((prev) => [...prev, item]);
-            setHobbyList((prev) => prev.filter((name) => name !== item));
-            toggle(false);
-          }}
-        >
-          {item}
-        </HobbyItem>
-      ))}
-    </HobbyList>
-  );
+  React.useEffect(() => {
+    Render();
+  }, [hobbyList]);
+
+  function Render() {
+    return (
+      <HobbyList>
+        {hobbyList.map((item, index) => (
+          <HobbyItem
+            key={index}
+            onClick={() => {
+              setHobbies((prev) => [...prev, item]);
+              setHobbyList((prev) => prev.filter((name) => name !== item));
+              toggle(false);
+            }}
+          >
+            {item}
+          </HobbyItem>
+        ))}
+      </HobbyList>
+    );
+  }
+  return Render();
 }
 
 export default HobbyPicker;

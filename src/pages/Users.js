@@ -21,9 +21,6 @@ function User() {
     api.getDataWithSingleQuery("users", "uid", "==", id).then((res) => {
       console.log(res);
       if (!res.length) return;
-      if (res[0].status === 0) {
-        <Navigate replace to="/" />;
-      }
       if (!mounted) return;
       setTargetUser(res[0]);
     });
@@ -38,7 +35,7 @@ function User() {
       return <>loading...</>;
     }
     if (user) {
-      return targetUser ? (
+      return targetUser && targetUser.status === 1 ? (
         targetUser.role === 1 ? (
           <UserInfo user={targetUser} role={1} />
         ) : targetUser.role === 2 ? (

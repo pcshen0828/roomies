@@ -103,6 +103,16 @@ const HobbyTag = styled(FlexWrapper)`
   cursor: pointer;
 `;
 
+const ConfirmWrapper = styled(FlexWrapper)`
+  width: 100%;
+  margin-top: 20px;
+  align-items: center;
+`;
+
+const NewLabel = styled(SmallLabel)`
+  margin: 0;
+`;
+
 let allHobbies = [];
 
 function TenantInfo() {
@@ -126,6 +136,7 @@ function TenantInfo() {
   const [profileImage, setProfileImage] = React.useState(
     currentUser.profileImage
   );
+  const [status, setStatus] = React.useState(currentUser.status);
 
   const employments = [
     { name: "待業中", value: 0 },
@@ -151,6 +162,7 @@ function TenantInfo() {
       employment,
       selfIntro,
       hobbies,
+      status,
     };
     const newHobbies = hobbies.filter((item) => !allHobbies.includes(item));
     if (newHobbies.length) {
@@ -188,7 +200,6 @@ function TenantInfo() {
 
   React.useEffect(() => {
     api.getAllDocsFromCollection("hobbies").then((res) => {
-      console.log(res);
       const allData = res
         .map((item) => item.name)
         .filter((name) => !hobbies.includes(name));
@@ -320,15 +331,23 @@ function TenantInfo() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log(e.target[0].value);
-                  setHobbies((prev) => [...prev, e.target[0].value]);
+                  const newHobby = e.target[0].value;
+                  console.log(newHobby);
+                  if (!hobbyList.includes(newHobby)) {
+                    setHobbies((prev) => [...prev, newHobby]);
+                  } else {
+                    setHobbies((prev) => [...prev, newHobby]);
+                    setHobbyList(
+                      allHobbies.filter((item) => item !== newHobby)
+                    );
+                  }
                   setQuery("");
                   setHobbyList(allHobbies);
                 }}
               >
                 <Input
                   id="hobbies"
-                  placeholder="請選擇興趣"
+                  placeholder="請輸入或選擇興趣"
                   value={query}
                   onFocus={() => {
                     setOpenPicker(true);
@@ -383,6 +402,17 @@ function TenantInfo() {
               />
             </Block>
           </InnerWrapper>
+          <ConfirmWrapper>
+            <input
+              id="public"
+              type="checkbox"
+              checked={status === 1 ? true : false}
+              onChange={(e) => setStatus(e.target.checked === true ? 1 : 0)}
+            />
+            <NewLabel htmlFor="public">
+              公開個人資訊（讓其他使用者可以看到你的職稱、興趣和簡介）
+            </NewLabel>
+          </ConfirmWrapper>
           {isLoading ? (
             <Loading>上傳中</Loading>
           ) : (

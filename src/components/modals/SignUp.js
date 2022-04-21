@@ -96,6 +96,7 @@ function SignUpModal({ setOpenSignUp }) {
           selfIntro: "",
           birthday: "",
           gender: 0,
+          status: 0,
         };
         api.SetDoc(
           api.Doc(api.DB, "users", userId),
