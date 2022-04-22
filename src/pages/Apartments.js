@@ -97,7 +97,7 @@ function Apartments() {
             ? apartments
                 .slice(itemsPerPage * (paging - 1), itemsPerPage * paging)
                 .map((apartment, index) => (
-                  <Card key={index} detail={apartment.basic} />
+                  <Card key={apartment.basic.id} detail={apartment.basic} />
                 ))
             : "無符合物件"}
         </Cards>

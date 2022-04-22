@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import heart from "../../images/heart.svg";
+import heartFill from "../../images/heartFill.svg";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -30,6 +31,15 @@ const Heart = styled.img`
   right: 10px;
   width: 35px;
   height: 35px;
+  cursor: pointer;
+`;
+
+const HeartFill = styled.img`
+  position: absolute;
+  top: 13px;
+  right: 13px;
+  width: 30px;
+  height: 30px;
   cursor: pointer;
 `;
 
@@ -63,6 +73,13 @@ function Card({ detail }) {
   const auth = Firebase.getAuth();
   const { currentUser } = useAuth();
   const [user, loading, error] = useAuthState(auth);
+  const [isCollected, setIsCollected] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsCollected(
+      currentUser && currentUser.collectionList.includes(detail.id)
+    );
+  }, [currentUser]);
 
   function RenderHeart() {
     // 收藏房源愛心：判斷是否登入為會員(房客?)
@@ -70,7 +87,11 @@ function Card({ detail }) {
       return null;
     }
     if (user) {
-      return <Heart src={heart} onClick={() => collectApartment(detail.id)} />;
+      return isCollected ? (
+        <HeartFill src={heartFill} onClick={() => cancelCollect(detail.id)} />
+      ) : (
+        <Heart src={heart} onClick={() => collectApartment(detail.id)} />
+      );
     }
     if (error) {
       return null;
@@ -79,6 +100,16 @@ function Card({ detail }) {
 
   function collectApartment(id) {
     console.log(id);
+    api.updateDocData("users", currentUser.uid, {
+      collectionList: [...currentUser.collectionList, id],
+    });
+  }
+
+  function cancelCollect(id) {
+    console.log(id);
+    api.updateDocData("users", currentUser.uid, {
+      collectionList: currentUser.collectionList.filter((item) => item !== id),
+    });
   }
 
   return (
