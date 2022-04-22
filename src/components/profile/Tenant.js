@@ -7,6 +7,8 @@ import {
   ProfileContent,
 } from "../common/Components";
 import TenantInfo from "./TenantInfo";
+import CollectionList from "./CollectionList";
+import GroupAndTeam from "./GroupAndTeam";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
@@ -15,7 +17,7 @@ const Wrapper = styled(BodyWrapper)`
 const profilelist = [
   { name: "會員基本資料", id: 1 },
   { name: "我的收藏", id: 2 },
-  { name: "房源管理", id: 3 },
+  { name: "社團 / 群組管理", id: 3 },
   { name: "預約看房", id: 4 },
 ];
 
@@ -37,8 +39,8 @@ function Tenant() {
       {listIndex && (
         <ProfileContent>
           {listIndex === 1 && <TenantInfo />}
-          {listIndex === 2 && <>我的收藏</>}
-          {listIndex === 3 && <>房源管理</>}
+          {listIndex === 2 && <CollectionList />}
+          {listIndex === 3 && <GroupAndTeam />}
         </ProfileContent>
       )}
     </Wrapper>

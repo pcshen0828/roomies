@@ -67,6 +67,7 @@ function TeamCard({ team }) {
   async function joinTeam() {
     api.updateDocData("teams", team.id, {
       members: [...team.members, { uid: currentUser.uid, status: 3 }],
+      userIDs: [...team.userIDs, currentUser.uid],
     });
     setOpenAppliedModal(true);
   }
@@ -83,6 +84,7 @@ function TeamCard({ team }) {
           toggle={setOpenMemberListModal}
           members={team.members}
           teamId={team.id}
+          team={team}
         />
       )}
       <Wrapper>

@@ -138,12 +138,14 @@ function NewTeamModal({ toggle, aid, members, groupId }) {
     const newList = inviteList.map(({ name, ...rest }) => {
       return rest;
     });
+    const uids = newList.map((user) => user.uid);
     newList.push({ uid: currentUser.uid, status: 0 });
     api.setNewDoc(newTeamRef, {
       id: newTeamRef.id,
       apartmentID: aid,
       name: teamName,
       members: newList,
+      userIDs: [...uids, currentUser.uid],
       createTime: time,
       updateTime: time,
     });

@@ -10,6 +10,7 @@ import { FlexWrapper } from "../common/Components";
 import MemberModal from "../modals/MemberModal";
 import MessageModal from "../modals/MessageModal";
 import NoticeModal from "../modals/NoticeModal";
+import { useLocation } from "react-router-dom";
 
 const icons = [
   {
@@ -37,6 +38,7 @@ const Icon = styled.img`
 `;
 
 function LoggedIn() {
+  const location = useLocation();
   const [activeicon, setActiveIcon] = React.useState("");
   return (
     <>
@@ -49,7 +51,12 @@ function LoggedIn() {
         {icons.map((icon, index) => (
           <React.Fragment key={index}>
             <Icon
-              src={activeicon === icon.name ? icon.activeSrc : icon.src}
+              src={
+                activeicon === icon.name ||
+                (icon.name === "member" && location.pathname === "/profile")
+                  ? icon.activeSrc
+                  : icon.src
+              }
               onClick={() => setActiveIcon(icon.name)}
             />
           </React.Fragment>
@@ -58,5 +65,4 @@ function LoggedIn() {
     </>
   );
 }
-
 export default LoggedIn;

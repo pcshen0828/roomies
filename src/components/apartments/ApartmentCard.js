@@ -17,6 +17,7 @@ const Wrapper = styled.div`
   border-radius: 20px;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
 `;
 
 const StyledLink = styled(Link)`
