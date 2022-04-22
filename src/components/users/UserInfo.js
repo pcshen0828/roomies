@@ -87,7 +87,7 @@ function UserInfo({ user, role }) {
           {currentUser && currentUser.uid === user.uid ? (
             ""
           ) : (
-            <button>發送訊息</button>
+            <button onClick={() => {}}>發送訊息</button>
           )}
         </InfoWrapper>
       </LeftWrapper>

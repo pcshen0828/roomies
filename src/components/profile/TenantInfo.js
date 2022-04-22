@@ -13,7 +13,7 @@ import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import { TenantBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
-import { HobbyPicker } from "./HobbyPicker";
+import Creatable from "react-select/creatable";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -117,11 +117,40 @@ function TenantInfo() {
   const { currentUser } = useAuth();
   const [openModal, setOpenModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [openPicker, setOpenPicker] = React.useState(false);
   const [allHobbies, setAllHobbies] = React.useState(false);
-  const [hobbyList, setHobbyList] = React.useState([]);
-  const [query, setQuery] = React.useState("");
-  const [results, setResults] = React.useState([]);
+  const [options, setOptions] = React.useState([]);
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      width: "100%",
+      borderBottom: "1px solid #dadada",
+      color: state.isSelected ? "#e8e8e8" : "#424b5a",
+      fontSize: "14px",
+      "&:hover": {
+        background: "#e8e8e8",
+      },
+    }),
+    container: (provided, state) => ({
+      ...provided,
+      width: "calc(90% + 12px)",
+      marginBottom: "20px",
+    }),
+    control: (base, state) => ({
+      ...base,
+      border: state.isFocused ? "1px solid #c1b18a" : "1px solid #dadada",
+      boxShadow: state.isFocused ? 0 : 0,
+      "&:hover": {
+        border: state.isFocused ? "1px solid #c1b18a" : "1px solid #dadada",
+      },
+    }),
+    menuList: (provided, state) => ({
+      ...provided,
+      padding: 0,
+      "&:hover": {
+        background: "#fff",
+      },
+    }),
+  };
 
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState(currentUser.name);
@@ -203,7 +232,11 @@ function TenantInfo() {
       console.log(res);
       const initData = res.map((item) => item.name);
       setAllHobbies(initData);
-      setHobbyList(initData.filter((name) => !hobbies.includes(name)));
+      setOptions(
+        initData
+          .filter((name) => !hobbies.includes(name))
+          .map((item) => ({ label: item, value: item }))
+      );
     });
   }, []);
 
@@ -304,76 +337,17 @@ function TenantInfo() {
               <NewTitle>進階資訊</NewTitle>
 
               <SmallLabel htmlFor="hobbies">興趣標籤</SmallLabel>
-              {hobbies.length ? (
-                <HobbyDisplayer
-                  onClick={() => {
-                    setOpenPicker(false);
-                  }}
-                >
-                  {hobbies.map((hobby, index) => (
-                    <HobbyTag
-                      key={index}
-                      onClick={() => {
-                        setHobbies((prev) =>
-                          prev.filter((item) => item !== hobby)
-                        );
-                        setHobbyList((prev) => [...prev, hobby]);
-                      }}
-                    >
-                      {hobby}
-                    </HobbyTag>
-                  ))}
-                </HobbyDisplayer>
-              ) : (
-                ""
-              )}
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const newHobby = e.target[0].value;
-                  console.log(newHobby);
-                  setResults([]);
-                  if (!allHobbies.includes(newHobby)) {
-                    setHobbies((prev) => [...prev, newHobby]);
-                  } else {
-                    // 已經存在的標籤
-                    setHobbies((prev) => [...prev, newHobby]);
-                    setHobbyList((prev) =>
-                      prev.filter((item) => item !== newHobby)
-                    );
-                  }
-                  setQuery("");
-                  setHobbyList(allHobbies);
-                }}
-              >
-                <Input
-                  id="hobbies"
-                  placeholder="請輸入或選擇興趣"
-                  value={query}
-                  onFocus={() => {
-                    setOpenPicker(true);
-                  }}
-                  // 搜尋已存在的興趣選項
-                  onChange={(e) => {
-                    setQuery(e.target.value);
-                    setOpenPicker(false);
-                    setResults(
-                      allHobbies.filter((item) => item.includes(e.target.value))
-                    );
-                  }}
-                />
-              </form>
-              {openPicker && (
-                <HobbyPicker
-                  hobbyList={hobbyList}
-                  toggle={setOpenPicker}
-                  hobbies={hobbies}
-                  setHobbies={setHobbies}
-                  setHobbyList={setHobbyList}
-                  setQuery={setQuery}
-                  allHobbies={allHobbies}
-                />
-              )}
+
+              <Creatable
+                isClearable
+                isMulti
+                onChange={(value) =>
+                  setHobbies(value.map((item) => item.label))
+                }
+                options={options}
+                value={hobbies.map((hobby) => ({ label: hobby, value: hobby }))}
+                styles={customStyles}
+              />
 
               <SmallLabel htmlFor="job">職稱</SmallLabel>
               <Input

@@ -211,6 +211,29 @@ const PagingItem = styled.div`
   background: ${(props) => (props.active ? "#dadada" : "")};
 `;
 
+const SearchWrapper = styled(FlexWrapper)`
+  padding: 0;
+  position: relative;
+  width: 100%;
+`;
+
+const SearchInput = styled(Input)`
+  width: calc(100% - 10px);
+  height: 30px;
+  border: 1px solid #dadada;
+  border-radius: 5px;
+  padding-left: 10px;
+  margin: 0;
+`;
+
+const SearchButton = styled.img`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: 5px;
+  top: 8px;
+`;
+
 export {
   Wrapper,
   Title,
@@ -236,4 +259,7 @@ export {
   LoadingButton,
   PagingList,
   PagingItem,
+  SearchWrapper,
+  SearchInput,
+  SearchButton,
 };
