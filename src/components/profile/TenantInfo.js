@@ -13,7 +13,7 @@ import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import { TenantBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
-import HobbyPicker from "./HobbyPicker";
+import { HobbyPicker } from "./HobbyPicker";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -113,8 +113,6 @@ const NewLabel = styled(SmallLabel)`
   margin: 0;
 `;
 
-let allHobbies = [];
-
 function TenantInfo() {
   const { currentUser } = useAuth();
   const [openModal, setOpenModal] = React.useState(false);
@@ -123,6 +121,7 @@ function TenantInfo() {
   const [allHobbies, setAllHobbies] = React.useState(false);
   const [hobbyList, setHobbyList] = React.useState([]);
   const [query, setQuery] = React.useState("");
+  const [results, setResults] = React.useState([]);
 
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState(currentUser.name);
@@ -201,11 +200,10 @@ function TenantInfo() {
 
   React.useEffect(() => {
     api.getAllDocsFromCollection("hobbies").then((res) => {
-      const allData = res
-        .map((item) => item.name)
-        .filter((name) => !hobbies.includes(name));
-      setAllHobbies(allData);
-      setHobbyList(allData);
+      console.log(res);
+      const initData = res.map((item) => item.name);
+      setAllHobbies(initData);
+      setHobbyList(initData.filter((name) => !hobbies.includes(name)));
     });
   }, []);
 
@@ -334,12 +332,14 @@ function TenantInfo() {
                   e.preventDefault();
                   const newHobby = e.target[0].value;
                   console.log(newHobby);
-                  if (!hobbyList.includes(newHobby)) {
+                  setResults([]);
+                  if (!allHobbies.includes(newHobby)) {
                     setHobbies((prev) => [...prev, newHobby]);
                   } else {
+                    // 已經存在的標籤
                     setHobbies((prev) => [...prev, newHobby]);
-                    setHobbyList(
-                      allHobbies.filter((item) => item !== newHobby)
+                    setHobbyList((prev) =>
+                      prev.filter((item) => item !== newHobby)
                     );
                   }
                   setQuery("");
@@ -353,9 +353,11 @@ function TenantInfo() {
                   onFocus={() => {
                     setOpenPicker(true);
                   }}
+                  // 搜尋已存在的興趣選項
                   onChange={(e) => {
                     setQuery(e.target.value);
-                    setHobbyList(
+                    setOpenPicker(false);
+                    setResults(
                       allHobbies.filter((item) => item.includes(e.target.value))
                     );
                   }}
@@ -365,8 +367,11 @@ function TenantInfo() {
                 <HobbyPicker
                   hobbyList={hobbyList}
                   toggle={setOpenPicker}
+                  hobbies={hobbies}
                   setHobbies={setHobbies}
                   setHobbyList={setHobbyList}
+                  setQuery={setQuery}
+                  allHobbies={allHobbies}
                 />
               )}
 

@@ -24,11 +24,18 @@ const HobbyItem = styled(FlexWrapper)`
   }
 `;
 
-function HobbyPicker({ hobbyList, toggle, setHobbies, setHobbyList }) {
+function HobbyPicker({
+  hobbyList,
+  toggle,
+  hobbies,
+  setHobbies,
+  setHobbyList,
+  setQuery,
+  allHobbies,
+}) {
   React.useEffect(() => {
     console.log("mounted");
-    Render();
-  }, [hobbyList]);
+  }, []);
 
   function Render() {
     return (
@@ -51,4 +58,4 @@ function HobbyPicker({ hobbyList, toggle, setHobbies, setHobbyList }) {
   return Render();
 }
 
-export default HobbyPicker;
+export { HobbyPicker };
