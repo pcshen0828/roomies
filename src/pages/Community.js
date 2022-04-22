@@ -47,11 +47,6 @@ function Community() {
 
   React.useEffect(() => {
     let mounted = true;
-    // api.getDataWithSingleQuery("users", "status", "==", 1).then((res) => {
-    //   console.log(res);
-    //   if (!mounted) return;
-    //   setUsers(res);
-    // });
     api.getAllDocsFromCollection("hobbies").then((res) => {
       if (!mounted) return;
       setHobbies(res);

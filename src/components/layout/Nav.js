@@ -40,7 +40,12 @@ function NavBar() {
       return (
         <StyledNavLink
           to="/community"
-          style={location.pathname === "/community" ? activeStyle : {}}
+          style={
+            location.pathname === "/community" ||
+            location.pathname.startsWith("/users/")
+              ? activeStyle
+              : {}
+          }
         >
           社群
         </StyledNavLink>

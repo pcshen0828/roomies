@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import heart from "../../images/heart.svg";
+import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled.div`
   border: 1px solid #e8e8e8;
@@ -56,9 +60,30 @@ const Price = styled.div`
 `;
 
 function Card({ detail }) {
+  const auth = Firebase.getAuth();
+  const { currentUser } = useAuth();
+  const [user, loading, error] = useAuthState(auth);
+
+  function RenderHeart() {
+    // 收藏房源愛心：判斷是否登入為會員(房客?)
+    if (loading) {
+      return null;
+    }
+    if (user) {
+      return <Heart src={heart} onClick={() => collectApartment(detail.id)} />;
+    }
+    if (error) {
+      return null;
+    }
+  }
+
+  function collectApartment(id) {
+    console.log(id);
+  }
+
   return (
     <Wrapper>
-      <Heart src={heart} onClick={() => console.log(detail.title)} />
+      {RenderHeart()}
       <StyledLink to={`/apartment/${detail.id}`}>
         <CoverImage src={detail.coverImage} />
         <CardContent>

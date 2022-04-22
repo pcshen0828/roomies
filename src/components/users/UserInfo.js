@@ -2,24 +2,28 @@ import React from "react";
 import styled from "styled-components";
 import { FlexWrapper, Bold, Title, MediumTitle } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
+import SendMessageModal from "../modals/SendMessage";
+import { SearchWrapper, SearchInput, SearchButton } from "../common/Components";
+import search from "../../images/search.svg";
+import { Firebase } from "../../utils/firebase";
+import UserCard from "../Community/UserCard";
 
 const NewWrapper = styled(FlexWrapper)`
-  ${"" /* border: 1px solid red; */}
   justify-content: space-between;
   align-items: flex-start;
-  margin-top: 20px;
+  margin-top: 50px;
 `;
 
 const LeftWrapper = styled(FlexWrapper)`
   width: 65%;
   justify-content: space-between;
   align-items: flex-start;
-  border: 1px solid blue;
 `;
 
 const RightWrapper = styled(FlexWrapper)`
   width: 30%;
-  border: 1px solid blue;
+  flex-direction: column;
+  align-items: flex-start;
 `;
 
 const ProfileImage = styled.div`
@@ -61,38 +65,92 @@ const IntroText = styled.div`
   line-height: 180%;
 `;
 
+const ResultDisplayer = styled(FlexWrapper)`
+  flex-direction: column;
+  margin-top: 20px;
+`;
+
 function UserInfo({ user, role }) {
   const { currentUser } = useAuth();
+  const [openMessage, setOpenMessage] = React.useState(false);
+  const [query, setQuery] = React.useState("");
+  const [users, setUsers] = React.useState([]);
+
+  function sendMyMessage() {
+    setOpenMessage(true);
+  }
+
+  async function searchByJobTitle(job) {
+    if (!job.trim()) {
+      setUsers([]);
+      return;
+    }
+    const query = Firebase.query(
+      Firebase.collection(Firebase.db, "users"),
+      Firebase.where("role", "==", 1),
+      Firebase.where("jobTitle", ">=", job),
+      Firebase.where("jobTitle", "<=", job + "\uf8ff")
+    );
+    const querySnapShot = await Firebase.getDocs(query);
+    const result = querySnapShot.docs.map((doc) => doc.data());
+    setUsers(result.filter((object) => user.uid !== object.uid));
+  }
 
   return (
-    <NewWrapper>
-      <LeftWrapper>
-        <ProfileImage url={user.profileImage} />
-        <InfoWrapper>
-          <MediumTitle>{user.alias}</MediumTitle>
-          <InfoInnerWrapper>
-            {role === 1 && <LightText>{user.jobTitle}</LightText>}
-            <LightText>生理性別：{user.gender === 0 ? "女" : "男"}</LightText>
-          </InfoInnerWrapper>
-          {role === 1 && user.hobbies.length ? (
+    <>
+      {openMessage && (
+        <SendMessageModal objectId={user.uid} setOpenModal={setOpenMessage} />
+      )}
+      <NewWrapper>
+        <LeftWrapper>
+          <ProfileImage url={user.profileImage} />
+          <InfoWrapper>
+            <MediumTitle>{user.alias}</MediumTitle>
             <InfoInnerWrapper>
-              {user.hobbies.map((hobby, index) => (
-                <Hobbytag key={index}>{hobby}</Hobbytag>
-              ))}
+              {role === 1 && <LightText>{user.jobTitle}</LightText>}
+              <LightText>生理性別：{user.gender === 0 ? "女" : "男"}</LightText>
             </InfoInnerWrapper>
+            {role === 1 && user.hobbies.length ? (
+              <InfoInnerWrapper>
+                {user.hobbies.map((hobby, index) => (
+                  <Hobbytag key={index}>{hobby}</Hobbytag>
+                ))}
+              </InfoInnerWrapper>
+            ) : (
+              ""
+            )}
+            <IntroText>{user.selfIntro}</IntroText>
+            {currentUser && currentUser.uid === user.uid ? (
+              ""
+            ) : (
+              <button onClick={sendMyMessage}>發送訊息</button>
+            )}
+          </InfoWrapper>
+        </LeftWrapper>
+        <RightWrapper>
+          <SearchWrapper>
+            <SearchInput
+              placeholder="尋找從事相同行業的室友"
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                searchByJobTitle(e.target.value);
+              }}
+            />
+            <SearchButton src={search} />
+          </SearchWrapper>
+          {users.length ? (
+            <ResultDisplayer>
+              {users.map((info, index) => (
+                <UserCard key={index} user={info} />
+              ))}
+            </ResultDisplayer>
           ) : (
             ""
           )}
-          <IntroText>{user.selfIntro}</IntroText>
-          {currentUser && currentUser.uid === user.uid ? (
-            ""
-          ) : (
-            <button onClick={() => {}}>發送訊息</button>
-          )}
-        </InfoWrapper>
-      </LeftWrapper>
-      <RightWrapper>search feature</RightWrapper>
-    </NewWrapper>
+        </RightWrapper>
+      </NewWrapper>
+    </>
   );
 }
 
