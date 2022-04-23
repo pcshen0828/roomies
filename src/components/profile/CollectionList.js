@@ -35,6 +35,10 @@ function CollectionList() {
 
   React.useEffect(() => {
     console.log(currentUser.collectionList);
+    if (!currentUser.collectionList.length) {
+      setCollectionList([]);
+      return;
+    }
     api
       .getDataWithSingleQuery(
         "apartments",
@@ -52,10 +56,11 @@ function CollectionList() {
     <Wrapper>
       <Bold>我的收藏</Bold>
       <CollectionWrapper>
-        {collectionList.length &&
-          collectionList.map((item, index) => (
-            <Card key={item.id} detail={item} collected />
-          ))}
+        {collectionList.length
+          ? collectionList.map((item, index) => (
+              <Card key={item.id} detail={item} collected />
+            ))
+          : ""}
       </CollectionWrapper>
     </Wrapper>
   );
