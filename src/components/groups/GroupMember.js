@@ -15,13 +15,14 @@ const defaultCardStyle = `
   border: 1px solid #c1b18a;
   border-radius: 10px;
   display: flex;
+  margin-bottom: 40px;
 `;
 const MemberBlockWrapper = styled.div`
   ${defaultCardStyle}
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
-  height: 300px;
+  height: 320px;
 `;
 
 const MembersBlock = styled.div`

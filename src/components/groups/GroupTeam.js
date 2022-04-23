@@ -15,13 +15,14 @@ const defaultCardStyle = `
   border-radius: 10px;
   display: flex;
   align-items: center;
+  margin-bottom: 40px;
 `;
 
 const TeamBlockWrapper = styled.div`
   ${defaultCardStyle}
   width: 100%;
   overflow-x: scroll;
-  height: 300px;
+  height: 320px;
 `;
 
 const TeamBlockCards = styled.div`
@@ -43,7 +44,7 @@ const SubtitleSmall = styled.div`
   color: #a1aeb7;
 `;
 
-function GroupTeam({ aid, members, groupId }) {
+function GroupTeam({ aid, members, groupId, roomies }) {
   const [teams, setTeams] = React.useState([]);
 
   React.useEffect(() => {
@@ -76,7 +77,9 @@ function GroupTeam({ aid, members, groupId }) {
         <TeamBlockCards>
           <CreateTeam aid={aid} members={members} groupId={groupId} />
           {teams.length
-            ? teams.map((team, index) => <TeamCard key={index} team={team} />)
+            ? teams.map((team, index) => (
+                <TeamCard key={index} team={team} roomies={roomies} />
+              ))
             : ""}
         </TeamBlockCards>
       </TeamBlockWrapper>

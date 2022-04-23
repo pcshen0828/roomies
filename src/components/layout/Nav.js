@@ -68,7 +68,8 @@ function NavBar() {
         to="/apartments"
         style={
           location.pathname === "/apartments" ||
-          location.pathname.startsWith("/apartment/")
+          location.pathname.startsWith("/apartment/") ||
+          location.pathname.startsWith("/groups/")
             ? activeStyle
             : {}
         }

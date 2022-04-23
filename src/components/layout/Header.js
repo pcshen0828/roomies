@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import NavBar from "./Nav";
-import LoggedIn from "./LoggenIn";
+import LoggedIn from "./LoggedIn";
 import NotLoggedIn from "./NotLoggedIn";
 import { FlexWrapper } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";

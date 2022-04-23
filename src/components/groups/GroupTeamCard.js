@@ -59,7 +59,7 @@ const ShowStatus = styled.button`
   }
 `;
 
-function TeamCard({ team }) {
+function TeamCard({ team, roomies }) {
   const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
   const { currentUser } = useAuth();
@@ -101,8 +101,10 @@ function TeamCard({ team }) {
             <ShowStatus>邀請中</ShowStatus>
           ) : userStatus === 3 ? (
             <ShowStatus>待核准</ShowStatus>
-          ) : (
+          ) : team.members.length < roomies ? (
             <JoinButton onClick={joinTeam}>申請加入</JoinButton>
+          ) : (
+            <ShowStatus>已額滿</ShowStatus>
           )}
         </Bottom>
       </Wrapper>

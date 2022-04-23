@@ -128,6 +128,7 @@ function Groups() {
         <GroupBody>
           <GroupMember members={members} />
           <GroupTeam
+            roomies={apartmentData.roomiesCount}
             aid={apartmentData.id}
             members={groupMembers}
             groupId={id}
