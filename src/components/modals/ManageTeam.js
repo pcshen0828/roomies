@@ -12,6 +12,7 @@ import {
 import { Bold, SmallLabel, Input, FlexWrapper } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
+import { Firebase } from "../../utils/firebase";
 
 const NewModal = styled(Modal)`
   width: 70%;
@@ -94,13 +95,25 @@ function ManageTeamModal({ team, group, toggle }) {
 
   function approveJoinTeam(user) {
     console.log(user);
-    // update team doc
+    const time = Firebase.Timestamp.fromDate(new Date());
+    team.members.find((member) => member.uid === user.uid).status = 1;
     api.updateDocData("teams", team.id, {
-      members: [...team.members, { uid: user.uid, status: 1 }],
+      members: team.members,
+      updateTime: time,
     });
   }
 
-  function updateTeamName() {}
+  function updateTeamName() {
+    const time = Firebase.Timestamp.fromDate(new Date());
+    api
+      .updateDocData("teams", team.id, {
+        name,
+        updateTime: time,
+      })
+      .then(() => {
+        toggle("");
+      });
+  }
 
   return (
     <Overlay>
@@ -168,7 +181,7 @@ function ManageTeamModal({ team, group, toggle }) {
               updateTeamName();
             }}
           >
-            儲存
+            完成
           </Button>
         </Buttons>
       </NewModal>
