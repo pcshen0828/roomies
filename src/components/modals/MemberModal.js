@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { NavModalOverlay, NavModal } from "./ModalElements";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { StyledLink } from "../common/Components";
+import { StyledLink, Button1 } from "../common/Components";
 
-const SignoutButton = styled.button`
+const SignoutButton = styled(Button1)`
   width: 90px;
   height: 35px;
   margin-top: 30px;

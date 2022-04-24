@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SendMessageModal from "../modals/SendMessage";
 import { useAuth } from "../../context/AuthContext";
+import { Button1 } from "../common/Components";
 
 const Wrapper = styled.div`
   display: flex;
@@ -66,7 +67,7 @@ const MemberJobTitle = styled.div`
   font-size: 14px;
 `;
 
-const MessageButton = styled.button`
+const MessageButton = styled(Button1)`
   width: 100px;
   justify-self: end;
 `;

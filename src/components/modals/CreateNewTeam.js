@@ -9,6 +9,7 @@ import {
   Body,
   Button,
 } from "./ModalElements";
+import { Button1 } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import search from "../../images/search.svg";
 import api from "../../utils/api";
@@ -83,7 +84,7 @@ const UserInfo = styled.div`
   flex-direction: column;
 `;
 
-const InviteButton = styled.button`
+const InviteButton = styled(Button1)`
   width: 90px;
   height: 35px;
 `;

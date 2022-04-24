@@ -7,6 +7,7 @@ import {
   SmallLabel,
   Select,
   Textarea,
+  Button1,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -39,7 +40,7 @@ const ProfileImage = styled.div`
   background-repeat: no-repeat;
 `;
 
-const ImageButton = styled.button`
+const ImageButton = styled(Button1)`
   width: 100px;
   height: 35px;
   font-size: 14px;
@@ -72,12 +73,12 @@ const Required = styled.span`
   color: #ed3636;
 `;
 
-const NewButton = styled.button`
+const NewButton = styled(Button1)`
   align-self: end;
   margin: 20px;
 `;
 
-const Loading = styled.button`
+const Loading = styled(Button1)`
   align-self: end;
   margin: 20px;
   cursor: not-allowed;

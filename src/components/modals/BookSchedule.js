@@ -25,6 +25,15 @@ const NewBody = styled(Body)`
 `;
 
 export default function BookScheduleModal({ host, team, group, toggle }) {
+  const date = new Date();
+  const isoDateTime = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000
+  )
+    .toISOString()
+    .slice(0, -5);
+  const [start, setStart] = React.useState(isoDateTime);
+  const [end, setEnd] = React.useState(isoDateTime);
+
   React.useEffect(() => {
     console.log(host);
     console.log(team);
@@ -40,8 +49,10 @@ export default function BookScheduleModal({ host, team, group, toggle }) {
         </Header>
         <NewBody>
           <SmallTitle>此房源目前已排定的看房行程</SmallTitle>
-          <SmallTitle>選擇時段</SmallTitle>
-          <MUIDateTimePicker />
+          <SmallTitle>選擇開始時間</SmallTitle>
+          <MUIDateTimePicker value={start} setValue={setStart} />
+          <SmallTitle>選擇結束時間</SmallTitle>
+          <MUIDateTimePicker value={end} setValue={setEnd} />
         </NewBody>
         <Button>送出</Button>
       </NewModal>

@@ -9,6 +9,7 @@ import {
   Title,
   Body,
 } from "./ModalElements";
+import { Button1 } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -58,7 +59,7 @@ const MemberStatus = styled.div`
   margin-right: 30px;
 `;
 
-const ActionButton = styled.button`
+const ActionButton = styled(Button1)`
   width: 90px;
   height: 35px;
   margin-right: 10px;

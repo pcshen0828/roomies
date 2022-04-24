@@ -4,17 +4,21 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
-export default function MUIDateTimePicker() {
-  const [value, setValue] = React.useState(new Date());
+export default function MUIDateTimePicker({ value, setValue }) {
+  const date = new Date();
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DateTimePicker
         renderInput={(props) => <TextField {...props} />}
         label="DateTimePicker"
-        value={value}
+        value={date}
         onChange={(newValue) => {
-          setValue(new Date(newValue).toISOString());
-          console.log(new Date(newValue).toISOString());
+          const isoDateTime = new Date(
+            newValue.getTime() - newValue.getTimezoneOffset() * 60000
+          )
+            .toISOString()
+            .slice(0, -5);
+          setValue(isoDateTime);
         }}
       />
     </LocalizationProvider>

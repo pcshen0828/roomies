@@ -9,7 +9,7 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallLabel } from "../common/Components";
+import { SmallLabel, Button1 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 
 const NewBody = styled(Body)`
@@ -26,7 +26,7 @@ const FileImage = styled.img`
   margin-bottom: 10px;
 `;
 
-const FileCancelButton = styled.button`
+const FileCancelButton = styled(Button1)`
   width: 90px;
   height: 35px;
   font-size: 14px;

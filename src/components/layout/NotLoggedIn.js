@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper } from "../common/Components";
+import { FlexWrapper, Button1 } from "../common/Components";
 import SignInModal from "../modals/SignIn";
 import SignUpModal from "../modals/SignUp";
 
-const Signup = styled.button`
+const Signup = styled(Button1)`
   margin-left: 20px;
 `;
 
-const SignIn = styled.button`
+const SignIn = styled(Button1)`
   background: #fff;
   color: #424b5a;
   width: 90px;

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Button1 } from "../common/Components";
 
 const Overlay = styled.div`
   position: fixed;
@@ -48,7 +49,7 @@ const Body = styled.div`
   margin: 20px auto;
 `;
 
-const Button = styled.button`
+const Button = styled(Button1)`
   align-self: end;
   margin: 20px 20px 40px 0;
 `;

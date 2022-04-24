@@ -192,6 +192,11 @@ const Error = styled.div`
 `;
 
 const LoadingButton = styled.button`
+  font-size: 16px;
+  border: none;
+  width: 120px;
+  height: 40px;
+  border-radius: 5px;
   align-self: end;
   margin: 20px;
   cursor: not-allowed;

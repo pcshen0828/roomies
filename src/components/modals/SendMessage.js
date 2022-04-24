@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
+import { Button1 } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -40,7 +41,7 @@ const DefaultMessage = styled.input`
   }
 `;
 
-const Button = styled.button`
+const Button = styled(Button1)`
   align-self: end;
   margin: 20px 20px 40px 0;
 `;

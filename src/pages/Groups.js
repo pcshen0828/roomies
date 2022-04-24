@@ -53,7 +53,7 @@ const Buttons = styled.div`
   align-items: center;
 `;
 
-const ExitButton = styled.button`
+const ExitButton = styled(Button1)`
   background: none;
   border: 1px solid #424b5a;
   color: #424b5a;

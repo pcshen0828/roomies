@@ -4,6 +4,7 @@ import CheckTeamMembersModal from "../modals/CheckTeamMembers";
 import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
+import { Button1 } from "../common/Components";
 
 const Wrapper = styled.div`
   width: 200px;
@@ -41,12 +42,12 @@ const Bottom = styled.div`
   align-items: center;
 `;
 
-const JoinButton = styled.button`
+const JoinButton = styled(Button1)`
   width: 100px;
   height: 35px;
 `;
 
-const ShowStatus = styled.button`
+const ShowStatus = styled(Button1)`
   width: 100px;
   height: 35px;
   background: #dadada;

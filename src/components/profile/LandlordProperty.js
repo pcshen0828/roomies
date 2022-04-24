@@ -21,7 +21,7 @@ const NewFlexWrapper = styled(FlexWrapper)`
   margin-top: 20px;
 `;
 
-const NewButton = styled.button`
+const NewButton = styled(Button1)`
   width: 100px;
   height: 40px;
   border: 1px solid #dadada;
