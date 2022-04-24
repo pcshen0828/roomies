@@ -79,9 +79,7 @@ function ManageTeamModal({ team, group, toggle }) {
         "users",
         "uid",
         "in",
-        team.members
-          .filter((user) => user.uid !== currentUser.uid)
-          .map((user) => user.uid)
+        team.members.map((user) => user.uid)
       )
       .then((res) => {
         if (!mounted) return;
@@ -140,48 +138,64 @@ function ManageTeamModal({ team, group, toggle }) {
             <ProfileImage
               src={
                 selfStatus !== 0
-                  ? otherMembers.find((user) => user.uid === host).profileImage
+                  ? otherMembers.length &&
+                    otherMembers.find((user) => user.uid === host).profileImage
                   : currentUser.profileImage
               }
             />
             <Alias>
               {selfStatus !== 0
-                ? otherMembers.find((user) => user.uid === host).alias
+                ? otherMembers.length &&
+                  otherMembers.find((user) => user.uid === host).alias
                 : currentUser.alias}
             </Alias>
           </MemberWrapper>
           <SmallLabel>成員</SmallLabel>
-          {otherMembers.map((user) => (
-            <MemberWrapper key={user.uid}>
-              <ProfileImage src={user.profileImage} />
-              <Alias>{user.alias}</Alias>
-              {team.members.find((member) => member.uid === user.uid).status ===
-              1 ? (
-                <MemberStatus>已加入</MemberStatus>
-              ) : team.members.find((member) => member.uid === user.uid)
-                  .status === 2 ? (
-                <MemberStatus>已邀請</MemberStatus>
-              ) : team.members.find((member) => member.uid === user.uid)
-                  .status === 3 ? (
-                <ApproveButton onClick={() => approveJoinTeam(user)}>
-                  核准
-                </ApproveButton>
-              ) : (
-                ""
-              )}
-            </MemberWrapper>
-          ))}
+          {otherMembers
+            .filter((member) => member.uid !== host)
+            .map((user) => (
+              <MemberWrapper key={user.uid}>
+                <ProfileImage src={user.profileImage} />
+                <Alias>{user.alias}</Alias>
+                {team.members.find((member) => member.uid === user.uid)
+                  .status === 1 ? (
+                  <MemberStatus>已加入</MemberStatus>
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 2 && user.uid !== currentUser.uid ? (
+                  <MemberStatus>已邀請</MemberStatus>
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 2 && user.uid === currentUser.uid ? (
+                  <ApproveButton onClick={() => approveJoinTeam(user)}>
+                    加入
+                  </ApproveButton>
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 3 && host !== currentUser.uid ? (
+                  <MemberStatus>待核准</MemberStatus>
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 3 && host === currentUser.uid ? (
+                  <ApproveButton onClick={() => approveJoinTeam(user)}>
+                    核准
+                  </ApproveButton>
+                ) : (
+                  ""
+                )}
+              </MemberWrapper>
+            ))}
         </NewBody>
         <Buttons>
-          {team.members.length === group.roomiesCount && selfStatus === 0 && (
-            <Button onClick={() => {}}>預約看房</Button>
-          )}
+          {team.members.length === group.roomiesCount &&
+            selfStatus === 0 &&
+            team.members
+              .filter((member) => member.status !== 0)
+              .every((member) => member.status === 1) && (
+              <Button onClick={() => {}}>預約看房</Button>
+            )}
           <Button
             onClick={() => {
               updateTeamName();
             }}
           >
-            完成
+            儲存
           </Button>
         </Buttons>
       </NewModal>
