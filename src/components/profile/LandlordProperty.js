@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { Wrapper, FlexWrapper, SmallTitle } from "../common/Components";
-import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
 import CreatePropertyModal from "../modals/CreateProperty";

@@ -10,16 +10,19 @@ import {
   BodyRight,
 } from "../components/common/Components";
 import MyMap from "../components/explore/Map";
-// import SearchBox from "../components/explore/SearchInput";
+
+const NewWrapper = styled(Wrapper)`
+  margin-bottom: 30px;
+`;
 
 function Explore() {
   return (
     <>
       <Header />
-      <Wrapper>
-        <Title>在這裡，找到適合共居的夥伴</Title>
-        <SubTitle>看看誰也在尋找附近的租屋</SubTitle>
-      </Wrapper>
+      <NewWrapper>
+        <Title>探索附近的租屋</Title>
+        <SubTitle>用地圖快速瀏覽公寓周邊交通與生活機能</SubTitle>
+      </NewWrapper>
       <BodyWrapper>
         <MyMap />
         {/* <BodyLeft></BodyLeft> */}

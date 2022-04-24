@@ -8,6 +8,7 @@ import {
 } from "../common/Components";
 import LandlordInfo from "./LandlordInfo";
 import LandlordProperty from "./LandlordProperty";
+import LandlordSchedule from "./LandlordSchedule";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
@@ -38,7 +39,7 @@ function Landlord() {
         <ProfileContent>
           {listIndex === 1 && <LandlordInfo />}
           {listIndex === 2 && <LandlordProperty />}
-          {listIndex === 3 && <>預約看房管理</>}
+          {listIndex === 3 && <LandlordSchedule />}
         </ProfileContent>
       )}
     </Wrapper>

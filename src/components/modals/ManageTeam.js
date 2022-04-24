@@ -13,6 +13,7 @@ import { Bold, SmallLabel, Input, FlexWrapper } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
+import BookScheduleModal from "./BookSchedule";
 
 const NewModal = styled(Modal)`
   width: 70%;
@@ -65,6 +66,7 @@ const Buttons = styled(FlexWrapper)`
 
 function ManageTeamModal({ team, group, toggle }) {
   const { currentUser } = useAuth();
+  const [openSchedule, setOpenSchedule] = React.useState(false);
   const [otherMembers, setOtherMembers] = React.useState([]);
   const [name, setName] = React.useState(team.name);
   const host = team.members.find((user) => user.status === 0).uid;
@@ -113,93 +115,108 @@ function ManageTeamModal({ team, group, toggle }) {
       });
   }
 
+  function openBookScheduleModal() {
+    setOpenSchedule(true);
+  }
+
   return (
-    <Overlay>
-      <NewModal>
-        <Header>
-          <Title>
-            管理群組｜人數 {team.members.length} / {group.roomiesCount}
-          </Title>
-          <CloseButton onClick={() => toggle("")}>×</CloseButton>
-        </Header>
-        <NewBody>
-          <SmallLabel>群組名稱</SmallLabel>
-          <Input
-            value={name}
-            readOnly={selfStatus !== 0}
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-          />
-          <SmallLabel>房源名稱</SmallLabel>
-          <Input value={group.title} readOnly />
-          <SmallLabel>團主</SmallLabel>
-          <MemberWrapper>
-            <ProfileImage
-              src={
-                selfStatus !== 0
-                  ? otherMembers.length &&
-                    otherMembers.find((user) => user.uid === host).profileImage
-                  : currentUser.profileImage
-              }
+    <>
+      {openSchedule && (
+        <BookScheduleModal
+          host={currentUser}
+          team={team}
+          group={group}
+          toggle={setOpenSchedule}
+        />
+      )}
+      <Overlay>
+        <NewModal>
+          <Header>
+            <Title>
+              管理群組｜人數 {team.members.length} / {group.roomiesCount}
+            </Title>
+            <CloseButton onClick={() => toggle("")}>×</CloseButton>
+          </Header>
+          <NewBody>
+            <SmallLabel>群組名稱</SmallLabel>
+            <Input
+              value={name}
+              readOnly={selfStatus !== 0}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
             />
-            <Alias>
-              {selfStatus !== 0
-                ? otherMembers.length &&
-                  otherMembers.find((user) => user.uid === host).alias
-                : currentUser.alias}
-            </Alias>
-          </MemberWrapper>
-          <SmallLabel>成員</SmallLabel>
-          {otherMembers
-            .filter((member) => member.uid !== host)
-            .map((user) => (
-              <MemberWrapper key={user.uid}>
-                <ProfileImage src={user.profileImage} />
-                <Alias>{user.alias}</Alias>
-                {team.members.find((member) => member.uid === user.uid)
-                  .status === 1 ? (
-                  <MemberStatus>已加入</MemberStatus>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 2 && user.uid !== currentUser.uid ? (
-                  <MemberStatus>已邀請</MemberStatus>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 2 && user.uid === currentUser.uid ? (
-                  <ApproveButton onClick={() => approveJoinTeam(user)}>
-                    加入
-                  </ApproveButton>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 3 && host !== currentUser.uid ? (
-                  <MemberStatus>待核准</MemberStatus>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 3 && host === currentUser.uid ? (
-                  <ApproveButton onClick={() => approveJoinTeam(user)}>
-                    核准
-                  </ApproveButton>
-                ) : (
-                  ""
-                )}
-              </MemberWrapper>
-            ))}
-        </NewBody>
-        <Buttons>
-          {team.members.length === group.roomiesCount &&
-            selfStatus === 0 &&
-            team.members
-              .filter((member) => member.status !== 0)
-              .every((member) => member.status === 1) && (
-              <Button onClick={() => {}}>預約看房</Button>
-            )}
-          <Button
-            onClick={() => {
-              updateTeamName();
-            }}
-          >
-            儲存
-          </Button>
-        </Buttons>
-      </NewModal>
-    </Overlay>
+            <SmallLabel>房源名稱</SmallLabel>
+            <Input value={group.title} readOnly />
+            <SmallLabel>團主</SmallLabel>
+            <MemberWrapper>
+              <ProfileImage
+                src={
+                  selfStatus !== 0
+                    ? otherMembers.length &&
+                      otherMembers.find((user) => user.uid === host)
+                        .profileImage
+                    : currentUser.profileImage
+                }
+              />
+              <Alias>
+                {selfStatus !== 0
+                  ? otherMembers.length &&
+                    otherMembers.find((user) => user.uid === host).alias
+                  : currentUser.alias}
+              </Alias>
+            </MemberWrapper>
+            <SmallLabel>成員</SmallLabel>
+            {otherMembers
+              .filter((member) => member.uid !== host)
+              .map((user) => (
+                <MemberWrapper key={user.uid}>
+                  <ProfileImage src={user.profileImage} />
+                  <Alias>{user.alias}</Alias>
+                  {team.members.find((member) => member.uid === user.uid)
+                    .status === 1 ? (
+                    <MemberStatus>已加入</MemberStatus>
+                  ) : team.members.find((member) => member.uid === user.uid)
+                      .status === 2 && user.uid !== currentUser.uid ? (
+                    <MemberStatus>已邀請</MemberStatus>
+                  ) : team.members.find((member) => member.uid === user.uid)
+                      .status === 2 && user.uid === currentUser.uid ? (
+                    <ApproveButton onClick={() => approveJoinTeam(user)}>
+                      加入
+                    </ApproveButton>
+                  ) : team.members.find((member) => member.uid === user.uid)
+                      .status === 3 && host !== currentUser.uid ? (
+                    <MemberStatus>待核准</MemberStatus>
+                  ) : team.members.find((member) => member.uid === user.uid)
+                      .status === 3 && host === currentUser.uid ? (
+                    <ApproveButton onClick={() => approveJoinTeam(user)}>
+                      核准
+                    </ApproveButton>
+                  ) : (
+                    ""
+                  )}
+                </MemberWrapper>
+              ))}
+          </NewBody>
+          <Buttons>
+            {team.members.length === group.roomiesCount &&
+              selfStatus === 0 &&
+              team.members
+                .filter((member) => member.status !== 0)
+                .every((member) => member.status === 1) && (
+                <Button onClick={openBookScheduleModal}>預約看房</Button>
+              )}
+            <Button
+              onClick={() => {
+                updateTeamName();
+              }}
+            >
+              儲存
+            </Button>
+          </Buttons>
+        </NewModal>
+      </Overlay>
+    </>
   );
 }
 

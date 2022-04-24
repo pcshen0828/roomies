@@ -156,6 +156,11 @@ const ProfileList = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  @media screen and (max-width: 1279.98px) {
+    flex-direction: row;
+    width: 100%;
+  }
 `;
 
 const ProfileItem = styled.div`
@@ -167,6 +172,9 @@ const ProfileItem = styled.div`
     props.active ? "1px solid #c1b18a" : "1px solid transparent"};
   &:hover {
     border-bottom: 1px solid #c1b18a;
+  }
+  @media screen and (max-width: 1279.98px) {
+    margin-right: 20px;
   }
 `;
 

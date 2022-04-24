@@ -1,0 +1,70 @@
+.fc-view-harness.fc-view-harness-active {
+  height: 625px !important;
+}
+
+@media screen and (max-width: 900px) {
+  .fc-view-harness.fc-view-harness-active {
+    width: 100%;
+    overflow-x: scroll;
+  }
+  .fc-daygrid.fc-dayGridMonth-view.fc-view,
+  .fc-timegrid.fc-timeGridWeek-view.fc-view,
+  .fc-list.fc-list-sticky.fc-listWeek-view.fc-view {
+    width: 860px;
+  }
+}
+
+.fc .fc-toolbar-title {
+  font-size: 20px;
+}
+@media screen and (max-width: 1279.98px) {
+  .fc .fc-toolbar-title {
+    font-size: 18px;
+  }
+}
+
+.fc-prev-button.fc-button.fc-button-primary,
+.fc-next-button.fc-button.fc-button-primary {
+  width: 60px;
+}
+
+.fc-dayGridMonth-button.fc-button.fc-button-primary,
+.fc-timeGridWeek-button.fc-button.fc-button-primary,
+.fc-listWeek-button.fc-button.fc-button-primary {
+  width: 90px;
+}
+
+@media screen and (max-width: 800px) {
+  .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .fc-toolbar-chunk {
+    margin-bottom: 10px;
+  }
+  .fc-toolbar-chunk:nth-child(2) {
+    order: 1;
+  }
+  .fc-toolbar-chunk:nth-child(1) {
+    order: 2;
+  }
+  .fc-toolbar-chunk:nth-child(3) {
+    order: 3;
+  }
+  .fc-prev-button.fc-button.fc-button-primary,
+  .fc-next-button.fc-button.fc-button-primary,
+  .fc-dayGridMonth-button.fc-button.fc-button-primary,
+  .fc-timeGridWeek-button.fc-button.fc-button-primary,
+  .fc-listWeek-button.fc-button.fc-button-primary {
+    height: 32px;
+    padding: 0;
+  }
+  .fc-today-button.fc-button.fc-button-primary {
+    height: 32px;
+    width: 90px;
+    padding: 0;
+  }
+}
+/* .fc-daygrid-day.fc-day.fc-day-sun.fc-day-today {
+  background-color: #f0ede4;
+} */

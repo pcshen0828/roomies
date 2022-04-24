@@ -17,7 +17,7 @@ const NewWrapper = styled(Wrapper)`
 `;
 
 const NewTitle = styled(Title)`
-  margin: 20px 0 30px;
+  margin: 0px 0 30px;
 `;
 
 const Cards = styled.div`
