@@ -10,6 +10,7 @@ import {
   Button,
 } from "./ModalElements";
 import { SmallTitle } from "../common/Components";
+import MUIDateTimePicker from "./DateTimePicker";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;
@@ -40,6 +41,7 @@ export default function BookScheduleModal({ host, team, group, toggle }) {
         <NewBody>
           <SmallTitle>此房源目前已排定的看房行程</SmallTitle>
           <SmallTitle>選擇時段</SmallTitle>
+          <MUIDateTimePicker />
         </NewBody>
         <Button>送出</Button>
       </NewModal>

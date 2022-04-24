@@ -6,6 +6,7 @@ import {
   Error,
   LoadingButton,
   PagingList,
+  Button1,
 } from "../common/Components";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
@@ -142,7 +143,7 @@ function CreatePropertyPage4({ id, paging, setPaging, toggle, apartment }) {
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button onClick={updateApartmentInfo}>儲存並完成</button>
+            <Button1 onClick={updateApartmentInfo}>儲存並完成</Button1>
           ))}
       </PagingList>
     </>

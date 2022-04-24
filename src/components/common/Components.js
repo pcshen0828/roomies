@@ -242,6 +242,21 @@ const SearchButton = styled.img`
   top: 8px;
 `;
 
+const Button1 = styled.button`
+  cursor: pointer;
+  font-size: 16px;
+  border: none;
+  background: #424b5a;
+  width: 120px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+
+  &:hover {
+    background: #c1b18a;
+  }
+`;
+
 export {
   Wrapper,
   Title,
@@ -270,4 +285,5 @@ export {
   SearchWrapper,
   SearchInput,
   SearchButton,
+  Button1,
 };

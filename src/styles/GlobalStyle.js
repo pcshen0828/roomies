@@ -11,18 +11,5 @@ export const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
   }
-  button {
-    cursor: pointer;
-    font-size: 16px;
-    border: none;
-    background: #424b5a;
-    width: 120px;
-    height: 40px;
-    color: #fff;
-    border-radius: 5px;
-
-    &:hover {
-      background: #c1b18a;
-    }
-  }
+  
 `;

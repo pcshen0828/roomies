@@ -5,7 +5,7 @@ import Header from "../components/layout/Header";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import api from "../utils/api";
-import { StyledLink } from "../components/common/Components";
+import { StyledLink, Button1 } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 
 const Wrapper = styled.div`
@@ -122,7 +122,7 @@ function Groups() {
           </SubTitles>
           <Buttons>
             <ExitButton>退出</ExitButton>
-            <button>邀請</button>
+            <Button1>邀請</Button1>
           </Buttons>
         </GroupHeader>
         <GroupBody>

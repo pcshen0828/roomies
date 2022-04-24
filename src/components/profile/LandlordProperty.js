@@ -1,7 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Wrapper, FlexWrapper, SmallTitle } from "../common/Components";
+import {
+  Wrapper,
+  FlexWrapper,
+  SmallTitle,
+  Button1,
+} from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
 import CreatePropertyModal from "../modals/CreateProperty";
@@ -104,14 +109,14 @@ function LandlordProperty() {
                 <CardImage src={item.coverImage}></CardImage>
                 <CardBody>
                   <SmallTitle>{item.title}</SmallTitle>
-                  <button
+                  <Button1
                     onClick={() => {
                       setOpenEdit(true);
                       setApartment(item);
                     }}
                   >
                     編輯
-                  </button>
+                  </Button1>
                 </CardBody>
               </Card>
             ))}
@@ -127,14 +132,14 @@ function LandlordProperty() {
                   <StyledLink to={`/apartment/${item.id}`}>
                     <SmallTitle>{item.title}</SmallTitle>
                   </StyledLink>
-                  <button
+                  <Button1
                     onClick={() => {
                       setOpenEdit(true);
                       setApartment(item);
                     }}
                   >
                     編輯
-                  </button>
+                  </Button1>
                 </CardBody>
               </Card>
             ))}

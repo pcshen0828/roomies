@@ -6,6 +6,7 @@ import {
   Error,
   LoadingButton,
   PagingList,
+  Button1,
 } from "../common/Components";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
@@ -143,27 +144,27 @@ function EditPropertyPage4({ apartment, paging, setPaging, toggle }) {
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button
+            <Button1
               onClick={() => setPaging((prev) => (prev > 1 ? prev - 1 : 1))}
             >
               上一頁
-            </button>
+            </Button1>
           ))}
         {paging < 4 &&
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button
+            <Button1
               onClick={() => setPaging((prev) => (prev < 4 ? prev + 1 : 4))}
             >
               儲存並繼續
-            </button>
+            </Button1>
           ))}
         {paging === 4 &&
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button onClick={updateApartmentInfo}>儲存並完成</button>
+            <Button1 onClick={updateApartmentInfo}>儲存並完成</Button1>
           ))}
       </PagingList>
     </>

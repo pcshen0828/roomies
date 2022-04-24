@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper, Bold } from "../common/Components";
+import { FlexWrapper, Bold, Button1 } from "../common/Components";
 import { Link } from "react-router-dom";
 
 const StyledLink = styled(Link)`
@@ -34,7 +34,7 @@ function UserCard({ user }) {
       <ProfileImage src={user.profileImage} />
       <Bold>{user.alias}</Bold>
       <StyledLink to={`/users/${user.uid}`}>
-        <button>查看個人頁面</button>
+        <Button1>查看個人頁面</Button1>
       </StyledLink>
     </Card>
   );

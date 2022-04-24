@@ -6,6 +6,7 @@ import JoinConfirmModal from "../modals/JoinGroupConfirm";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import SignInFirstModal from "../modals/SignInFirst";
+import { Button1 } from "../common/Components";
 
 const Head = styled.div`
   width: calc(100% - 48px);
@@ -121,7 +122,7 @@ function ApartmentDetail() {
               ) : (currentUser && currentUser.role) === 2 ? (
                 ""
               ) : (
-                <button onClick={openConfirmModal}>加入租屋</button>
+                <Button1 onClick={openConfirmModal}>加入租屋</Button1>
               )}
             </DetailInfo>
           )}

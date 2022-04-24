@@ -8,6 +8,7 @@ import {
   Textarea,
   LoadingButton,
   PagingList,
+  Button1,
 } from "../common/Components";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
@@ -155,13 +156,13 @@ function CreatePropertyPage3({ id, paging, setPaging, apartment }) {
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button onClick={updateApartmentInfo}>儲存並繼續</button>
+            <Button1 onClick={updateApartmentInfo}>儲存並繼續</Button1>
           ))}
         {paging === 4 &&
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button>儲存並完成</button>
+            <Button1>儲存並完成</Button1>
           ))}
       </PagingList>
     </>

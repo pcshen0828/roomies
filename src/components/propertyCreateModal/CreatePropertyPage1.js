@@ -7,6 +7,7 @@ import {
   Error,
   LoadingButton,
   PagingList,
+  Button1,
 } from "../common/Components";
 import api from "../../utils/api";
 import {
@@ -266,7 +267,7 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
           (isLoading ? (
             <LoadingButton>上傳中</LoadingButton>
           ) : (
-            <button onClick={updateApartmentInfo}>儲存並繼續</button>
+            <Button1 onClick={updateApartmentInfo}>儲存並繼續</Button1>
           ))}
       </PagingList>
     </>

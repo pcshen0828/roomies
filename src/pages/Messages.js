@@ -6,7 +6,7 @@ import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
 import { useAuth } from "../context/AuthContext";
 import { Navigate, Link } from "react-router-dom";
-import { Wrapper } from "../components/common/Components";
+import { Wrapper, Button1 } from "../components/common/Components";
 
 const FullWrapper = styled.div`
   width: 100%;
@@ -89,7 +89,7 @@ function Messages() {
         <CenterWrapper>
           <Reminder>沒有對話紀錄喔！趕快開啟對話吧</Reminder>
           <Link to="/community">
-            <button>前往探索</button>
+            <Button1>前往探索</Button1>
           </Link>
         </CenterWrapper>
       );

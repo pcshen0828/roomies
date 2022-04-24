@@ -3,7 +3,12 @@ import styled from "styled-components";
 import { FlexWrapper, Bold, Title, MediumTitle } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import SendMessageModal from "../modals/SendMessage";
-import { SearchWrapper, SearchInput, SearchButton } from "../common/Components";
+import {
+  SearchWrapper,
+  SearchInput,
+  SearchButton,
+  Button1,
+} from "../common/Components";
 import search from "../../images/search.svg";
 import { Firebase } from "../../utils/firebase";
 import UserCard from "../Community/UserCard";
@@ -123,7 +128,7 @@ function UserInfo({ user, role }) {
             {currentUser && currentUser.uid === user.uid ? (
               ""
             ) : (
-              <button onClick={sendMyMessage}>發送訊息</button>
+              <Button1 onClick={sendMyMessage}>發送訊息</Button1>
             )}
           </InfoWrapper>
         </LeftWrapper>
