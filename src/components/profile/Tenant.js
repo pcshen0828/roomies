@@ -9,6 +9,7 @@ import {
 import TenantInfo from "./TenantInfo";
 import CollectionList from "./CollectionList";
 import GroupAndTeam from "./GroupAndTeam";
+import TenantSchedule from "./TenantSchedule";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
@@ -18,7 +19,7 @@ const profilelist = [
   { name: "會員基本資料", id: 1 },
   { name: "我的收藏", id: 2 },
   { name: "社團 / 群組管理", id: 3 },
-  { name: "預約看房", id: 4 },
+  { name: "預約看房管理", id: 4 },
 ];
 
 function Tenant() {
@@ -41,6 +42,7 @@ function Tenant() {
           {listIndex === 1 && <TenantInfo />}
           {listIndex === 2 && <CollectionList />}
           {listIndex === 3 && <GroupAndTeam />}
+          {listIndex === 4 && <TenantSchedule />}
         </ProfileContent>
       )}
     </Wrapper>

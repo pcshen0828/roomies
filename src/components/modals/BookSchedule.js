@@ -57,7 +57,7 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
       updateTime: time,
       status: 0,
       host: host.uid,
-      otherMembers: team.userIDs.filter((user) => user !== host.uid),
+      members: team.userIDs,
       team: team.id,
       start,
       end,

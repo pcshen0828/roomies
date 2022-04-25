@@ -107,33 +107,6 @@ function GroupAndTeam() {
       setTeams(res);
       console.log(res);
     });
-    // api
-    //   .getDataWithSingleQuery(
-    //     "groups",
-    //     "members",
-    //     "array-contains",
-    //     currentUser.uid
-    //   )
-    //   .then((res) => {
-    //     const apartmentIds = res.map((item) => item.apartmentId);
-    //     api
-    //       .getDataWithSingleQuery("apartments", "id", "in", apartmentIds)
-    //       .then((res) => {
-    //         setGroups(res);
-    //         console.log(res);
-    //       });
-    //   });
-    // api
-    //   .getDataWithSingleQuery(
-    // "teams",
-    // "userIDs",
-    // "array-contains",
-    // currentUser.uid
-    //   )
-    //   .then((res) => {
-    //     setTeams(res);
-    //     console.log(res);
-    //   });
 
     return function cleanup() {
       unsubscribe1();
