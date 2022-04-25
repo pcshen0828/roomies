@@ -9,8 +9,10 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallTitle } from "../common/Components";
+import { SmallTitle, Textarea } from "../common/Components";
 import MUIDateTimePicker from "./DateTimePicker";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;
@@ -24,7 +26,11 @@ const NewBody = styled(Body)`
   height: 380px;
 `;
 
-export default function BookScheduleModal({ host, team, group, toggle }) {
+const PickerWrapper = styled.div`
+  margin: 20px 0;
+`;
+
+export default function BookScheduleModal({ host, team, apartment, toggle }) {
   const date = new Date();
   const isoDateTime = new Date(
     date.getTime() - date.getTimezoneOffset() * 60000
@@ -33,12 +39,81 @@ export default function BookScheduleModal({ host, team, group, toggle }) {
     .slice(0, -5);
   const [start, setStart] = React.useState(isoDateTime);
   const [end, setEnd] = React.useState(isoDateTime);
+  const [message, setMessage] = React.useState("");
 
   React.useEffect(() => {
     console.log(host);
     console.log(team);
-    console.log(group);
+    console.log(apartment);
   }, []);
+
+  function bookSchedule() {
+    const newDocRef = api.createNewDocRef("schedules");
+    const time = Firebase.Timestamp.fromDate(new Date());
+    api.setNewDoc(newDocRef, {
+      id: newDocRef.id,
+      apartmentID: apartment.id,
+      createTime: time,
+      updateTime: time,
+      status: 0,
+      host: host.uid,
+      otherMembers: team.userIDs.filter((user) => user !== host.uid),
+      team: team.id,
+      start,
+      end,
+      owner: apartment.owner,
+    });
+    if (message.trim()) {
+      api
+        .getDataWithSingleQuery(
+          "chats",
+          "userIDs",
+          "array-contains",
+          apartment.owner
+        )
+        .then((res) => {
+          return res.filter((data) => data.userIDs.includes(host.uid))[0];
+        })
+        .then((res) => {
+          if (res) {
+            const newMessage = {
+              content: message,
+              sender: res.members.find((member) => member.uid === host.uid)
+                .role,
+              timestamp: time,
+            };
+            api.updateDocData("chats", res.id, {
+              latestMessage: newMessage,
+              updateTime: time,
+            });
+            api.addNewDoc("chats/" + res.id + "/messages", newMessage);
+            toggle(false);
+          } else {
+            const newMessage = {
+              content: message,
+              sender: 0,
+              timestamp: time,
+            };
+            const newChatRef = api.createNewDocRef("chats");
+            api.setNewDoc(newChatRef, {
+              id: newChatRef.id,
+              createTime: time,
+              latestMessage: newMessage,
+              members: [
+                { role: 0, uid: host.uid },
+                { role: 1, uid: apartment.owner },
+              ],
+              updateTime: time,
+              userIDs: [host.uid, apartment.owner],
+            });
+            api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
+            toggle(false);
+          }
+        });
+    } else {
+      toggle(false);
+    }
+  }
 
   return (
     <HigherOverlay>
@@ -50,11 +125,20 @@ export default function BookScheduleModal({ host, team, group, toggle }) {
         <NewBody>
           <SmallTitle>此房源目前已排定的看房行程</SmallTitle>
           <SmallTitle>選擇開始時間</SmallTitle>
-          <MUIDateTimePicker value={start} setValue={setStart} />
+          <PickerWrapper>
+            <MUIDateTimePicker value={start} setValue={setStart} />
+          </PickerWrapper>
           <SmallTitle>選擇結束時間</SmallTitle>
-          <MUIDateTimePicker value={end} setValue={setEnd} />
+          <PickerWrapper>
+            <MUIDateTimePicker value={end} setValue={setEnd} />
+          </PickerWrapper>
+          <SmallTitle>留話給房東</SmallTitle>
+          <Textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
         </NewBody>
-        <Button>送出</Button>
+        <Button onClick={bookSchedule}>送出</Button>
       </NewModal>
     </HigherOverlay>
   );

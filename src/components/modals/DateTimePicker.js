@@ -11,7 +11,7 @@ export default function MUIDateTimePicker({ value, setValue }) {
       <DateTimePicker
         renderInput={(props) => <TextField {...props} />}
         label="DateTimePicker"
-        value={date}
+        value={value}
         onChange={(newValue) => {
           const isoDateTime = new Date(
             newValue.getTime() - newValue.getTimezoneOffset() * 60000

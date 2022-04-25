@@ -125,7 +125,7 @@ function ManageTeamModal({ team, group, toggle }) {
         <BookScheduleModal
           host={currentUser}
           team={team}
-          group={group}
+          apartment={group}
           toggle={setOpenSchedule}
         />
       )}
