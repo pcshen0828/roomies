@@ -16,6 +16,8 @@ const CalendarWrapper = styled.div`
 
 const EventInfoWindow = styled(NavModal)`
   z-index: 10;
+  width: auto;
+  height: auto;
 `;
 
 const Close = styled(CloseButton)`
@@ -26,6 +28,8 @@ function Schedule({ events }) {
   const [eventInfo, setEventInfo] = React.useState({});
   const [coordinates, setCoordinates] = React.useState({});
   const [showModal, setShowModal] = React.useState(false);
+
+  console.log(events);
 
   function showEventModal(info) {
     setEventInfo(info.event);
@@ -42,11 +46,16 @@ function Schedule({ events }) {
     <CalendarWrapper>
       {showModal && (
         <EventInfoWindow
-          style={{ top: `${coordinates.y}px`, left: `${coordinates.x}px` }}
+          style={{
+            top: `${coordinates.y}px`,
+            left: `${coordinates.x - 280}px`,
+          }}
         >
           <Close onClick={() => setShowModal(false)}>×</Close>
-          {eventInfo.title}
-          {eventInfo.extendedProps.apartment}
+          <div>{eventInfo.title}</div>
+          {eventInfo.extendedProps.members.map((member) => (
+            <div key={member.uid}>{member.alias}</div>
+          ))}
         </EventInfoWindow>
       )}
       <FullCalendar

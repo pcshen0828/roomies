@@ -22,6 +22,7 @@ const ScheduleCard = styled(FlexWrapper)`
   height: 200px;
   border-radius: 10px;
   border: 1px solid #dadada;
+  margin: 0 20px 20px 0;
 `;
 
 const CardTop = styled(FlexWrapper)`
@@ -37,6 +38,10 @@ export default function TenantSchedule() {
   const { currentUser } = useAuth();
   const [schedules, setSchedules] = React.useState([]);
 
+  function generateReadableDate(dateString) {
+    return new Date(dateString).toLocaleString().slice(0, -3);
+  }
+
   React.useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "schedules"),
@@ -45,15 +50,12 @@ export default function TenantSchedule() {
     );
 
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
-      const res = querySnapShot.docs.map((doc) => doc.data());
       let newSchedules = [];
-      setSchedules(res);
+      const res = querySnapShot.docs.map((doc) => doc.data());
       res.forEach((schedule) => {
         let newSchedule = {};
-        newSchedule.start = new Date(schedule.start)
-          .toLocaleString()
-          .slice(0, -3);
-        newSchedule.end = new Date(schedule.end).toLocaleString().slice(0, -3);
+        newSchedule.start = generateReadableDate(schedule.start);
+        newSchedule.end = generateReadableDate(schedule.end);
         newSchedule.status = schedule.status;
         newSchedule.id = schedule.id;
         api
@@ -73,8 +75,7 @@ export default function TenantSchedule() {
           });
         newSchedules.push(newSchedule);
       });
-      console.log(newSchedules);
-      // setSchedules(newSchedules);
+      setSchedules(newSchedules);
     });
 
     return function cleanup() {
@@ -90,7 +91,16 @@ export default function TenantSchedule() {
         {schedules.length
           ? schedules
               .filter((schedule) => schedule.status === 1)
-              .map((item) => <ScheduleCard key={item.id}>123</ScheduleCard>)
+              .map((item) => (
+                <ScheduleCard key={item.id}>
+                  <CardTop>
+                    <Bold>{item.apartment && item.apartment.title}</Bold>
+                  </CardTop>
+                  <CardBottom>
+                    <Bold>{item.start}</Bold>
+                  </CardBottom>
+                </ScheduleCard>
+              ))
           : ""}
       </FlexWrapper>
       <NewTitle>待確認行程</NewTitle>
@@ -101,12 +111,10 @@ export default function TenantSchedule() {
               .map((item) => (
                 <ScheduleCard key={item.id}>
                   <CardTop>
-                    <Bold>{item.apartmentID}</Bold>
+                    <Bold>{item.apartment && item.apartment.address}</Bold>
                   </CardTop>
                   <CardBottom>
-                    <Bold>
-                      {new Date(item.start).toLocaleString().slice(0, -3)}
-                    </Bold>
+                    <Bold>{item.start}</Bold>
                   </CardBottom>
                 </ScheduleCard>
               ))
