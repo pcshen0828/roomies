@@ -262,6 +262,44 @@ const Button1 = styled.button`
   }
 `;
 
+const CardWrapper = styled(FlexWrapper)`
+  flex-wrap: wrap;
+`;
+
+const ScheduleCard = styled(FlexWrapper)`
+  width: 350px;
+  height: 200px;
+  border-radius: 10px;
+  border: 1px solid #dadada;
+  margin: 0 20px 20px 0;
+  cursor: pointer;
+  padding: 20px;
+`;
+
+const ScheduleDate = styled(FlexWrapper)`
+  flex-direction: column;
+  align-items: flex-start;
+  width: 40%;
+`;
+
+const ScheduleInfo = styled(FlexWrapper)`
+  flex-direction: column;
+  width: 60%;
+  align-items: flex-start;
+`;
+
+const CardTop = styled(FlexWrapper)`
+  flex-direction: column;
+  height: 40%;
+  border-bottom: 1px solid #dadada;
+`;
+
+const CardBottom = styled(FlexWrapper)`
+  height: 60%;
+  align-items: flex-start;
+  flex-direction: column;
+`;
+
 export {
   Wrapper,
   Title,
@@ -291,4 +329,10 @@ export {
   SearchInput,
   SearchButton,
   Button1,
+  ScheduleDate,
+  ScheduleInfo,
+  CardWrapper,
+  ScheduleCard,
+  CardTop,
+  CardBottom,
 };
