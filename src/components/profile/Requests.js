@@ -7,51 +7,24 @@ import {
   ScheduleInfo,
   CardTop,
   CardBottom,
+  Button1,
 } from "../common/Components";
-
-// const CardWrapper = styled(FlexWrapper)`
-//   flex-wrap: wrap;
-// `;
-
-// const ScheduleCard = styled(FlexWrapper)`
-//   width: 350px;
-//   height: 200px;
-//   border-radius: 10px;
-//   border: 1px solid #dadada;
-//   margin: 0 20px 20px 0;
-//   cursor: pointer;
-//   padding: 20px;
-// `;
-
-// const ScheduleDate = styled(FlexWrapper)`
-//   flex-direction: column;
-//   align-items: flex-start;
-//   width: 40%;
-// `;
-
-// const ScheduleInfo = styled(FlexWrapper)`
-//   flex-direction: column;
-//   width: 60%;
-//   align-items: flex-start;
-// `;
-
-// const CardTop = styled(FlexWrapper)`
-//   flex-direction: column;
-//   height: 40%;
-//   border-bottom: 1px solid #dadada;
-// `;
-
-// const CardBottom = styled(FlexWrapper)`
-//   height: 60%;
-//   align-items: flex-start;
-//   flex-direction: column;
-// `;
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
 
 export default function Requests({ unConfirmed }) {
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
     const index = newString.indexOf("午");
     return newString.slice(index - 1, newString.length);
+  }
+
+  function confirmSchedule(id) {
+    const time = Firebase.Timestamp.fromDate(new Date());
+    api.updateDocData("schedules", id, {
+      updateTime: time,
+      status: 1,
+    });
   }
 
   return (
@@ -75,6 +48,13 @@ export default function Requests({ unConfirmed }) {
               <CardBottom>
                 {request.extendedProps.members &&
                   `${request.extendedProps.members.length}人`}
+                <Button1
+                  onClick={() => {
+                    confirmSchedule(request.extendedProps.id);
+                  }}
+                >
+                  確認
+                </Button1>
               </CardBottom>
             </ScheduleInfo>
           </ScheduleCard>

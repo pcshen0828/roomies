@@ -272,7 +272,7 @@ const ScheduleCard = styled(FlexWrapper)`
   border-radius: 10px;
   border: 1px solid #dadada;
   margin: 0 20px 20px 0;
-  cursor: pointer;
+  ${"" /* cursor: pointer; */}
   padding: 20px;
 `;
 
