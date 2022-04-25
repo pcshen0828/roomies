@@ -40,12 +40,23 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
   const [start, setStart] = React.useState(isoDateTime);
   const [end, setEnd] = React.useState(isoDateTime);
   const [message, setMessage] = React.useState("");
+  const [events, setEvents] = React.useState([]);
 
   React.useEffect(() => {
-    console.log(host);
-    console.log(team);
-    console.log(apartment);
+    const query = Firebase.query(
+      Firebase.collection(Firebase.db, "schedules"),
+      Firebase.where("apartmentID", "==", apartment.id),
+      Firebase.where("status", "==", 1)
+    );
+    Firebase.onSnapshot(query, (snapshot) => {
+      const confirmedEvents = snapshot.docs.map((doc) => doc.data());
+      setEvents(confirmedEvents);
+    });
   }, []);
+
+  function generateReadableDate(dateString) {
+    return new Date(dateString).toLocaleString().slice(0, -3);
+  }
 
   function bookSchedule() {
     const newDocRef = api.createNewDocRef("schedules");
@@ -124,6 +135,14 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
         </Header>
         <NewBody>
           <SmallTitle>此房源目前已排定的看房行程</SmallTitle>
+          {events.length
+            ? events.map((event) => (
+                <div key={event.id}>
+                  {generateReadableDate(event.start)}-
+                  {generateReadableDate(event.end)}
+                </div>
+              ))
+            : ""}
           <SmallTitle>選擇開始時間</SmallTitle>
           <PickerWrapper>
             <MUIDateTimePicker value={start} setValue={setStart} />
