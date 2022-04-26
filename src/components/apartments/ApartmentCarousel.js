@@ -1,17 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import switcher from "../../images/send.svg";
 import api from "../../utils/api";
-import { useParams } from "react-router-dom";
 
-const Wrapper = styled.div`
-  width: calc(55% - 20px);
-  height: 450px;
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "./carousel.css";
+
+const Wrapper = styled(Swiper)`
+  width: calc(60% - 30px);
+  height: 420px;
   overflow: hidden;
   position: relative;
   @media screen and (max-width: 1279.98px) {
     width: 100%;
     height: 300px;
+    margin-bottom: 20px;
   }
 `;
 
@@ -26,35 +33,12 @@ const Image = styled.div`
   background-position: center;
   background-repeat: no-repeat;
 `;
-const ImageSwitcher = styled.div`
-  display: flex;
-  justify-content: space-between;
-  position: absolute;
-  z-index: 10;
-  width: 100%;
-  bottom: 48%;
-`;
-
-const defaultStyle = `
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-`;
-
-const Prev = styled.img`
-  ${defaultStyle}
-`;
-
-const Next = styled.img`
-  ${defaultStyle}
-`;
 
 function Carousel({ id }) {
   const [images, setImages] = React.useState([]);
   const [cover, setCover] = React.useState("");
 
   React.useEffect(() => {
-    console.log(id);
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
       if (!mounted) return;
@@ -69,14 +53,25 @@ function Carousel({ id }) {
   }, []);
 
   return (
-    <Wrapper>
-      <ImageSwitcher>
-        <Prev src={switcher} onClick={() => {}} />
-        <Next src={switcher} onClick={() => {}} />
-      </ImageSwitcher>
+    <Wrapper
+      modules={[Navigation, Pagination, Scrollbar, A11y]}
+      spaceBetween={50}
+      slidesPerView={1}
+      navigation
+      pagination={{ clickable: true }}
+      scrollbar={{ draggable: true }}
+      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => console.log("slide change")}
+    >
+      <SwiperSlide>
+        <Image src={cover} />
+      </SwiperSlide>
       {images &&
-        images.map((image, index) => <Image src={image.url} key={index} />)}
-      <Image src={cover} />
+        images.map((image, index) => (
+          <SwiperSlide key={index}>
+            <Image src={image.url} key={index} />
+          </SwiperSlide>
+        ))}
     </Wrapper>
   );
 }

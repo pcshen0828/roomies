@@ -23,7 +23,6 @@ const CheckboxLabel = styled(SmallLabel)`
 function CreatePropertyPage2({ id, paging, setPaging, apartment }) {
   const [isLoading, setIsLoading] = React.useState(false);
 
-  // 以下與 sub-collections 相關
   const [conditions, setConditions] = React.useState([]);
   const [facilities, setFacilities] = React.useState([]);
   const [furnitures, setFurnitures] = React.useState([]);

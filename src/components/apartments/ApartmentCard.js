@@ -83,7 +83,6 @@ function Card({ detail }) {
   }, [currentUser]);
 
   function RenderHeart() {
-    // 收藏房源愛心：判斷是否登入為會員(房客?)
     if (loading) {
       return null;
     }
