@@ -1,17 +1,29 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper, Bold } from "../common/Components";
+import {
+  MediumTitle,
+  FlexWrapper,
+  Bold,
+  Button1,
+  StyledLink,
+} from "../common/Components";
 import api from "../../utils/api";
+import SendMessageLandlordModal from "../modals/SendMessageLandlord";
+import phone from "../../images/phone.svg";
 
 const Wrapper = styled(FlexWrapper)`
-  width: calc(40% - 40px);
-  height: 300px;
+  width: calc(40% - 60px);
   border-radius: 10px;
   background: #ffffff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   flex-direction: column;
   align-items: flex-start;
-  padding: 20px;
+  padding: 30px 30px 40px;
+
+  @media screen and (max-width: 1279.98px) {
+    width: calc(100% - 60px);
+    margin-bottom: 20px;
+  }
 `;
 
 const SubTitle = styled.div`
@@ -25,28 +37,66 @@ const ProfileImage = styled.div`
   width: 90px;
   height: 90px;
   border-radius: 50%;
+  margin-right: 10px;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
+const Info = styled(FlexWrapper)`
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const Intro = styled.div`
+  margin: 20px 0;
+`;
+
+const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+`;
+
 export default function OwnerCard({ owner }) {
   const [ownerInfo, setOwnerInfo] = React.useState();
+  const [openModal, setOpenModal] = React.useState(false);
   React.useEffect(() => {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
-      console.log(res[0]);
       setOwnerInfo(res[0]);
     });
   }, []);
+
   return (
-    <Wrapper>
-      <SubTitle>屋主資訊</SubTitle>
-      {ownerInfo && (
-        <FlexWrapper>
-          <ProfileImage src={ownerInfo.profileImage} />
-        </FlexWrapper>
+    <>
+      {openModal && (
+        <SendMessageLandlordModal
+          setOpenModal={setOpenModal}
+          objectId={ownerInfo.uid}
+        />
       )}
-    </Wrapper>
+      <Wrapper>
+        <SubTitle>屋主資訊</SubTitle>
+        {ownerInfo && (
+          <>
+            <FlexWrapper>
+              <ProfileImage src={ownerInfo.profileImage} />
+              <Info>
+                <StyledLink to={`/users/${ownerInfo.uid}`}>
+                  <MediumTitle>{ownerInfo.alias}</MediumTitle>
+                </StyledLink>
+                <FlexWrapper>
+                  <Icon alt="" src={phone} />
+                  <Bold>{ownerInfo.phone}</Bold>
+                </FlexWrapper>
+              </Info>
+            </FlexWrapper>
+            <Intro>{ownerInfo.selfIntro}</Intro>
+          </>
+        )}
+        <Button1 onClick={() => setOpenModal(true)}>發送訊息</Button1>
+      </Wrapper>
+    </>
   );
 }

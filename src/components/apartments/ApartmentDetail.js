@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import SignInFirstModal from "../modals/SignInFirst";
 import OwnerCard from "./ApartmentOwner";
 import { Button1, FlexWrapper, Title } from "../common/Components";
+import ApartmentMap from "./ApartmentMap";
 
 // icons
 import loc from "../../images/loc.svg";
@@ -130,7 +131,7 @@ const Detail = styled(FlexWrapper)`
 const DetailIcon = styled.img`
   width: 16px;
   height: 20px;
-  margin-right: 5px;
+  margin-right: 8px;
 `;
 
 const RentPrice = styled.span`
@@ -149,7 +150,7 @@ const HeartButton = styled(FlexWrapper)`
   margin-left: 20px;
 `;
 
-const HearIcon = styled.img`
+const HeartIcon = styled.img`
   width: 28px;
   height: 30px;
   margin-right: 6px;
@@ -160,7 +161,7 @@ const Body = styled(FlexWrapper)`
   width: 100%;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 20px auto;
+  margin: 20px auto 0;
 
   @media screen and (max-width: 1279.98px) {
     flex-direction: column;
@@ -173,6 +174,7 @@ const BodyLeft = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   @media screen and (max-width: 1279.98px) {
+    width: 100%;
   }
 `;
 
@@ -353,13 +355,13 @@ function ApartmentDetail() {
                   )}
                   <HeartButton>
                     {hasCollected ? (
-                      <HearIcon
+                      <HeartIcon
                         alt=""
                         src={heartFill}
                         onClick={cancelCollect}
                       />
                     ) : (
-                      <HearIcon
+                      <HeartIcon
                         alt=""
                         src={heart}
                         onClick={addToCollectionList}
@@ -435,6 +437,8 @@ function ApartmentDetail() {
             </BodyLeft>
             <OwnerCard owner={details[0].owner} />
           </Body>
+          <SubTitle>地圖位置</SubTitle>
+          <ApartmentMap geoLocation={details[0].geoLocation} />
         </Wrapper>
       ) : (
         <>無此房源</>
