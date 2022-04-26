@@ -60,8 +60,7 @@ function Carousel({ id }) {
       navigation
       pagination={{ clickable: true }}
       scrollbar={{ draggable: true }}
-      onSwiper={(swiper) => console.log(swiper)}
-      onSlideChange={() => console.log("slide change")}
+      rewind={true}
     >
       <SwiperSlide>
         <Image src={cover} />

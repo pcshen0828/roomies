@@ -5,8 +5,8 @@ import Header from "../components/layout/Header";
 import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
 import { useAuth } from "../context/AuthContext";
-import { Navigate, Link } from "react-router-dom";
-import { Wrapper, Button1 } from "../components/common/Components";
+import { Navigate, Link, useParams } from "react-router-dom";
+import { Wrapper, Button1, FlexWrapper } from "../components/common/Components";
 
 const FullWrapper = styled.div`
   width: 100%;
@@ -15,7 +15,7 @@ const FullWrapper = styled.div`
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: center;
-  height: calc(100vh - 350px);
+  height: calc(100vh - 250px);
 `;
 
 const CenterWrapper = styled(Wrapper)`
@@ -31,12 +31,31 @@ const InnerWrapper = styled.div`
   width: calc(100% - 48px);
   max-width: 1200px;
   display: flex;
+  height: 100%;
+`;
+
+const MessageList = styled.div`
+  width: 30%;
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: scroll;
+`;
+
+const DefaultMessage = styled(FlexWrapper)`
+  width: 70%;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  background: #f2f5f7;
+  color: #505d68;
 `;
 
 function Messages() {
+  const { id } = useParams();
   const { currentUser, user, loading, error } = useAuth();
   const [chats, setChats] = React.useState([]);
-  const [chatId, setChatId] = React.useState("");
 
   React.useEffect(() => {
     let mounted = true;
@@ -57,7 +76,6 @@ function Messages() {
         if (data.length) {
           console.log(data);
           setChats(data);
-          setChatId(data[0].id);
         }
       });
     }
@@ -77,13 +95,14 @@ function Messages() {
     if (user) {
       return chats.length ? (
         <InnerWrapper>
-          <List chats={chats} chatId={chatId} setChatId={setChatId} />
-          <MessageDetail
-            chats={chats}
-            chatId={chatId}
-            setChatId={setChatId}
-            currentUser={user}
-          />
+          <MessageList>
+            <List chats={chats} />
+          </MessageList>
+          {id === "all" ? (
+            <DefaultMessage>點擊聊天室</DefaultMessage>
+          ) : (
+            <MessageDetail chats={chats} currentUser={user} />
+          )}
         </InnerWrapper>
       ) : (
         <CenterWrapper>

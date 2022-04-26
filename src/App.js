@@ -28,7 +28,7 @@ function App() {
         <Route path="/community" element={<Community />}></Route>
         <Route path="/explore" element={<Explore />}></Route>
         <Route path="/profile" element={<Profile />}></Route>
-        <Route path="/messages" element={<Messages />}></Route>
+        <Route path="/messages/:id" element={<Messages />}></Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>

@@ -9,6 +9,7 @@ import SignInFirstModal from "../modals/SignInFirst";
 import OwnerCard from "./ApartmentOwner";
 import { Button1, FlexWrapper, Title } from "../common/Components";
 import ApartmentMap from "./ApartmentMap";
+import RecommendCarousel from "./Recommend";
 
 // icons
 import loc from "../../images/loc.svg";
@@ -439,6 +440,8 @@ function ApartmentDetail() {
           </Body>
           <SubTitle>地圖位置</SubTitle>
           <ApartmentMap geoLocation={details[0].geoLocation} />
+          <SubTitle>你可能也會喜歡：</SubTitle>
+          <RecommendCarousel id={details[0].id} />
         </Wrapper>
       ) : (
         <>無此房源</>

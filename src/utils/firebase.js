@@ -26,6 +26,7 @@ import {
   where,
   orderBy,
   Timestamp,
+  limit,
 } from "firebase/firestore";
 
 import {
@@ -63,6 +64,7 @@ const Firebase = {
   where,
   orderBy,
   Timestamp,
+  limit,
   db: getFirestore(app),
   storage,
   ref,

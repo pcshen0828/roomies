@@ -26,6 +26,13 @@ const Wrapper = styled(FlexWrapper)`
   }
 `;
 
+const OwnerLink = styled(StyledLink)`
+  &:hover {
+    border-bottom: 1px solid transparent;
+    color: #c1b18a;
+  }
+`;
+
 const SubTitle = styled.div`
   width: 300px;
   font-size: 18px;
@@ -83,9 +90,9 @@ export default function OwnerCard({ owner }) {
             <FlexWrapper>
               <ProfileImage src={ownerInfo.profileImage} />
               <Info>
-                <StyledLink to={`/users/${ownerInfo.uid}`}>
+                <OwnerLink to={`/users/${ownerInfo.uid}`}>
                   <MediumTitle>{ownerInfo.alias}</MediumTitle>
-                </StyledLink>
+                </OwnerLink>
                 <FlexWrapper>
                   <Icon alt="" src={phone} />
                   <Bold>{ownerInfo.phone}</Bold>

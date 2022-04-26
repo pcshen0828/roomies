@@ -3,14 +3,12 @@ import styled from "styled-components";
 import defaulImage from "../../images/default.png";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useParams, Link } from "react-router-dom";
 
-const MessageList = styled.div`
-  width: 30%;
-  border-right: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
+const StyledLink = styled(Link)`
+  color: #424b5a;
+  display: block;
+  width: 100%;
 `;
 
 const MessageItem = styled.div`
@@ -48,8 +46,9 @@ const LastMessage = styled.div`
   color: #505d68;
 `;
 
-function List({ chats, chatId, setChatId }) {
-  const { currentUser, user, loading, error } = useAuth();
+function List({ chats }) {
+  const { id } = useParams();
+  const { currentUser } = useAuth();
   const [chatUserData, setChatUserData] = React.useState([]);
   const stringLimit = 6;
 
@@ -96,48 +95,55 @@ function List({ chats, chatId, setChatId }) {
       : "現在";
   }
   return (
-    <MessageList>
-      {chats.map((chat, index) => (
-        <MessageItem
-          key={index}
-          onClick={() => {
-            setChatId(chat.id);
-          }}
-          active={chat.id === chatId}
-        >
-          <MessageImg
-            src={
-              chatUserData.length
-                ? chatUserData.find(
-                    (userData) =>
-                      userData.uid ===
-                      chat.userIDs.find((userID) => userID !== currentUser.uid)
-                  ).profileImage
-                : defaulImage
-            }
-          />
-          <MessageOverview>
-            <MessageObjectName>
-              {chatUserData.length &&
-                chatUserData.find(
-                  (userData) =>
-                    userData.uid ===
-                    chat.userIDs.find((userID) => userID !== currentUser.uid)
-                ).alias}
-            </MessageObjectName>
-            <LastMessage>
-              {chat.latestMessage.sender ===
-              chat.members.find((member) => member.uid === currentUser.uid).role
-                ? "你："
-                : ""}
-              {`${chat.latestMessage.content.slice(0, stringLimit)}`}
-              {chat.latestMessage.content.length > stringLimit ? "..." : ""}
-              <span> · {calcTimeGap(chat.updateTime.toDate())}</span>
-            </LastMessage>
-          </MessageOverview>
-        </MessageItem>
-      ))}
-    </MessageList>
+    <>
+      {chats.length
+        ? chats.map((chat) => (
+            <StyledLink key={chat.id} to={`/messages/${chat.id}`}>
+              <MessageItem active={chat.id === id}>
+                <MessageImg
+                  src={
+                    chatUserData.length
+                      ? chatUserData.find(
+                          (userData) =>
+                            userData.uid ===
+                            chat.userIDs.find(
+                              (userID) => userID !== currentUser.uid
+                            )
+                        ).profileImage
+                      : defaulImage
+                  }
+                />
+                <MessageOverview>
+                  <MessageObjectName>
+                    {chatUserData.length
+                      ? chatUserData.find(
+                          (userData) =>
+                            userData.uid ===
+                            chat.userIDs.find(
+                              (userID) => userID !== currentUser.uid
+                            )
+                        ).alias
+                      : "..."}
+                  </MessageObjectName>
+                  <LastMessage>
+                    {chat.latestMessage.sender ===
+                    chat.members.find(
+                      (member) => member.uid === currentUser.uid
+                    ).role
+                      ? "你："
+                      : ""}
+                    {`${chat.latestMessage.content.slice(0, stringLimit)}`}
+                    {chat.latestMessage.content.length > stringLimit
+                      ? "..."
+                      : ""}
+                    <span> · {calcTimeGap(chat.updateTime.toDate())}</span>
+                  </LastMessage>
+                </MessageOverview>
+              </MessageItem>
+            </StyledLink>
+          ))
+        : "loading"}
+    </>
   );
 }
 
