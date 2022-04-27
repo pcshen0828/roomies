@@ -99,7 +99,7 @@ function Messages() {
             <List chats={chats} />
           </MessageList>
           {id === "all" ? (
-            <DefaultMessage>點擊聊天室</DefaultMessage>
+            <DefaultMessage>點擊聊天室開始</DefaultMessage>
           ) : (
             <MessageDetail chats={chats} currentUser={user} />
           )}

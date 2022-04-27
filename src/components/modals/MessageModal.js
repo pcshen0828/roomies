@@ -39,10 +39,10 @@ function MessageModal({ setActiveIcon }) {
       );
 
       Firebase.onSnapshot(query, (querySnapshot) => {
-        if (!mounted) return;
         const data = querySnapshot.docs.map((doc) => doc.data());
         if (data.length) {
           console.log(data);
+          if (!mounted) return;
           setChats(data);
         }
       });

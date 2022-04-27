@@ -5,6 +5,7 @@ import send from "../../images/send.svg";
 import api from "../../utils/api";
 import { useParams } from "react-router-dom";
 import { FlexWrapper } from "../common/Components";
+import MessageBar from "./MessageBar";
 
 const MessageContent = styled.div`
   width: 70%;
@@ -19,23 +20,7 @@ const CreateTime = styled.div`
   font-size: 12px;
   color: #505d68;
   align-self: center;
-  margin-bottom: 20px;
-`;
-
-const SendDate = styled.div`
-  font-size: 12px;
-  color: #505d68;
-  align-self: center;
-  margin: 30px 0 20px;
-`;
-
-const SendTime = styled.div`
-  font-size: 12px;
-  color: #505d68;
-  margin: 0 0 10px;
-  position: absolute;
-  right: 10px;
-  bottom: 5px;
+  padding-bottom: 20px;
 `;
 
 const Messages = styled(FlexWrapper)`
@@ -77,29 +62,7 @@ const SendMessageButton = styled.img`
   cursor: pointer;
 `;
 
-const MessageSentByMe = styled.div`
-  background: #c2d1d9;
-  border-radius: 20px 20px 0px 20px;
-  padding: 10px 70px 15px 20px;
-  align-self: flex-end;
-  display: flex;
-  align-items: center;
-  max-width: 40%;
-  margin-bottom: 5px;
-  position: relative;
-`;
-
-const MessageSentByOthers = styled.div`
-  background: #f2f5f7;
-  border-radius: 20px 20px 20px 0px;
-  padding: 10px 70px 15px 20px;
-  align-self: flex-start;
-  display: flex;
-  align-items: center;
-  max-width: 40%;
-  margin-bottom: 5px;
-  position: relative;
-`;
+///////////////////////////////////////////////////
 
 function MessageDetail({ currentUser, chats }) {
   const { id } = useParams();
@@ -109,25 +72,59 @@ function MessageDetail({ currentUser, chats }) {
   const myRole = selectedChat
     ? selectedChat.members.find((member) => member.uid === currentUser.uid).role
     : 0;
+  const messageTop = React.useRef(null);
+  const last = React.useRef();
+
+  const snapRef2 = Firebase.collection(
+    Firebase.db,
+    "chats/" + id + "/messages"
+  );
 
   React.useEffect(() => {
     let mounted = true;
     if (id) {
-      const snapRef2 = Firebase.collection(
-        Firebase.db,
-        "chats/" + id + "/messages"
+      const query = Firebase.query(
+        snapRef2,
+        Firebase.orderBy("timestamp", "desc"),
+        Firebase.limit(10)
       );
-      const query = Firebase.query(snapRef2, Firebase.orderBy("timestamp"));
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
-        setMessages(snapshot.docs.map((doc) => doc.data()));
+        const fetchedMessages = snapshot.docs.map((doc) => doc.data());
+        setMessages(fetchedMessages.reverse());
+        const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+        last.current = lastVisible;
       });
     }
-
     return function cleaup() {
       mounted = false;
     };
   }, [id]);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver((entries, observer) => {
+      const entry = entries[0];
+      console.log("entry.isIntersecting", entry.isIntersecting);
+      if (entry.isIntersecting) {
+        let mounted = true;
+        const query = Firebase.query(
+          snapRef2,
+          Firebase.orderBy("timestamp", "desc"),
+          Firebase.startAfter(last.current),
+          Firebase.limit(10)
+        );
+        Firebase.onSnapshot(query, (snapshot) => {
+          if (!mounted) return;
+          const fetchedMessages = snapshot.docs.map((doc) => doc.data());
+          if (!fetchedMessages.length) return;
+          setMessages((prev) => [...fetchedMessages.reverse(), ...prev]);
+          const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+          last.current = lastVisible;
+        });
+      }
+    });
+    observer.observe(messageTop.current);
+  }, [last]);
 
   async function updateChat() {
     if (!message.trim()) return;
@@ -150,42 +147,20 @@ function MessageDetail({ currentUser, chats }) {
     return new Date(time.toDate()).toLocaleString().slice(0, endIndex);
   }
 
-  function generateReadableTime(time) {
-    const startIndex =
-      new Date(time.toDate()).toLocaleString().indexOf("午") - 1;
-    return new Date(time.toDate()).toLocaleString().slice(startIndex, -3);
-  }
-
   return (
     <MessageContent>
       <Messages>
-        <CreateTime>
+        <CreateTime ref={messageTop}>
           \ {generateReadableDate(selectedChat.createTime)}建立聊天室 /
         </CreateTime>
         {messages.length
           ? messages.map((detail, index) => (
-              <React.Fragment key={index}>
-                <SendDate>{generateReadableDate(detail.timestamp)}</SendDate>
-                {detail.sender === myRole ? (
-                  <>
-                    <MessageSentByMe>
-                      {detail.content}
-                      <SendTime>
-                        {generateReadableTime(detail.timestamp)}
-                      </SendTime>
-                    </MessageSentByMe>
-                  </>
-                ) : (
-                  <>
-                    <MessageSentByOthers>
-                      {detail.content}
-                      <SendTime>
-                        {generateReadableTime(detail.timestamp)}
-                      </SendTime>
-                    </MessageSentByOthers>
-                  </>
-                )}
-              </React.Fragment>
+              <MessageBar
+                key={index}
+                detail={detail}
+                myRole={myRole}
+                generateReadableDate={generateReadableDate}
+              />
             ))
           : "查無聊天紀錄！"}
       </Messages>

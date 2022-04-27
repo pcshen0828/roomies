@@ -27,6 +27,9 @@ import {
   orderBy,
   Timestamp,
   limit,
+  startAt,
+  startAfter,
+  endAt,
 } from "firebase/firestore";
 
 import {
@@ -65,6 +68,9 @@ const Firebase = {
   orderBy,
   Timestamp,
   limit,
+  startAt,
+  startAfter,
+  endAt,
   db: getFirestore(app),
   storage,
   ref,

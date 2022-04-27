@@ -54,7 +54,8 @@ function LoggedIn() {
               src={
                 activeicon === icon.name ||
                 (icon.name === "member" && location.pathname === "/profile") ||
-                (icon.name === "message" && location.pathname === "/messages")
+                (icon.name === "message" &&
+                  location.pathname.startsWith("/messages/"))
                   ? icon.activeSrc
                   : icon.src
               }
