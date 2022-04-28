@@ -9,19 +9,43 @@ import {
 import LandlordInfo from "./LandlordInfo";
 import LandlordProperty from "./LandlordProperty";
 import LandlordSchedule from "./LandlordSchedule";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
 `;
 
 const profilelist = [
-  { name: "會員基本資料", id: 1 },
-  { name: "房源管理", id: 2 },
-  { name: "行程管理", id: 3 },
+  {
+    name: "會員基本資料",
+    id: 1,
+    to: "/profile/info",
+    component: <LandlordInfo key="1" />,
+  },
+  {
+    name: "房源管理",
+    id: 2,
+    to: "/profile/apartments",
+    component: <LandlordProperty key="2" />,
+  },
+  {
+    name: "行程管理",
+    id: 3,
+    to: "/profile/schedule",
+    component: <LandlordSchedule key="3" />,
+  },
 ];
 
 function Landlord() {
   const [listIndex, setListIndex] = React.useState(1);
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  React.useEffect(() => {
+    const current = profilelist.find((item) => item.to === `/profile/${id}`);
+    setListIndex(current && current.id);
+  }, [id]);
+
   return (
     <Wrapper>
       <ProfileList>
@@ -29,7 +53,10 @@ function Landlord() {
           <ProfileItem
             key={index}
             active={listIndex === item.id}
-            onClick={() => setListIndex(item.id)}
+            onClick={() => {
+              setListIndex(item.id);
+              navigate(item.to);
+            }}
           >
             {item.name}
           </ProfileItem>
@@ -37,9 +64,7 @@ function Landlord() {
       </ProfileList>
       {listIndex && (
         <ProfileContent>
-          {listIndex === 1 && <LandlordInfo />}
-          {listIndex === 2 && <LandlordProperty />}
-          {listIndex === 3 && <LandlordSchedule />}
+          {profilelist.map((item) => listIndex === item.id && item.component)}
         </ProfileContent>
       )}
     </Wrapper>

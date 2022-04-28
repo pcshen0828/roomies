@@ -18,7 +18,7 @@ function MemberModal({ setActiveIcon }) {
     <NavModalOverlay onClick={() => setActiveIcon("")}>
       <NavModal onClick={(e) => e.stopPropagation()}>
         <>{currentUser.email}</>
-        <StyledLink to="/profile">會員專區</StyledLink>
+        <StyledLink to="/profile/info">會員專區</StyledLink>
         <SignoutButton
           onClick={() => {
             signOut().then(navigate("/"));

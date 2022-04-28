@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "../components/layout/Header";
 import { Wrapper } from "../components/common/Components";
 import { useParams } from "react-router-dom";
 import api from "../utils/api";
@@ -53,12 +52,7 @@ function User() {
     return <Navigate replace to="/" />;
   }
 
-  return (
-    <>
-      <Header />
-      <Wrapper>{Render()}</Wrapper>
-    </>
-  );
+  return <Wrapper>{Render()}</Wrapper>;
 }
 
 export default User;

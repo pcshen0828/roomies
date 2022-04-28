@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../components/layout/Header";
 import {
   Wrapper,
   Title,
@@ -117,12 +116,7 @@ function Community() {
     return <Navigate replace to="/" />;
   }
 
-  return (
-    <>
-      <Header />
-      {Render()}
-    </>
-  );
+  return Render();
 }
 
 export default Community;

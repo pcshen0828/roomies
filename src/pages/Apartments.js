@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../components/layout/Header";
 import Selector from "../components/apartments/ApartmentSelector";
 import Card from "../components/apartments/ApartmentCard";
 import { Wrapper, Title } from "../components/common/Components";
@@ -46,6 +45,7 @@ function Apartments() {
   const firstRender = React.useRef();
   const currentPage = React.useRef(1);
   const allPages = React.useRef();
+  const queryList = React.useRef([]);
 
   const query = api.createQuery("apartments", "status", "==", 1);
 
@@ -113,7 +113,6 @@ function Apartments() {
 
   return (
     <>
-      <Header />
       <NewWrapper>
         <NewTitle>立即開始，搜尋理想房源</NewTitle>
         <Selector
@@ -123,6 +122,7 @@ function Apartments() {
           setPaging={setPaging}
           allPages={allPages}
           calcAllPages={calcAllPages}
+          queryList={queryList}
         />
         <Cards>
           {apartments.length

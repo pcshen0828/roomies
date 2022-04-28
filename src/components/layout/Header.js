@@ -5,7 +5,9 @@ import NavBar from "./Nav";
 import LoggedIn from "./LoggedIn";
 import NotLoggedIn from "./NotLoggedIn";
 import { FlexWrapper } from "../common/Components";
+import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -32,7 +34,21 @@ const IndexLink = styled(Link)`
 `;
 
 function Header() {
-  const { currentUser } = useAuth();
+  const auth = Firebase.getAuth();
+  const [user, loading, error] = useAuthState(auth);
+
+  function Render() {
+    if (loading) {
+      return <>...</>;
+    }
+    if (user) {
+      return <LoggedIn />;
+    }
+    if (error) {
+      return null;
+    }
+    return <NotLoggedIn />;
+  }
   return (
     <Wrapper>
       <InnerWrapper>
@@ -40,7 +56,7 @@ function Header() {
           <IndexLink to="/">logo</IndexLink>
           <NavBar />
         </FlexWrapper>
-        {(currentUser ? currentUser.uid : "") ? <LoggedIn /> : <NotLoggedIn />}
+        {Render()}
       </InnerWrapper>
     </Wrapper>
   );

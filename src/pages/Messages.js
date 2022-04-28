@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Firebase } from "../utils/firebase";
-import Header from "../components/layout/Header";
 import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
 import { useAuth } from "../context/AuthContext";
@@ -127,12 +126,7 @@ function Messages() {
     return <Navigate replace to="/" />;
   }
 
-  return (
-    <>
-      <Header />
-      <FullWrapper>{Render()}</FullWrapper>
-    </>
-  );
+  return <FullWrapper>{Render()}</FullWrapper>;
 }
 
 export default Messages;

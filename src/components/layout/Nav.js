@@ -29,7 +29,6 @@ const activeStyle = {
 function NavBar() {
   const location = useLocation();
   const auth = Firebase.getAuth();
-  const { currentUser } = useAuth();
   const [user, loading, error] = useAuthState(auth);
 
   function Render() {
@@ -58,12 +57,6 @@ function NavBar() {
 
   return (
     <Wrapper>
-      <StyledNavLink
-        to="/about"
-        style={location.pathname === "/about" ? activeStyle : {}}
-      >
-        關於
-      </StyledNavLink>
       <StyledNavLink
         to="/apartments"
         style={

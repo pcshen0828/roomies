@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Header from "../components/layout/Header";
 import {
   Wrapper,
   Title,
@@ -18,7 +17,6 @@ const NewWrapper = styled(Wrapper)`
 function Explore() {
   return (
     <>
-      <Header />
       <NewWrapper>
         <Title>探索附近的租屋</Title>
         <SubTitle>用地圖快速瀏覽公寓周邊交通與生活機能</SubTitle>

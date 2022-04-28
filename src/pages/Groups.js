@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import Header from "../components/layout/Header";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import api from "../utils/api";
@@ -109,7 +108,6 @@ function Groups() {
 
   return (
     <>
-      <Header />
       <Wrapper>
         <Banner src={apartmentData.coverImage} />
         <GroupHeader>

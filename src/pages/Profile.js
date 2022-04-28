@@ -1,6 +1,5 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
-import Header from "../components/layout/Header";
 import Tenant from "../components/profile/Tenant";
 import Landlord from "../components/profile/Landlord";
 import { useAuth } from "../context/AuthContext";
@@ -32,12 +31,7 @@ function Profile() {
     return <Navigate replace to="/" />;
   }
 
-  return (
-    <>
-      <Header />
-      <Wrapper>{Render()}</Wrapper>
-    </>
-  );
+  return <Wrapper>{Render()}</Wrapper>;
 }
 
 export default Profile;

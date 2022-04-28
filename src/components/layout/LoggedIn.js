@@ -11,6 +11,9 @@ import MemberModal from "../modals/MemberModal";
 import MessageModal from "../modals/MessageModal";
 import NoticeModal from "../modals/NoticeModal";
 import { useLocation } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+import { useAuth } from "../../context/AuthContext";
 
 const icons = [
   {
@@ -30,6 +33,10 @@ const icons = [
   },
 ];
 
+const IconWrapper = styled.div`
+  position: relative;
+`;
+
 const Icon = styled.img`
   width: 30px;
   height: 30px;
@@ -37,9 +44,43 @@ const Icon = styled.img`
   cursor: pointer;
 `;
 
+const Unread = styled.div`
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ed3636;
+  position: absolute;
+  top: 3px;
+  right: 0px;
+`;
+
 function LoggedIn() {
   const location = useLocation();
   const [activeicon, setActiveIcon] = React.useState("");
+  const { currentUser } = useAuth();
+  const [unreadMessage, setUnreadMessage] = React.useState();
+  const [unreadNotice, setUnreadNotice] = React.useState();
+
+  React.useEffect(() => {
+    if (currentUser) {
+      const query = Firebase.query(
+        Firebase.collection(Firebase.db, "notices"),
+        Firebase.where("receiver", "==", currentUser.uid),
+        Firebase.where("status", "==", 0)
+      );
+
+      Firebase.onSnapshot(query, (snapshot) => {
+        const data = snapshot.docs.map((doc) => doc.data());
+        console.log(data);
+        if (data.length) {
+          setUnreadNotice(true);
+        } else {
+          setUnreadNotice(false);
+        }
+      });
+    }
+  }, [currentUser]);
+
   return (
     <>
       {activeicon === "member" && <MemberModal setActiveIcon={setActiveIcon} />}
@@ -49,19 +90,25 @@ function LoggedIn() {
       {activeicon === "notice" && <NoticeModal setActiveIcon={setActiveIcon} />}
       <FlexWrapper>
         {icons.map((icon, index) => (
-          <React.Fragment key={index}>
+          <IconWrapper key={index}>
+            {icon.name === "notice" && unreadNotice ? <Unread /> : ""}
             <Icon
               src={
                 activeicon === icon.name ||
-                (icon.name === "member" && location.pathname === "/profile") ||
+                (icon.name === "member" &&
+                  location.pathname.startsWith("/profile/")) ||
                 (icon.name === "message" &&
                   location.pathname.startsWith("/messages/"))
                   ? icon.activeSrc
                   : icon.src
               }
-              onClick={() => setActiveIcon(icon.name)}
+              onClick={() => {
+                setActiveIcon(icon.name);
+                if (icon.name === "notice") {
+                }
+              }}
             />
-          </React.Fragment>
+          </IconWrapper>
         ))}
       </FlexWrapper>
     </>

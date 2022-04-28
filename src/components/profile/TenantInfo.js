@@ -229,9 +229,10 @@ function TenantInfo() {
   }
 
   React.useEffect(() => {
+    let mounted = true;
     api.getAllDocsFromCollection("hobbies").then((res) => {
-      console.log(res);
       const initData = res.map((item) => item.name);
+      if (!mounted) return;
       setAllHobbies(initData);
       setOptions(
         initData
@@ -239,6 +240,9 @@ function TenantInfo() {
           .map((item) => ({ label: item, value: item }))
       );
     });
+    return function cleanup() {
+      mounted = false;
+    };
   }, []);
 
   function Render() {

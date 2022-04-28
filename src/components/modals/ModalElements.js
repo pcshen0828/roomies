@@ -69,12 +69,16 @@ const NavModal = styled.div`
   top: 0;
   right: 20px;
   background: #ffffff;
-  box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 20px;
+
+  @media screen and (min-width: 1280px) {
+    left: calc((100% - 1200px) / 2 + 950px);
+  }
 `;
 
 export {

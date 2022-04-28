@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import {
+  Bold,
   Button1,
   FlexWrapper,
   SmallLabel,
@@ -47,7 +48,7 @@ const Container = styled(FlexWrapper)`
   z-index: 10;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
 `;
 
 const Wrapper = styled(FlexWrapper)`
@@ -57,6 +58,8 @@ const Wrapper = styled(FlexWrapper)`
   align-items: flex-start;
   flex-direction: column;
   border-radius: 5px;
+  position: relative;
+  padding: 20px 0 10px;
 `;
 
 const ColumnWrapper = styled(FlexWrapper)`
@@ -101,6 +104,28 @@ const HiddenInput = styled.input`
   ${"" /* display: none; */}
 `;
 
+const ClearAll = styled(Bold)`
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    color: #c1b18a;
+  }
+`;
+
+const ShowAll = styled(Bold)`
+  position: absolute;
+  top: 10px;
+  right: 110px;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    color: #c1b18a;
+  }
+`;
+
 const conditionList = {
   id: "conditions",
   content: [
@@ -136,8 +161,6 @@ const furnitureList = {
   ],
 };
 
-let queryList = [];
-
 function Selector({
   allData,
   setApartments,
@@ -145,21 +168,22 @@ function Selector({
   setPaging,
   allPages,
   calcAllPages,
+  queryList,
 }) {
   const [isClose, setIsClose] = React.useState(false);
-  const [prevScrollPos, setPrevScrollPos] = React.useState(0);
-  const [visible, setVisible] = React.useState(true);
+  // const [prevScrollPos, setPrevScrollPos] = React.useState(0);
+  // const [visible, setVisible] = React.useState(true);
   const toFilterData = allData;
 
   function ShowMatchedApartments({ e, name }) {
     const value = e.target.checked;
     if (!value) {
-      queryList = queryList.filter((item) => item !== name);
+      queryList.current = queryList.current.filter((item) => item !== name);
     } else {
-      queryList.push(name);
+      queryList.current.push(name);
     }
     const filteredData = toFilterData.filter((item) =>
-      queryList.every((value) => item.conditions.includes(value))
+      queryList.current.every((value) => item.conditions.includes(value))
     );
     setPaging(1);
     allPages.current = calcAllPages(filteredData);
@@ -187,6 +211,13 @@ function Selector({
   //   return () => window.removeEventListener("scroll", handleScroll);
   // }, []);
 
+  function displayAllApartments() {
+    queryList.current = [];
+    setApartments(allData);
+    setPaging(1);
+    page.current = 1;
+  }
+
   function RenderSelector() {
     return (
       <>
@@ -199,6 +230,8 @@ function Selector({
           calcAllPages={calcAllPages}
         />
         <Wrapper>
+          <ClearAll onClick={displayAllApartments}>×清空條件</ClearAll>
+          <ShowAll onClick={displayAllApartments}>顯示所有房源</ShowAll>
           {renderList.map((selector, index) => (
             <SelectItemWrapper key={index}>
               <ColumnWrapper>
@@ -209,6 +242,7 @@ function Selector({
                       <HiddenInput
                         type="checkbox"
                         id={condition.en}
+                        checked={queryList.current.includes(condition.en)}
                         onChange={(event) => {
                           page.current = 1;
                           ShowMatchedApartments({
