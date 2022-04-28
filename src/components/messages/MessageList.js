@@ -46,7 +46,7 @@ const LastMessage = styled.div`
   color: #505d68;
 `;
 
-function List({ chats }) {
+function List({ chats, setChatId }) {
   const { id } = useParams();
   const { currentUser } = useAuth();
   const [chatUserData, setChatUserData] = React.useState([]);
@@ -98,7 +98,14 @@ function List({ chats }) {
     <>
       {chats.length
         ? chats.map((chat) => (
-            <StyledLink key={chat.id} to={`/messages/${chat.id}`}>
+            <StyledLink
+              key={chat.id}
+              onClick={() => {
+                console.log(chat.id);
+                setChatId(chat.id);
+              }}
+              to={`/messages/${chat.id}`}
+            >
               <MessageItem active={chat.id === id}>
                 <MessageImg
                   src={

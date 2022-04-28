@@ -56,6 +56,11 @@ function Messages() {
   const { id } = useParams();
   const { currentUser, user, loading, error } = useAuth();
   const [chats, setChats] = React.useState([]);
+  const [chatId, setChatId] = React.useState(id);
+  const selectedChat = chats.find((chat) => chat.id === chatId);
+  const myRole =
+    selectedChat &&
+    selectedChat.members.find((member) => member.uid === currentUser.uid).role;
 
   React.useEffect(() => {
     let mounted = true;
@@ -96,12 +101,18 @@ function Messages() {
       return chats.length ? (
         <InnerWrapper>
           <MessageList>
-            <List chats={chats} />
+            <List chats={chats} setChatId={setChatId} />
           </MessageList>
           {id === "all" ? (
             <DefaultMessage>點擊聊天室開始</DefaultMessage>
           ) : (
-            <MessageDetail chats={chats} currentUser={user} />
+            <MessageDetail
+              chats={chats}
+              currentUser={user}
+              chatId={chatId}
+              chat={selectedChat}
+              myRole={myRole}
+            />
           )}
         </InnerWrapper>
       ) : (

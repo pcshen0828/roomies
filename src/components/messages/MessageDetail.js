@@ -64,29 +64,25 @@ const SendMessageButton = styled.img`
 
 ///////////////////////////////////////////////////
 
-function MessageDetail({ currentUser, chats }) {
+function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
   const { id } = useParams();
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
-  const selectedChat = chats.find((chat) => chat.id === id);
-  const myRole = selectedChat
-    ? selectedChat.members.find((member) => member.uid === currentUser.uid).role
-    : 0;
   const messageTop = React.useRef(null);
   const last = React.useRef();
-
-  const snapRef2 = Firebase.collection(
-    Firebase.db,
-    "chats/" + id + "/messages"
-  );
+  const notFirstRender = React.useRef();
 
   React.useEffect(() => {
     let mounted = true;
-    if (id) {
+    if (chatId) {
+      const snapRef2 = Firebase.collection(
+        Firebase.db,
+        "chats/" + chatId + "/messages"
+      );
       const query = Firebase.query(
         snapRef2,
-        Firebase.orderBy("timestamp", "desc"),
-        Firebase.limit(10)
+        Firebase.orderBy("timestamp", "desc")
+        // Firebase.limit(10)
       );
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
@@ -99,32 +95,56 @@ function MessageDetail({ currentUser, chats }) {
     return function cleaup() {
       mounted = false;
     };
-  }, [id]);
+  }, [chatId]);
 
-  React.useEffect(() => {
-    const observer = new IntersectionObserver((entries, observer) => {
-      const entry = entries[0];
-      console.log("entry.isIntersecting", entry.isIntersecting);
-      if (entry.isIntersecting) {
-        let mounted = true;
-        const query = Firebase.query(
-          snapRef2,
-          Firebase.orderBy("timestamp", "desc"),
-          Firebase.startAfter(last.current),
-          Firebase.limit(10)
-        );
-        Firebase.onSnapshot(query, (snapshot) => {
-          if (!mounted) return;
-          const fetchedMessages = snapshot.docs.map((doc) => doc.data());
-          if (!fetchedMessages.length) return;
-          setMessages((prev) => [...fetchedMessages.reverse(), ...prev]);
-          const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-          last.current = lastVisible;
-        });
-      }
-    });
-    observer.observe(messageTop.current);
-  }, [last]);
+  // React.useEffect(() => {
+  //   let mounted = true;
+  //   const observer = new IntersectionObserver((entries, observer) => {
+  //     const entry = entries[0];
+  //     console.log("entry.isIntersecting", entry.isIntersecting);
+  // const snapRef2 = Firebase.collection(
+  //   Firebase.db,
+  //   "chats/" + chatId + "/messages"
+  // );
+  //     if (entry.isIntersecting) {
+  //       // first render
+  //       if (!notFirstRender.current) {
+  //         const query = Firebase.query(
+  //           snapRef2,
+  //           Firebase.orderBy("timestamp", "desc"),
+  //           Firebase.limit(10)
+  //         );
+  //         Firebase.onSnapshot(query, (snapshot) => {
+  //           if (!mounted) return;
+  //           const fetchedMessages = snapshot.docs.map((doc) => doc.data());
+  //           setMessages(fetchedMessages.reverse());
+  //           const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  //           last.current = lastVisible;
+  //           notFirstRender.current = true;
+  //         });
+  //       }
+  //       // next render
+  //       if (notFirstRender.current) {
+  //         let mounted = true;
+  //         const query = Firebase.query(
+  //           snapRef2,
+  //           Firebase.orderBy("timestamp", "desc"),
+  //           Firebase.startAfter(last.current),
+  //           Firebase.limit(10)
+  //         );
+  //         Firebase.onSnapshot(query, (snapshot) => {
+  //           if (!mounted) return;
+  //           const fetchedMessages = snapshot.docs.map((doc) => doc.data());
+  //           if (!fetchedMessages.length) return;
+  //           setMessages((prev) => [...fetchedMessages.reverse(), ...prev]);
+  //           const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+  //           last.current = lastVisible;
+  //         });
+  //       }
+  //     }
+  //   });
+  //   observer.observe(messageTop.current);
+  // }, []);
 
   async function updateChat() {
     if (!message.trim()) return;
@@ -134,11 +154,11 @@ function MessageDetail({ currentUser, chats }) {
       sender: myRole,
       timestamp: time,
     };
-    api.updateDocData("chats", id, {
+    api.updateDocData("chats", chatId, {
       latestMessage: newMessage,
       updateTime: time,
     });
-    api.addNewDoc("chats/" + id + "/messages", newMessage);
+    api.addNewDoc("chats/" + chatId + "/messages", newMessage);
     setMessage("");
   }
 
@@ -151,7 +171,7 @@ function MessageDetail({ currentUser, chats }) {
     <MessageContent>
       <Messages>
         <CreateTime ref={messageTop}>
-          \ {generateReadableDate(selectedChat.createTime)}建立聊天室 /
+          \ {generateReadableDate(chat.createTime)}建立聊天室 /
         </CreateTime>
         {messages.length
           ? messages.map((detail, index) => (

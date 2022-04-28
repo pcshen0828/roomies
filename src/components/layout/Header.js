@@ -14,6 +14,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 100;
 `;
 const InnerWrapper = styled.div`
   width: calc(100% - 48px);

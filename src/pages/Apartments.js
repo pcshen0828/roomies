@@ -3,17 +3,13 @@ import styled from "styled-components";
 import Header from "../components/layout/Header";
 import Selector from "../components/apartments/ApartmentSelector";
 import Card from "../components/apartments/ApartmentCard";
-import {
-  Wrapper,
-  PagingList,
-  PagingItem,
-  Title,
-} from "../components/common/Components";
+import { Wrapper, Title } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
+  position: relative;
 `;
 
 const NewTitle = styled(Title)`
@@ -25,7 +21,7 @@ const Cards = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 340px);
   justify-content: space-between;
-  margin: 20px auto;
+  margin: 20px auto 0;
 
   @media screen and (max-width: 1280px) {
     grid-template-columns: repeat(auto-fill, calc((100% - 10px) / 2));
@@ -33,20 +29,29 @@ const Cards = styled.div`
 
   @media screen and (max-width: 600px) {
     grid-template-columns: repeat(auto-fill, 100%);
-    margin-bottom: 20px;
   }
+`;
+
+const Anchor = styled.div`
+  width: 100%;
+  height: 40px;
 `;
 
 function Apartments() {
   const [apartments, setApartments] = React.useState([]);
   const [allData, setAllData] = React.useState([]);
-  const query = api.createQuery("apartments", "status", "==", 1);
   const [paging, setPaging] = React.useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 6;
+  const anchor = React.useRef(null);
+  const firstRender = React.useRef();
+  const currentPage = React.useRef(1);
+  const allPages = React.useRef();
 
-  React.useEffect(() => {
-    const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
-      const apartmentDocs = querySnapShot.docs.map((doc) => doc.data());
+  const query = api.createQuery("apartments", "status", "==", 1);
+
+  function fetchApartments(query, callback) {
+    Firebase.onSnapshot(query, (snapShot) => {
+      const apartmentDocs = snapShot.docs.map((doc) => doc.data());
       let apartmentArray = [];
       apartmentDocs.forEach((apartment) => {
         let newData = { basic: apartment, conditions: [] };
@@ -70,17 +75,41 @@ function Apartments() {
         });
         apartmentArray.push(newData);
       });
-      setApartments(apartmentArray);
-      setAllData(apartmentArray);
+      callback(apartmentArray);
     });
-    return function cleanup() {
-      unsubscribe();
-    };
+  }
+
+  function calcAllPages(data) {
+    return Math.ceil(data / itemsPerPage);
+  }
+
+  React.useEffect(() => {
+    // 一開始 mounted 的時候監聽就好，之後都用 allData 處理畫面
+    firstRender.current = true;
+    fetchApartments(query, (data) => {
+      if (firstRender.current) {
+        setAllData(data); // 這個不會變 database
+        setApartments(data); // 處理渲染邏輯
+        firstRender.current = false;
+        allPages.current = calcAllPages(data);
+      }
+    });
   }, []);
 
-  function createPaging(num) {
-    return Array.from(Array(num).keys());
-  }
+  React.useEffect(() => {
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry.intersectionRatio <= 0) return;
+      if (firstRender.current) return;
+
+      // 這裡是每次觸發 observer 都會進來的地方
+      // 如果有條件篩選，要保留條件的結果，不要 reset
+      currentPage.current++;
+      if (currentPage.current > allPages.current) return;
+      setPaging(currentPage.current);
+    });
+    intersectionObserver.observe(anchor.current);
+  }, []);
 
   return (
     <>
@@ -90,32 +119,21 @@ function Apartments() {
         <Selector
           allData={allData}
           setApartments={setApartments}
+          page={currentPage}
           setPaging={setPaging}
+          allPages={allPages}
+          calcAllPages={calcAllPages}
         />
         <Cards>
           {apartments.length
             ? apartments
-                .slice(itemsPerPage * (paging - 1), itemsPerPage * paging)
+                .slice(0, itemsPerPage * paging)
                 .map((apartment, index) => (
                   <Card key={apartment.basic.id} detail={apartment.basic} />
                 ))
             : "無符合物件"}
         </Cards>
-        <PagingList>
-          {apartments.length
-            ? createPaging(Math.ceil(apartments.length / itemsPerPage)).map(
-                (number, index) => (
-                  <PagingItem
-                    key={index}
-                    onClick={() => setPaging(number + 1)}
-                    active={paging === number + 1}
-                  >
-                    {number + 1}
-                  </PagingItem>
-                )
-              )
-            : ""}
-        </PagingList>
+        <Anchor ref={anchor}></Anchor>
       </NewWrapper>
     </>
   );

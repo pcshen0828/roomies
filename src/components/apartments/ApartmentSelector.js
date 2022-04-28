@@ -1,10 +1,57 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper, SmallLabel, SmallTitle } from "../common/Components";
+import {
+  Button1,
+  FlexWrapper,
+  SmallLabel,
+  SmallTitle,
+} from "../common/Components";
 import SearchBox from "./SearchBox";
 
-const Wrapper = styled(FlexWrapper)`
+const Toggler = styled.div`
   width: 100%;
+  height: 30px;
+  position: sticky;
+  top: 80px;
+  padding: 20px 0;
+  left: 0;
+  z-index: 10;
+  text-align: center;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  ${
+    "" /* display: none;
+
+  @media screen and (max-width: 1279.98px) {
+    display: block;
+  } */
+  }
+`;
+
+const CloseButton = styled(Button1)`
+  width: 90px;
+  height: 35px;
+  align-self: center;
+`;
+
+const Container = styled(FlexWrapper)`
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  position: sticky;
+  top: 80px;
+  padding: 20px 0;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border-radius: 10px;
+`;
+
+const Wrapper = styled(FlexWrapper)`
+  width: 95%;
   margin: 20px auto;
   border: 1px solid #dadada;
   align-items: flex-start;
@@ -12,9 +59,18 @@ const Wrapper = styled(FlexWrapper)`
   border-radius: 5px;
 `;
 
+const ColumnWrapper = styled(FlexWrapper)`
+  flex-direction: column;
+  margin-bottom: 0px;
+  align-items: flex-start;
+`;
+
+const SelectorWrapper = styled(FlexWrapper)`
+  flex-wrap: wrap;
+`;
+
 const SelectItemWrapper = styled(FlexWrapper)`
   width: calc(100% - 40px);
-  height: 60px;
   padding: 0 20px;
   justify-content: flex-start;
 
@@ -39,6 +95,7 @@ const NewLabel = styled(SmallLabel)`
 
 const InputWrapper = styled(FlexWrapper)`
   margin-right: 10px;
+  margin-bottom: 10px;
 `;
 const HiddenInput = styled.input`
   ${"" /* display: none; */}
@@ -78,17 +135,20 @@ const furnitureList = {
     { en: "table", zh: "桌子" },
   ],
 };
-const otherInfoList = {
-  id: "otherInfo",
-  content: [
-    { en: "isRentIncludeUtilities", zh: "房租含水電雜費" },
-    { en: "managementFee", zh: "管理費" },
-  ],
-};
 
 let queryList = [];
 
-function Selector({ allData, setApartments, setPaging }) {
+function Selector({
+  allData,
+  setApartments,
+  page,
+  setPaging,
+  allPages,
+  calcAllPages,
+}) {
+  const [isClose, setIsClose] = React.useState(false);
+  const [prevScrollPos, setPrevScrollPos] = React.useState(0);
+  const [visible, setVisible] = React.useState(true);
   const toFilterData = allData;
 
   function ShowMatchedApartments({ e, name }) {
@@ -101,6 +161,8 @@ function Selector({ allData, setApartments, setPaging }) {
     const filteredData = toFilterData.filter((item) =>
       queryList.every((value) => item.conditions.includes(value))
     );
+    setPaging(1);
+    allPages.current = calcAllPages(filteredData);
     setApartments(filteredData);
   }
 
@@ -109,40 +171,85 @@ function Selector({ allData, setApartments, setPaging }) {
     { list: facilityList, name: "室內設備" },
     { list: furnitureList, name: "家具" },
   ];
+
+  // function handleScroll() {
+  //   const currentScrollPos = window.pageYOffset;
+  //   setVisible(
+  //     (prevScrollPos > currentScrollPos &&
+  //       prevScrollPos - currentScrollPos > 90) ||
+  //       currentScrollPos < 90
+  //   );
+  //   setPrevScrollPos(currentScrollPos);
+  // }
+
+  // React.useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => window.removeEventListener("scroll", handleScroll);
+  // }, []);
+
+  function RenderSelector() {
+    return (
+      <>
+        <SearchBox
+          apartments={toFilterData}
+          setApartments={setApartments}
+          page={page}
+          setPaging={setPaging}
+          allPages={allPages}
+          calcAllPages={calcAllPages}
+        />
+        <Wrapper>
+          {renderList.map((selector, index) => (
+            <SelectItemWrapper key={index}>
+              <ColumnWrapper>
+                <NewTitle>{selector.name}</NewTitle>
+                <SelectorWrapper>
+                  {selector.list.content.map((condition, index) => (
+                    <InputWrapper key={index}>
+                      <HiddenInput
+                        type="checkbox"
+                        id={condition.en}
+                        onChange={(event) => {
+                          page.current = 1;
+                          ShowMatchedApartments({
+                            e: event,
+                            name: condition.en,
+                          });
+                        }}
+                      />
+                      <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
+                    </InputWrapper>
+                  ))}
+                </SelectorWrapper>
+              </ColumnWrapper>
+            </SelectItemWrapper>
+          ))}
+        </Wrapper>
+      </>
+    );
+  }
   return (
     <>
-      <SearchBox
-        apartments={toFilterData}
-        setApartments={setApartments}
-        setPaging={setPaging}
-      />
-      <Wrapper>
-        {renderList.map((selector, index) => (
-          <SelectItemWrapper key={index}>
-            <FlexWrapper>
-              <NewTitle>{selector.name}</NewTitle>
-            </FlexWrapper>
-            <FlexWrapper>
-              {selector.list.content.map((condition, index) => (
-                <InputWrapper key={index}>
-                  <HiddenInput
-                    type="checkbox"
-                    id={condition.en}
-                    onChange={(event) => {
-                      setPaging(1);
-                      ShowMatchedApartments({
-                        e: event,
-                        name: condition.en,
-                      });
-                    }}
-                  />
-                  <NewLabel htmlFor={condition.en}>{condition.zh}</NewLabel>
-                </InputWrapper>
-              ))}
-            </FlexWrapper>
-          </SelectItemWrapper>
-        ))}
-      </Wrapper>
+      {isClose ? (
+        <Toggler
+          onClick={() => {
+            setIsClose(false);
+          }}
+        >
+          展開篩選條件
+        </Toggler>
+      ) : (
+        <Container>
+          {RenderSelector()}
+          <CloseButton
+            onClick={() => {
+              setIsClose(true);
+            }}
+          >
+            收起
+          </CloseButton>
+        </Container>
+      )}
     </>
   );
 }

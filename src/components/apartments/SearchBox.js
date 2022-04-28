@@ -1,35 +1,47 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  FlexWrapper,
-  Input,
-  SearchWrapper,
-  SearchInput,
-  SearchButton,
-} from "../common/Components";
+import { SearchWrapper, SearchInput, SearchButton } from "../common/Components";
 import search from "../../images/search.svg";
 
-function SearchBox({ apartments, setApartments, setPaging }) {
+const StyldSearchWrapper = styled(SearchWrapper)`
+  width: 95%;
+  margin: 0 auto;
+`;
+
+function SearchBox({
+  apartments,
+  setApartments,
+  page,
+  setPaging,
+  allPages,
+  calcAllPages,
+}) {
   const [searchQuery, setSearchQuery] = React.useState("");
 
   function searchKeyWords(keyword) {
-    setApartments(
-      apartments.filter((item) => item.basic.title.includes(keyword))
+    if (!keyword.trim()) {
+      setApartments(apartments);
+    }
+    const filteredData = apartments.filter((item) =>
+      item.basic.title.includes(keyword)
     );
+    setPaging(1);
+    allPages.current = calcAllPages(filteredData);
+    setApartments(filteredData);
   }
   return (
-    <SearchWrapper>
+    <StyldSearchWrapper>
       <SearchInput
         placeholder="請輸入房源關鍵字"
         value={searchQuery}
         onChange={(e) => {
-          setPaging(1);
+          page.current = 1;
           setSearchQuery(e.target.value);
           searchKeyWords(e.target.value);
         }}
       />
       <SearchButton src={search} />
-    </SearchWrapper>
+    </StyldSearchWrapper>
   );
 }
 
