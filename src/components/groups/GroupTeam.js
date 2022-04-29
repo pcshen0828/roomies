@@ -74,7 +74,7 @@ function GroupTeam({ aid, members, groupId, roomies }) {
     <TeamsBlock>
       <SubtitlesSmall>
         <TitleSmall>已成立群組</TitleSmall>
-        <SubtitleSmall></SubtitleSmall>
+        <SubtitleSmall>・{teams.length}組</SubtitleSmall>
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>

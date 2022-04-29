@@ -23,9 +23,6 @@ function Explore() {
       </NewWrapper>
       <BodyWrapper>
         <MyMap />
-        {/* <BodyLeft></BodyLeft> */}
-        {/* <BodyRight> */}
-        {/* </BodyRight> */}
       </BodyWrapper>
     </>
   );

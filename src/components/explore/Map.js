@@ -2,6 +2,7 @@ import React from "react";
 import {
   GoogleMap,
   useLoadScript,
+  MarkerClusterer,
   Marker,
   InfoWindow,
   StandaloneSearchBox,
@@ -10,8 +11,9 @@ import {
 import { googleMapsAppKey } from "../../appkeys";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { BodyLeft, BodyRight } from "../common/Components";
+import { BodyLeft, BodyRight, FlexWrapper } from "../common/Components";
 import api from "../../utils/api";
+import Card from "../apartments/ApartmentCard";
 
 const libraries = ["places"];
 
@@ -78,6 +80,27 @@ const SearchBox = styled.input`
   }
 `;
 
+const Cards = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 100%);
+  justify-content: space-between;
+  margin: 20px auto 0;
+
+  @media screen and (max-width: 1280px) {
+    display: none;
+    grid-template-columns: repeat(auto-fill, calc((100% - 10px) / 2));
+    height: 400px;
+  }
+  @media screen and (max-width: 700px) {
+    grid-template-columns: repeat(auto-fill, 100%);
+    height: 400px;
+  }
+  height: 648px;
+  overflow-y: scroll;
+`;
+
+const StyledCard = styled(Card)``;
+
 function MyMap() {
   const [map, setMap] = React.useState(null);
   const [center, setCenter] = React.useState(defaultCenter);
@@ -87,6 +110,7 @@ function MyMap() {
   const [apartments, setApartments] = React.useState([]);
   const [searchBox, setSearchBox] = React.useState(null);
   const [query, setQuery] = React.useState("");
+  // const [locations, setLocations] = React.useState([]);
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
@@ -120,10 +144,20 @@ function MyMap() {
   };
 
   React.useEffect(() => {
-    api
-      .getDataWithSingleQuery("apartments", "status", "==", 1)
-      .then((res) => setApartments(res));
+    let mounted = true;
+    api.getDataWithSingleQuery("apartments", "status", "==", 1).then((res) => {
+      if (!mounted) return;
+      setApartments(res);
+      // setLocations(res.map((item) => item.geoLocation));
+    });
+    return function cleanup() {
+      mounted = false;
+    };
   }, []);
+
+  function createKey(location) {
+    return location.lat + location.lng;
+  }
 
   const renderMap = () => {
     return (
@@ -140,6 +174,13 @@ function MyMap() {
               onChange={(e) => setQuery(e.target.value)}
             />
           </StandaloneSearchBox>
+          <Cards>
+            {apartments.length
+              ? apartments.map((item) => (
+                  <StyledCard key={item.id} detail={item} />
+                ))
+              : ""}
+          </Cards>
         </BodyLeft>
         <BodyRight>
           <GoogleMap
@@ -149,25 +190,29 @@ function MyMap() {
             onLoad={onLoad}
             onUnmount={onUnmount}
           >
+            {/* <MarkerClusterer>
+              {(clusterer) => { */}
             {apartments.map((apartment, index) => (
-              <div key={index}>
-                <Marker
-                  position={apartment.geoLocation}
-                  onClick={() => setMarker(apartment.geoLocation)}
-                >
-                  {marker === apartment.geoLocation ? (
-                    <InfoWindow onCloseClick={() => setMarker(null)}>
-                      <InfoModal>
-                        {apartment.title}
-                        <StyledLink to={`/apartment/${apartment.id}`}>
-                          查看房源
-                        </StyledLink>
-                      </InfoModal>
-                    </InfoWindow>
-                  ) : null}
-                </Marker>
-              </div>
+              <Marker
+                key={apartment.id}
+                position={apartment.geoLocation}
+                onClick={() => setMarker(apartment.geoLocation)}
+                // clusterer={clusterer}
+              >
+                {marker === apartment.geoLocation ? (
+                  <InfoWindow onCloseClick={() => setMarker(null)}>
+                    <InfoModal>
+                      {apartment.title}
+                      <StyledLink to={`/apartment/${apartment.id}`}>
+                        查看房源
+                      </StyledLink>
+                    </InfoModal>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
             ))}
+            {/* }}
+            </MarkerClusterer> */}
             {<Circle center={circleCenter} options={options} />}
           </GoogleMap>
         </BodyRight>
@@ -179,7 +224,7 @@ function MyMap() {
     return <div>Map cannot be loaded right now, sorry.</div>;
   }
 
-  return isLoaded ? renderMap() : <></>;
+  return isLoaded ? renderMap() : null;
 }
 
 export default React.memo(MyMap);

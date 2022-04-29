@@ -8,8 +8,11 @@ import List from "../messages/MessageList";
 
 const NewNavModal = styled(NavModal)`
   width: 30%;
-  min-width: 320px;
+  min-width: 280px;
   max-height: 300px;
+  @media screen and (max-width: 400px) {
+    width: 200px;
+  }
 `;
 
 const ChatsWrapper = styled(FlexWrapper)`

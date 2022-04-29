@@ -102,7 +102,7 @@ function GroupMember({ members }) {
       )}
       <SubtitlesSmall>
         <TitleSmall>成員</TitleSmall>
-        <SubtitleSmall></SubtitleSmall>
+        <SubtitleSmall>・{members.length}人</SubtitleSmall>
       </SubtitlesSmall>
       <MemberBlockWrapper>
         <MembersBlock>

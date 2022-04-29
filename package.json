@@ -14,7 +14,7 @@
     "@mui/material": "latest",
     "@mui/styled-engine-sc": "latest",
     "@mui/x-date-pickers": "^5.0.0-alpha.1",
-    "@react-google-maps/api": "^2.8.1",
+    "@react-google-maps/api": "^2.10.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.5.0",

@@ -44,14 +44,19 @@ const Icon = styled.img`
   cursor: pointer;
 `;
 
-const Unread = styled.div`
-  width: 8px;
-  height: 8px;
+const Unread = styled(FlexWrapper)`
+  justify-content: center;
+  align-items: center;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  color: #fff;
   border-radius: 50%;
-  background: #424b5a;
+  background: #ff0606;
   position: absolute;
-  top: 1px;
-  right: 0px;
+  top: -3px;
+  right: -8px;
+  cursor: pointer;
 `;
 
 function LoggedIn() {
@@ -60,6 +65,7 @@ function LoggedIn() {
   const { currentUser } = useAuth();
   const [unreadMessage, setUnreadMessage] = React.useState();
   const [unreadNotice, setUnreadNotice] = React.useState();
+  const [unreadNoticeCount, setUnreadNoticeCount] = React.useState();
 
   React.useEffect(() => {
     let mounted = true;
@@ -76,6 +82,9 @@ function LoggedIn() {
         if (!mounted) return;
         if (data.length) {
           setUnreadNotice(true);
+          setUnreadNoticeCount(
+            data.filter((notice) => notice.status === 0).length
+          );
         } else {
           setUnreadNotice(false);
         }
@@ -96,7 +105,11 @@ function LoggedIn() {
       <FlexWrapper>
         {icons.map((icon, index) => (
           <IconWrapper key={index}>
-            {icon.name === "notice" && unreadNotice ? <Unread /> : ""}
+            {icon.name === "notice" && unreadNotice ? (
+              <Unread>{unreadNoticeCount && unreadNoticeCount}</Unread>
+            ) : (
+              ""
+            )}
             <Icon
               src={
                 activeicon === icon.name ||
