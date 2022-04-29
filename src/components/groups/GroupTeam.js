@@ -8,6 +8,9 @@ const TeamsBlock = styled.div`
   display: flex;
   flex-direction: column;
   width: 60%;
+  @media screen and (max-width: 1279.98px) {
+    width: 100%;
+  }
 `;
 
 const defaultCardStyle = `

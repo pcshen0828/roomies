@@ -70,6 +70,9 @@ const GroupBody = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 30px;
+  @media screen and (max-width: 1279.98px) {
+    flex-direction: column;
+  }
 `;
 
 function Groups() {
@@ -118,10 +121,10 @@ function Groups() {
             <SubTitle>{`成團人數：${apartmentData.roomiesCount}人`}</SubTitle>
             <SubTitle>{`${members.length}人已加入`}</SubTitle>
           </SubTitles>
-          <Buttons>
+          {/* <Buttons>
             <ExitButton>退出</ExitButton>
             <Button1>邀請</Button1>
-          </Buttons>
+          </Buttons> */}
         </GroupHeader>
         <GroupBody>
           <GroupMember members={members} />

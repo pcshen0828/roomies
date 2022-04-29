@@ -70,6 +70,8 @@ function TeamCard({ team, roomies }) {
       members: [...team.members, { uid: currentUser.uid, status: 3 }],
       userIDs: [...team.userIDs, currentUser.uid],
     });
+    const host = team.members.find((member) => member.status === 0).uid;
+    api.createNoticeByType(currentUser.uid, host, 0);
     setOpenAppliedModal(true);
   }
   const ifUserincludes = team.members.find(

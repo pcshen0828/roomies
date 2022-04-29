@@ -30,7 +30,13 @@ const PickerWrapper = styled.div`
   margin: 20px 0;
 `;
 
-export default function BookScheduleModal({ host, team, apartment, toggle }) {
+export default function BookScheduleModal({
+  host,
+  team,
+  apartment,
+  toggle,
+  toggleParent,
+}) {
   const date = new Date();
   const isoDateTime = new Date(
     date.getTime() - date.getTimezoneOffset() * 60000
@@ -129,6 +135,7 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
             api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
             createNoticeToOwner();
             toggle(false);
+            toggleParent("");
           }
         });
     } else {

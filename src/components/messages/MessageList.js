@@ -149,7 +149,7 @@ function List({ chats, setChatId }) {
               </MessageItem>
             </StyledLink>
           ))
-        : "loading"}
+        : ""}
     </>
   );
 }

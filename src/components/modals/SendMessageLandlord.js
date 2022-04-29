@@ -25,6 +25,7 @@ const DefaultMessages = styled.div`
   display: flex;
   width: calc(100% - 40px);
   margin: 0 auto 10px;
+  overflow-x: scroll;
 `;
 
 const DefaultMessage = styled.input`

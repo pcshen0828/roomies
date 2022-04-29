@@ -4,6 +4,10 @@ import { Overlay, Modal, Body, Button } from "./ModalElements";
 import { FlexWrapper, Title } from "../common/Components";
 import check from "../../images/check.svg";
 
+const NewOverlay = styled(Overlay)`
+  z-index: 1000;
+`;
+
 const NewModal = styled(Modal)`
   align-items: center;
   justify-content: center;
@@ -30,7 +34,7 @@ const ConfirmImg = styled.img`
 
 export default function PopupNoticeModal({ message, toggle }) {
   return (
-    <Overlay>
+    <NewOverlay>
       <NewModal>
         <ModalFlexWrapper>
           <ConfirmImg alt="" src={check} />
@@ -38,6 +42,6 @@ export default function PopupNoticeModal({ message, toggle }) {
           <NewButton onClick={() => toggle(false)}>關閉</NewButton>
         </ModalFlexWrapper>
       </NewModal>
-    </Overlay>
+    </NewOverlay>
   );
 }

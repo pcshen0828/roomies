@@ -14,6 +14,7 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import BookScheduleModal from "./BookSchedule";
+import PopupNoticeModal from "./PopupNotice";
 
 const NewModal = styled(Modal)`
   width: 70%;
@@ -67,6 +68,7 @@ const Buttons = styled(FlexWrapper)`
 function ManageTeamModal({ team, group, toggle }) {
   const { currentUser } = useAuth();
   const [openSchedule, setOpenSchedule] = React.useState(false);
+  const [openPopup, setOpenPopup] = React.useState(false);
   const [otherMembers, setOtherMembers] = React.useState([]);
   const [name, setName] = React.useState(team.name);
   const host = team.members.find((user) => user.status === 0).uid;
@@ -93,14 +95,21 @@ function ManageTeamModal({ team, group, toggle }) {
     };
   }, [currentUser]);
 
-  function approveJoinTeam(user) {
-    console.log(user);
+  function approveJoinTeam(user, status) {
     const time = Firebase.Timestamp.fromDate(new Date());
     team.members.find((member) => member.uid === user.uid).status = 1;
     api.updateDocData("teams", team.id, {
       members: team.members,
       updateTime: time,
     });
+    if (status === 2) {
+      // （被邀請者）確認加入群組
+      api.createNoticeByType(currentUser.uid, host, 1);
+    }
+    if (status === 3) {
+      // （團主）核准加入群組
+      api.createNoticeByType(currentUser.uid, user.uid, 3);
+    }
   }
 
   function updateTeamName() {
@@ -111,7 +120,8 @@ function ManageTeamModal({ team, group, toggle }) {
         updateTime: time,
       })
       .then(() => {
-        toggle("");
+        setOpenPopup(true);
+        // toggle("");
       });
   }
 
@@ -127,7 +137,11 @@ function ManageTeamModal({ team, group, toggle }) {
           team={team}
           apartment={group}
           toggle={setOpenSchedule}
+          toggleParent={toggle}
         />
+      )}
+      {openPopup && (
+        <PopupNoticeModal message="儲存成功" toggle={setOpenPopup} />
       )}
       <Overlay>
         <NewModal>
@@ -181,7 +195,7 @@ function ManageTeamModal({ team, group, toggle }) {
                     <MemberStatus>已邀請</MemberStatus>
                   ) : team.members.find((member) => member.uid === user.uid)
                       .status === 2 && user.uid === currentUser.uid ? (
-                    <ApproveButton onClick={() => approveJoinTeam(user)}>
+                    <ApproveButton onClick={() => approveJoinTeam(user, 2)}>
                       加入
                     </ApproveButton>
                   ) : team.members.find((member) => member.uid === user.uid)
@@ -189,7 +203,7 @@ function ManageTeamModal({ team, group, toggle }) {
                     <MemberStatus>待核准</MemberStatus>
                   ) : team.members.find((member) => member.uid === user.uid)
                       .status === 3 && host === currentUser.uid ? (
-                    <ApproveButton onClick={() => approveJoinTeam(user)}>
+                    <ApproveButton onClick={() => approveJoinTeam(user, 3)}>
                       核准
                     </ApproveButton>
                   ) : (
