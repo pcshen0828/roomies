@@ -45,12 +45,12 @@ const Icon = styled.img`
 `;
 
 const Unread = styled.div`
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #ed3636;
+  background: #424b5a;
   position: absolute;
-  top: 3px;
+  top: 1px;
   right: 0px;
 `;
 
@@ -62,6 +62,7 @@ function LoggedIn() {
   const [unreadNotice, setUnreadNotice] = React.useState();
 
   React.useEffect(() => {
+    let mounted = true;
     if (currentUser) {
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "notices"),
@@ -72,6 +73,7 @@ function LoggedIn() {
       Firebase.onSnapshot(query, (snapshot) => {
         const data = snapshot.docs.map((doc) => doc.data());
         console.log(data);
+        if (!mounted) return;
         if (data.length) {
           setUnreadNotice(true);
         } else {
@@ -79,6 +81,9 @@ function LoggedIn() {
         }
       });
     }
+    return function cleanup() {
+      mounted = false;
+    };
   }, [currentUser]);
 
   return (

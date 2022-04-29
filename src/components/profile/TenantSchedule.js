@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import {
   FlexWrapper,
   Bold,
+  Title,
   SmallTitle,
   CardWrapper,
   ScheduleCard,
@@ -13,7 +14,10 @@ import {
   ScheduleInfo,
   CardTop,
   CardBottom,
+  ScheduleInnerWrapper,
 } from "../common/Components";
+import RequestDetailModal from "../modals/RequestDetail";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -22,14 +26,38 @@ const Wrapper = styled(FlexWrapper)`
   margin-top: 10px;
 `;
 
+const StyledLink = styled(Link)`
+  color: #424b5a;
+  &:hover {
+    color: #c1b18a;
+  }
+`;
+
 const NewTitle = styled(SmallTitle)`
   margin: 20px 0;
+`;
+
+const DateTitle = styled(Title)`
+  margin: 10px 0;
+`;
+
+const TimeTitle = styled(Bold)`
+  padding-bottom: 10px;
+`;
+
+const TeamInfoLink = styled.div`
+  cursor: pointer;
+  margin: 10px 0 0;
+  &:hover {
+    color: #c1b18a;
+  }
 `;
 
 export default function TenantSchedule() {
   const { currentUser } = useAuth();
   const [unConfirmed, setUnconfirmed] = React.useState([]);
   const [schedules, setSchedules] = React.useState([]);
+  const [checkDetail, setCheckDetail] = React.useState(false);
 
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
@@ -48,11 +76,14 @@ export default function TenantSchedule() {
       let newSchedules = [];
       const res = querySnapShot.docs.map((doc) => doc.data());
       res.forEach((schedule) => {
-        let newSchedule = {};
-        newSchedule.start = schedule.start;
-        newSchedule.end = schedule.end;
-        newSchedule.status = schedule.status;
-        newSchedule.id = schedule.id;
+        let newSchedule = {
+          start: schedule.start,
+          end: schedule.end,
+          id: schedule.id,
+          status: schedule.status,
+          host: schedule.host,
+          title: schedule.title,
+        };
         api
           .getDataWithSingleQuery(
             "apartments",
@@ -83,61 +114,58 @@ export default function TenantSchedule() {
     return unsubscribe;
   }, [currentUser]);
 
-  return (
-    <Wrapper>
-      <Bold>預約看房管理</Bold>
-      <NewTitle>已確認行程</NewTitle>
-      <CardWrapper>
-        {unConfirmed.length
-          ? unConfirmed.map((item) => (
-              <ScheduleCard key={item.id}>
-                <ScheduleDate>
-                  <div>{new Date(item.start).getFullYear()}</div>
-                  <div>
-                    {new Date(item.start).getMonth() + 1} /
-                    {new Date(item.start).getDate()}
-                  </div>
-                  <div>{generateReadableDate(item.start)}</div>
-                  <div>{generateReadableDate(item.end)}</div>
-                </ScheduleDate>
-                <ScheduleInfo>
-                  <CardTop>
-                    <div>{item.apartment.title}</div>
-                  </CardTop>
-                  <CardBottom>
-                    <div>{item.members.length}人</div>
-                  </CardBottom>
-                </ScheduleInfo>
-              </ScheduleCard>
-            ))
-          : ""}
-      </CardWrapper>
-      <NewTitle>待確認行程</NewTitle>
+  function RenderScheduleCard(schedules) {
+    return (
       <CardWrapper>
         {schedules.length
           ? schedules.map((item) => (
               <ScheduleCard key={item.id}>
-                <ScheduleDate>
-                  <div>{new Date(item.start).getFullYear()}</div>
-                  <div>
-                    {new Date(item.start).getMonth() + 1} /
-                    {new Date(item.start).getDate()}
-                  </div>
-                  <div>{generateReadableDate(item.start)}</div>
-                  <div>{generateReadableDate(item.end)}</div>
-                </ScheduleDate>
-                <ScheduleInfo>
-                  <CardTop>
-                    <div>{item.apartment.title}</div>
-                  </CardTop>
-                  <CardBottom>
-                    <div>{item.members.length}人</div>
-                  </CardBottom>
-                </ScheduleInfo>
+                {checkDetail && (
+                  <RequestDetailModal
+                    members={item.members}
+                    hostId={item.host}
+                    toggle={setCheckDetail}
+                  />
+                )}
+                <ScheduleInnerWrapper>
+                  <ScheduleDate>
+                    <DateTitle>
+                      <div>{new Date(item.start).getFullYear()}</div>
+                      {new Date(item.start).getMonth() + 1} /
+                      {new Date(item.start).getDate()}
+                    </DateTitle>
+                    <TimeTitle>
+                      <div>{generateReadableDate(item.start)}-</div>
+                      <div>{generateReadableDate(item.end)}</div>
+                    </TimeTitle>
+                  </ScheduleDate>
+                  <ScheduleInfo>
+                    <CardTop>
+                      <StyledLink to={`/apartment/${item.apartment.id}`}>
+                        <Bold>{item.apartment.title}</Bold>
+                      </StyledLink>
+                    </CardTop>
+                    <CardBottom>
+                      <TeamInfoLink onClick={() => setCheckDetail(true)}>
+                        {item.members && `${item.members.length}人・查看名單`}
+                      </TeamInfoLink>
+                    </CardBottom>
+                  </ScheduleInfo>
+                </ScheduleInnerWrapper>
               </ScheduleCard>
             ))
-          : ""}
+          : "尚無行程"}
       </CardWrapper>
+    );
+  }
+
+  return (
+    <Wrapper>
+      <Bold>預約看房管理</Bold>
+      <NewTitle>待確認行程</NewTitle>
+      {RenderScheduleCard(unConfirmed)}
+      <NewTitle>已確認行程</NewTitle>
+      {RenderScheduleCard(schedules)}
     </Wrapper>
   );
 }

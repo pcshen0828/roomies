@@ -57,6 +57,7 @@ function LandlordSchedule() {
               })
               .then(() => {
                 newEvent.extendedProps.id = event.id;
+                newEvent.extendedProps.host = event.host;
                 newEvent.extendedProps.status = event.status;
                 newEvent.start = event.start;
                 newEvent.end = event.end;
@@ -96,7 +97,9 @@ function LandlordSchedule() {
           預約看房行事曆
         </NewTitle>
       </TitleWrapper>
-      {page === "request" && <Requests unConfirmed={unConfirmed} />}
+      {page === "request" && (
+        <Requests unConfirmed={unConfirmed} user={currentUser} />
+      )}
       {page === "calendar" && <Schedule events={events} />}
     </Wrapper>
   );

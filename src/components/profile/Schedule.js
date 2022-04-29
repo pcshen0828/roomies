@@ -7,21 +7,11 @@ import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import zhTwLocale from "@fullcalendar/core/locales/zh-tw";
 import "./customCalendar.css";
-import { NavModal, CloseButton } from "../modals/ModalElements";
+import EventInfoWindowModal from "./EventInfoWindow";
 
 const CalendarWrapper = styled.div`
   width: 100%;
   margin-top: 30px;
-`;
-
-const EventInfoWindow = styled(NavModal)`
-  z-index: 10;
-  width: auto;
-  height: auto;
-`;
-
-const Close = styled(CloseButton)`
-  align-self: end;
 `;
 
 function Schedule({ events }) {
@@ -45,18 +35,11 @@ function Schedule({ events }) {
   return (
     <CalendarWrapper>
       {showModal && (
-        <EventInfoWindow
-          style={{
-            top: `${coordinates.y}px`,
-            left: `${coordinates.x - 280}px`,
-          }}
-        >
-          <Close onClick={() => setShowModal(false)}>×</Close>
-          <div>{eventInfo.title}</div>
-          {eventInfo.extendedProps.members.map((member) => (
-            <div key={member.uid}>{member.alias}</div>
-          ))}
-        </EventInfoWindow>
+        <EventInfoWindowModal
+          coordinates={coordinates}
+          eventInfo={eventInfo}
+          toggle={setShowModal}
+        />
       )}
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
@@ -69,7 +52,6 @@ function Schedule({ events }) {
         locale={zhTwLocale}
         events={events}
         eventClick={(info) => showEventModal(info)}
-        dateClick={(info) => {}}
       />
     </CalendarWrapper>
   );

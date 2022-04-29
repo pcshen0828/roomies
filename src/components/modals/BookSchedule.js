@@ -10,7 +10,7 @@ import {
   Button,
 } from "./ModalElements";
 import { SmallTitle, Textarea } from "../common/Components";
-import MUIDateTimePicker from "./DateTimePicker";
+import { MUIDatePicker, MUITimePicker } from "./DateTimePicker";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
@@ -37,8 +37,9 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
   )
     .toISOString()
     .slice(0, -5);
-  const [start, setStart] = React.useState(isoDateTime);
-  const [end, setEnd] = React.useState(isoDateTime);
+  const [pickedDate, setPickedDate] = React.useState(isoDateTime);
+  const [startTime, setStartTime] = React.useState(isoDateTime);
+  const [endTime, setEndTime] = React.useState(isoDateTime);
   const [message, setMessage] = React.useState("");
   const [events, setEvents] = React.useState([]);
 
@@ -48,14 +49,20 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
       Firebase.where("apartmentID", "==", apartment.id),
       Firebase.where("status", "==", 1)
     );
-    Firebase.onSnapshot(query, (snapshot) => {
+    const unsubscribe = Firebase.onSnapshot(query, (snapshot) => {
       const confirmedEvents = snapshot.docs.map((doc) => doc.data());
       setEvents(confirmedEvents);
     });
+
+    return unsubscribe;
   }, []);
 
   function generateReadableDate(dateString) {
     return new Date(dateString).toLocaleString().slice(0, -3);
+  }
+
+  function createNoticeToOwner() {
+    api.createNoticeByType(host.uid, apartment.owner, 5);
   }
 
   function bookSchedule() {
@@ -70,10 +77,11 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
       host: host.uid,
       members: team.userIDs,
       team: team.id,
-      start,
-      end,
+      start: pickedDate + "T" + startTime.substring(11),
+      end: pickedDate + "T" + endTime.substring(11),
       owner: apartment.owner,
     });
+    createNoticeToOwner();
     if (message.trim()) {
       api
         .getDataWithSingleQuery(
@@ -98,6 +106,7 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
               updateTime: time,
             });
             api.addNewDoc("chats/" + res.id + "/messages", newMessage);
+            createNoticeToOwner();
             toggle(false);
           } else {
             const newMessage = {
@@ -118,6 +127,7 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
               userIDs: [host.uid, apartment.owner],
             });
             api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
+            createNoticeToOwner();
             toggle(false);
           }
         });
@@ -143,13 +153,17 @@ export default function BookScheduleModal({ host, team, apartment, toggle }) {
                 </div>
               ))
             : ""}
+          <SmallTitle>選擇日期</SmallTitle>
+          <PickerWrapper>
+            <MUIDatePicker value={pickedDate} setValue={setPickedDate} />
+          </PickerWrapper>
           <SmallTitle>選擇開始時間</SmallTitle>
           <PickerWrapper>
-            <MUIDateTimePicker value={start} setValue={setStart} />
+            <MUITimePicker value={startTime} setValue={setStartTime} />
           </PickerWrapper>
           <SmallTitle>選擇結束時間</SmallTitle>
           <PickerWrapper>
-            <MUIDateTimePicker value={end} setValue={setEnd} />
+            <MUITimePicker value={endTime} setValue={setEndTime} />
           </PickerWrapper>
           <SmallTitle>留話給房東</SmallTitle>
           <Textarea

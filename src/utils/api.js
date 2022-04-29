@@ -95,6 +95,18 @@ const api = {
   async signUp(email, password) {
     return Firebase.createUserWithEmailAndPassword(this.auth, email, password);
   },
+  createNoticeByType(sender, receiver, type) {
+    const newNoticeRef = api.createNewDocRef("notices");
+    const time = Firebase.Timestamp.fromDate(new Date());
+    api.setNewDoc(newNoticeRef, {
+      id: newNoticeRef.id,
+      sender,
+      receiver,
+      createTime: time,
+      status: 0,
+      type,
+    });
+  },
 };
 
 export default api;

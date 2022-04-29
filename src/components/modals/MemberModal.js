@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { NavModalOverlay, NavModal } from "./ModalElements";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { StyledLink, Button1 } from "../common/Components";
+import { StyledLink, Button1, Bold } from "../common/Components";
 
 const SignoutButton = styled(Button1)`
   width: 90px;
@@ -17,6 +17,7 @@ function MemberModal({ setActiveIcon }) {
   return (
     <NavModalOverlay onClick={() => setActiveIcon("")}>
       <NavModal onClick={(e) => e.stopPropagation()}>
+        <Bold>會員</Bold>
         <>{currentUser.email}</>
         <StyledLink to="/profile/info">會員專區</StyledLink>
         <SignoutButton

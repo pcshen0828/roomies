@@ -270,10 +270,15 @@ const ScheduleCard = styled(FlexWrapper)`
   width: 350px;
   height: 200px;
   border-radius: 10px;
-  border: 1px solid #dadada;
   margin: 0 20px 20px 0;
   ${"" /* cursor: pointer; */}
   padding: 20px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+`;
+
+const ScheduleInnerWrapper = styled(FlexWrapper)`
+  ${"" /* align-items: flex-start; */}
+  width: 100%;
 `;
 
 const ScheduleDate = styled(FlexWrapper)`
@@ -330,6 +335,7 @@ export {
   SearchButton,
   Button1,
   ScheduleDate,
+  ScheduleInnerWrapper,
   ScheduleInfo,
   CardWrapper,
   ScheduleCard,
