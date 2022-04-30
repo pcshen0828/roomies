@@ -76,8 +76,8 @@ const NavModal = styled.div`
   align-items: flex-start;
   padding: 20px;
 
-  @media screen and (min-width: 1280px) {
-    left: calc((100% - 1200px) / 2 + 950px);
+  @media screen and (min-width: 1440px) {
+    left: calc((100% - 1200px) / 2 + 850px);
   }
   @media screen and (max-width: 400px) {
     width: 300px;

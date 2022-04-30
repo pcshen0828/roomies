@@ -188,6 +188,7 @@ const GroupNotice = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   padding: 20px;
+  background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
 `;
 
