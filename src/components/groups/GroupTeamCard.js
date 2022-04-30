@@ -4,33 +4,40 @@ import CheckTeamMembersModal from "../modals/CheckTeamMembers";
 import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
-import { Button1 } from "../common/Components";
+import { Bold, Button1, FlexWrapper, Title } from "../common/Components";
+import member from "../../images/members.svg";
+import InviteJoinTeamModal from "../modals/InviteJoinTeam";
 
 const defaultCardStyle = `
   border-radius: 10px;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
 `;
 
-const Wrapper = styled.div`
+// #c1b18a
+
+const Wrapper = styled(FlexWrapper)`
   ${defaultCardStyle}
-  width: 100%;
+  width: 99.5%;
   height: 200px;
-  margin-left: 20px;
-  display: flex;
   flex-direction: column;
+  align-items: flex-start;
   border-radius: 10px;
-  overflow: hidden;
+  ${"" /* border: 1px solid #e8e8e8; */}
+  padding: 30px 0 10px;
+  @media screen and (max-width: 995.98px) {
+    height: 180px;
+  }
 `;
 
-const Top = styled.div`
-  width: 100%;
+const Top = styled(FlexWrapper)`
+  width: 90%;
   height: 55%;
-  background: #dadada;
-  display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start;
+  margin-left: 10%;
 `;
 
 const TeamName = styled.div`
@@ -41,12 +48,17 @@ const TeamName = styled.div`
   }
 `;
 
-const Bottom = styled.div`
-  width: 100%;
+const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+`;
+
+const Bottom = styled(FlexWrapper)`
+  width: 90%;
   height: 45%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  justify-content: flex-start;
+  margin-left: 10%;
 `;
 
 const JoinButton = styled(Button1)`
@@ -67,9 +79,16 @@ const ShowStatus = styled(Button1)`
   }
 `;
 
-function TeamCard({ team, roomies }) {
+const InviteButton = styled(Button1)`
+  width: 100px;
+  height: 35px;
+  margin-left: 10px;
+`;
+
+function TeamCard({ team, roomies, groupMemberDetail }) {
   const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
+  const [openInviteModal, setOpenInviteModal] = React.useState(false);
   const { currentUser } = useAuth();
 
   async function joinTeam() {
@@ -97,12 +116,23 @@ function TeamCard({ team, roomies }) {
           team={team}
         />
       )}
+      {openInviteModal && (
+        <InviteJoinTeamModal
+          toggle={setOpenInviteModal}
+          team={team}
+          groupMemberDetail={groupMemberDetail}
+        />
+      )}
       <Wrapper>
         <Top>
+          <Title>{team.name}</Title>
           <TeamName onClick={() => setOpenMemberListModal(true)}>
-            {team.name}
+            查看成員
           </TeamName>
-          <div>{team.members.length}</div>
+          <FlexWrapper>
+            <Icon alt="" src={member} />
+            <div>{team.members.length}人</div>
+          </FlexWrapper>
         </Top>
         <Bottom>
           {userStatus === 0 || userStatus === 1 ? (
@@ -115,6 +145,15 @@ function TeamCard({ team, roomies }) {
             <JoinButton onClick={joinTeam}>申請加入</JoinButton>
           ) : (
             <ShowStatus>已額滿</ShowStatus>
+          )}
+          {userStatus === 0 && team.members.length < roomies && (
+            <InviteButton
+              onClick={() => {
+                setOpenInviteModal(true);
+              }}
+            >
+              邀請
+            </InviteButton>
           )}
         </Bottom>
       </Wrapper>

@@ -7,7 +7,7 @@ export const noticeTypes = [
     type: 4,
     message: "邀請你加入新成立的租屋群組",
     path: "/profile/groupteam",
-  },
+  }, //done
   { type: 5, message: "向你送出了預約看房申請", path: "/profile/schedule" }, //done
   { type: 6, message: "加入了你的房源社團", path: "/profile/apartments" },
   { type: 7, message: "拒絕了你的預約看房申請", path: "/profile/schedule" },

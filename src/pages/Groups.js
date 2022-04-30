@@ -4,12 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import api from "../utils/api";
-import {
-  StyledLink,
-  Button1,
-  FlexWrapper,
-  Bold,
-} from "../components/common/Components";
+import { Button1, FlexWrapper, Bold } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
 import member from "../images/members.svg";
@@ -88,6 +83,7 @@ const Title = styled.div`
   margin-right: 30px;
   @media screen and (max-width: 767.98px) {
     margin-bottom: 10px;
+    font-size: 20px;
   }
 `;
 
@@ -154,29 +150,33 @@ const GroupBody = styled(FlexWrapper)`
   justify-content: space-between;
   margin-bottom: 20px;
   align-items: flex-start;
-  height: 1000px;
+  @media screen and (max-width: 995.98px) {
+    flex-direction: column;
+  }
 `;
 
 const GroupBodyLeft = styled(FlexWrapper)`
   width: 60%;
   flex-direction: column;
-  border: 1px solid red;
   align-items: flex-start;
+  z-index: 2;
   position: sticky;
-  top: 80px;
-  height: 500px;
-  overflow-y: scroll;
+  top: 90px;
+  @media screen and (max-width: 995.98px) {
+    width: 100%;
+    position: static;
+    order: 2;
+  }
 `;
 
 const GroupBodyRight = styled(FlexWrapper)`
   width: 38%;
   flex-direction: column;
   align-items: flex-start;
-  border: 1px solid red;
-  height: 500px;
-  overflow-y: scroll;
-  position: sticky;
-  top: 80px;
+  @media screen and (max-width: 995.98px) {
+    width: 100%;
+    order: 1;
+  }
 `;
 
 const GroupNotice = styled(FlexWrapper)`
@@ -253,9 +253,9 @@ function Groups() {
       <Banner src={apartmentData.coverImage} />
       <GroupHeader>
         <MainSubTitles>
-          <StyledLink to={`/apartment/${apartmentData.id}`}>
+          <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
             <Title>{apartmentData.title}</Title>
-          </StyledLink>
+          </BreadCrumbLink>
           <SubTitles>
             <Icon src={room} alt="" />
             <SubTitle>{`可容納房客：${
@@ -282,6 +282,7 @@ function Groups() {
             aid={apartmentData.id}
             members={groupMembers}
             groupId={id}
+            groupMemberDetail={members}
           />
         </GroupBodyLeft>
         <GroupBodyRight>

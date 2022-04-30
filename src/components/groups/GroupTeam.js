@@ -14,8 +14,11 @@ const TeamsBlock = styled.div`
 const TeamBlockWrapper = styled(FlexWrapper)`
   width: 100%;
   flex-direction: column;
-  overflow-y: scroll;
-  height: 500px;
+  overflow-y: auto;
+  height: 900px;
+  @media screen and (max-width: 995.98px) {
+    height: auto;
+  }
 `;
 
 const TeamBlockCards = styled(FlexWrapper)`
@@ -38,15 +41,15 @@ const SubtitleSmall = styled.div`
   color: #a1aeb7;
 `;
 
-function GroupTeam({ aid, members, groupId, roomies }) {
+function GroupTeam({ aid, members, groupId, roomies, groupMemberDetail }) {
   const [teams, setTeams] = React.useState([]);
-
   React.useEffect(() => {
     let mounted = true;
     async function getTeams() {
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "teams"),
-        Firebase.where("apartmentID", "==", aid ? aid : "")
+        Firebase.where("apartmentID", "==", aid ? aid : ""),
+        Firebase.orderBy("createTime", "desc")
       );
 
       Firebase.onSnapshot(query, (snapshot) => {
@@ -69,10 +72,20 @@ function GroupTeam({ aid, members, groupId, roomies }) {
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>
-          <CreateTeam aid={aid} members={members} groupId={groupId} />
+          <CreateTeam
+            aid={aid}
+            members={members}
+            groupId={groupId}
+            groupMemberDetail={groupMemberDetail}
+          />
           {teams.length
             ? teams.map((team, index) => (
-                <TeamCard key={index} team={team} roomies={roomies} />
+                <TeamCard
+                  key={index}
+                  team={team}
+                  roomies={roomies}
+                  groupMemberDetail={groupMemberDetail}
+                />
               ))
             : ""}
         </TeamBlockCards>

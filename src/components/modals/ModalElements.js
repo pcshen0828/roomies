@@ -8,14 +8,14 @@ const Overlay = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
-  z-index: 999;
+  z-index: 1200;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const Modal = styled.div`
-  width: 50%;
+  width: 70%;
   overflow-y: scroll;
   background: #fff;
   border-radius: 10px;
@@ -64,7 +64,7 @@ const NavModalOverlay = styled.div`
 `;
 
 const NavModal = styled.div`
-  width: 250px;
+  width: 350px;
   position: absolute;
   top: 0;
   right: 20px;
@@ -78,6 +78,9 @@ const NavModal = styled.div`
 
   @media screen and (min-width: 1280px) {
     left: calc((100% - 1200px) / 2 + 950px);
+  }
+  @media screen and (max-width: 400px) {
+    width: 300px;
   }
 `;
 

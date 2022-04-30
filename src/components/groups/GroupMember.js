@@ -17,14 +17,16 @@ const defaultCardStyle = `
   display: flex;
   margin-bottom: 40px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-
 `;
 const MemberBlockWrapper = styled.div`
   ${defaultCardStyle}
-  overflow-y: scroll;
+  overflow-y: auto;
   height: 400px;
   width: calc(100% - 40px);
   padding: 10px 20px 30px;
+  @media screen and (max-width: 995.98px) {
+    height: auto;
+  }
 `;
 
 const MembersBlock = styled.div`

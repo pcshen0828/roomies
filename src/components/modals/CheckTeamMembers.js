@@ -13,6 +13,10 @@ import { Button1 } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 
+const NewBody = styled(Body)`
+  height: 400px;
+`;
+
 const Members = styled.div`
   display: flex;
   flex-direction: column;
@@ -108,7 +112,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
           <Title>群組成員</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
-        <Body>
+        <NewBody>
           <Members>
             {teamMembers.length
               ? teamMembers.map((teamMember, index) => (
@@ -152,7 +156,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
                 ))
               : "loading..."}
           </Members>
-        </Body>
+        </NewBody>
       </Modal>
     </Overlay>
   );

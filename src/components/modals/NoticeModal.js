@@ -9,12 +9,7 @@ import { Link } from "react-router-dom";
 import { noticeTypes } from "../../utils/noticeType";
 
 const NewModal = styled(NavModal)`
-  width: 30%;
-  min-width: 280px;
   max-height: 300px;
-  @media screen and (max-width: 400px) {
-    width: 200px;
-  }
 `;
 
 const StyledLink = styled(Link)`

@@ -9,26 +9,15 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { Button1 } from "../common/Components";
-import { Firebase } from "../../utils/firebase";
+import { Button1, SmallTitle } from "../common/Components";
 import search from "../../images/search.svg";
-import api from "../../utils/api";
+import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
 
 const NewBody = styled(Body)`
-  border: none;
-  display: flex;
-  flex-direction: column;
-  height: 300px;
-`;
-
-const SmallTitle = styled(Title)`
-  font-size: 14px;
-  margin-bottom: 10px;
-`;
-
-const SmallText = styled.div`
-  font-size: 14px;
+  height: 280px;
+  padding: 10px;
 `;
 
 const SearchBar = styled.div`
@@ -51,6 +40,10 @@ const Input = styled.input`
   }
 `;
 
+const SmallText = styled.div`
+  font-size: 14px;
+`;
+
 const SearchButton = styled.img`
   width: 20px;
   height: 20px;
@@ -65,7 +58,7 @@ const QueriedUser = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 70%;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const FlexWrapper = styled.div`
@@ -90,6 +83,16 @@ const InviteButton = styled(Button1)`
   height: 35px;
 `;
 
+const Status = styled(FlexWrapper)`
+  align-items: center;
+  justify-content: center;
+  width: 90px;
+  height: 35px;
+  background: #e8e8e8;
+  border-radius: 5px;
+  margin: 0;
+`;
+
 const InviteList = styled.div`
   display: flex;
   margin-bottom: 20px;
@@ -106,22 +109,35 @@ const CancelButton = styled.div`
   cursor: pointer;
 `;
 
-function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
-  const [teamName, setTeamName] = React.useState("");
+export default function InviteJoinTeamModal({
+  toggle,
+  team,
+  groupMemberDetail,
+}) {
   const [queryName, setQueryName] = React.useState("");
   const [queriedUsers, setQueriedUsers] = React.useState([]);
   const [defaultResponse, setDefaultResponse] = React.useState("");
   const [inviteList, setInviteList] = React.useState([]);
   const { currentUser } = useAuth();
 
-  async function seachUsers() {
-    if (!queryName.trim()) return;
-    // 應該只能搜尋社團內的成員
+  async function seachUsers(name) {
+    if (!name.trim()) {
+      setQueriedUsers([]);
+      return;
+    }
+    setDefaultResponse("請輸入使用者名稱");
+    // 應該只能從已經在社團裡面的成員搜尋
+    // groupMemberDetail
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "users"),
       Firebase.where("role", "==", 1),
-      Firebase.where("alias", ">=", queryName),
-      Firebase.where("alias", "<=", queryName + "\uf8ff")
+      Firebase.where(
+        "uid",
+        "in",
+        groupMemberDetail.map((member) => member.uid)
+      ),
+      Firebase.where("alias", ">=", name),
+      Firebase.where("alias", "<=", name + "\uf8ff")
     );
 
     const querySnapShot = await Firebase.getDocs(query);
@@ -134,37 +150,22 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
     }
   }
 
-  async function createTeam() {
-    if (!teamName.trim()) return;
-    const newTeamRef = api.createNewDocRef("teams");
+  async function inviteNewMember() {
     const time = Firebase.Timestamp.fromDate(new Date());
     const newList = inviteList.map(({ name, ...rest }) => {
       return rest;
     });
     const uids = newList.map((user) => user.uid);
-    newList.push({ uid: currentUser.uid, status: 0 });
-    api.setNewDoc(newTeamRef, {
-      id: newTeamRef.id,
-      apartmentID: aid,
-      name: teamName,
-      members: newList,
-      userIDs: [...uids, currentUser.uid],
-      createTime: time,
+    api.updateDocData("teams", team.id, {
+      members: [...team.members, ...newList],
+      userIDs: [...team.userIDs, ...uids],
       updateTime: time,
     });
-    const newToGroupList = newList
-      .filter((user) => !members.includes(user.uid))
-      .map((user) => user.uid);
-    if (newToGroupList.length) {
-      api.updateDocData("groups", groupId, {
-        members: [...members, ...newToGroupList],
-      });
-    }
+
     // 通知被邀請對象
     uids.forEach((uid) => {
       api.createNoticeByType(currentUser.uid, uid, 4);
     });
-
     toggle(false);
   }
 
@@ -172,24 +173,28 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
     <Overlay>
       <Modal>
         <Header>
-          <Title>建立群組</Title>
+          <Title>邀請社團成員加入群組</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SmallTitle>群組名稱</SmallTitle>
-          <Input
-            placeholder="請輸入群組名稱"
-            value={teamName}
-            onChange={(e) => setTeamName(e.target.value)}
-          />
-          <SmallTitle>邀請他人</SmallTitle>
+          <SmallTitle>搜尋用戶</SmallTitle>
           <SearchBar>
-            <Input
-              placeholder="請輸入用戶名稱"
-              value={queryName}
-              onChange={(e) => setQueryName(e.target.value)}
-            />
-            <SearchButton src={search} onClick={seachUsers} />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                seachUsers();
+              }}
+            >
+              <Input
+                placeholder="請輸入用戶名稱"
+                value={queryName}
+                onChange={(e) => {
+                  setQueryName(e.target.value);
+                  seachUsers(e.target.value);
+                }}
+              />
+              <SearchButton src={search} />
+            </form>
           </SearchBar>
           <InviteList>
             {inviteList.length
@@ -209,16 +214,19 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
                 ))
               : ""}
           </InviteList>
-          {queriedUsers.length
-            ? queriedUsers.map((user, index) => (
-                <QueriedUser key={index}>
-                  <FlexWrapper>
-                    <UserImage src={user.profileImage} />
-                    <UserInfo>
-                      <SmallTitle>{user.alias}</SmallTitle>
-                      <SmallText>{user.jobTitle}</SmallText>
-                    </UserInfo>
-                  </FlexWrapper>
+          {queriedUsers.length ? (
+            queriedUsers.map((user, index) => (
+              <QueriedUser key={index}>
+                <FlexWrapper>
+                  <UserImage src={user.profileImage} />
+                  <UserInfo>
+                    <SmallTitle>{user.alias}</SmallTitle>
+                    <SmallText>{user.jobTitle}</SmallText>
+                  </UserInfo>
+                </FlexWrapper>
+                {!team.members
+                  .map((member) => member.uid)
+                  .includes(user.uid) ? (
                   <InviteButton
                     onClick={() => {
                       setInviteList((prev) => [
@@ -229,16 +237,28 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
                       setQueriedUsers([]);
                     }}
                   >
-                    邀請
+                    新增
                   </InviteButton>
-                </QueriedUser>
-              ))
-            : defaultResponse}
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 1 ? (
+                  <Status>成員</Status>
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 2 ? (
+                  <Status>邀請中</Status>
+                ) : team.members.find((member) => member.uid === user.uid)
+                    .status === 3 ? (
+                  <Status>待核准</Status>
+                ) : (
+                  ""
+                )}
+              </QueriedUser>
+            ))
+          ) : (
+            <SmallText>{defaultResponse}</SmallText>
+          )}
         </NewBody>
-        <Button onClick={createTeam}>建立群組</Button>
+        <Button onClick={inviteNewMember}>邀請</Button>
       </Modal>
     </Overlay>
   );
 }
-
-export default NewTeamModal;
