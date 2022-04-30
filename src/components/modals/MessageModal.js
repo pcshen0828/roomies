@@ -20,6 +20,9 @@ const ChatsWrapper = styled(FlexWrapper)`
 
 const MessagesLink = styled(StyledLink)`
   align-self: center;
+  @media screen and (max-width: 995.98px) {
+    display: none;
+  }
 `;
 
 function MessageModal({ setActiveIcon }) {

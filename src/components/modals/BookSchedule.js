@@ -9,10 +9,11 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallTitle, Textarea } from "../common/Components";
+import { FlexWrapper, SmallTitle, Textarea } from "../common/Components";
 import { MUIDatePicker, MUITimePicker } from "./DateTimePicker";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
+import calendar from "../../images/calendar.svg";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;
@@ -30,6 +31,26 @@ const NewBody = styled(Body)`
 
 const PickerWrapper = styled.div`
   margin: 20px 0;
+`;
+
+const BookedTime = styled(FlexWrapper)`
+  width: 90%;
+  height: 30px;
+  margin-bottom: 10px;
+  background: #f2f5f7;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+
+  @media screen and (max-width: 767.98px) {
+    font-size: 14px;
+  }
+`;
+
+const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
 export default function BookScheduleModal({
@@ -153,13 +174,14 @@ export default function BookScheduleModal({
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SmallTitle>此房源目前已排定的看房行程</SmallTitle>
+          <SmallTitle>此房源目前已被預約的看房時段</SmallTitle>
           {events.length
             ? events.map((event) => (
-                <div key={event.id}>
-                  {generateReadableDate(event.start)}-
+                <BookedTime key={event.id}>
+                  <Icon alt="" src={calendar} />
+                  {generateReadableDate(event.start)} -{" "}
                   {generateReadableDate(event.end)}
-                </div>
+                </BookedTime>
               ))
             : ""}
           <SmallTitle>選擇日期</SmallTitle>

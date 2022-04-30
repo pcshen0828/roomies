@@ -9,12 +9,14 @@ import { Wrapper, Button1, FlexWrapper } from "../components/common/Components";
 
 const FullWrapper = styled.div`
   width: 100%;
-  margin-top: 50px;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: center;
-  height: calc(100vh - 250px);
+  height: calc(100vh - 200px);
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  background: #fff;
+  @media screen and (max-width: 995.98px) {
+    height: calc(100vh - 130px);
+  }
 `;
 
 const CenterWrapper = styled(Wrapper)`
@@ -31,15 +33,22 @@ const InnerWrapper = styled.div`
   max-width: 1200px;
   display: flex;
   height: 100%;
+  @media screen and (max-width: 995.98px) {
+    flex-direction: column;
+  }
 `;
 
 const MessageList = styled.div`
   width: 30%;
-  border-right: 1px solid #ccc;
+  border-right: 1px solid #e8e8e8;
   display: flex;
   flex-direction: column;
   padding: 20px;
-  overflow-y: scroll;
+  overflow-y: auto;
+  background: #fff;
+  @media screen and (max-width: 995.98px) {
+    display: none;
+  }
 `;
 
 const DefaultMessage = styled(FlexWrapper)`
@@ -49,6 +58,11 @@ const DefaultMessage = styled(FlexWrapper)`
   align-items: center;
   background: #f2f5f7;
   color: #505d68;
+  @media screen and (max-width: 995.98px) {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
 `;
 
 function Messages() {

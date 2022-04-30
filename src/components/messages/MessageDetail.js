@@ -6,6 +6,7 @@ import api from "../../utils/api";
 import { useParams } from "react-router-dom";
 import { FlexWrapper } from "../common/Components";
 import MessageBar from "./MessageBar";
+import { checkActionCode } from "firebase/auth";
 
 const MessageContent = styled.div`
   width: 70%;
@@ -14,6 +15,10 @@ const MessageContent = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 995.98px) {
+    width: 100%;
+    padding: 10px 0 20px 0;
+  }
 `;
 
 const CreateTime = styled.div`
@@ -37,6 +42,9 @@ const SendMessageBlock = styled.form`
   position: absolute;
   left: 20px;
   bottom: 20px;
+  @media screen and (max-width: 995.98px) {
+    bottom: 10px;
+  }
 `;
 
 const MessageInput = styled.input`
@@ -68,9 +76,10 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
   const { id } = useParams();
   const [message, setMessage] = React.useState("");
   const [messages, setMessages] = React.useState([]);
+  const [members, setMembers] = React.useState([]);
   const messageTop = React.useRef(null);
   const last = React.useRef();
-  const notFirstRender = React.useRef();
+  // const notFirstRender = React.useRef();
 
   React.useEffect(() => {
     let mounted = true;
@@ -91,6 +100,16 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
         const lastVisible = snapshot.docs[snapshot.docs.length - 1];
         last.current = lastVisible;
       });
+      api
+        .getDataWithSingleQuery(
+          "users",
+          "uid",
+          "in",
+          chats.find((chat) => chat.id === chatId).userIDs
+        )
+        .then((res) => {
+          setMembers(res);
+        });
     }
     return function cleaup() {
       mounted = false;
@@ -180,6 +199,8 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
                 detail={detail}
                 myRole={myRole}
                 generateReadableDate={generateReadableDate}
+                members={members}
+                self={currentUser}
               />
             ))
           : "查無聊天紀錄！"}
