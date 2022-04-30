@@ -50,6 +50,7 @@ const ProfileImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  flex-shrink: 0;
 `;
 
 const Info = styled(FlexWrapper)`

@@ -27,6 +27,9 @@ const Wrapper = styled.div`
 const ImageWrapper = styled(FlexWrapper)`
   margin: 0 0 40px;
   font-size: 14px;
+  @media screen and (max-width: 767.98px) {
+    flex-direction: column;
+  }
 `;
 
 const ProfileImage = styled.div`
@@ -38,6 +41,11 @@ const ProfileImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  flex-shrink: 0;
+
+  @media screen and (max-width: 767.98px) {
+    margin: 0 0 10px;
+  }
 `;
 
 const ImageButton = styled(Button1)`
@@ -45,6 +53,9 @@ const ImageButton = styled(Button1)`
   height: 35px;
   font-size: 14px;
   margin-left: 20px;
+  @media screen and (max-width: 767.98px) {
+    margin: 10px 0 0;
+  }
 `;
 
 const NewTitle = styled(Title)`
@@ -76,6 +87,9 @@ const Required = styled.span`
 const NewButton = styled(Button1)`
   align-self: end;
   margin: 20px;
+  @media screen and (max-width: 767.98px) {
+    margin: 30px 0 20px;
+  }
 `;
 
 const Loading = styled(Button1)`
@@ -89,29 +103,20 @@ const Loading = styled(Button1)`
   }
 `;
 
-const HobbyDisplayer = styled(FlexWrapper)`
-  flex-wrap: wrap;
-  width: 90%;
-  padding: 10px 6px 10px 0;
-`;
-
-const HobbyTag = styled(FlexWrapper)`
-  padding: 5px;
-  border-radius: 5px;
-  background: #dadada;
-  font-size: 14px;
-  margin: 0 5px 5px 0;
-  cursor: pointer;
-`;
-
 const ConfirmWrapper = styled(FlexWrapper)`
   width: 100%;
   margin-top: 20px;
   align-items: center;
+  @media screen and (max-width: 767.98px) {
+    align-items: flex-start;
+  }
 `;
 
 const NewLabel = styled(SmallLabel)`
   margin: 0;
+  @media screen and (max-width: 767.98px) {
+    margin-top: -2px;
+  }
 `;
 
 function TenantInfo() {

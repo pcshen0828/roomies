@@ -26,6 +26,11 @@ const ProfileImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  flex-shrink: 0;
+  @media screen and (max-width: 767.98px) {
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const MemberBar = styled(FlexWrapper)`

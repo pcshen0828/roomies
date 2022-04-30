@@ -34,6 +34,15 @@
   width: 90px;
 }
 
+@media screen and (max-width: 413.98px) {
+  .fc-dayGridMonth-button.fc-button.fc-button-primary,
+  .fc-timeGridWeek-button.fc-button.fc-button-primary,
+  .fc-listWeek-button.fc-button.fc-button-primary {
+    width: 74px;
+    font-size: 14px;
+  }
+}
+
 @media screen and (max-width: 800px) {
   .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
     flex-direction: column;

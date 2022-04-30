@@ -86,7 +86,7 @@ const Cards = styled.div`
   justify-content: space-between;
   margin: 20px auto 0;
 
-  @media screen and (max-width: 1280px) {
+  @media screen and (max-width: 1279.98px) {
     display: none;
     grid-template-columns: repeat(auto-fill, calc((100% - 10px) / 2));
     height: 400px;
@@ -98,8 +98,6 @@ const Cards = styled.div`
   height: 648px;
   overflow-y: scroll;
 `;
-
-const StyledCard = styled(Card)``;
 
 function MyMap() {
   const [map, setMap] = React.useState(null);
@@ -176,9 +174,7 @@ function MyMap() {
           </StandaloneSearchBox>
           <Cards>
             {apartments.length
-              ? apartments.map((item) => (
-                  <StyledCard key={item.id} detail={item} />
-                ))
+              ? apartments.map((item) => <Card key={item.id} detail={item} />)
               : ""}
           </Cards>
         </BodyLeft>

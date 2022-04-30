@@ -39,6 +39,10 @@ const NewTitle = styled(SmallTitle)`
 
 const DateTitle = styled(Title)`
   margin: 10px 0;
+  @media screen and (max-width: 767.98px) {
+    font-size: 18px;
+    margin: 0 10px 0 0;
+  }
 `;
 
 const TimeTitle = styled(Bold)`

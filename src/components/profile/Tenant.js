@@ -14,6 +14,9 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
+  @media screen and (max-width: 1279.98px) {
+    flex-direction: cloumn;
+  }
 `;
 
 const profilelist = [

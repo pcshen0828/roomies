@@ -20,10 +20,12 @@ const HigherOverlay = styled(Overlay)`
 
 const NewModal = styled(Modal)`
   width: 70%;
+  min-width: 350px;
 `;
 
 const NewBody = styled(Body)`
   height: 380px;
+  padding: 10px;
 `;
 
 const PickerWrapper = styled.div`

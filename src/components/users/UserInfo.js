@@ -40,6 +40,7 @@ const ProfileImage = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   margin-right: 30px;
+  flex-shrink: 0;
 `;
 
 const InfoWrapper = styled(FlexWrapper)`

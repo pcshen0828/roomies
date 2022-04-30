@@ -12,6 +12,14 @@ const NewModal = styled(NavModal)`
   max-height: 300px;
 `;
 
+const NoticeWrapper = styled(FlexWrapper)`
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
 const StyledLink = styled(Link)`
   color: #424b5a;
   display: block;
@@ -163,36 +171,38 @@ function NoticeModal({ setActiveIcon }) {
       <NewModal onClick={(e) => e.stopPropagation()}>
         <Bold>通知</Bold>
         <SmallTitle>先前的通知</SmallTitle>
-        {notices.length
-          ? notices.map((notice) => (
-              <StyledLink
-                to={`${noticeTypes.at(notice.type).path}`}
-                key={notice.id}
-                onClick={() => {
-                  setNoticeStatusRead(notice.status, notice.id);
-                }}
-              >
-                <UnreadNot show={notice.status === 0} />
-                <MessageItem unread={notice.status === 0}>
-                  <MessageImg src={notice.sender.profileImage} />
-                  <MessageOverview>
-                    <MessageWrapper>
-                      <MessageObjectName>
-                        {notice.sender.alias}
-                      </MessageObjectName>
-                      <LastMessage>
-                        {noticeTypes
-                          .at(notice.type)
-                          .message.slice(0, stringLimit)}
-                        ...
-                      </LastMessage>
-                    </MessageWrapper>
-                    <Time>・{notice.time}</Time>
-                  </MessageOverview>
-                </MessageItem>
-              </StyledLink>
-            ))
-          : "尚無通知"}
+        <NoticeWrapper>
+          {notices.length
+            ? notices.map((notice) => (
+                <StyledLink
+                  to={`${noticeTypes.at(notice.type).path}`}
+                  key={notice.id}
+                  onClick={() => {
+                    setNoticeStatusRead(notice.status, notice.id);
+                  }}
+                >
+                  <UnreadNot show={notice.status === 0} />
+                  <MessageItem unread={notice.status === 0}>
+                    <MessageImg src={notice.sender.profileImage} />
+                    <MessageOverview>
+                      <MessageWrapper>
+                        <MessageObjectName>
+                          {notice.sender.alias}
+                        </MessageObjectName>
+                        <LastMessage>
+                          {noticeTypes
+                            .at(notice.type)
+                            .message.slice(0, stringLimit)}
+                          ...
+                        </LastMessage>
+                      </MessageWrapper>
+                      <Time>・{notice.time}</Time>
+                    </MessageOverview>
+                  </MessageItem>
+                </StyledLink>
+              ))
+            : "尚無通知"}
+        </NoticeWrapper>
       </NewModal>
     </NavModalOverlay>
   );

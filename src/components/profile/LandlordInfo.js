@@ -26,6 +26,9 @@ const Wrapper = styled.div`
 const ImageWrapper = styled(FlexWrapper)`
   margin: 0 0 40px;
   font-size: 14px;
+  @media screen and (max-width: 767.98px) {
+    flex-direction: column;
+  }
 `;
 
 const ProfileImage = styled.div`
@@ -37,6 +40,11 @@ const ProfileImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  flex-shrink: 0;
+
+  @media screen and (max-width: 767.98px) {
+    margin: 0 0 10px;
+  }
 `;
 
 const ImageButton = styled(Button1)`
@@ -44,6 +52,9 @@ const ImageButton = styled(Button1)`
   height: 35px;
   font-size: 14px;
   margin-left: 20px;
+  @media screen and (max-width: 767.98px) {
+    margin: 10px 0 0;
+  }
 `;
 
 const NewTitle = styled(Title)`
@@ -75,6 +86,9 @@ const Required = styled.span`
 const NewButton = styled(Button1)`
   align-self: end;
   margin: 20px;
+  @media screen and (max-width: 767.98px) {
+    margin: 30px 0 20px;
+  }
 `;
 
 const Loading = styled(Button1)`

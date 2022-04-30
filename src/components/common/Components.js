@@ -42,6 +42,7 @@ const BodyWrapper = styled.div`
   max-width: 1200px;
   margin: 20px auto;
   display: flex;
+  align-items: flex-start;
   justify-content: space-between;
 
   @media screen and (max-width: 1279.98px) {
@@ -152,36 +153,61 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 const ProfileList = styled.div`
-  width: 20%;
+  width: calc(20%);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
 
   @media screen and (max-width: 1279.98px) {
     flex-direction: row;
     width: 100%;
+    margin-bottom: 20px;
+  }
+  @media screen and (max-width: 767.98px) {
+    flex-wrap: wrap;
   }
 `;
 
 const ProfileItem = styled.div`
   font-size: 14px;
-  padding: 10px 0 5px;
-  margin-bottom: 10px;
+  padding: 20px;
   cursor: pointer;
-  border-bottom: ${(props) =>
-    props.active ? "1px solid #c1b18a" : "1px solid transparent"};
+  width: calc(100% - 45px);
+  border-left: ${(props) =>
+    props.active ? "5px solid #c1b18a" : "5px solid transparent"};
+  background: ${(props) => (props.active ? "#f2f5f7" : "none")};
+  font-weight: ${(props) => (props.active ? "700" : "400")};
+
   &:hover {
-    border-bottom: 1px solid #c1b18a;
+    background: #f2f5f7;
   }
   @media screen and (max-width: 1279.98px) {
-    margin-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: none;
+    border-bottom: ${(props) =>
+      props.active ? "5px solid #c1b18a" : "5px solid transparent"};
+  }
+  @media screen and (max-width: 767.98px) {
+    padding: 10px;
+    width: calc(100% - 20px);
   }
 `;
 
 const ProfileContent = styled.div`
-  width: 78%;
+  width: calc(78% - 40px);
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+
   @media screen and (max-width: 1279.98px) {
-    width: 100%;
+    width: calc(100% - 40px);
   }
 `;
 
@@ -263,41 +289,63 @@ const Button1 = styled.button`
 `;
 
 const CardWrapper = styled(FlexWrapper)`
+  width: 100%;
   flex-wrap: wrap;
+  @media screen and (max-width: 767.98px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `;
 
 const ScheduleCard = styled(FlexWrapper)`
   width: 350px;
-  height: 200px;
+  height: 180px;
   border-radius: 10px;
   margin: 0 20px 20px 0;
-  ${"" /* cursor: pointer; */}
   padding: 20px;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  @media screen and (max-width: 767.98px) {
+    width: 200px;
+    height: 250px;
+    margin: 0 0 20px;
+    padding: 10px 10px 10px 20px;
+  }
 `;
 
 const ScheduleInnerWrapper = styled(FlexWrapper)`
-  ${"" /* align-items: flex-start; */}
   width: 100%;
+  @media screen and (max-width: 767.98px) {
+    flex-direction: column;
+  }
 `;
 
 const ScheduleDate = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   width: 40%;
+  @media screen and (max-width: 767.98px) {
+    flex-direction: row;
+    width: 100%;
+  }
 `;
 
 const ScheduleInfo = styled(FlexWrapper)`
   flex-direction: column;
   width: 60%;
   align-items: flex-start;
+  @media screen and (max-width: 767.98px) {
+    width: 100%;
+  }
 `;
 
 const CardTop = styled(FlexWrapper)`
   flex-direction: column;
   height: 40%;
   border-bottom: 1px solid #dadada;
+  @media screen and (max-width: 767.98px) {
+    margin: 10px 0;
+  }
 `;
 
 const CardBottom = styled(FlexWrapper)`

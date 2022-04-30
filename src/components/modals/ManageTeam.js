@@ -17,15 +17,21 @@ import BookScheduleModal from "./BookSchedule";
 import PopupNoticeModal from "./PopupNotice";
 
 const NewModal = styled(Modal)`
-  width: 70%;
+  width: 60%;
+  min-width: 350px;
 `;
 
 const NewBody = styled(Body)`
   height: 380px;
+  padding: 10px;
+  overflow-y: auto;
 `;
 
 const MemberWrapper = styled(FlexWrapper)`
   margin: 20px 10px;
+  @media screen and (max-width: 767.98px) {
+    font-size: 14px;
+  }
 `;
 
 const Alias = styled(Bold)`
@@ -41,6 +47,11 @@ const ProfileImage = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  flex-shrink: 0;
+  @media screen and (max-width: 767.98px) {
+    width: 50px;
+    height: 50px;
+  }
 `;
 
 const MemberStatus = styled(FlexWrapper)`
