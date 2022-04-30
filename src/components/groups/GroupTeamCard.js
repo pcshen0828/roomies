@@ -6,10 +6,17 @@ import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import { Button1 } from "../common/Components";
 
+const defaultCardStyle = `
+  border-radius: 10px;
+  align-items: center;
+  margin-bottom: 40px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+`;
+
 const Wrapper = styled.div`
-  width: 200px;
+  ${defaultCardStyle}
+  width: 100%;
   height: 200px;
-  border: 1px solid #dadada;
   margin-left: 20px;
   display: flex;
   flex-direction: column;

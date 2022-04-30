@@ -3,30 +3,28 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SendMessageModal from "../modals/SendMessage";
 import { useAuth } from "../../context/AuthContext";
-import { Button1 } from "../common/Components";
+import { Button1, FlexWrapper } from "../common/Components";
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 35%;
-  @media screen and (max-width: 1279.98px) {
-    width: 100%;
-  }
+  width: 100%;
 `;
 
 const defaultCardStyle = `
   width: 100%;
-  border: 1px solid #c1b18a;
   border-radius: 10px;
   display: flex;
   margin-bottom: 40px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+
 `;
 const MemberBlockWrapper = styled.div`
   ${defaultCardStyle}
-  overflow: hidden;
-  overflow-y: auto;
-  width: 100%;
-  height: 320px;
+  overflow-y: scroll;
+  height: 400px;
+  width: calc(100% - 40px);
+  padding: 10px 20px 30px;
 `;
 
 const MembersBlock = styled.div`
@@ -52,8 +50,9 @@ const MemberLink = styled(Link)`
 `;
 
 const MemberImage = styled.img`
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
   border-radius: 50%;
 `;
 
@@ -71,8 +70,10 @@ const MemberJobTitle = styled.div`
 `;
 
 const MessageButton = styled(Button1)`
-  width: 100px;
+  width: 90px;
+  height: 35px;
   justify-self: end;
+  font-size: 14px;
 `;
 
 const SubtitlesSmall = styled.div`
@@ -107,21 +108,19 @@ function GroupMember({ members }) {
       <MemberBlockWrapper>
         <MembersBlock>
           <MemberBlockCard>
-            {members.find((member) => member.uid === currentUser.uid) && (
-              <>☑︎已加入</>
-            )}
             {members
               .filter((member) => member.uid !== currentUser.uid)
               .map((member, index) => (
                 <Member key={index}>
-                  <MemberLink to={`/users/${member.uid}`}>
-                    <MemberImage src={member.profileImage} />
-                  </MemberLink>
-                  <MemberInfo>
-                    <MemberName>{member.alias}</MemberName>
-                    <MemberJobTitle>{member.jobTitle}</MemberJobTitle>
-                  </MemberInfo>
-
+                  <FlexWrapper>
+                    <MemberLink to={`/users/${member.uid}`}>
+                      <MemberImage src={member.profileImage} />
+                    </MemberLink>
+                    <MemberInfo>
+                      <MemberName>{member.alias}</MemberName>
+                      <MemberJobTitle>{member.jobTitle}</MemberJobTitle>
+                    </MemberInfo>
+                  </FlexWrapper>
                   <MessageButton
                     onClick={() => {
                       setOpenModal(true);

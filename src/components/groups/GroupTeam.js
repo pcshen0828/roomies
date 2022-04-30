@@ -3,33 +3,24 @@ import styled from "styled-components";
 import TeamCard from "./GroupTeamCard";
 import CreateTeam from "./GroupCreateTeam";
 import { Firebase } from "../../utils/firebase";
+import { FlexWrapper } from "../common/Components";
 
 const TeamsBlock = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
-  @media screen and (max-width: 1279.98px) {
-    width: 100%;
-  }
-`;
-
-const defaultCardStyle = `
-  border: 1px solid #c1b18a;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  margin-bottom: 40px;
-`;
-
-const TeamBlockWrapper = styled.div`
-  ${defaultCardStyle}
   width: 100%;
-  overflow-x: scroll;
-  height: 320px;
 `;
 
-const TeamBlockCards = styled.div`
-  display: flex;
+const TeamBlockWrapper = styled(FlexWrapper)`
+  width: 100%;
+  flex-direction: column;
+  overflow-y: scroll;
+  height: 500px;
+`;
+
+const TeamBlockCards = styled(FlexWrapper)`
+  flex-direction: column;
+  width: 100%;
 `;
 
 const SubtitlesSmall = styled.div`
@@ -74,7 +65,7 @@ function GroupTeam({ aid, members, groupId, roomies }) {
     <TeamsBlock>
       <SubtitlesSmall>
         <TitleSmall>已成立群組</TitleSmall>
-        <SubtitleSmall>・{teams.length}組</SubtitleSmall>
+        <SubtitleSmall>・{teams.length}</SubtitleSmall>
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>

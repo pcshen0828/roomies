@@ -10,6 +10,7 @@ import {
 import api from "../../utils/api";
 import SendMessageLandlordModal from "../modals/SendMessageLandlord";
 import phone from "../../images/phone.svg";
+import SignInFirstModal from "../modals/SignInFirst";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(40% - 60px);
@@ -66,9 +67,10 @@ const Icon = styled.img`
   margin-right: 6px;
 `;
 
-export default function OwnerCard({ owner }) {
+export default function OwnerCard({ owner, currentUser }) {
   const [ownerInfo, setOwnerInfo] = React.useState();
   const [openModal, setOpenModal] = React.useState(false);
+  const [openSignin, setOpenSignin] = React.useState(false);
   React.useEffect(() => {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
       setOwnerInfo(res[0]);
@@ -83,6 +85,7 @@ export default function OwnerCard({ owner }) {
           objectId={ownerInfo.uid}
         />
       )}
+      {openSignin && <SignInFirstModal setToggle={setOpenSignin} />}
       <Wrapper>
         <SubTitle>屋主資訊</SubTitle>
         {ownerInfo && (
@@ -102,7 +105,17 @@ export default function OwnerCard({ owner }) {
             <Intro>{ownerInfo.selfIntro}</Intro>
           </>
         )}
-        <Button1 onClick={() => setOpenModal(true)}>發送訊息</Button1>
+        <Button1
+          onClick={() => {
+            if (!currentUser) {
+              setOpenSignin(true);
+              return;
+            }
+            setOpenModal(true);
+          }}
+        >
+          發送訊息
+        </Button1>
       </Wrapper>
     </>
   );

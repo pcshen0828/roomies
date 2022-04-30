@@ -282,6 +282,10 @@ function ApartmentDetail() {
   }
 
   function addToCollectionList() {
+    if (!currentUser) {
+      setHasNotSignIn(true);
+      return;
+    }
     api.updateDocData("users", currentUser.uid, {
       collectionList: [...currentUser.collectionList, id],
     });
@@ -436,7 +440,7 @@ function ApartmentDetail() {
                   ))}
               </DescriptionWrapper>
             </BodyLeft>
-            <OwnerCard owner={details[0].owner} />
+            <OwnerCard owner={details[0].owner} currentUser={currentUser} />
           </Body>
           <SubTitle>地圖位置</SubTitle>
           <ApartmentMap geoLocation={details[0].geoLocation} />
