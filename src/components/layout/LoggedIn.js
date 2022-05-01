@@ -12,7 +12,6 @@ import MessageModal from "../modals/MessageModal";
 import NoticeModal from "../modals/NoticeModal";
 import { useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 
 const icons = [
@@ -32,6 +31,18 @@ const icons = [
     activeSrc: noticeActive,
   },
 ];
+
+const Wrapper = styled(FlexWrapper)`
+  ${
+    "" /* @media screen and (max-width: 767.98px) {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border: 1px solid red;
+  } */
+  }
+`;
 
 const IconWrapper = styled.div`
   position: relative;
@@ -102,7 +113,7 @@ function LoggedIn() {
         <MessageModal setActiveIcon={setActiveIcon} />
       )}
       {activeicon === "notice" && <NoticeModal setActiveIcon={setActiveIcon} />}
-      <FlexWrapper>
+      <Wrapper>
         {icons.map((icon, index) => (
           <IconWrapper key={index}>
             {icon.name === "notice" && unreadNotice ? (
@@ -128,7 +139,7 @@ function LoggedIn() {
             />
           </IconWrapper>
         ))}
-      </FlexWrapper>
+      </Wrapper>
     </>
   );
 }

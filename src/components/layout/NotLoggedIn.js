@@ -6,6 +6,12 @@ import SignUpModal from "../modals/SignUp";
 
 const Signup = styled(Button1)`
   margin-left: 20px;
+  @media screen and (max-width: 767.98px) {
+    width: 90px;
+    height: 35px;
+    font-size: 14px;
+    margin-left: 10px;
+  }
 `;
 
 const SignIn = styled(Button1)`
@@ -16,6 +22,11 @@ const SignIn = styled(Button1)`
 
   &:hover {
     color: #fff;
+  }
+  @media screen and (max-width: 767.98px) {
+    width: 70px;
+    height: 35px;
+    font-size: 14px;
   }
 `;
 

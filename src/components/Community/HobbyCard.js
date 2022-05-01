@@ -4,16 +4,18 @@ import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 
 const Card = styled.div`
-  border: 1px solid #c1b18a;
+  border: 1px solid transparent;
   border-radius: 10px;
   padding: 5px 10px;
   margin: 0px 10px 10px 0;
   font-size: 14px;
   cursor: pointer;
-  background: ${(props) => (props.active ? "rgba(0, 0, 0, 0.5)" : "")};
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+
+  background: ${(props) => (props.active ? "#c1b18a" : "#fff")};
   color: ${(props) => (props.active ? "#fff" : "#424b5a")};
   &:hover {
-    background: rgba(0, 0, 0, 0.5);
+    background: #c1b18a;
     color: #fff;
     border: 1px solid #fff;
   }

@@ -2,16 +2,17 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import NavBar from "./Nav";
+import MobileNavBar from "./MobileNav";
 import LoggedIn from "./LoggedIn";
 import NotLoggedIn from "./NotLoggedIn";
 import { FlexWrapper } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
-import { useAuth } from "../../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
+import menu from "../../images/menu.svg";
 
 const Wrapper = styled.div`
   width: 100%;
-  border-bottom: 1px solid #ccc;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   height: 80px;
   display: flex;
   justify-content: center;
@@ -31,11 +32,28 @@ const InnerWrapper = styled.div`
 
 const IndexLink = styled(Link)`
   color: #424b5a;
+  @media screen and (max-width: 767.98px) {
+    display: none;
+  }
+`;
+
+const Menu = styled.img`
+  width: 28px;
+  height: 28px;
+  display: none;
+  @media screen and (max-width: 767.98px) {
+    display: block;
+    position: absolute;
+    left: 20px;
+    top: 25px;
+    cursor: pointer;
+  }
 `;
 
 function Header() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
+  const [toggleMenu, setToggleMenu] = React.useState(false);
 
   function Render() {
     if (loading) {
@@ -53,8 +71,10 @@ function Header() {
     <Wrapper>
       <InnerWrapper>
         <FlexWrapper>
+          <Menu src={menu} onClick={() => setToggleMenu(true)} />
           <IndexLink to="/">logo</IndexLink>
           <NavBar />
+          {toggleMenu && <MobileNavBar toggle={setToggleMenu} />}
         </FlexWrapper>
         {Render()}
       </InnerWrapper>

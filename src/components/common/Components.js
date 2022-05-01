@@ -78,6 +78,7 @@ const Input = styled.input`
   padding-left: 10px;
   color: #424b5a;
   flex-shrink: 0;
+  background: #fff;
 
   &:focus {
     outline: none;
@@ -107,6 +108,7 @@ const Textarea = styled.textarea`
   margin-bottom: 20px;
   padding: 10px;
   color: #424b5a;
+  background: #fff;
   flex-shrink: 0;
   font-family: "Noto Sans TC", sans-serif;
 
@@ -263,6 +265,7 @@ const SearchInput = styled(Input)`
   border-radius: 5px;
   padding-left: 10px;
   margin: 0;
+  background: #fff;
 `;
 
 const SearchButton = styled.img`

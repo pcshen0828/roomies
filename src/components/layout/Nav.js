@@ -2,11 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
-import { useAuth } from "../../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const Wrapper = styled.div`
   display: flex;
+  @media screen and (max-width: 767.98px) {
+    display: none;
+  }
 `;
 
 const StyledNavLink = styled(NavLink)`
@@ -19,6 +21,17 @@ const StyledNavLink = styled(NavLink)`
 
   &:hover {
     border-bottom: 2px solid #c1b18a;
+  }
+
+  @media screen and (max-width: 767.98px) {
+    margin: 0;
+    width: calc(100% - 40px);
+    padding: 20px;
+    border-bottom: 1px solid #e8e8e8;
+    &:hover {
+      background: #f2f5f7;
+      border-bottom: 1px solid #e8e8e8;
+    }
   }
 `;
 
