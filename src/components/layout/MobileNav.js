@@ -17,15 +17,14 @@ const StyledNavLink = styled(NavLink)`
   &:hover {
     border-bottom: 2px solid #c1b18a;
   }
-
   @media screen and (max-width: 767.98px) {
+    transition: border 0.3s;
     margin: 0;
     width: calc(100% - 40px);
-    padding: 20px;
-    border-bottom: 1px solid #e8e8e8;
+    padding: 15px 20px;
+    border-bottom: 2px solid transparent;
     &:hover {
-      background: #f2f5f7;
-      border-bottom: 1px solid #e8e8e8;
+      border-bottom: 2px solid #c1b18a;
     }
   }
 `;
@@ -40,13 +39,13 @@ const MobileWrapper = styled(Overlay)`
 
 const MobileModal = styled(FlexWrapper)`
   width: 250px;
-  padding: 60px 0 60px;
+  padding: 70px 0 50px;
   flex-direction: column;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  border-radius: 5px;
+  border-radius: 0 5px 5px 0;
   background: #fff;
   position: absolute;
-  top: 5px;
+  top: 0px;
   left: 0;
   display: none;
   @media screen and (max-width: 767.98px) {
@@ -60,6 +59,7 @@ const Logo = styled(Title)`
   position: absolute;
   left: 20px;
   top: 20px;
+  font-family: "Noto Serif TC", serif;
 `;
 
 const CloseButton = styled.div`
@@ -102,7 +102,7 @@ function MobileNavBar({ toggle }) {
   return (
     <MobileWrapper onClick={() => toggle(false)}>
       <MobileModal onClick={(e) => e.stopPropagation()}>
-        <Logo>Logo</Logo>
+        <Logo>寓見 Roomies</Logo>
         <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         <StyledNavLink
           to="/"

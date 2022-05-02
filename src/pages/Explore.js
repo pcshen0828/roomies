@@ -5,18 +5,23 @@ import {
   Title,
   SubTitle,
   BodyWrapper,
-  BodyLeft,
-  BodyRight,
+  FlexWrapper,
 } from "../components/common/Components";
 import MyMap from "../components/explore/Map";
 
+const Container = styled(FlexWrapper)`
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 40px;
+`;
+
 const NewWrapper = styled(Wrapper)`
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 `;
 
 function Explore() {
   return (
-    <>
+    <Container>
       <NewWrapper>
         <Title>探索附近的租屋</Title>
         <SubTitle>用地圖快速瀏覽公寓周邊交通與生活機能</SubTitle>
@@ -24,7 +29,7 @@ function Explore() {
       <BodyWrapper>
         <MyMap />
       </BodyWrapper>
-    </>
+    </Container>
   );
 }
 

@@ -12,6 +12,7 @@ import Profile from "./pages/Profile";
 import Messages from "./pages/Messages";
 import PageNotFound from "./pages/NotFound";
 import Community from "./pages/Community";
+import Footer from "./components/layout/Footer";
 
 function App() {
   // 網址不要用大寫
@@ -31,6 +32,7 @@ function App() {
         <Route path="/messages/:id" element={<Messages />}></Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
