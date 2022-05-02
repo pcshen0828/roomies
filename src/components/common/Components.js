@@ -265,7 +265,7 @@ const SearchInput = styled(Input)`
   border-radius: 5px;
   padding-left: 10px;
   margin: 0;
-  background: #fff;
+  background-color: #fff;
 `;
 
 const SearchButton = styled.img`

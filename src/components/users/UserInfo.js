@@ -18,22 +18,34 @@ const NewWrapper = styled(FlexWrapper)`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
+  @media screen and (max-width: 995.98px) {
+    flex-direction: column;
+  }
 `;
 
 const LeftWrapper = styled(FlexWrapper)`
   width: calc(65% - 40px);
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   padding: 30px 20px;
+  @media screen and (max-width: 995.98px) {
+    width: calc(100% - 40px);
+    margin-bottom: 20px;
+    justify-content: flex-start;
+  }
 `;
 
 const RightWrapper = styled(FlexWrapper)`
   width: 30%;
   flex-direction: column;
   align-items: flex-start;
+  @media screen and (max-width: 995.98px) {
+    width: 100%;
+  }
 `;
 
 const BreadCrumb = styled(FlexWrapper)`
@@ -42,6 +54,9 @@ const BreadCrumb = styled(FlexWrapper)`
   margin: 30px auto 20px;
   font-size: 14px;
   align-items: center;
+  @media screen and (max-width: 995.98px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const StyledLink = styled(Link)`
@@ -61,6 +76,11 @@ const Active = styled.div`
   font-weight: 700;
 `;
 
+const TopFlexWrapper = styled(FlexWrapper)`
+  align-items: flex-start;
+  width: 100%;
+`;
+
 const ProfileImage = styled.div`
   width: 110px;
   height: 110px;
@@ -71,6 +91,10 @@ const ProfileImage = styled.div`
   background-repeat: no-repeat;
   margin-right: 20px;
   flex-shrink: 0;
+  @media screen and (max-width: 995.98px) {
+    width: 80px;
+    height: 80px;
+  }
 `;
 
 const InfoWrapper = styled(FlexWrapper)`
@@ -102,6 +126,8 @@ const Hobbytag = styled.div`
 const IntroText = styled.div`
   margin-bottom: 20px;
   line-height: 180%;
+  @media screen and (max-width: 995.98px) {
+  }
 `;
 
 const ResultDisplayer = styled(FlexWrapper)`
@@ -149,29 +175,33 @@ function UserInfo({ user, role }) {
       </BreadCrumb>
       <NewWrapper>
         <LeftWrapper>
-          <ProfileImage url={user.profileImage} />
-          <InfoWrapper>
-            <MediumTitle>{user.alias}</MediumTitle>
-            <InfoInnerWrapper>
-              {role === 1 && <LightText>{user.jobTitle}</LightText>}
-              <LightText>生理性別：{user.gender === 0 ? "女" : "男"}</LightText>
-            </InfoInnerWrapper>
-            {role === 1 && user.hobbies.length ? (
+          <TopFlexWrapper>
+            <ProfileImage url={user.profileImage} />
+            <InfoWrapper>
+              <MediumTitle>{user.alias}</MediumTitle>
               <InfoInnerWrapper>
-                {user.hobbies.map((hobby, index) => (
-                  <Hobbytag key={index}>{hobby}</Hobbytag>
-                ))}
+                {role === 1 && <LightText>{user.jobTitle}</LightText>}
+                <LightText>
+                  生理性別：{user.gender === 0 ? "女" : "男"}
+                </LightText>
               </InfoInnerWrapper>
-            ) : (
-              ""
-            )}
-            <IntroText>{user.selfIntro}</IntroText>
-            {currentUser && currentUser.uid === user.uid ? (
-              ""
-            ) : (
-              <Button1 onClick={sendMyMessage}>發送訊息</Button1>
-            )}
-          </InfoWrapper>
+              {role === 1 && user.hobbies.length ? (
+                <InfoInnerWrapper>
+                  {user.hobbies.map((hobby, index) => (
+                    <Hobbytag key={index}>{hobby}</Hobbytag>
+                  ))}
+                </InfoInnerWrapper>
+              ) : (
+                ""
+              )}
+            </InfoWrapper>
+          </TopFlexWrapper>
+          <IntroText>{user.selfIntro}</IntroText>
+          {currentUser && currentUser.uid === user.uid ? (
+            ""
+          ) : (
+            <Button1 onClick={sendMyMessage}>發送訊息</Button1>
+          )}
         </LeftWrapper>
         <RightWrapper>
           <SearchWrapper>
