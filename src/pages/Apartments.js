@@ -47,8 +47,11 @@ function Apartments() {
   const allPages = React.useRef();
   const queryList = React.useRef([]);
 
-  const query = api.createQuery("apartments", "status", "==", 1);
-
+  const query = Firebase.query(
+    Firebase.collection(Firebase.db, "apartments"),
+    Firebase.where("status", "==", 1),
+    Firebase.orderBy("createTime", "desc")
+  );
   function fetchApartments(query, callback) {
     Firebase.onSnapshot(query, (snapShot) => {
       const apartmentDocs = snapShot.docs.map((doc) => doc.data());

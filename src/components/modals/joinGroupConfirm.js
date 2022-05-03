@@ -57,7 +57,7 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
   }
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>租屋說明</Title>

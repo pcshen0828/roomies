@@ -100,7 +100,7 @@ function MobileNavBar({ toggle }) {
   }
 
   return (
-    <MobileWrapper onClick={() => toggle(false)}>
+    <MobileWrapper out={false} onClick={() => toggle(false)}>
       <MobileModal onClick={(e) => e.stopPropagation()}>
         <Logo>寓見 Roomies</Logo>
         <CloseButton onClick={() => toggle(false)}>×</CloseButton>

@@ -154,7 +154,7 @@ function ManageTeamModal({ team, group, toggle }) {
       {openPopup && (
         <PopupNoticeModal message="儲存成功" toggle={setOpenPopup} />
       )}
-      <Overlay>
+      <Overlay out={false}>
         <NewModal>
           <Header>
             <Title>

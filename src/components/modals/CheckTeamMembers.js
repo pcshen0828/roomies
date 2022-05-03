@@ -106,7 +106,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
   }
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>群組成員</Title>

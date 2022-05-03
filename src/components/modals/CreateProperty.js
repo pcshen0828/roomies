@@ -114,7 +114,7 @@ function CreatePropertyModal({ toggle }) {
       {openConfirm && (
         <ConfirmBeforeQuitModal toggle={toggle} apartmentId={apartmentId} />
       )}
-      <Overlay>
+      <Overlay out={false}>
         <NewModal>
           <Header>
             <Title>上架房源</Title>

@@ -11,7 +11,7 @@ const FullWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 351px);
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   background: #fff;
   @media screen and (max-width: 995.98px) {

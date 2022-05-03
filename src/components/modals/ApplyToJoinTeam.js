@@ -25,7 +25,7 @@ const NewButton = styled(Button)`
 
 function ApplyJoinModal({ toggle }) {
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <NewHeader>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>

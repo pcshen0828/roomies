@@ -85,11 +85,8 @@ const SelectItemWrapper = styled(FlexWrapper)`
 `;
 
 const NewTitle = styled(SmallTitle)`
-  margin: 0;
+  margin: 0 0 10px 0;
   width: 80px;
-  @media screen and (max-width: 1279.98px) {
-    margin-bottom: 10px;
-  }
 `;
 
 const NewLabel = styled(SmallLabel)`
@@ -98,7 +95,7 @@ const NewLabel = styled(SmallLabel)`
 
 const InputWrapper = styled(FlexWrapper)`
   margin-right: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 `;
 const HiddenInput = styled.input`
   ${"" /* display: none; */}

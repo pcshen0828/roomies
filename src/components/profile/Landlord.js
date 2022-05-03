@@ -13,6 +13,12 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
+  min-height: calc(100vh - 471px);
+  @media screen and (max-width: 1279.98px) {
+    flex-direction: cloumn;
+    justify-content: flex-start;
+    min-height: calc(100vh - 431px);
+  }
 `;
 
 const profilelist = [

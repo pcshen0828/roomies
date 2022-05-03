@@ -79,7 +79,7 @@ function TenantBasicInfoModal({
 
   return (
     toggle && (
-      <HigherOverlay>
+      <HigherOverlay out={false}>
         <NewModal>
           <Header>
             <Title>基本資料快速設定</Title>
@@ -176,10 +176,10 @@ function LandlordBasicInfoModal({
 
   return (
     toggle && (
-      <HigherOverlay>
+      <HigherOverlay out={false}>
         <Modal>
           <Header>
-            <Title>基本資料設定</Title>
+            <Title>基本資料快速設定</Title>
             <CloseButton onClick={() => setToggle(false)}>×</CloseButton>
           </Header>
           <NewBody>
@@ -197,7 +197,7 @@ function LandlordBasicInfoModal({
             </SmallLabel>
             <Input
               id="alias"
-              placeholder="顯示在社群上的名字"
+              placeholder="公開顯示的名字"
               value={alias}
               onChange={(e) => setAlias(e.target.value)}
             />
@@ -218,7 +218,7 @@ function LandlordBasicInfoModal({
             <SmallLabel htmlFor="intro">社群簡介</SmallLabel>
             <Textarea
               id="intro"
-              placeholder="介紹自己，讓其他人快速認識你！"
+              placeholder="介紹自己，讓房客快速認識你！"
               value={selfIntro}
               onChange={(e) => setSelfIntro(e.target.value)}
             />

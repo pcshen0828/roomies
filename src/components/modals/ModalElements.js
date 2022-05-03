@@ -1,5 +1,25 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Button1 } from "../common/Components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
+
+const fadeOut = keyframes`
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+`;
 
 const Overlay = styled.div`
   position: fixed;
@@ -12,6 +32,10 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  visibility: ${(props) => (props.out ? "hidden" : "visible")};
+  animation: ${(props) => (props.out ? fadeOut : fadeIn)} 0.3s ease-out;
+  transition: visibility 0.3s ease-out;
 `;
 
 const Modal = styled.div`
@@ -57,20 +81,23 @@ const Button = styled(Button1)`
 const NavModalOverlay = styled.div`
   position: fixed;
   left: 0;
-  top: 85px;
+  top: 80px;
   width: 100vw;
   height: 100vh;
   z-index: 999;
+  visibility: ${(props) => (props.out ? "hidden" : "visible")};
+  animation: ${(props) => (props.out ? fadeOut : fadeIn)} 0.3s ease-out;
+  transition: visibility 0.3s ease-out;
 `;
 
 const NavModal = styled.div`
   width: 350px;
   position: absolute;
   top: 0;
-  right: 20px;
+  right: 0px;
   background: #ffffff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

@@ -20,7 +20,7 @@ const CenterButton = styled(Button)`
 
 function SignInFirstModal({ setToggle }) {
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <NewHeader>
           <Title>請先登入</Title>

@@ -15,7 +15,7 @@ function MemberModal({ setActiveIcon }) {
   const { signOut, currentUser } = useAuth();
   const navigate = useNavigate();
   return (
-    <NavModalOverlay onClick={() => setActiveIcon("")}>
+    <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
       <NavModal onClick={(e) => e.stopPropagation()}>
         <Bold>會員</Bold>
         <>{currentUser.email}</>

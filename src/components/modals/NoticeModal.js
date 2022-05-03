@@ -167,7 +167,7 @@ function NoticeModal({ setActiveIcon }) {
   }
 
   return (
-    <NavModalOverlay onClick={() => setActiveIcon("")}>
+    <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
       <NewModal onClick={(e) => e.stopPropagation()}>
         <Bold>通知</Bold>
         <SmallTitle>先前的通知</SmallTitle>

@@ -51,7 +51,7 @@ function MessageModal({ setActiveIcon }) {
   }, []);
 
   return (
-    <NavModalOverlay onClick={() => setActiveIcon("")}>
+    <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
       <NewNavModal onClick={(e) => e.stopPropagation()}>
         <Title>聊天室</Title>
         <ChatsWrapper>

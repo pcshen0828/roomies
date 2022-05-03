@@ -87,7 +87,7 @@ function EditPropertyModal({ toggle, apartment }) {
   }, []);
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <NewModal>
         <Header>
           <Title>編輯房源資訊</Title>

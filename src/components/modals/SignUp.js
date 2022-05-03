@@ -120,7 +120,7 @@ function SignUpModal({ setOpenSignUp }) {
   }
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>註冊</Title>

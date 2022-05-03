@@ -30,7 +30,7 @@ export default function SuccessfullySavedModal({ toggle }) {
     };
   }, []);
   return (
-    <NewOverlay>
+    <NewOverlay out={false}>
       <NewModal>儲存成功！</NewModal>
     </NewOverlay>
   );

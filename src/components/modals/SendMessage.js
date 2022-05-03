@@ -103,7 +103,7 @@ function SendMessageModal({ setOpenModal, objectId }) {
   }
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>發送訊息</Title>

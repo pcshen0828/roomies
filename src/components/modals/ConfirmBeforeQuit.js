@@ -35,7 +35,7 @@ function ConfirmBeforeQuitModal({ toggle, apartmentId }) {
       });
   }
   return (
-    <HigherOverlay>
+    <HigherOverlay out={false}>
       <NewModal>
         尚未儲存，確認離開？
         <Button1 onClick={closeAndDeleteDoc}>確認</Button1>

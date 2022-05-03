@@ -4,6 +4,7 @@ import {
   Button1,
   FlexWrapper,
   StyledLink,
+  Title,
 } from "../components/common/Components";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Scrollbar, A11y, Autoplay } from "swiper";
@@ -95,9 +96,9 @@ const ActionButtons = styled(FlexWrapper)`
 const IntroBanner = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
-  margin: 20px auto 40px;
+  margin: 30px auto 40px;
   height: 400px;
-  border: 1px solid red;
+  align-items: flex-start;
 `;
 
 function Index() {
@@ -131,7 +132,9 @@ function Index() {
           ))}
         </BannerWrapper>
       </Wrapper>
-      <IntroBanner></IntroBanner>
+      <IntroBanner>
+        <Title>為奔忙生活的你，打造全新的租屋體驗</Title>
+      </IntroBanner>
     </>
   );
 }

@@ -34,7 +34,7 @@ const ConfirmImg = styled.img`
 
 export default function PopupNoticeModal({ message, toggle }) {
   return (
-    <NewOverlay>
+    <NewOverlay out={false}>
       <NewModal>
         <ModalFlexWrapper>
           <ConfirmImg alt="" src={check} />

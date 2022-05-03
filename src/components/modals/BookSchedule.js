@@ -167,7 +167,7 @@ export default function BookScheduleModal({
   }
 
   return (
-    <HigherOverlay>
+    <HigherOverlay out={false}>
       <NewModal>
         <Header>
           <Title>預約看房</Title>

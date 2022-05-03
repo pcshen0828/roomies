@@ -33,7 +33,7 @@ function SignInModal({ setOpenSignIn }) {
   const [errMessage, setErrMessage] = React.useState("");
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>登入</Title>

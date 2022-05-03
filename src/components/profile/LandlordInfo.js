@@ -158,6 +158,7 @@ function LandlordInfo() {
         selfIntro,
       });
       setIsLoading(false);
+      setSaved(true);
     }
   }
 

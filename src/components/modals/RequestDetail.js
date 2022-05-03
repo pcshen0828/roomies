@@ -43,7 +43,7 @@ export default function RequestDetailModal({ members, hostId, toggle }) {
   const others = members.filter((member) => member !== host);
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>群組資訊</Title>

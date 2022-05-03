@@ -170,7 +170,7 @@ export default function InviteJoinTeamModal({
   }
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>邀請社團成員加入群組</Title>

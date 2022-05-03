@@ -45,7 +45,7 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
   const fileRef = React.useRef(null);
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>更換大頭照</Title>

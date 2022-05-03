@@ -169,7 +169,7 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
   }
 
   return (
-    <Overlay>
+    <Overlay out={false}>
       <Modal>
         <Header>
           <Title>建立群組</Title>
