@@ -9,13 +9,24 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallLabel, Input, Select, Textarea } from "../common/Components";
+import {
+  SmallLabel,
+  Input,
+  Select,
+  Textarea,
+  SubTitle,
+} from "../common/Components";
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;
 `;
+
+const NewModal = styled(Modal)`
+  width: 80%;
+`;
+
 const NewBody = styled(Body)`
   height: 400px;
   padding: 10px 0 0 10px;
@@ -62,16 +73,16 @@ function TenantBasicInfoModal({
       })
       .then(() => {
         setToggle(false);
-        navigate("/profile");
+        navigate("/profile/info");
       });
   }
 
   return (
     toggle && (
       <HigherOverlay>
-        <Modal>
+        <NewModal>
           <Header>
-            <Title>基本資料設定</Title>
+            <Title>基本資料快速設定</Title>
             <CloseButton onClick={() => setToggle(false)}>×</CloseButton>
           </Header>
           <NewBody>
@@ -125,7 +136,7 @@ function TenantBasicInfoModal({
             />
           </NewBody>
           <Button onClick={SetupUserInfo}>完成</Button>
-        </Modal>
+        </NewModal>
       </HigherOverlay>
     )
   );

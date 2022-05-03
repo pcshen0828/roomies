@@ -358,22 +358,25 @@ function ApartmentDetail() {
                   ) : (
                     <Button1 onClick={openConfirmModal}>加入租屋</Button1>
                   )}
-                  <HeartButton>
-                    {hasCollected ? (
+                  {hasCollected ? (
+                    <HeartButton>
                       <HeartIcon
                         alt=""
                         src={heartFill}
                         onClick={cancelCollect}
                       />
-                    ) : (
+                      已收藏
+                    </HeartButton>
+                  ) : (
+                    <HeartButton>
                       <HeartIcon
                         alt=""
                         src={heart}
                         onClick={addToCollectionList}
                       />
-                    )}
-                    收藏房源
-                  </HeartButton>
+                      收藏房源
+                    </HeartButton>
+                  )}
                 </ActionArea>
               </DetailInfo>
             )}

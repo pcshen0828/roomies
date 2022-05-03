@@ -14,6 +14,7 @@ import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import { LandlordBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -106,6 +107,7 @@ function LandlordInfo() {
   const { currentUser } = useAuth();
   const [openModal, setOpenModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [saved, setSaved] = React.useState(false);
 
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState(currentUser.name);
@@ -162,6 +164,7 @@ function LandlordInfo() {
   function Render() {
     return (
       <>
+        {saved && <SuccessfullySavedModal toggle={setSaved} />}
         {(!currentUser.name || !currentUser.alias) && (
           <LandlordBasicInfoModal
             user={currentUser}

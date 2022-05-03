@@ -41,10 +41,11 @@ const StyledLink = styled(Link)`
   color: #424b5a;
   font-size: 14px;
   margin-bottom: 10px;
-  border-bottom: 1px solid transparent;
+  ${"" /* border-bottom: 1px solid transparent; */}
 
   &:hover {
-    border-bottom: 1px solid #fff;
+    color: #fff;
+    ${"" /* border-bottom: 1px solid #fff; */}
   }
 `;
 

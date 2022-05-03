@@ -18,20 +18,21 @@ const NewWrapper = styled(FlexWrapper)`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
+  min-height: 590px;
   @media screen and (max-width: 995.98px) {
     flex-direction: column;
   }
 `;
 
 const LeftWrapper = styled(FlexWrapper)`
-  width: calc(65% - 40px);
+  width: calc(65% - 60px);
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  padding: 30px 20px;
+  padding: 30px 30px 40px;
   @media screen and (max-width: 995.98px) {
     width: calc(100% - 40px);
     margin-bottom: 20px;
@@ -41,6 +42,7 @@ const LeftWrapper = styled(FlexWrapper)`
 
 const RightWrapper = styled(FlexWrapper)`
   width: 30%;
+  min-height: 630px;
   flex-direction: column;
   align-items: flex-start;
   @media screen and (max-width: 995.98px) {
@@ -133,6 +135,23 @@ const IntroText = styled.div`
 const ResultDisplayer = styled(FlexWrapper)`
   flex-direction: column;
   margin-top: 20px;
+  width: 100%;
+  height: 500px;
+  overflow-y: auto;
+  align-items: flex-start;
+`;
+
+const KeywordResults = styled(FlexWrapper)`
+  margin: 10px 0 0;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+const Keyword = styled.div`
+  padding: 5px 10px;
+  border-radius: 5px;
+  background: #e8e8e8;
+  margin: 0 10px 10px 0;
 `;
 
 function UserInfo({ user, role }) {
@@ -140,6 +159,7 @@ function UserInfo({ user, role }) {
   const [openMessage, setOpenMessage] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const [users, setUsers] = React.useState([]);
+  const [jobs, setJobs] = React.useState([]);
 
   function sendMyMessage() {
     setOpenMessage(true);
@@ -148,6 +168,7 @@ function UserInfo({ user, role }) {
   async function searchByJobTitle(job) {
     if (!job.trim()) {
       setUsers([]);
+      setJobs([]);
       return;
     }
     const query = Firebase.query(
@@ -159,6 +180,11 @@ function UserInfo({ user, role }) {
     const querySnapShot = await Firebase.getDocs(query);
     const result = querySnapShot.docs.map((doc) => doc.data());
     setUsers(result.filter((object) => user.uid !== object.uid));
+    setJobs(
+      result
+        .filter((object) => user.uid !== object.uid)
+        .map((user) => user.jobTitle)
+    );
   }
 
   return (
@@ -215,15 +241,31 @@ function UserInfo({ user, role }) {
             />
             <SearchButton src={search} />
           </SearchWrapper>
-          {users.length ? (
-            <ResultDisplayer>
-              {users.map((info, index) => (
-                <UserCard key={index} user={info} />
-              ))}
-            </ResultDisplayer>
-          ) : (
-            ""
-          )}
+          <KeywordResults>
+            {jobs.length ? (
+              <>
+                <div>搜尋結果：</div>
+                {jobs
+                  .filter((job, index) => jobs.indexOf(job) === index)
+                  .map((job, index) => (
+                    <Keyword key={job}>{job}</Keyword>
+                  ))}
+              </>
+            ) : (
+              ""
+            )}
+          </KeywordResults>
+          <ResultDisplayer>
+            {users.length ? (
+              <>
+                {users.map((info, index) => (
+                  <UserCard key={index} user={info} />
+                ))}
+              </>
+            ) : (
+              ""
+            )}
+          </ResultDisplayer>
         </RightWrapper>
       </NewWrapper>
     </>

@@ -31,8 +31,10 @@ const HobbyTags = styled(FlexWrapper)`
 `;
 
 const ResultDisplayer = styled(FlexWrapper)`
-  margin-top: 20px;
+  margin-top: 40px;
   flex-wrap: wrap;
+  min-height: 400px;
+  align-items: flex-start;
 `;
 
 function Community() {

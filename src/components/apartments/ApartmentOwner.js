@@ -94,9 +94,9 @@ export default function OwnerCard({ owner, currentUser }) {
             <FlexWrapper>
               <ProfileImage src={ownerInfo.profileImage} />
               <Info>
-                <OwnerLink to={`/users/${ownerInfo.uid}`}>
-                  <MediumTitle>{ownerInfo.alias}</MediumTitle>
-                </OwnerLink>
+                {/* <OwnerLink to={`/users/${ownerInfo.uid}`}> */}
+                <MediumTitle>{ownerInfo.alias}</MediumTitle>
+                {/* </OwnerLink> */}
                 <FlexWrapper>
                   <Icon alt="" src={phone} />
                   <Bold>{ownerInfo.phone}</Bold>

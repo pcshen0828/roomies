@@ -22,9 +22,9 @@ const banners = [banner5, banner1, banner3, banner2, banner4];
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 450px;
+  height: 500px;
   position: relative;
-  margin-bottom: 120px;
+  margin-bottom: 40px;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   @media screen and (max-width: 767.98px) {
@@ -92,36 +92,47 @@ const ActionButtons = styled(FlexWrapper)`
   width: 240px;
 `;
 
+const IntroBanner = styled(FlexWrapper)`
+  width: calc(100% - 48px);
+  max-width: 1200px;
+  margin: 20px auto 40px;
+  height: 400px;
+  border: 1px solid red;
+`;
+
 function Index() {
   const [openSignup, setOpenSignUp] = React.useState(false);
   return (
-    <Wrapper>
-      {openSignup && <SignUpModal setOpenSignUp={setOpenSignUp} />}
-      <InnerWrapper>
-        <IntroWrapper>
-          <Intro>寓見 Roomies</Intro>｜單層公寓合租平台
-          <ActionButtons>
-            <Button1 onClick={() => setOpenSignUp(true)}>立即註冊</Button1>
-            <StyledLink to="/apartments">查看所有房源</StyledLink>
-          </ActionButtons>
-        </IntroWrapper>
-      </InnerWrapper>
-      <BannerWrapper
-        modules={[Pagination, Scrollbar, A11y, Autoplay]}
-        spaceBetween={50}
-        slidesPerView={1}
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-        rewind={true}
-        autoplay={{ delay: 6000, disableOnInteraction: false }}
-      >
-        {banners.map((image, index) => (
-          <SwiperSlide key={image}>
-            <Banner src={image} />
-          </SwiperSlide>
-        ))}
-      </BannerWrapper>
-    </Wrapper>
+    <>
+      <Wrapper>
+        {openSignup && <SignUpModal setOpenSignUp={setOpenSignUp} />}
+        <InnerWrapper>
+          <IntroWrapper>
+            <Intro>寓見 Roomies</Intro>｜單層公寓合租平台
+            <ActionButtons>
+              <Button1 onClick={() => setOpenSignUp(true)}>立即註冊</Button1>
+              <StyledLink to="/apartments">查看所有房源</StyledLink>
+            </ActionButtons>
+          </IntroWrapper>
+        </InnerWrapper>
+        <BannerWrapper
+          modules={[Pagination, Scrollbar, A11y, Autoplay]}
+          spaceBetween={50}
+          slidesPerView={1}
+          pagination={{ clickable: true }}
+          scrollbar={{ draggable: true }}
+          rewind={true}
+          autoplay={{ delay: 6000, disableOnInteraction: false }}
+        >
+          {banners.map((image, index) => (
+            <SwiperSlide key={image}>
+              <Banner src={image} />
+            </SwiperSlide>
+          ))}
+        </BannerWrapper>
+      </Wrapper>
+      <IntroBanner></IntroBanner>
+    </>
   );
 }
 

@@ -15,6 +15,7 @@ import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import { TenantBasicInfoModal } from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
 import Creatable from "react-select/creatable";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -125,6 +126,8 @@ function TenantInfo() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [allHobbies, setAllHobbies] = React.useState(false);
   const [options, setOptions] = React.useState([]);
+  const [saved, setSaved] = React.useState(false);
+
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -231,6 +234,7 @@ function TenantInfo() {
       });
       setIsLoading(false);
     }
+    setSaved(true);
   }
 
   React.useEffect(() => {
@@ -253,6 +257,7 @@ function TenantInfo() {
   function Render() {
     return (
       <>
+        {saved && <SuccessfullySavedModal toggle={setSaved} />}
         {(!currentUser.name || !currentUser.alias || !currentUser.jobTitle) && (
           <TenantBasicInfoModal
             user={currentUser}
