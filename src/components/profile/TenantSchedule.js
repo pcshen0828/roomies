@@ -61,6 +61,7 @@ export default function TenantSchedule() {
   const { currentUser } = useAuth();
   const [unConfirmed, setUnconfirmed] = React.useState([]);
   const [schedules, setSchedules] = React.useState([]);
+  const [finished, setFinished] = React.useState([]);
   const [checkDetail, setCheckDetail] = React.useState(false);
 
   function generateReadableDate(dateString) {
@@ -105,10 +106,20 @@ export default function TenantSchedule() {
                 newSchedule.members = [...res];
                 newSchedules.push(newSchedule);
                 setSchedules(
-                  newSchedules.filter((schedule) => schedule.status === 1)
+                  newSchedules.filter(
+                    (schedule) =>
+                      schedule.status === 1 &&
+                      new Date(schedule.end).getTime() >= new Date().getTime()
+                  )
                 );
                 setUnconfirmed(
                   newSchedules.filter((schedule) => schedule.status === 0)
+                );
+                setFinished(
+                  newSchedules.filter(
+                    (schedule) =>
+                      new Date(schedule.end).getTime() < new Date().getTime()
+                  )
                 );
               });
           });
@@ -170,6 +181,8 @@ export default function TenantSchedule() {
       {RenderScheduleCard(unConfirmed)}
       <NewTitle>已確認行程</NewTitle>
       {RenderScheduleCard(schedules)}
+      <NewTitle>已結束行程</NewTitle>
+      {RenderScheduleCard(finished)}
     </Wrapper>
   );
 }

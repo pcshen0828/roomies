@@ -14,6 +14,7 @@ import { MUIDatePicker, MUITimePicker } from "./DateTimePicker";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 import calendar from "../../images/calendar.svg";
+import SuccessfullySavedModal from "./SuccessfullySaved";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;
@@ -71,6 +72,7 @@ export default function BookScheduleModal({
   const [endTime, setEndTime] = React.useState(isoDateTime);
   const [message, setMessage] = React.useState("");
   const [events, setEvents] = React.useState([]);
+  const [booked, setBooked] = React.useState(false);
 
   React.useEffect(() => {
     const query = Firebase.query(
@@ -158,16 +160,20 @@ export default function BookScheduleModal({
             api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
             createNoticeToOwner();
             toggle(false);
+            setBooked(true);
             toggleParent("");
           }
         });
     } else {
       toggle(false);
+      setBooked(true);
+      toggleParent("");
     }
   }
 
   return (
     <HigherOverlay out={false}>
+      {booked && <SuccessfullySavedModal out={false} />}
       <NewModal>
         <Header>
           <Title>預約看房</Title>

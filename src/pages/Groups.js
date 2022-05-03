@@ -21,7 +21,7 @@ const Wrapper = styled(FlexWrapper)`
 const BreadCrumb = styled(FlexWrapper)`
   width: 100%;
   max-width: 1200px;
-  margin: 10px auto;
+  margin: 10px auto 20px;
   font-size: 14px;
   align-items: center;
   flex-wrap: wrap;
