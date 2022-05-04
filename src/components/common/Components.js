@@ -227,9 +227,22 @@ const LoadingButton = styled.button`
   height: 40px;
   border-radius: 5px;
   align-self: end;
-  margin: 20px;
+  margin: 0 20px 0;
   cursor: not-allowed;
   background: #dadada;
+  color: #424b5a;
+`;
+
+const PrevStepButton = styled.button`
+  font-size: 16px;
+  border: none;
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  align-self: end;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+  background: #e8e8e8;
   color: #424b5a;
   &:hover {
     background: #dadada;
@@ -360,6 +373,10 @@ const CardBottom = styled(FlexWrapper)`
   flex-direction: column;
 `;
 
+const Required = styled.span`
+  color: #ed3636;
+`;
+
 export {
   Wrapper,
   Title,
@@ -382,6 +399,7 @@ export {
   ProfileItem,
   ProfileContent,
   Error,
+  PrevStepButton,
   LoadingButton,
   PagingList,
   PagingItem,
@@ -396,4 +414,5 @@ export {
   ScheduleCard,
   CardTop,
   CardBottom,
+  Required,
 };

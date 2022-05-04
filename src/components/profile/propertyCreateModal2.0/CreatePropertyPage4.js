@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  SmallTitle,
-  FlexWrapper,
-  Error,
-  LoadingButton,
-  PagingList,
-  Button1,
-} from "../../common/Components";
+import { SmallTitle, FlexWrapper, Error } from "../../common/Components";
 import api from "../../../utils/api";
 import { Firebase } from "../../../utils/firebase";
 
@@ -19,6 +12,10 @@ const Image = styled.div`
   width: 320px;
   height: 200px;
   margin: 0 10px 10px 0;
+  @media screen and (max-width: 767.98px) {
+    width: 240px;
+    height: 135px;
+  }
 `;
 
 const DeleteButton = styled.div`
@@ -56,32 +53,13 @@ const UploadNewImage = styled.label`
   font-size: 60px;
 `;
 
-function CreatePropertyPage4({ id, paging, setPaging, toggle, apartment }) {
-  const [isLoading, setIsLoading] = React.useState(false);
+function CreatePropertyPage4({ id, images, setImages }) {
   const fileRef = React.useRef(null);
   const [error, setError] = React.useState("");
-  const [images, setImages] = React.useState(
-    apartment.images ? apartment.images : []
-  );
-
-  React.useEffect(() => {
-    console.log(apartment);
-  }, [apartment]);
-
-  function updateApartmentInfo() {
-    setIsLoading(true);
-    const time = Firebase.Timestamp.fromDate(new Date());
-    api.updateDocData("apartments", id, {
-      images,
-      updateTime: time,
-      status: 1,
-    });
-    setIsLoading(false);
-    toggle(false);
-  }
 
   function uploadImageFile(e) {
     const file = e.target.files[0];
+    if (!file) return;
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案大小過大，請重新上傳");
       return;
@@ -138,14 +116,6 @@ function CreatePropertyPage4({ id, paging, setPaging, toggle, apartment }) {
           />
         </FlexWrapper>
       </ImagesDisplayer>
-      <PagingList>
-        {paging === 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1 onClick={updateApartmentInfo}>儲存並完成</Button1>
-          ))}
-      </PagingList>
     </>
   );
 }

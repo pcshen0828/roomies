@@ -6,12 +6,7 @@ import {
   Input,
   FlexWrapper,
   Textarea,
-  LoadingButton,
-  PagingList,
-  Button1,
 } from "../../common/Components";
-import api from "../../../utils/api";
-import { Firebase } from "../../../utils/firebase";
 
 const CheckboxWrapper = styled(FlexWrapper)`
   align-items: center;
@@ -22,66 +17,8 @@ const CheckboxLabel = styled(SmallLabel)`
   margin: 3px 10px 5px 3px;
 `;
 
-function CreatePropertyPage3({ id, paging, setPaging, apartment }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [otherInfo, setOtherInfo] = React.useState([]);
-
-  // 處理被轉成字串的 boolean value
+function CreatePropertyPage3({ otherInfo, setOtherInfo }) {
   const stringToBoolean = (string) => (string === "false" ? false : !!string);
-  const otherInfoList = [
-    { en: "availableTime", zh: "可入住日期", value: "" },
-    { en: "depositMonth", zh: "押金（月）", value: 0 },
-    { en: "feature", zh: "房源特色", value: "" },
-    { en: "floor", zh: "所在樓層", value: 1 },
-    { en: "isRentIncludeUtilities", zh: "房租含水電雜費", value: false },
-    { en: "managementFee", zh: "管理費", value: false },
-    { en: "minLeaseTerm", zh: "最短租期", value: "半年" },
-    { en: "squareFeet", zh: "坪數", value: 50 },
-  ].map((item) => ({
-    docName: item.en,
-    content: { id: item.en, name: item.zh, value: item.value },
-  }));
-
-  React.useEffect(() => {
-    otherInfoList.forEach((item) => {
-      const newDocRef = Firebase.doc(
-        Firebase.db,
-        "apartments",
-        id,
-        "otherInfo",
-        item.docName
-      );
-      api.setNewDoc(newDocRef, {
-        ...item.content,
-      });
-    });
-  }, []);
-
-  React.useEffect(() => {
-    api
-      .getAllDocsFromCollection("apartments/" + id + "/otherInfo")
-      .then((res) => {
-        console.log(res);
-        setOtherInfo(res);
-      });
-  }, [apartment]);
-
-  function updateApartmentInfo() {
-    setIsLoading(true);
-    otherInfo.forEach((info) => {
-      api.updateSubCollectionDocData("apartments", id, "otherInfo", info.id, {
-        id: info.id,
-        name: info.name,
-        value: info.value,
-      });
-    });
-    const time = Firebase.Timestamp.fromDate(new Date());
-    api.updateDocData("apartments", id, {
-      updateTime: time,
-    });
-    setIsLoading(false);
-    setPaging((prev) => (prev < 4 ? prev + 1 : 4));
-  }
 
   return (
     <>
@@ -151,20 +88,6 @@ function CreatePropertyPage3({ id, paging, setPaging, apartment }) {
           )}
         </React.Fragment>
       ))}
-      <PagingList>
-        {paging < 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1 onClick={updateApartmentInfo}>儲存並繼續</Button1>
-          ))}
-        {paging === 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1>儲存並完成</Button1>
-          ))}
-      </PagingList>
     </>
   );
 }

@@ -15,6 +15,8 @@ import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
 import CreatePropertyModal from "./CreateProperty2.0";
 import { Firebase } from "../../utils/firebase";
+import { CloseButton } from "../modals/ModalElements";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;
@@ -100,10 +102,11 @@ function LandlordProperty() {
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openCreate, setOpenCreate] = React.useState(false);
   const [apartment, setApartment] = React.useState("");
+  const [saved, setSaved] = React.useState(false);
   const [tab, setTab] = React.useState("active");
   const navigate = useNavigate();
   const [paging, setPaging] = React.useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
 
   React.useEffect(() => {
     const query = Firebase.query(
@@ -112,7 +115,6 @@ function LandlordProperty() {
       Firebase.orderBy("updateTime", "desc")
     );
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
-      console.log(querySnapShot.docs.map((doc) => doc.data()));
       setProperties(querySnapShot.docs.map((doc) => doc.data()));
     });
 
@@ -133,6 +135,17 @@ function LandlordProperty() {
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
               .map((item, index) => (
                 <Card key={item.id}>
+                  {status === 0 && (
+                    <CloseButton
+                      onClick={() => {
+                        Firebase.deleteDoc(
+                          Firebase.doc(Firebase.db, "apartments", item.id)
+                        );
+                      }}
+                    >
+                      ×
+                    </CloseButton>
+                  )}
                   <CardImage src={item.coverImage}></CardImage>
                   <CardBody>
                     <StyledLink to={`/apartment/${item.id}`}>
@@ -175,11 +188,20 @@ function LandlordProperty() {
   return (
     <>
       {openEdit && (
-        <EditPropertyModal toggle={setOpenEdit} apartment={apartment} />
+        <EditPropertyModal
+          toggle={setOpenEdit}
+          apartment={apartment}
+          setSaved={setSaved}
+        />
       )}
       {openCreate && (
-        <CreatePropertyModal toggle={setOpenCreate} apartment={apartment} />
+        <CreatePropertyModal
+          toggle={setOpenCreate}
+          apartment={apartment}
+          setSaved={setSaved}
+        />
       )}
+      {saved && <SuccessfullySavedModal toggle={setSaved} />}
       <NewWrapper>
         <NewButton onClick={() => setOpenCreate(true)}>新增房源</NewButton>
         <TabsWrapper>

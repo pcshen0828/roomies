@@ -1,14 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  SmallTitle,
-  SmallLabel,
-  Input,
-  Error,
-  LoadingButton,
-  Button1,
-  FlexWrapper,
-} from "../../common/Components";
+import { SmallTitle, SmallLabel, Input, Error } from "../../common/Components";
 import api from "../../../utils/api";
 import {
   GoogleMap,
@@ -33,6 +25,10 @@ const Image = styled.div`
   width: 320px;
   height: 180px;
   margin: 0 10px 10px 0;
+  @media screen and (max-width: 575.98px) {
+    width: 240px;
+    height: 135px;
+  }
 `;
 
 const ChooseImageButton = styled.label`
@@ -68,48 +64,14 @@ const SearchBox = styled.input`
   }
 `;
 
-const ButtonWrapper = styled(FlexWrapper)`
-  width: 95%;
-  justify-content: flex-end;
-  position: sticky;
-  right: 10px;
-  bottom: 0;
-`;
-
 const libraries = ["places"];
 
-function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [title, setTitle] = React.useState(
-    apartment.title ? apartment.title : ""
-  );
-  const [monthlyRent, setMonthlyRent] = React.useState(
-    apartment.monthlyRent ? apartment.monthlyRent : ""
-  );
-  const [rooms, setRooms] = React.useState(
-    apartment.rooms ? apartment.rooms : ""
-  );
-  const [roomiesCount, setRoomiesCount] = React.useState(
-    apartment.roomiesCount ? apartment.roomiesCount : ""
-  );
-
-  const [coverImage, setCoverImage] = React.useState(
-    apartment.coverFile ? apartment.coverFile : ""
-  );
-  const [coverFile, setCoverFile] = React.useState(null);
+function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
   const coverFileRef = React.useRef(null);
-
   const [error, setError] = React.useState("");
 
-  const [geoLocation, setGeoLocation] = React.useState(
-    apartment.geoLocation ? apartment.geoLocation : {}
-  );
-  const [address, setAddress] = React.useState(
-    apartment.address ? apartment.address : ""
-  );
   const [searchBox, setSearchBox] = React.useState(null);
   const [map, setMap] = React.useState(null);
-  const [query, setQuery] = React.useState("");
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
@@ -136,57 +98,35 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng(),
     };
-    setAddress(place.formatted_address);
-    setGeoLocation(newCenter);
-    setQuery(place.formatted_address);
+    setBasicInfo({
+      ...basicInfo,
+      address: place.formatted_address,
+      query: place.formatted_address,
+      geoLocation: newCenter,
+    });
   };
 
-  function updateApartmentInfo() {
-    setIsLoading(true);
-    const time = Firebase.Timestamp.fromDate(new Date());
-    if (coverFile) {
-      api
-        .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, coverFile)
-        .then((snapshot) => {
-          Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-            api.updateDocData("apartments", id, {
-              address,
-              geoLocation,
-              coverImage: downloadURL,
-              monthlyRent: parseInt(monthlyRent),
-              roomiesCount: parseInt(roomiesCount),
-              rooms: parseInt(rooms),
-              title,
-              updateTime: time,
-            });
-            setIsLoading(false);
-            setPaging((prev) => (prev < 4 ? prev + 1 : 4));
-          });
-        });
-    } else {
-      api
-        .updateDocData("apartments", id, {
-          address,
-          geoLocation,
-          coverImage,
-          monthlyRent: parseInt(monthlyRent),
-          roomiesCount: parseInt(roomiesCount),
-          rooms: parseInt(rooms),
-          title,
-          updateTime: time,
-        })
-        .then(() => {
-          setIsLoading(false);
-          setPaging((prev) => (prev < 4 ? prev + 1 : 4));
-        });
+  function handleUpload(file) {
+    if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
+      setError("檔案大小過大，請重新上傳");
+      return;
     }
+    setError("");
+    api
+      .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, file)
+      .then((snapshot) => {
+        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
+          setBasicInfo({ ...basicInfo, coverImage: downloadURL });
+          coverFileRef.current.value = null;
+        });
+      });
   }
 
   return (
     <>
       <SmallTitle htmlFor="title">封面照片（建議比例：16:9）</SmallTitle>
       <CoverImageDisplayer>
-        <Image src={coverImage} />
+        <Image src={basicInfo.coverImage} />
         <ChooseImageButton htmlFor="coverImage">上傳封面照片</ChooseImageButton>
         <HiddenInputFilePicker
           id="coverImage"
@@ -194,15 +134,7 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
           type="file"
           accept="image/*"
           onChange={(e) => {
-            if ((e.target.files[0].size / 1024 / 1024).toFixed(4) >= 2) {
-              setError("檔案大小過大，請重新上傳");
-              return;
-            }
-            setError("");
-            setCoverFile(e.target.files[0]);
-            const objectUrl = URL.createObjectURL(e.target.files[0]);
-            setCoverImage(objectUrl);
-            coverFileRef.current.value = null;
+            handleUpload(e.target.files[0]);
           }}
         />
         {error && <Error>{error}</Error>}
@@ -211,8 +143,8 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
       <SmallLabel htmlFor="title">房源名稱</SmallLabel>
       <Input
         id="title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={basicInfo.title}
+        onChange={(e) => setBasicInfo({ ...basicInfo, title: e.target.value })}
       />
 
       <SmallLabel htmlFor="geoLocation">房源地址</SmallLabel>
@@ -225,8 +157,10 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
             <SearchBox
               placeholder="請輸入地點"
               id="geoLocation"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              value={basicInfo.query}
+              onChange={(e) =>
+                setBasicInfo({ ...basicInfo, query: e.target.value })
+              }
             />
           </StandaloneSearchBox>
           <GoogleMap
@@ -245,31 +179,27 @@ function CreatePropertyPage1({ id, paging, setPaging, apartment }) {
       <SmallLabel htmlFor="monthlyRent">每月房租（間）</SmallLabel>
       <Input
         id="monthlyRent"
-        value={monthlyRent}
-        onChange={(e) => setMonthlyRent(e.target.value)}
+        value={basicInfo.monthlyRent}
+        onChange={(e) =>
+          setBasicInfo({ ...basicInfo, monthlyRent: e.target.value })
+        }
       />
 
       <SmallLabel htmlFor="roomiesCount">可住人數</SmallLabel>
       <Input
         id="roomiesCount"
-        value={roomiesCount}
-        onChange={(e) => setRoomiesCount(e.target.value)}
+        value={basicInfo.roomiesCount}
+        onChange={(e) =>
+          setBasicInfo({ ...basicInfo, roomiesCount: e.target.value })
+        }
       />
 
       <SmallLabel htmlFor="rooms">房間數</SmallLabel>
       <Input
         id="rooms"
-        value={rooms}
-        onChange={(e) => setRooms(e.target.value)}
+        value={basicInfo.rooms}
+        onChange={(e) => setBasicInfo({ ...basicInfo, rooms: e.target.value })}
       />
-      <ButtonWrapper>
-        {paging < 4 &&
-          (isLoading ? (
-            <LoadingButton>...</LoadingButton>
-          ) : (
-            <Button1 onClick={updateApartmentInfo}>儲存並繼續</Button1>
-          ))}
-      </ButtonWrapper>
     </>
   );
 }
