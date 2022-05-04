@@ -203,6 +203,7 @@ const ProfileItem = styled.div`
 
 const ProfileContent = styled.div`
   width: calc(78% - 40px);
+  min-height: 500px;
   background: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -238,18 +239,20 @@ const LoadingButton = styled.button`
 const PagingList = styled(FlexWrapper)`
   justify-content: flex-end;
   align-self: end;
+  min-height: 40px;
 `;
 
 const PagingItem = styled.div`
-  width: 30px;
-  height: 30px;
-  border: 1px solid #dadada;
-  margin-left: 10px;
+  width: 35px;
+  height: 35px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background: ${(props) => (props.active ? "#dadada" : "")};
+  background: ${(props) => (props.active ? "#f2f5f7" : "")};
+  &:hover {
+    background: #f2f5f7;
+  }
 `;
 
 const SearchWrapper = styled(FlexWrapper)`

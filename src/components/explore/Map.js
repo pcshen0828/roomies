@@ -108,7 +108,7 @@ function MyMap() {
   const [apartments, setApartments] = React.useState([]);
   const [searchBox, setSearchBox] = React.useState(null);
   const [query, setQuery] = React.useState("");
-  // const [locations, setLocations] = React.useState([]);
+  const [locations, setLocations] = React.useState([]);
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
@@ -146,7 +146,7 @@ function MyMap() {
     api.getDataWithSingleQuery("apartments", "status", "==", 1).then((res) => {
       if (!mounted) return;
       setApartments(res);
-      // setLocations(res.map((item) => item.geoLocation));
+      setLocations(res.map((item) => item.geoLocation));
     });
     return function cleanup() {
       mounted = false;
@@ -186,29 +186,29 @@ function MyMap() {
             onLoad={onLoad}
             onUnmount={onUnmount}
           >
-            {/* <MarkerClusterer>
-              {(clusterer) => { */}
-            {apartments.map((apartment, index) => (
-              <Marker
-                key={apartment.id}
-                position={apartment.geoLocation}
-                onClick={() => setMarker(apartment.geoLocation)}
-                // clusterer={clusterer}
-              >
-                {marker === apartment.geoLocation ? (
-                  <InfoWindow onCloseClick={() => setMarker(null)}>
-                    <InfoModal>
-                      {apartment.title}
-                      <StyledLink to={`/apartment/${apartment.id}`}>
-                        查看房源
-                      </StyledLink>
-                    </InfoModal>
-                  </InfoWindow>
-                ) : null}
-              </Marker>
-            ))}
-            {/* }}
-            </MarkerClusterer> */}
+            <MarkerClusterer>
+              {(clusterer) => {
+                return apartments.map((apartment, index) => (
+                  <Marker
+                    key={apartment.id}
+                    position={apartment.geoLocation}
+                    onClick={() => setMarker(apartment.geoLocation)}
+                    clusterer={clusterer}
+                  >
+                    {marker === apartment.geoLocation ? (
+                      <InfoWindow onCloseClick={() => setMarker(null)}>
+                        <InfoModal>
+                          {apartment.title}
+                          <StyledLink to={`/apartment/${apartment.id}`}>
+                            查看房源
+                          </StyledLink>
+                        </InfoModal>
+                      </InfoWindow>
+                    ) : null}
+                  </Marker>
+                ));
+              }}
+            </MarkerClusterer>
             {<Circle center={circleCenter} options={options} />}
           </GoogleMap>
         </BodyRight>
