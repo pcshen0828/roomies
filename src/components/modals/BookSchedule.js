@@ -173,7 +173,13 @@ export default function BookScheduleModal({
 
   return (
     <HigherOverlay out={false}>
-      {booked && <SuccessfullySavedModal out={false} />}
+      {booked && (
+        <SuccessfullySavedModal
+          out={false}
+          toggle={setBooked}
+          message="預約成功！"
+        />
+      )}
       <NewModal>
         <Header>
           <Title>預約看房</Title>

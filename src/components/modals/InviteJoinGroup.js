@@ -77,6 +77,7 @@ export default function InviteJoinGroupModal({
   toggle,
   groupMembers,
   setSaved,
+  groupId,
 }) {
   const [queryName, setQueryName] = React.useState("");
   const [queriedUsers, setQueriedUsers] = React.useState([]);
@@ -88,9 +89,11 @@ export default function InviteJoinGroupModal({
   const [pendingList, setPendingList] = React.useState([]);
 
   React.useEffect(() => {
-    api.getAllDocsFromCollection("groupInvitations").then((res) => {
-      setPendingList(res.map((list) => list.receiver));
-    });
+    api
+      .getDataWithSingleQuery("groupInvitations", "groupId", "==", groupId)
+      .then((res) => {
+        setPendingList(res.map((list) => list.receiver));
+      });
   }, []);
 
   async function inviteNewMember() {
@@ -107,6 +110,7 @@ export default function InviteJoinGroupModal({
         createTime: time,
         sender: currentUser.uid,
         receiver: user,
+        groupId,
         status: 0,
       });
       api.createNoticeByType(currentUser.uid, user, 8);

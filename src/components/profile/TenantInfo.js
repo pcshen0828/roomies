@@ -257,7 +257,9 @@ function TenantInfo() {
   function Render() {
     return (
       <>
-        {saved && <SuccessfullySavedModal toggle={setSaved} />}
+        {saved && (
+          <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
+        )}
         {(!currentUser.name || !currentUser.alias || !currentUser.jobTitle) && (
           <TenantBasicInfoModal
             user={currentUser}

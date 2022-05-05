@@ -327,7 +327,9 @@ function LandlordProperty() {
           setSaved={setSaved}
         />
       )}
-      {saved && <SuccessfullySavedModal toggle={setSaved} />}
+      {saved && (
+        <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
+      )}
       <NewWrapper>
         <NewButton onClick={() => setOpenCreate(true)}>新增房源</NewButton>
         <TabsWrapper>

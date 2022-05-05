@@ -127,7 +127,7 @@ function GroupAndTeam() {
     <Wrapper>
       <Bold>社團 / 群組管理</Bold>
       <NewTitle>我加入的房源社團 / 群組</NewTitle>
-      <TableParent>
+      {/* <TableParent>
         <FlexTableWrapper>
           <FlexRowWrapper>
             <TableHead no>編號</TableHead>
@@ -165,7 +165,7 @@ function GroupAndTeam() {
             </FlexRowWrapper>
           ))}
         </FlexTableWrapper>
-      </TableParent>
+      </TableParent> */}
     </Wrapper>
   );
 }

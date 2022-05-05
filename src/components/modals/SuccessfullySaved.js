@@ -20,7 +20,7 @@ const NewModal = styled(Modal)`
   transition: all 0.5s;
 `;
 
-export default function SuccessfullySavedModal({ toggle }) {
+export default function SuccessfullySavedModal({ toggle, message }) {
   React.useEffect(() => {
     const timeoutId = setTimeout(() => {
       toggle(false);
@@ -31,7 +31,7 @@ export default function SuccessfullySavedModal({ toggle }) {
   }, []);
   return (
     <NewOverlay out={false}>
-      <NewModal>儲存成功！</NewModal>
+      <NewModal>{message}</NewModal>
     </NewOverlay>
   );
 }

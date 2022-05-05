@@ -21,6 +21,7 @@ import check from "../images/check.svg";
 import exit from "../images/exit.svg";
 import InviteJoinGroupModal from "../components/modals/InviteJoinGroup";
 import SuccessfullySavedModal from "../components/modals/SuccessfullySaved";
+import lock from "../images/lock.svg";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -201,6 +202,23 @@ const ExitButton = styled(FlexWrapper)`
   }
 `;
 
+const RejectButton = styled(FlexWrapper)`
+  background: none;
+  color: #424b5a;
+  width: 70px;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background: #e8e8e8;
+  margin-left: 10px;
+
+  &:hover {
+    background: #dadada;
+  }
+`;
+
 const GroupBody = styled(FlexWrapper)`
   width: 100%;
   justify-content: space-between;
@@ -260,14 +278,34 @@ const ContentList = styled.ol`
   margin-top: 10px;
 `;
 
+const NotMemberWrapper = styled(FlexWrapper)`
+  width: 100%;
+  height: 150px;
+  margin: 20px 0;
+  justify-content: center;
+  align-items: center;
+  background: #e8e8e8;
+  flex-direction: column;
+  border-radius: 10px;
+`;
+
+const Reminder = styled(FlexWrapper)`
+  margin: 20px 0;
+  align-items: center;
+`;
+
 function Groups() {
   const { id } = useParams();
   const [apartmentData, setApartmentData] = React.useState({});
   const [members, setMembers] = React.useState([]);
   const [groupMembers, setGroupMembers] = React.useState([]);
   const { currentUser } = useAuth();
+  const [isInvited, setIsInvited] = React.useState();
+  const [invitation, setInvitation] = React.useState([]);
 
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [openConfirmQuit, setOpenConfirmQuit] = React.useState(false);
+  const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
+  const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
   const [confirmMessage, setConfirmMessage] = React.useState("");
   const [dropdown, setDropdown] = React.useState(false);
 
@@ -297,10 +335,45 @@ function Groups() {
     }
     getGroupData();
 
+    function checkCurrentUserStatus() {
+      const query = Firebase.query(
+        Firebase.collection(Firebase.db, "groupInvitations"),
+        Firebase.where("groupId", "==", id)
+      );
+
+      Firebase.onSnapshot(query, (snapshot) => {
+        const res = snapshot.docs.map((doc) => doc.data());
+        if (!mounted) return;
+        setInvitation(
+          res.find((data) => data.receiver === (currentUser && currentUser.uid))
+        );
+        setIsInvited(
+          res.filter(
+            (data) => data.receiver === (currentUser && currentUser.uid)
+          ).length
+        );
+      });
+      // api
+      //   .getDataWithSingleQuery("groupInvitations", "groupId", "==", id)
+      //   .then((res) => {
+      //     setInvitation(
+      //       res.find(
+      //         (data) => data.receiver === (currentUser && currentUser.uid)
+      //       )
+      //     );
+      //     setIsInvited(
+      //       res.filter(
+      //         (data) => data.receiver === (currentUser && currentUser.uid)
+      //       ).length
+      //     );
+      //   });
+    }
+    checkCurrentUserStatus();
+
     return function cleanup() {
       mounted = false;
     };
-  }, []);
+  }, [currentUser]);
 
   function quitTheGroup() {
     // 將自己從 group members 中刪除
@@ -314,25 +387,63 @@ function Groups() {
     setDropdown(false);
   }
 
+  function confirmJoinGroup() {
+    api.updateDocData("groups", id, {
+      members: [...groupMembers, currentUser.uid],
+    });
+    api.createNoticeByType(currentUser.uid, invitation.sender, 9);
+    Firebase.deleteDoc(
+      Firebase.doc(Firebase.db, "groupInvitations", invitation.id)
+    );
+  }
+
+  function rejectJoinGroup() {
+    Firebase.deleteDoc(
+      Firebase.doc(Firebase.db, "groupInvitations", invitation.id)
+    );
+    api.createNoticeByType(currentUser.uid, invitation.sender, 10);
+  }
+
   return (
     <Wrapper
       onClick={() => {
         setDropdown(false);
       }}
     >
-      {saved && <SuccessfullySavedModal out={false} />}
+      {saved && (
+        <SuccessfullySavedModal
+          out={false}
+          toggle={setSaved}
+          message="邀請已送出！"
+        />
+      )}
       {openInviteModal && (
         <InviteJoinGroupModal
+          groupId={id}
           toggle={setOpenInviteModal}
           groupMembers={groupMembers}
           setSaved={setSaved}
         />
       )}
-      {openConfirm && (
+      {openConfirmQuit && (
         <ConfirmBeforeActionModal
           message={confirmMessage}
           action={quitTheGroup}
-          toggle={setOpenConfirm}
+          toggle={setOpenConfirmQuit}
+        />
+      )}
+      {openConfirmJoin && (
+        <ConfirmBeforeActionModal
+          message="確認加入？"
+          action={confirmJoinGroup}
+          toggle={setOpenConfirmJoin}
+        />
+      )}
+      {openConfirmReject && (
+        <ConfirmBeforeActionModal
+          message="確認拒絕？"
+          action={rejectJoinGroup}
+          toggle={setOpenConfirmReject}
         />
       )}
       <BreadCrumb>
@@ -363,8 +474,29 @@ function Groups() {
             <SubTitle>{`${members.length}位成員`}</SubTitle>
           </SubTitles>
         </MainSubTitles>
-        <Buttons>
-          {members.find((member) => member.uid === currentUser.uid) && (
+        {isInvited &&
+        !members.find((member) => member.uid === currentUser.uid) ? (
+          <Buttons>
+            <Button1
+              onClick={() => {
+                setOpenConfirmJoin(true);
+              }}
+            >
+              確認加入
+            </Button1>
+            <RejectButton
+              onClick={() => {
+                setOpenConfirmReject(true);
+              }}
+            >
+              拒絕
+            </RejectButton>
+          </Buttons>
+        ) : (
+          ""
+        )}
+        {members.find((member) => member.uid === currentUser.uid) ? (
+          <Buttons>
             <DropdownWrapper onClick={(e) => e.stopPropagation()}>
               <HasJoined
                 onClick={() => {
@@ -380,7 +512,7 @@ function Groups() {
                   <ExitButton
                     onClick={() => {
                       setConfirmMessage("確認退出？");
-                      setOpenConfirm(true);
+                      setOpenConfirmQuit(true);
                     }}
                   >
                     <Icon src={exit} alt="" />
@@ -389,50 +521,62 @@ function Groups() {
                 </DropdownMenu>
               )}
             </DropdownWrapper>
-          )}
-          <InviteButton
-            onClick={() => {
-              setOpenInviteModal(true);
-            }}
-          >
-            邀請
-          </InviteButton>
-        </Buttons>
+            <InviteButton
+              onClick={() => {
+                setOpenInviteModal(true);
+              }}
+            >
+              邀請
+            </InviteButton>
+          </Buttons>
+        ) : (
+          ""
+        )}
       </GroupHeader>
-      <GroupBody>
-        <GroupBodyLeft>
-          <GroupTeam
-            roomies={apartmentData.roomiesCount}
-            aid={apartmentData.id}
-            members={groupMembers}
-            groupId={id}
-            groupMemberDetail={members}
-          />
-        </GroupBodyLeft>
-        <GroupBodyRight>
-          <SubtitlesSmall>
-            <Bold>社團守則</Bold>
-          </SubtitlesSmall>
-          <GroupNotice>
-            <Bold>租屋流程</Bold>
-            <ContentList>
-              <li>加入房源社團，尋找合租的室友</li>
-              <li>人數到齊後，與屋主預約看房</li>
-              <li>確認租屋設備、租金、押金等一切細節</li>
-              <li>與屋主簽訂租屋契約</li>
-            </ContentList>
-            <Bold>租屋須知</Bold>
-            <ContentList>
-              <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
-              <li>與屋主預約看房請遵守約定，切勿無故未到</li>
-              <li>
-                若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
-              </li>
-            </ContentList>
-          </GroupNotice>
-          <GroupMember members={members} />
-        </GroupBodyRight>
-      </GroupBody>
+      {members.find((member) => member.uid === currentUser.uid) ? (
+        <GroupBody>
+          <GroupBodyLeft>
+            <GroupTeam
+              roomies={apartmentData.roomiesCount}
+              aid={apartmentData.id}
+              members={groupMembers}
+              groupId={id}
+              groupMemberDetail={members}
+            />
+          </GroupBodyLeft>
+          <GroupBodyRight>
+            <SubtitlesSmall>
+              <Bold>社團守則</Bold>
+            </SubtitlesSmall>
+            <GroupNotice>
+              <Bold>租屋流程</Bold>
+              <ContentList>
+                <li>加入房源社團，尋找合租的室友</li>
+                <li>人數到齊後，與屋主預約看房</li>
+                <li>確認租屋設備、租金、押金等一切細節</li>
+                <li>與屋主簽訂租屋契約</li>
+              </ContentList>
+              <Bold>租屋須知</Bold>
+              <ContentList>
+                <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
+                <li>與屋主預約看房請遵守約定，切勿無故未到</li>
+                <li>
+                  若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
+                </li>
+              </ContentList>
+            </GroupNotice>
+            <GroupMember members={members} />
+          </GroupBodyRight>
+        </GroupBody>
+      ) : (
+        <NotMemberWrapper>
+          <Reminder>
+            <Icon src={lock} alt="" />
+            成為社團成員才能預覽內容喔
+          </Reminder>
+          {!isInvited && <Button1 onClick={() => {}}>加入</Button1>}
+        </NotMemberWrapper>
+      )}
     </Wrapper>
   );
 }
