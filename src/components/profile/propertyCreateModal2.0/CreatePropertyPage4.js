@@ -26,6 +26,10 @@ const DeleteButton = styled.div`
   display: none;
   font-size: 30px;
   font-weight: 700;
+
+  &:hover {
+    color: #dadada;
+  }
 `;
 
 const ImageContainer = styled.div`

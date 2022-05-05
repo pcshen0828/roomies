@@ -15,8 +15,17 @@ import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
 import CreatePropertyModal from "./CreateProperty2.0";
 import { Firebase } from "../../utils/firebase";
-import { CloseButton } from "../modals/ModalElements";
+import {
+  Overlay,
+  Modal,
+  Header,
+  Title,
+  Body,
+  Button,
+  CloseButton,
+} from "../modals/ModalElements";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import api from "../../utils/api";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;
@@ -96,17 +105,79 @@ const Tab = styled(SmallTitle)`
     props.active ? "2px solid #424b5a" : "2px solid transparent"};
 `;
 
+const StatusButton = styled(Button1)`
+  width: 80px;
+  background: #dadada;
+  color: #424b5a;
+  &:hover {
+    background: #c1b18a;
+    color: #fff;
+  }
+`;
+
+const EditButton = styled(Button1)`
+  width: 100px;
+  margin-right: 10px;
+`;
+
+function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
+  function updateStatus() {
+    const time = Firebase.Timestamp.fromDate(new Date());
+    if (currentStatus === 0) {
+      api
+        .updateDocData("apartments", item.id, {
+          updateTime: time,
+          status: 1,
+        })
+        .then(() => {
+          toggle(false);
+          setSaved(true);
+        });
+    } else {
+      api
+        .updateDocData("apartments", item.id, {
+          updateTime: time,
+          status: 0,
+        })
+        .then(() => {
+          toggle(false);
+          setSaved(true);
+        });
+    }
+  }
+  return (
+    <Overlay>
+      <Modal>
+        <Header>
+          <Title>確認更新？</Title>
+          <CloseButton
+            onClick={() => {
+              toggle(false);
+            }}
+          >
+            ×
+          </CloseButton>
+        </Header>
+        <Button onClick={updateStatus}>確認</Button>
+      </Modal>
+    </Overlay>
+  );
+}
+
 function LandlordProperty() {
   const { currentUser } = useAuth();
   const [properties, setProperties] = React.useState([]);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [openCreate, setOpenCreate] = React.useState(false);
   const [apartment, setApartment] = React.useState("");
+  const [statusItem, setStatusItem] = React.useState("");
   const [saved, setSaved] = React.useState(false);
+  const [confirmActive, setConfirmActive] = React.useState(false);
+  const [confirmInactive, setConfirmInactive] = React.useState(false);
   const [tab, setTab] = React.useState("active");
-  const navigate = useNavigate();
   const [paging, setPaging] = React.useState(1);
   const itemsPerPage = 6;
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const query = Firebase.query(
@@ -125,17 +196,41 @@ function LandlordProperty() {
     return Array.from(Array(num).keys());
   }
 
+  function handleActiveStatus(status) {
+    if (status === 0) {
+      setConfirmActive(true);
+    } else {
+      setConfirmInactive(true);
+    }
+  }
+
   function Render(status) {
     const data = properties.filter((property) => property.status === status);
     return (
       <>
+        {confirmActive && (
+          <ConfirmChangeStatus
+            currentStatus={0}
+            item={statusItem}
+            setSaved={setSaved}
+            toggle={setConfirmActive}
+          />
+        )}
+        {confirmInactive && (
+          <ConfirmChangeStatus
+            currentStatus={1}
+            item={statusItem}
+            setSaved={setSaved}
+            toggle={setConfirmInactive}
+          />
+        )}
         <NewFlexWrapper>
           {data.length ? (
             data
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
-              .map((item, index) => (
+              .map((item) => (
                 <Card key={item.id}>
-                  {status === 0 && (
+                  {/* {status === 0 && (
                     <CloseButton
                       onClick={() => {
                         Firebase.deleteDoc(
@@ -145,20 +240,41 @@ function LandlordProperty() {
                     >
                       ×
                     </CloseButton>
-                  )}
+                  )} */}
                   <CardImage src={item.coverImage}></CardImage>
                   <CardBody>
                     <StyledLink to={`/apartment/${item.id}`}>
                       <CardTitle title={item.title}>{item.title}</CardTitle>
                     </StyledLink>
-                    <Button1
-                      onClick={() => {
-                        setOpenEdit(true);
-                        setApartment(item);
-                      }}
-                    >
-                      編輯
-                    </Button1>
+                    <FlexWrapper>
+                      <EditButton
+                        onClick={() => {
+                          setOpenEdit(true);
+                          setApartment(item);
+                        }}
+                      >
+                        編輯
+                      </EditButton>
+                      {status === 0 ? (
+                        <StatusButton
+                          onClick={() => {
+                            setStatusItem(item);
+                            handleActiveStatus(status);
+                          }}
+                        >
+                          上架
+                        </StatusButton>
+                      ) : (
+                        <StatusButton
+                          onClick={() => {
+                            setStatusItem(item);
+                            handleActiveStatus(status);
+                          }}
+                        >
+                          下架
+                        </StatusButton>
+                      )}
+                    </FlexWrapper>
                   </CardBody>
                 </Card>
               ))
