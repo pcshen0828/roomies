@@ -16,6 +16,7 @@ const Wrapper = styled(FlexWrapper)`
   width: calc(40% - 60px);
   border-radius: 10px;
   background: #ffffff;
+  border: 1px solid #e8e8e8;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   flex-direction: column;
   align-items: flex-start;

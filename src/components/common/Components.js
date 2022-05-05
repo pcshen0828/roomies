@@ -324,6 +324,7 @@ const ScheduleCard = styled(FlexWrapper)`
   padding: 20px;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
   @media screen and (max-width: 767.98px) {
     width: 200px;
     height: 250px;

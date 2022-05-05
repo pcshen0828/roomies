@@ -9,8 +9,8 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled.div`
-  ${"" /* border: 1px solid #e8e8e8; */}
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
   height: 350px;
   margin-bottom: 30px;
   display: flex;

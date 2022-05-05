@@ -22,6 +22,7 @@ const Toggler = styled.div`
   background: #fff;
   border-radius: 0 0 10px 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
   ${
     "" /* display: none;
 

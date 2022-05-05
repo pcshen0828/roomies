@@ -11,6 +11,7 @@ const StyledLink = styled(Link)`
 const Card = styled(FlexWrapper)`
   flex-direction: column;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
   width: 200px;
   height: 240px;
   border-radius: 10px;

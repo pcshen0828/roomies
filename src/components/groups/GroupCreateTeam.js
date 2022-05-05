@@ -8,6 +8,7 @@ const Wrapper = styled(FlexWrapper)`
   height: 150px;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
   margin-bottom: 20px;
   flex-direction: column;
   justify-content: center;
@@ -15,7 +16,6 @@ const Wrapper = styled(FlexWrapper)`
   border-radius: 10px;
   font-size: 80px;
   cursor: pointer;
-  border: 0.5px solid rgba(0, 0, 0, 0.03);
   &:hover {
     background: #e8e8e8;
   }
