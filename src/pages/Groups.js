@@ -19,6 +19,8 @@ import ConfirmBeforeActionModal from "../components/modals/ConfirmBeforeAction";
 import { Modal } from "../components/modals/ModalElements";
 import check from "../images/check.svg";
 import exit from "../images/exit.svg";
+import InviteJoinGroupModal from "../components/modals/InviteJoinGroup";
+import SuccessfullySavedModal from "../components/modals/SuccessfullySaved";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -139,7 +141,6 @@ const Buttons = styled.div`
 `;
 
 const InviteButton = styled(Button1)`
-  margin-right: 10px;
   width: 90px;
   @media screen and (max-width: 575.98px) {
     width: 90px;
@@ -270,6 +271,9 @@ function Groups() {
   const [confirmMessage, setConfirmMessage] = React.useState("");
   const [dropdown, setDropdown] = React.useState(false);
 
+  const [openInviteModal, setOpenInviteModal] = React.useState(false);
+  const [saved, setSaved] = React.useState(false);
+
   React.useEffect(() => {
     let mounted = true;
     async function getGroupData() {
@@ -298,10 +302,15 @@ function Groups() {
     };
   }, []);
 
-  function initeNewMemberToGroup() {}
-
   function quitTheGroup() {
-    console.log("退出");
+    // 將自己從 group members 中刪除
+    // 如果有加入群組，也將自己從隸屬於這個社團的所有群組中刪除
+    // 如果退出的人是團主，應該不能退群組
+    const userID = currentUser.uid;
+    api.updateDocData("groups", id, {
+      members: [...groupMembers.filter((memberID) => memberID !== userID)],
+    });
+
     setDropdown(false);
   }
 
@@ -311,6 +320,14 @@ function Groups() {
         setDropdown(false);
       }}
     >
+      {saved && <SuccessfullySavedModal out={false} />}
+      {openInviteModal && (
+        <InviteJoinGroupModal
+          toggle={setOpenInviteModal}
+          groupMembers={groupMembers}
+          setSaved={setSaved}
+        />
+      )}
       {openConfirm && (
         <ConfirmBeforeActionModal
           message={confirmMessage}
@@ -373,7 +390,13 @@ function Groups() {
               )}
             </DropdownWrapper>
           )}
-          <InviteButton onClick={() => {}}>邀請</InviteButton>
+          <InviteButton
+            onClick={() => {
+              setOpenInviteModal(true);
+            }}
+          >
+            邀請
+          </InviteButton>
         </Buttons>
       </GroupHeader>
       <GroupBody>

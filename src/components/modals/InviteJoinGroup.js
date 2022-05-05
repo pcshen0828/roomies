@@ -14,7 +14,7 @@ import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import SearchAndInviteToTeam from "../groups/SearchInviteUsersToTeam";
+import SearchAndInviteToGroup from "../groups/SearchInviteUsersToGroup";
 
 const NewBody = styled(Body)`
   height: 280px;
@@ -58,8 +58,9 @@ const UserInfo = styled.div`
 `;
 
 const InviteButton = styled(Button1)`
-  width: 90px;
-  height: 35px;
+  font-size: 25px;
+  width: 40px;
+  border-radius: 50%;
 `;
 
 const Status = styled(FlexWrapper)`
@@ -72,10 +73,10 @@ const Status = styled(FlexWrapper)`
   margin: 0;
 `;
 
-export default function InviteJoinTeamModal({
+export default function InviteJoinGroupModal({
   toggle,
-  team,
-  groupMemberDetail,
+  groupMembers,
+  setSaved,
 }) {
   const [queryName, setQueryName] = React.useState("");
   const [queriedUsers, setQueriedUsers] = React.useState([]);
@@ -84,29 +85,41 @@ export default function InviteJoinTeamModal({
   const { currentUser } = useAuth();
   const [openConfirm, setOpenConfirm] = React.useState(false);
 
+  const [pendingList, setPendingList] = React.useState([]);
+
+  React.useEffect(() => {
+    api.getAllDocsFromCollection("groupInvitations").then((res) => {
+      setPendingList(res.map((list) => list.receiver));
+    });
+  }, []);
+
   async function inviteNewMember() {
-    const time = Firebase.Timestamp.fromDate(new Date());
     const newList = inviteList.map(({ name, ...rest }) => {
       return rest;
     });
     const uids = newList.map((user) => user.uid);
-    api.updateDocData("teams", team.id, {
-      members: [...team.members, ...newList],
-      userIDs: [...team.userIDs, ...uids],
-      updateTime: time,
-    });
 
-    uids.forEach((uid) => {
-      api.createNoticeByType(currentUser.uid, uid, 4);
+    uids.forEach((user) => {
+      const newDocRef = api.createNewDocRef("groupInvitations");
+      const time = Firebase.Timestamp.fromDate(new Date());
+      api.setNewDoc(newDocRef, {
+        id: newDocRef.id,
+        createTime: time,
+        sender: currentUser.uid,
+        receiver: user,
+        status: 0,
+      });
+      api.createNoticeByType(currentUser.uid, user, 8);
     });
     toggle(false);
+    setSaved(true);
   }
 
   return (
     <Overlay out={false}>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          message="確認建立群組？"
+          message="確認邀請？"
           action={inviteNewMember}
           toggle={setOpenConfirm}
         />
@@ -117,8 +130,8 @@ export default function InviteJoinTeamModal({
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SearchAndInviteToTeam
-            groupMemberDetail={groupMemberDetail}
+          <SearchAndInviteToGroup
+            groupMembers={groupMembers}
             currentUser={currentUser}
             inviteList={inviteList}
             setInviteList={setInviteList}
@@ -137,9 +150,11 @@ export default function InviteJoinTeamModal({
                     <SmallText>{user.jobTitle}</SmallText>
                   </UserInfo>
                 </FlexWrapper>
-                {!team.members
-                  .map((member) => member.uid)
-                  .includes(user.uid) ? (
+                {groupMembers.includes(user.uid) ? (
+                  <Status>成員</Status>
+                ) : pendingList.includes(user.uid) ? (
+                  <Status>邀請中</Status>
+                ) : (
                   <InviteButton
                     onClick={() => {
                       setInviteList((prev) => [
@@ -150,19 +165,8 @@ export default function InviteJoinTeamModal({
                       setQueriedUsers([]);
                     }}
                   >
-                    新增
+                    +
                   </InviteButton>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 1 ? (
-                  <Status>成員</Status>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 2 ? (
-                  <Status>邀請中</Status>
-                ) : team.members.find((member) => member.uid === user.uid)
-                    .status === 3 ? (
-                  <Status>待核准</Status>
-                ) : (
-                  ""
                 )}
               </QueriedUser>
             ))

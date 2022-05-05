@@ -14,7 +14,7 @@ import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import SearchAndInvite from "../groups/SearchInviteUsers";
+import SearchAndInviteToTeam from "../groups/SearchInviteUsersToTeam";
 
 const NewBody = styled(Body)`
   border: none;
@@ -140,7 +140,7 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
           />
-          <SearchAndInvite
+          <SearchAndInviteToTeam
             groupMemberDetail={groupMemberDetail}
             currentUser={currentUser}
             inviteList={inviteList}

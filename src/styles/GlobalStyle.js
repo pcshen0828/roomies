@@ -6,7 +6,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     position: relative;
     color: #424B5A;
-    ${"" /* background: #fafafa;  */}
+    ${"" /* background: #E4E6EB; */}
     font-family: 'Noto Sans TC', sans-serif;
     ${"" /* font-family: 'Noto Serif TC', serif; */}
   }

@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Title } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import search from "../../images/search.svg";
+import api from "../../utils/api";
 
 const SmallTitle = styled(Title)`
   font-size: 14px;
@@ -11,11 +12,11 @@ const SmallTitle = styled(Title)`
 
 const SearchBar = styled.div`
   position: relative;
-  width: 100%;
+  width: 90%;
 `;
 
 const Input = styled.input`
-  width: 90%;
+  width: calc(100% - 10px);
   height: 30px;
   border: 1px solid #dadada;
   margin-bottom: 20px;
@@ -32,6 +33,7 @@ const Input = styled.input`
 const InviteList = styled.div`
   display: flex;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 `;
 
 const InvitedUser = styled.div`
@@ -40,6 +42,7 @@ const InvitedUser = styled.div`
   background: #dadada;
   font-size: 14px;
   position: relative;
+  margin: 0 10px 10px 0;
 `;
 
 const CancelButton = styled.div`
@@ -55,11 +58,10 @@ const SearchButton = styled.img`
   cursor: pointer;
   position: absolute;
   top: 6px;
-  left: calc(90% - 15px);
+  left: calc(100% - 25px);
 `;
 
-export default function SearchAndInvite({
-  groupMemberDetail,
+export default function SearchAndInviteToGroup({
   currentUser,
   inviteList,
   setInviteList,
@@ -76,11 +78,7 @@ export default function SearchAndInvite({
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "users"),
       Firebase.where("role", "==", 1),
-      Firebase.where(
-        "uid",
-        "in",
-        groupMemberDetail.map((member) => member.uid)
-      ),
+      Firebase.where("status", "==", 1),
       Firebase.where("alias", ">=", name),
       Firebase.where("alias", "<=", name + "\uf8ff")
     );
@@ -96,7 +94,7 @@ export default function SearchAndInvite({
   }
   return (
     <>
-      <SmallTitle>搜尋社團成員</SmallTitle>
+      <SmallTitle>搜尋用戶</SmallTitle>
       <SearchBar>
         <form
           onSubmit={(e) => {
