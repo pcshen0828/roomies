@@ -111,19 +111,23 @@ function GroupMember({ members }) {
       <MemberBlockWrapper>
         <MembersBlock>
           <MemberBlockCard>
-            <Member key={currentUser.uid}>
+            <Member key={currentUser && currentUser.uid}>
               <FlexWrapper>
-                <MemberLink to={`/users/${currentUser.uid}`}>
-                  <MemberImage src={currentUser.profileImage} />
+                <MemberLink to={`/users/${currentUser && currentUser.uid}`}>
+                  <MemberImage src={currentUser && currentUser.profileImage} />
                 </MemberLink>
                 <MemberInfo>
-                  <MemberName>{currentUser.alias}</MemberName>
-                  <MemberJobTitle>{currentUser.jobTitle}</MemberJobTitle>
+                  <MemberName>{currentUser && currentUser.alias}</MemberName>
+                  <MemberJobTitle>
+                    {currentUser && currentUser.jobTitle}
+                  </MemberJobTitle>
                 </MemberInfo>
               </FlexWrapper>
             </Member>
             {members
-              .filter((member) => member.uid !== currentUser.uid)
+              .filter(
+                (member) => member.uid !== (currentUser && currentUser.uid)
+              )
               .map((member, index) => (
                 <Member key={index}>
                   <FlexWrapper>

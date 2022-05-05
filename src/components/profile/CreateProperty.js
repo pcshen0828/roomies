@@ -16,10 +16,10 @@ import {
 } from "../common/Components";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
-import CreatePropertyPage1 from "./propertyCreateModal2.0/CreatePropertyPage1";
-import CreatePropertyPage2 from "./propertyCreateModal2.0/CreatePropertyPage2";
-import CreatePropertyPage3 from "./propertyCreateModal2.0/CreatePropertyPage3";
-import CreatePropertyPage4 from "./propertyCreateModal2.0/CreatePropertyPage4";
+import CreatePropertyPage1 from "./propertyCreateModal/CreatePropertyPage1";
+import CreatePropertyPage2 from "./propertyCreateModal/CreatePropertyPage2";
+import CreatePropertyPage3 from "./propertyCreateModal/CreatePropertyPage3";
+import CreatePropertyPage4 from "./propertyCreateModal/CreatePropertyPage4";
 import ConfirmBeforeQuitModal from "../modals/ConfirmBeforeQuit";
 import { useAuth } from "../../context/AuthContext";
 import { FlexWrapper } from "../common/Components";

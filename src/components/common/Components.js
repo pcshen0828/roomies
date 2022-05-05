@@ -377,6 +377,12 @@ const Required = styled.span`
   color: #ed3636;
 `;
 
+const SlicedTitle = styled(Title)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 export {
   Wrapper,
   Title,
@@ -415,4 +421,5 @@ export {
   CardTop,
   CardBottom,
   Required,
+  SlicedTitle,
 };

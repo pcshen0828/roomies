@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Wrapper,
   FlexWrapper,
@@ -13,19 +13,19 @@ import {
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
-import CreatePropertyModal from "./CreateProperty2.0";
+import CreatePropertyModal from "./CreateProperty";
 import { Firebase } from "../../utils/firebase";
 import {
   Overlay,
   Modal,
   Header,
   Title,
-  Body,
   Button,
   CloseButton,
 } from "../modals/ModalElements";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import api from "../../utils/api";
+import edit from "../../images/edit.svg";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;
@@ -62,7 +62,7 @@ const StyledLink = styled(Link)`
 `;
 
 const Card = styled.div`
-  margin: 0 20px 20px 0;
+  margin: 0 15px 20px 0;
   width: 240px;
   height: 280px;
   border: 1px solid #e8e8e8;
@@ -106,18 +106,29 @@ const Tab = styled(SmallTitle)`
 `;
 
 const StatusButton = styled(Button1)`
-  width: 80px;
-  background: #dadada;
+  width: 60px;
+  height: 36px;
+  background: none;
+  border: 1px solid #dadada;
   color: #424b5a;
   &:hover {
-    background: #c1b18a;
-    color: #fff;
+    background: #dadada;
   }
 `;
 
-const EditButton = styled(Button1)`
-  width: 100px;
-  margin-right: 10px;
+const EditButton = styled.img`
+  width: 25px;
+  height: 25px;
+  margin-left: 15px;
+  cursor: pointer;
+`;
+
+const EditWrapper = styled(FlexWrapper)`
+  justify-content: flex-end;
+`;
+
+const NewModal = styled(Modal)`
+  max-width: 600px;
 `;
 
 function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
@@ -147,7 +158,7 @@ function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
   }
   return (
     <Overlay>
-      <Modal>
+      <NewModal>
         <Header>
           <Title>確認更新？</Title>
           <CloseButton
@@ -159,7 +170,7 @@ function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
           </CloseButton>
         </Header>
         <Button onClick={updateStatus}>確認</Button>
-      </Modal>
+      </NewModal>
     </Overlay>
   );
 }
@@ -230,7 +241,7 @@ function LandlordProperty() {
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
               .map((item) => (
                 <Card key={item.id}>
-                  {/* {status === 0 && (
+                  {status === 0 && (
                     <CloseButton
                       onClick={() => {
                         Firebase.deleteDoc(
@@ -240,21 +251,13 @@ function LandlordProperty() {
                     >
                       ×
                     </CloseButton>
-                  )} */}
+                  )}
                   <CardImage src={item.coverImage}></CardImage>
                   <CardBody>
                     <StyledLink to={`/apartment/${item.id}`}>
                       <CardTitle title={item.title}>{item.title}</CardTitle>
                     </StyledLink>
-                    <FlexWrapper>
-                      <EditButton
-                        onClick={() => {
-                          setOpenEdit(true);
-                          setApartment(item);
-                        }}
-                      >
-                        編輯
-                      </EditButton>
+                    <EditWrapper>
                       {status === 0 ? (
                         <StatusButton
                           onClick={() => {
@@ -274,7 +277,14 @@ function LandlordProperty() {
                           下架
                         </StatusButton>
                       )}
-                    </FlexWrapper>
+                      <EditButton
+                        src={edit}
+                        onClick={() => {
+                          setOpenEdit(true);
+                          setApartment(item);
+                        }}
+                      />
+                    </EditWrapper>
                   </CardBody>
                 </Card>
               ))

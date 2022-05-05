@@ -39,7 +39,9 @@ function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
           groupMemberDetail={groupMemberDetail}
         />
       )}
-      <Wrapper onClick={() => setOpenNewTeamModal(true)}>+</Wrapper>
+      <Wrapper title="建立群組" onClick={() => setOpenNewTeamModal(true)}>
+        +
+      </Wrapper>
     </>
   );
 }

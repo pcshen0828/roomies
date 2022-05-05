@@ -4,11 +4,21 @@ import { useParams, Link } from "react-router-dom";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import api from "../utils/api";
-import { Button1, FlexWrapper, Bold } from "../components/common/Components";
+import {
+  Button1,
+  FlexWrapper,
+  Bold,
+  SlicedTitle,
+  Title,
+} from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
 import member from "../images/members.svg";
 import room from "../images/room.svg";
+import ConfirmBeforeActionModal from "../components/modals/ConfirmBeforeAction";
+import { Modal } from "../components/modals/ModalElements";
+import check from "../images/check.svg";
+import exit from "../images/exit.svg";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -77,21 +87,28 @@ const GroupHeader = styled.div`
   }
 `;
 
-const Title = styled.div`
-  font-size: 24px;
-  font-weight: 700;
-  margin-right: 30px;
-  @media screen and (max-width: 767.98px) {
-    margin-bottom: 10px;
-    font-size: 20px;
+const NewSLicedTitle = styled(SlicedTitle)`
+  max-width: 400px;
+  @media screen and (max-width: 1279.98px) {
+    max-width: 350px;
+  }
+  @media screen and (max-width: 1099.98px) {
+    max-width: 250px;
+  }
+  @media screen and (max-width: 995.98px) {
+    max-width: 100%;
+  }
+  @media screen and (max-width: 413.98px) {
+    max-width: 300px;
   }
 `;
 
 const MainSubTitles = styled(FlexWrapper)`
   align-items: center;
-  @media screen and (max-width: 767.98px) {
+  @media screen and (max-width: 995.98px) {
     flex-direction: column;
     align-items: flex-start;
+    width: 100%;
   }
 `;
 
@@ -121,18 +138,16 @@ const Buttons = styled.div`
   }
 `;
 
-const ExitButton = styled(Button1)`
-  background: none;
-  border: 1px solid #424b5a;
-  color: #424b5a;
-  width: 100px;
-  margin-right: 20px;
-
-  &:hover {
-    border: 1px solid transparent;
-    background: #c1b18a;
-    color: #fff;
+const InviteButton = styled(Button1)`
+  margin-right: 10px;
+  width: 90px;
+  @media screen and (max-width: 575.98px) {
+    width: 90px;
   }
+`;
+
+const DropdownWrapper = styled.div`
+  position: relative;
 `;
 
 const HasJoined = styled(FlexWrapper)`
@@ -142,7 +157,47 @@ const HasJoined = styled(FlexWrapper)`
   border-radius: 5px;
   color: #424b5a;
   justify-content: center;
+  align-items: center;
   margin-right: 10px;
+  cursor: pointer;
+`;
+
+const Dropdown = styled.span`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 3px;
+  font-size: 20px;
+  padding-bottom: 3px;
+`;
+
+const DropdownMenu = styled(Modal)`
+  width: 200px;
+  border-radius: 5px;
+  position: absolute;
+  z-index: 10;
+  top: 50px;
+  left: 0;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
+  align-items: flex-start;
+  padding: 10px;
+`;
+
+const ExitButton = styled(FlexWrapper)`
+  background: none;
+  color: #424b5a;
+  width: calc(100% - 20px);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+
+  &:hover {
+    background: #e8e8e8;
+  }
 `;
 
 const GroupBody = styled(FlexWrapper)`
@@ -210,6 +265,10 @@ function Groups() {
   const [groupMembers, setGroupMembers] = React.useState([]);
   const { currentUser } = useAuth();
 
+  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [confirmMessage, setConfirmMessage] = React.useState("");
+  const [dropdown, setDropdown] = React.useState(false);
+
   React.useEffect(() => {
     let mounted = true;
     async function getGroupData() {
@@ -238,15 +297,29 @@ function Groups() {
     };
   }, []);
 
+  function initeNewMemberToGroup() {}
+
+  function quitTheGroup() {
+    console.log("退出");
+    setDropdown(false);
+  }
+
   return (
     <Wrapper>
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          message={confirmMessage}
+          action={quitTheGroup}
+          toggle={setOpenConfirm}
+        />
+      )}
       <BreadCrumb>
         <BreadCrumbLink to="/">首頁</BreadCrumbLink>
         <Span>{" > "}</Span>
         <BreadCrumbLink to="/apartments">所有房源</BreadCrumbLink>
         <Span>{" > "}</Span>
         <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-          {apartmentData.id}
+          {apartmentData.title}
         </BreadCrumbLink>
         <Span>{" > "}</Span>
         <Active>社團</Active>
@@ -270,10 +343,32 @@ function Groups() {
         </MainSubTitles>
         <Buttons>
           {members.find((member) => member.uid === currentUser.uid) && (
-            <HasJoined>☑︎已加入</HasJoined>
+            <DropdownWrapper>
+              <HasJoined
+                onClick={() => {
+                  setDropdown((prev) => !prev);
+                }}
+              >
+                <Icon src={check} alt="" />
+                已加入
+                <Dropdown>▾</Dropdown>
+              </HasJoined>
+              {dropdown && (
+                <DropdownMenu>
+                  <ExitButton
+                    onClick={() => {
+                      setConfirmMessage("確認退出？");
+                      setOpenConfirm(true);
+                    }}
+                  >
+                    <Icon src={exit} alt="" />
+                    退出
+                  </ExitButton>
+                </DropdownMenu>
+              )}
+            </DropdownWrapper>
           )}
-          {/* <ExitButton>退出</ExitButton> */}
-          <Button1>邀請</Button1>
+          <InviteButton onClick={() => {}}>邀請</InviteButton>
         </Buttons>
       </GroupHeader>
       <GroupBody>

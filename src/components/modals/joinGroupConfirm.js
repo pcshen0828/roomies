@@ -13,6 +13,14 @@ import {
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 
+const NewModal = styled(Modal)`
+  max-width: 870px;
+`;
+
+const NewBody = styled(Body)`
+  padding: 10px;
+`;
+
 const ContentList = styled.ol`
   line-height: 150%;
   margin-top: 10px;
@@ -58,12 +66,12 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      <NewModal>
         <Header>
           <Title>租屋說明</Title>
           <CloseButton onClick={() => setIsActive(false)}>×</CloseButton>
         </Header>
-        <Body>
+        <NewBody>
           <Title>租屋流程</Title>
           <ContentList>
             <li>加入房源社團，尋找合租的室友</li>
@@ -79,7 +87,7 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
               若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
             </li>
           </ContentList>
-        </Body>
+        </NewBody>
         <ConfirmBlock>
           <Checkbox
             id="confirm"
@@ -90,7 +98,7 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
           <label htmlFor="confirm">我已詳閱並同意以上租屋流程及須知</label>
         </ConfirmBlock>
         <Button onClick={joinGroup}>加入</Button>
-      </Modal>
+      </NewModal>
     </Overlay>
   );
 }

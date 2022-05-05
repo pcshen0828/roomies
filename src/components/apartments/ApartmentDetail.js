@@ -7,7 +7,7 @@ import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import SignInFirstModal from "../modals/SignInFirst";
 import OwnerCard from "./ApartmentOwner";
-import { Button1, FlexWrapper, Title } from "../common/Components";
+import { Button1, FlexWrapper, SlicedTitle, Title } from "../common/Components";
 import ApartmentMap from "./ApartmentMap";
 import RecommendCarousel from "./Recommend";
 
@@ -204,16 +204,14 @@ const OtherInfo = styled.div`
   margin-bottom: 10px;
 `;
 
-function ApartmentDetail() {
+function ApartmentDetail({ details }) {
   const { currentUser } = useAuth();
   const { id } = useParams();
-  const [details, setDetails] = React.useState([]);
   const [isActive, setIsActive] = React.useState(false);
   const [hasJoined, setHasJoined] = React.useState(false);
   const [hasCollected, setHasCollected] = React.useState(false);
   const [groupId, setGroupId] = React.useState();
   const [hasNotSignIn, setHasNotSignIn] = React.useState(false);
-
   const [conditions, setConditions] = React.useState([]);
   const [facilities, setFacilities] = React.useState([]);
   const [furnitures, setFurnitures] = React.useState([]);
@@ -237,13 +235,6 @@ function ApartmentDetail() {
         });
     });
 
-    async function getDetailData() {
-      if (!mounted) return;
-      api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
-        setDetails(res);
-      });
-    }
-
     async function checkHasJoinedGroupOrNot() {
       if (!mounted) return;
       api
@@ -255,7 +246,6 @@ function ApartmentDetail() {
           }
         });
     }
-    getDetailData();
 
     if (currentUser) {
       checkHasJoinedGroupOrNot();
@@ -350,34 +340,46 @@ function ApartmentDetail() {
                     / 間
                   </Detail>
                 </Details>
-                <ActionArea>
-                  {hasJoined ? (
+                {currentUser &&
+                currentUser.role === 2 &&
+                details[0].owner === currentUser.uid ? (
+                  <ActionArea>
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
-                  ) : (currentUser && currentUser.role) === 2 ? (
-                    ""
-                  ) : (
-                    <Button1 onClick={openConfirmModal}>加入租屋</Button1>
-                  )}
-                  {hasCollected ? (
-                    <HeartButton>
-                      <HeartIcon
-                        alt=""
-                        src={heartFill}
-                        onClick={cancelCollect}
-                      />
-                      已收藏
-                    </HeartButton>
-                  ) : (
-                    <HeartButton>
-                      <HeartIcon
-                        alt=""
-                        src={heart}
-                        onClick={addToCollectionList}
-                      />
-                      收藏房源
-                    </HeartButton>
-                  )}
-                </ActionArea>
+                  </ActionArea>
+                ) : currentUser &&
+                  currentUser.role === 2 &&
+                  details[0].owner !== currentUser.uid ? (
+                  ""
+                ) : (
+                  <ActionArea>
+                    {hasJoined ? (
+                      <StyledLink to={`/groups/${groupId}`}>
+                        查看社團
+                      </StyledLink>
+                    ) : (
+                      <Button1 onClick={openConfirmModal}>加入租屋</Button1>
+                    )}
+                    {hasCollected ? (
+                      <HeartButton>
+                        <HeartIcon
+                          alt=""
+                          src={heartFill}
+                          onClick={cancelCollect}
+                        />
+                        已收藏
+                      </HeartButton>
+                    ) : (
+                      <HeartButton>
+                        <HeartIcon
+                          alt=""
+                          src={heart}
+                          onClick={addToCollectionList}
+                        />
+                        收藏房源
+                      </HeartButton>
+                    )}
+                  </ActionArea>
+                )}
               </DetailInfo>
             )}
           </Head>

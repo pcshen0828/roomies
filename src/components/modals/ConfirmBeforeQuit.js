@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Overlay, Modal } from "./ModalElements";
 import { Firebase } from "../../utils/firebase";
-import { Button1 } from "../common/Components";
+import { Bold, Button1 } from "../common/Components";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1200;
@@ -12,7 +12,12 @@ const NewModal = styled(Modal)`
   justify-content: center;
   align-items: center;
   height: 100px;
-  padding: 20px 20px 0;
+  padding: 30px 20px 20px;
+  max-width: 600px;
+`;
+
+const AlertMessage = styled(Bold)`
+  margin-bottom: 20px;
 `;
 
 function ConfirmBeforeQuitModal({ toggle, apartmentId }) {
@@ -37,7 +42,7 @@ function ConfirmBeforeQuitModal({ toggle, apartmentId }) {
   return (
     <HigherOverlay out={false}>
       <NewModal>
-        尚未儲存，確認離開？
+        <AlertMessage>尚未儲存，確認離開？</AlertMessage>
         <Button1 onClick={closeAndDeleteDoc}>確認</Button1>
       </NewModal>
     </HigherOverlay>
