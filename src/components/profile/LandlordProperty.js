@@ -337,7 +337,7 @@ function LandlordProperty() {
             active={tab === "active"}
             onClick={() => {
               setTab("active");
-              navigate("/profile/apartments?status=active");
+              navigate("/profile/apartments/active");
             }}
           >
             已上架
@@ -346,7 +346,7 @@ function LandlordProperty() {
             active={tab === "inactive"}
             onClick={() => {
               setTab("inactive");
-              navigate("/profile/apartments?status=inactive");
+              navigate("/profile/apartments/inactive");
             }}
           >
             待上架

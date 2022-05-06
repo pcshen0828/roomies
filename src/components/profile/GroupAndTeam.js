@@ -1,11 +1,18 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper, Bold, SmallTitle } from "../common/Components";
+import {
+  FlexWrapper,
+  Bold,
+  SmallTitle,
+  SlicedTitle,
+  SlicedBold,
+} from "../common/Components";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import ManageTeamModal from "../modals/ManageTeam";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -80,11 +87,44 @@ const TeamLink = styled.div`
   }
 `;
 
+const TabsWrapper = styled(FlexWrapper)`
+  border-bottom: 1px solid #dadada;
+  margin: 20px 0;
+  width: 100%;
+`;
+
+const Tab = styled(SmallTitle)`
+  cursor: pointer;
+  margin: 0 10px 0 0;
+  padding: 0 10px 10px 10px;
+  border-bottom: ${(props) =>
+    props.active ? "2px solid #424b5a" : "2px solid transparent"};
+`;
+
+const GroupsWrapper = styled(FlexWrapper)`
+  flex-wrap: wrap;
+`;
+
+const GroupCard = styled(FlexWrapper)`
+  width: 300px;
+  height: 100px;
+  border-radius: 10px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
+  margin: 0 10px 10px 0;
+  padding: 10px 20px;
+  @media screen and (max-width: 767.98px) {
+    width: 200px;
+  }
+`;
+
 function GroupAndTeam() {
   const { currentUser } = useAuth();
   const [groups, setGroups] = React.useState([]);
   const [teams, setTeams] = React.useState([]);
   const [teamId, setTeamId] = React.useState("");
+  const [tab, setTab] = React.useState("groups");
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const query1 = api.createQuery(
@@ -126,7 +166,40 @@ function GroupAndTeam() {
   return (
     <Wrapper>
       <Bold>社團 / 群組管理</Bold>
-      <NewTitle>我加入的房源社團 / 群組</NewTitle>
+      <TabsWrapper>
+        <Tab
+          active={tab === "groups"}
+          onClick={() => {
+            setTab("groups");
+            navigate("/profile/groupteam/groups");
+          }}
+        >
+          社團
+        </Tab>
+        <Tab
+          active={tab === "teams"}
+          onClick={() => {
+            setTab("teams");
+            navigate("/profile/groupteam/teams");
+          }}
+        >
+          群組
+        </Tab>
+      </TabsWrapper>
+      <GroupsWrapper>
+        {tab === "groups" &&
+          groups.map((group) => (
+            <GroupCard key={group.id}>
+              <SlicedBold>{group.title}</SlicedBold>
+            </GroupCard>
+          ))}
+      </GroupsWrapper>
+      <FlexWrapper>
+        {tab === "teams" &&
+          teams.map((team) => (
+            <FlexWrapper key={team.id}>{team.name}</FlexWrapper>
+          ))}
+      </FlexWrapper>
       {/* <TableParent>
         <FlexTableWrapper>
           <FlexRowWrapper>

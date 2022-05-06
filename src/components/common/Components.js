@@ -386,6 +386,12 @@ const SlicedTitle = styled(Title)`
   text-overflow: ellipsis;
 `;
 
+const SlicedBold = styled(Bold)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
 export {
   Wrapper,
   Title,
@@ -425,4 +431,5 @@ export {
   CardBottom,
   Required,
   SlicedTitle,
+  SlicedBold,
 };

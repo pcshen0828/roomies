@@ -446,7 +446,7 @@ function CreatePropertyModal({ toggle, setSaved }) {
       .then(() => {
         setIsLoading(false);
         toggle(false);
-        navigate("/profile/apartments?status=inactive");
+        navigate("/profile/apartments/inactive");
         setSaved(true);
       });
   }

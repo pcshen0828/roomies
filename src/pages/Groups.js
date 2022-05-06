@@ -287,6 +287,7 @@ const NotMemberWrapper = styled(FlexWrapper)`
   background: #e8e8e8;
   flex-direction: column;
   border-radius: 10px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
 `;
 
 const Reminder = styled(FlexWrapper)`
@@ -305,8 +306,8 @@ function Groups() {
 
   const [openConfirmQuit, setOpenConfirmQuit] = React.useState(false);
   const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
+  const [openJoin, setOpenJoin] = React.useState(false);
   const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
-  const [confirmMessage, setConfirmMessage] = React.useState("");
   const [dropdown, setDropdown] = React.useState(false);
 
   const [openInviteModal, setOpenInviteModal] = React.useState(false);
@@ -353,20 +354,6 @@ function Groups() {
           ).length
         );
       });
-      // api
-      //   .getDataWithSingleQuery("groupInvitations", "groupId", "==", id)
-      //   .then((res) => {
-      //     setInvitation(
-      //       res.find(
-      //         (data) => data.receiver === (currentUser && currentUser.uid)
-      //       )
-      //     );
-      //     setIsInvited(
-      //       res.filter(
-      //         (data) => data.receiver === (currentUser && currentUser.uid)
-      //       ).length
-      //     );
-      //   });
     }
     checkCurrentUserStatus();
 
@@ -376,14 +363,10 @@ function Groups() {
   }, [currentUser]);
 
   function quitTheGroup() {
-    // 將自己從 group members 中刪除
-    // 如果有加入群組，也將自己從隸屬於這個社團的所有群組中刪除
-    // 如果退出的人是團主，應該不能退群組
     const userID = currentUser.uid;
     api.updateDocData("groups", id, {
       members: [...groupMembers.filter((memberID) => memberID !== userID)],
     });
-
     setDropdown(false);
   }
 
@@ -395,6 +378,12 @@ function Groups() {
     Firebase.deleteDoc(
       Firebase.doc(Firebase.db, "groupInvitations", invitation.id)
     );
+  }
+
+  function joinGroup() {
+    api.updateDocData("groups", id, {
+      members: [...groupMembers, currentUser.uid],
+    });
   }
 
   function rejectJoinGroup() {
@@ -427,7 +416,7 @@ function Groups() {
       )}
       {openConfirmQuit && (
         <ConfirmBeforeActionModal
-          message={confirmMessage}
+          message="確認退出？"
           action={quitTheGroup}
           toggle={setOpenConfirmQuit}
         />
@@ -437,6 +426,13 @@ function Groups() {
           message="確認加入？"
           action={confirmJoinGroup}
           toggle={setOpenConfirmJoin}
+        />
+      )}
+      {openJoin && (
+        <ConfirmBeforeActionModal
+          message="確認加入？"
+          action={joinGroup}
+          toggle={setOpenJoin}
         />
       )}
       {openConfirmReject && (
@@ -511,7 +507,6 @@ function Groups() {
                 <DropdownMenu>
                   <ExitButton
                     onClick={() => {
-                      setConfirmMessage("確認退出？");
                       setOpenConfirmQuit(true);
                     }}
                   >
@@ -574,7 +569,15 @@ function Groups() {
             <Icon src={lock} alt="" />
             成為社團成員才能預覽內容喔
           </Reminder>
-          {!isInvited && <Button1 onClick={() => {}}>加入</Button1>}
+          {!isInvited && (
+            <Button1
+              onClick={() => {
+                setOpenJoin(true);
+              }}
+            >
+              加入
+            </Button1>
+          )}
         </NotMemberWrapper>
       )}
     </Wrapper>

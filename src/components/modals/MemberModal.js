@@ -19,7 +19,7 @@ function MemberModal({ setActiveIcon }) {
       <NavModal onClick={(e) => e.stopPropagation()}>
         <Bold>會員</Bold>
         <>{currentUser.email}</>
-        <StyledLink to="/profile/info">會員專區</StyledLink>
+        <StyledLink to="/profile/info/edit">會員專區</StyledLink>
         <SignoutButton
           onClick={() => {
             signOut().then(navigate("/"));

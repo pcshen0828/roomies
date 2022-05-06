@@ -9,7 +9,7 @@ import {
 import LandlordInfo from "./LandlordInfo";
 import LandlordProperty from "./LandlordProperty";
 import LandlordSchedule from "./LandlordSchedule";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 0px;
@@ -26,18 +26,21 @@ const profilelist = [
     name: "會員基本資料",
     id: 1,
     to: "/profile/info",
+    defaultStatus: "edit",
     component: <LandlordInfo key="1" />,
   },
   {
     name: "房源管理",
     id: 2,
     to: "/profile/apartments",
+    defaultStatus: "active",
     component: <LandlordProperty key="2" />,
   },
   {
     name: "行程管理",
     id: 3,
     to: "/profile/schedule",
+    defaultStatus: "pending",
     component: <LandlordSchedule key="3" />,
   },
 ];
@@ -45,12 +48,15 @@ const profilelist = [
 function Landlord() {
   const [listIndex, setListIndex] = React.useState(1);
   const navigate = useNavigate();
-  const { id } = useParams();
+  const location = useLocation();
+  const { id, status } = useParams();
 
   React.useEffect(() => {
-    const current = profilelist.find((item) => item.to === `/profile/${id}`);
+    const current = profilelist.find(
+      (item) => item.to === `/profile/${id}/${status}`
+    );
     setListIndex(current && current.id);
-  }, [id]);
+  }, []);
 
   return (
     <Wrapper>
@@ -58,21 +64,21 @@ function Landlord() {
         {profilelist.map((item, index) => (
           <ProfileItem
             key={index}
-            active={listIndex === item.id}
+            active={location.pathname.startsWith(item.to)}
             onClick={() => {
               setListIndex(item.id);
-              navigate(item.to);
+              navigate(`${item.to}/${item.defaultStatus}`);
             }}
           >
             {item.name}
           </ProfileItem>
         ))}
       </ProfileList>
-      {listIndex && (
-        <ProfileContent>
-          {profilelist.map((item) => listIndex === item.id && item.component)}
-        </ProfileContent>
-      )}
+      <ProfileContent>
+        {profilelist.map(
+          (item) => location.pathname.startsWith(item.to) && item.component
+        )}
+      </ProfileContent>
     </Wrapper>
   );
 }

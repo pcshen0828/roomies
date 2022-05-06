@@ -73,7 +73,7 @@ function TenantBasicInfoModal({
       })
       .then(() => {
         setToggle(false);
-        navigate("/profile/info");
+        navigate("/profile/info/edit");
       });
   }
 

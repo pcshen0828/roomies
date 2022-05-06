@@ -16,6 +16,7 @@ import Footer from "./components/layout/Footer";
 
 function App() {
   // 網址不要用大寫
+  // profile 頁面的 path 要再重新設計
   return (
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>
@@ -28,7 +29,7 @@ function App() {
         <Route path="/users/:id" element={<User />}></Route>
         <Route path="/community" element={<Community />}></Route>
         <Route path="/explore" element={<Explore />}></Route>
-        <Route path="/profile/:id" element={<Profile />}></Route>
+        <Route path="/profile/:id/:status" element={<Profile />}></Route>
         <Route path="/messages/:id" element={<Messages />}></Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>

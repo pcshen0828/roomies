@@ -112,7 +112,7 @@ function SignUpModal({ setOpenSignUp }) {
                 ...basicInfo,
               }
         );
-        navigate("/profile/info");
+        navigate("/profile/info/edit");
       })
       .catch((error) => {
         setErrMessage(api.handleError(error));
