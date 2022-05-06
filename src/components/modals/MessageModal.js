@@ -57,7 +57,9 @@ function MessageModal({ setActiveIcon }) {
         <ChatsWrapper>
           <List chats={chats} nav={true} />
         </ChatsWrapper>
-        <MessagesLink to="/messages/all">查看收件匣</MessagesLink>
+        <MessagesLink to="/messages/all" onClick={() => setActiveIcon("")}>
+          查看收件匣
+        </MessagesLink>
       </NewNavModal>
     </NavModalOverlay>
   );

@@ -433,9 +433,18 @@ function GroupAndTeam() {
                 <ConfirmButton onClick={() => setTeamId(team.id)}>
                   <UnreadNot
                     show={
-                      team.members.find((member) => member.status === 0).uid ===
-                        currentUser.uid &&
-                      team.members.find((member) => member.status === 3)
+                      (team.members.find((member) => member.status === 0)
+                        .uid === currentUser.uid &&
+                        team.members.find((member) => member.status === 3)) ||
+                      getUserStatus(team.members) === "邀請中" ||
+                      (apartments.length &&
+                        apartments.find((item) => item.id === team.apartmentID)
+                          .roomiesCount === team.members.length &&
+                        team.members
+                          .filter((member) => member.status !== 0)
+                          .every((member) => member.status === 1) &&
+                        team.members.find((member) => member.status === 0)
+                          .uid === currentUser.uid)
                     }
                   />
                   查看

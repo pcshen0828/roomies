@@ -179,6 +179,7 @@ function NoticeModal({ setActiveIcon }) {
                   key={notice.id}
                   onClick={() => {
                     setNoticeStatusRead(notice.status, notice.id);
+                    setActiveIcon("");
                   }}
                 >
                   <UnreadNot show={notice.status === 0} />

@@ -15,6 +15,7 @@ import {
   Input,
   FlexWrapper,
   Status,
+  SlicedBold,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -39,6 +40,13 @@ const MemberWrapper = styled(FlexWrapper)`
   margin: 20px 10px;
   @media screen and (max-width: 767.98px) {
     font-size: 14px;
+  }
+`;
+
+const NewTitle = styled(SlicedBold)`
+  max-width: 300px;
+  @media screen and (max-width: 767.98px) {
+    max-width: 100px;
   }
 `;
 
@@ -196,9 +204,8 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
         <NewModal>
           <Header>
             <FlexWrapper>
-              <Title>
-                {team.name}｜{team.members.length}位成員
-              </Title>
+              <NewTitle>{team.name}</NewTitle>｜{team.members.length}
+              位成員
               <Status>{group.roomiesCount}人成團</Status>
             </FlexWrapper>
             <CloseButton onClick={() => toggle("")}>×</CloseButton>
@@ -283,13 +290,23 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
                 .every((member) => member.status === 1) && (
                 <Button onClick={openBookScheduleModal}>預約看房</Button>
               )}
-            <Button
-              onClick={() => {
-                updateTeamName();
-              }}
-            >
-              儲存
-            </Button>
+            {selfStatus === 0 ? (
+              <Button
+                onClick={() => {
+                  updateTeamName();
+                }}
+              >
+                儲存
+              </Button>
+            ) : (
+              <Button
+                onClick={() => {
+                  toggle("");
+                }}
+              >
+                關閉
+              </Button>
+            )}
           </Buttons>
         </NewModal>
       </Overlay>
