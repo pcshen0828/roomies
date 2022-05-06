@@ -15,6 +15,7 @@ import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import BookScheduleModal from "./BookSchedule";
 import PopupNoticeModal from "./PopupNotice";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 
 const NewModal = styled(Modal)`
   width: 60%;
@@ -80,6 +81,7 @@ function ManageTeamModal({ team, group, toggle }) {
   const { currentUser } = useAuth();
   const [openSchedule, setOpenSchedule] = React.useState(false);
   const [openPopup, setOpenPopup] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = React.useState(false);
   const [otherMembers, setOtherMembers] = React.useState([]);
   const [name, setName] = React.useState(team.name);
   const host = team.members.find((user) => user.status === 0).uid;
@@ -154,6 +156,15 @@ function ManageTeamModal({ team, group, toggle }) {
       {openPopup && (
         <PopupNoticeModal message="儲存成功" toggle={setOpenPopup} />
       )}
+
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          message="確認加入？"
+          action={() => {}}
+          toggle={setOpenConfirm}
+        />
+      )}
+
       <Overlay out={false}>
         <NewModal>
           <Header>

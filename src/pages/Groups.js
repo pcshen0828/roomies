@@ -10,6 +10,8 @@ import {
   Bold,
   SlicedTitle,
   Title,
+  RejectButton,
+  ExitButton,
 } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
@@ -188,37 +190,6 @@ const DropdownMenu = styled(Modal)`
   padding: 10px;
 `;
 
-const ExitButton = styled(FlexWrapper)`
-  background: none;
-  color: #424b5a;
-  width: calc(100% - 20px);
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-
-  &:hover {
-    background: #e8e8e8;
-  }
-`;
-
-const RejectButton = styled(FlexWrapper)`
-  background: none;
-  color: #424b5a;
-  width: 70px;
-  height: 40px;
-  border-radius: 5px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: center;
-  background: #e8e8e8;
-  margin-left: 10px;
-
-  &:hover {
-    background: #dadada;
-  }
-`;
-
 const GroupBody = styled(FlexWrapper)`
   width: 100%;
   justify-content: space-between;
@@ -320,6 +291,7 @@ function Groups() {
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
         const groupData = snapshot.docs.map((doc) => doc.data())[0];
+        if (!groupData) return;
         setGroupMembers(groupData.members);
         api
           .getDataWithSingleQuery(

@@ -70,6 +70,14 @@ const FlexWrapper = styled.div`
   align-items: center;
 `;
 
+const FlexWrap = styled(FlexWrapper)`
+  flex-wrap: wrap;
+`;
+
+const FlexColumn = styled(FlexWrapper)`
+  flex-direction: column;
+`;
+
 const Input = styled.input`
   width: 90%;
   height: 30px;
@@ -392,6 +400,73 @@ const SlicedBold = styled(Bold)`
   text-overflow: ellipsis;
 `;
 
+const SlicedLink = styled(Link)`
+  font-weight: 700;
+  color: #424b5a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ExitButton = styled(FlexWrapper)`
+  background: none;
+  color: #424b5a;
+  width: calc(100% - 20px);
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+
+  &:hover {
+    background: #e8e8e8;
+  }
+  @media screen and (max-width: 767.98px) {
+    font-size: 14px;
+  }
+`;
+
+const RejectButton = styled(FlexWrapper)`
+  background: none;
+  color: #424b5a;
+  width: 70px;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  background: #e8e8e8;
+  margin-left: 10px;
+
+  &:hover {
+    background: #dadada;
+  }
+  @media screen and (max-width: 767.98px) {
+    font-size: 14px;
+  }
+`;
+
+const ConfirmButton = styled(Button1)`
+  width: 90px;
+  height: 40px;
+  position: relative;
+  @media screen and (max-width: 767.98px) {
+    font-size: 14px;
+  }
+`;
+
+const Status = styled(FlexWrapper)`
+  align-items: center;
+  justify-content: center;
+  background: #f2f5f7;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-left: 10px;
+  font-size: 14px;
+`;
+
 export {
   Wrapper,
   Title,
@@ -402,6 +477,8 @@ export {
   BodyLeft,
   BodyRight,
   FlexWrapper,
+  FlexWrap,
+  FlexColumn,
   Input,
   Select,
   Textarea,
@@ -432,4 +509,9 @@ export {
   Required,
   SlicedTitle,
   SlicedBold,
+  SlicedLink,
+  RejectButton,
+  ExitButton,
+  ConfirmButton,
+  Status,
 };

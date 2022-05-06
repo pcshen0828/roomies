@@ -17,7 +17,7 @@ import {
   ScheduleInnerWrapper,
 } from "../common/Components";
 import RequestDetailModal from "../modals/RequestDetail";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -33,8 +33,18 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const NewTitle = styled(SmallTitle)`
+const TitleWrapper = styled(FlexWrapper)`
+  border-bottom: 1px solid #dadada;
   margin: 20px 0;
+  width: 100%;
+`;
+
+const NewTitle = styled(SmallTitle)`
+  margin: 0 20px 0 0;
+  padding-bottom: 10px;
+  cursor: pointer;
+  border-bottom: ${(props) =>
+    props.active ? "2px solid #424B5A" : "2px solid transparent"};
 `;
 
 const DateTitle = styled(Title)`
@@ -63,6 +73,8 @@ export default function TenantSchedule() {
   const [schedules, setSchedules] = React.useState([]);
   const [finished, setFinished] = React.useState([]);
   const [checkDetail, setCheckDetail] = React.useState(false);
+  const [status, setStatus] = React.useState(0);
+  const navigate = useNavigate();
 
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
@@ -177,12 +189,38 @@ export default function TenantSchedule() {
   return (
     <Wrapper>
       <Bold>預約看房管理</Bold>
-      <NewTitle>待確認行程</NewTitle>
-      {RenderScheduleCard(unConfirmed)}
-      <NewTitle>已確認行程</NewTitle>
-      {RenderScheduleCard(schedules)}
-      <NewTitle>已結束行程</NewTitle>
-      {RenderScheduleCard(finished)}
+      <TitleWrapper>
+        <NewTitle
+          active={status === 0}
+          onClick={() => {
+            setStatus(0);
+            navigate("/profile/schedule/pending");
+          }}
+        >
+          待確認行程
+        </NewTitle>
+        <NewTitle
+          active={status === 1}
+          onClick={() => {
+            setStatus(1);
+            navigate("/profile/schedule/booked");
+          }}
+        >
+          已確認行程
+        </NewTitle>
+        <NewTitle
+          active={status === 2}
+          onClick={() => {
+            setStatus(2);
+            navigate("/profile/schedule/finished");
+          }}
+        >
+          已結束行程
+        </NewTitle>
+      </TitleWrapper>
+      {status === 0 && RenderScheduleCard(unConfirmed)}
+      {status === 1 && RenderScheduleCard(schedules)}
+      {status === 2 && RenderScheduleCard(finished)}
     </Wrapper>
   );
 }
