@@ -197,7 +197,7 @@ function UserInfo({ user, role }) {
         <Span>{" > "}</Span>
         <StyledLink to="/community">社群</StyledLink>
         <Span>{" > "}</Span>
-        <Active>{user.uid}</Active>
+        <Active>{user.alias}</Active>
       </BreadCrumb>
       <NewWrapper>
         <LeftWrapper>

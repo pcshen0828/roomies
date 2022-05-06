@@ -4,9 +4,10 @@ import CheckTeamMembersModal from "../modals/CheckTeamMembers";
 import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
-import { Bold, Button1, FlexWrapper, Title } from "../common/Components";
+import { Button1, FlexWrapper, Title } from "../common/Components";
 import member from "../../images/members.svg";
 import InviteJoinTeamModal from "../modals/InviteJoinTeam";
+import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 
 const defaultCardStyle = `
   border-radius: 10px;
@@ -26,7 +27,6 @@ const Wrapper = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   border-radius: 10px;
-  ${"" /* border: 1px solid #e8e8e8; */}
   padding: 30px 0 10px;
   @media screen and (max-width: 995.98px) {
     height: 180px;
@@ -91,6 +91,7 @@ function TeamCard({ team, roomies, groupMemberDetail }) {
   const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
   const [openInviteModal, setOpenInviteModal] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = React.useState(false);
   const { currentUser } = useAuth();
 
   async function joinTeam() {
@@ -125,6 +126,13 @@ function TeamCard({ team, roomies, groupMemberDetail }) {
           groupMemberDetail={groupMemberDetail}
         />
       )}
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          message="確認申請加入？"
+          action={joinTeam}
+          toggle={setOpenConfirm}
+        />
+      )}
       <Wrapper>
         <Top>
           <Title>{team.name}</Title>
@@ -144,7 +152,13 @@ function TeamCard({ team, roomies, groupMemberDetail }) {
           ) : userStatus === 3 ? (
             <ShowStatus>待核准</ShowStatus>
           ) : team.members.length < roomies ? (
-            <JoinButton onClick={joinTeam}>申請加入</JoinButton>
+            <JoinButton
+              onClick={() => {
+                setOpenConfirm(true);
+              }}
+            >
+              申請加入
+            </JoinButton>
           ) : (
             <ShowStatus>已額滿</ShowStatus>
           )}

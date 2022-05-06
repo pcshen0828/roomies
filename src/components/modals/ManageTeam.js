@@ -9,17 +9,24 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { Bold, SmallLabel, Input, FlexWrapper } from "../common/Components";
+import {
+  Bold,
+  SmallLabel,
+  Input,
+  FlexWrapper,
+  Status,
+} from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import BookScheduleModal from "./BookSchedule";
-import PopupNoticeModal from "./PopupNotice";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
+import { Link } from "react-router-dom";
 
 const NewModal = styled(Modal)`
-  width: 60%;
+  width: 80%;
   min-width: 350px;
+  max-width: 700px;
 `;
 
 const NewBody = styled(Body)`
@@ -65,11 +72,14 @@ const MemberStatus = styled(FlexWrapper)`
 
 const ApproveButton = styled(FlexWrapper)`
   width: 60px;
-  padding: 5px 10px;
+  padding: 6px 10px;
   border-radius: 5px;
-  background: #dadada;
+  background: #e8e8e8;
   cursor: pointer;
   justify-content: center;
+  &:hover {
+    background: #dadada;
+  }
 `;
 
 const Buttons = styled(FlexWrapper)`
@@ -77,11 +87,14 @@ const Buttons = styled(FlexWrapper)`
   margin-top: -20px;
 `;
 
-function ManageTeamModal({ team, group, toggle }) {
+function ManageTeamModal({ team, group, toggle, setSaved }) {
   const { currentUser } = useAuth();
   const [openSchedule, setOpenSchedule] = React.useState(false);
-  const [openPopup, setOpenPopup] = React.useState(false);
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+
+  const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
+  const [openConfirmApprove, setOpenConfirmApprove] = React.useState(false);
+  const [targetUser, setTargetUser] = React.useState("");
+
   const [otherMembers, setOtherMembers] = React.useState([]);
   const [name, setName] = React.useState(team.name);
   const host = team.members.find((user) => user.status === 0).uid;
@@ -116,13 +129,13 @@ function ManageTeamModal({ team, group, toggle }) {
       updateTime: time,
     });
     if (status === 2) {
-      // （被邀請者）確認加入群組
       api.createNoticeByType(currentUser.uid, host, 1);
     }
     if (status === 3) {
-      // （團主）核准加入群組
       api.createNoticeByType(currentUser.uid, user.uid, 3);
     }
+    toggle("");
+    setSaved(true);
   }
 
   function updateTeamName() {
@@ -133,13 +146,18 @@ function ManageTeamModal({ team, group, toggle }) {
         updateTime: time,
       })
       .then(() => {
-        setOpenPopup(true);
-        // toggle("");
+        toggle("");
+        setSaved(true);
       });
   }
 
   function openBookScheduleModal() {
     setOpenSchedule(true);
+  }
+
+  function getUserStatus(userbase, userID) {
+    const status = userbase.find((member) => member.uid === userID).status;
+    return status;
   }
 
   return (
@@ -153,24 +171,36 @@ function ManageTeamModal({ team, group, toggle }) {
           toggleParent={toggle}
         />
       )}
-      {openPopup && (
-        <PopupNoticeModal message="儲存成功" toggle={setOpenPopup} />
-      )}
 
-      {openConfirm && (
+      {openConfirmJoin && (
         <ConfirmBeforeActionModal
           message="確認加入？"
-          action={() => {}}
-          toggle={setOpenConfirm}
+          action={() => {
+            approveJoinTeam(targetUser, 2);
+          }}
+          toggle={setOpenConfirmJoin}
+        />
+      )}
+
+      {openConfirmApprove && (
+        <ConfirmBeforeActionModal
+          message="確認核准加入？"
+          action={() => {
+            approveJoinTeam(targetUser, 3);
+          }}
+          toggle={setOpenConfirmApprove}
         />
       )}
 
       <Overlay out={false}>
         <NewModal>
           <Header>
-            <Title>
-              管理群組｜人數 {team.members.length} / {group.roomiesCount}
-            </Title>
+            <FlexWrapper>
+              <Title>
+                {team.name}｜{team.members.length}位成員
+              </Title>
+              <Status>{group.roomiesCount}人成團</Status>
+            </FlexWrapper>
             <CloseButton onClick={() => toggle("")}>×</CloseButton>
           </Header>
           <NewBody>
@@ -207,25 +237,36 @@ function ManageTeamModal({ team, group, toggle }) {
               .filter((member) => member.uid !== host)
               .map((user) => (
                 <MemberWrapper key={user.uid}>
-                  <ProfileImage src={user.profileImage} />
+                  <Link to={`/users/${user.uid}`}>
+                    <ProfileImage src={user.profileImage} />
+                  </Link>
                   <Alias>{user.alias}</Alias>
-                  {team.members.find((member) => member.uid === user.uid)
-                    .status === 1 ? (
+                  {getUserStatus(team.members, user.uid) === 1 ? (
                     <MemberStatus>已加入</MemberStatus>
-                  ) : team.members.find((member) => member.uid === user.uid)
-                      .status === 2 && user.uid !== currentUser.uid ? (
+                  ) : getUserStatus(team.members, user.uid) === 2 &&
+                    user.uid !== currentUser.uid ? (
                     <MemberStatus>已邀請</MemberStatus>
-                  ) : team.members.find((member) => member.uid === user.uid)
-                      .status === 2 && user.uid === currentUser.uid ? (
-                    <ApproveButton onClick={() => approveJoinTeam(user, 2)}>
+                  ) : getUserStatus(team.members, user.uid) === 2 &&
+                    user.uid === currentUser.uid ? (
+                    <ApproveButton
+                      onClick={() => {
+                        setTargetUser(user);
+                        setOpenConfirmJoin(true);
+                      }}
+                    >
                       加入
                     </ApproveButton>
-                  ) : team.members.find((member) => member.uid === user.uid)
-                      .status === 3 && host !== currentUser.uid ? (
+                  ) : getUserStatus(team.members, user.uid) === 3 &&
+                    host !== currentUser.uid ? (
                     <MemberStatus>待核准</MemberStatus>
-                  ) : team.members.find((member) => member.uid === user.uid)
-                      .status === 3 && host === currentUser.uid ? (
-                    <ApproveButton onClick={() => approveJoinTeam(user, 3)}>
+                  ) : getUserStatus(team.members, user.uid) === 3 &&
+                    host === currentUser.uid ? (
+                    <ApproveButton
+                      onClick={() => {
+                        setTargetUser(user);
+                        setOpenConfirmApprove(true);
+                      }}
+                    >
                       核准
                     </ApproveButton>
                   ) : (

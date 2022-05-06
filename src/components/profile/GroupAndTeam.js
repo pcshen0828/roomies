@@ -18,6 +18,7 @@ import { Firebase } from "../../utils/firebase";
 import ManageTeamModal from "../modals/ManageTeam";
 import { useNavigate, useLocation } from "react-router-dom";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import members from "../../images/members.svg";
 
 const Wrapper = styled(FlexWrapper)`
@@ -180,6 +181,7 @@ function GroupAndTeam() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [saved, setSaved] = React.useState(false);
   const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
   const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
   const [actionObject, setActionObject] = React.useState({
@@ -324,6 +326,10 @@ function GroupAndTeam() {
         </Tab>
       </TabsWrapper>
 
+      {saved && (
+        <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
+      )}
+
       {location.pathname === "/profile/groupteam/groups" && invitations.length
         ? invitations.map((invitation) => (
             <InvitationWrapper key={invitation.id}>
@@ -437,6 +443,7 @@ function GroupAndTeam() {
               </ActionButtons>
               {teamId === team.id && (
                 <ManageTeamModal
+                  setSaved={setSaved}
                   team={team}
                   group={apartments.find(
                     (item) => item.id === team.apartmentID
