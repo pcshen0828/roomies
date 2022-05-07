@@ -4,7 +4,6 @@ import {
   Overlay,
   Modal,
   Header,
-  Title,
   CloseButton,
   Body,
   Button,
@@ -177,6 +176,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
           apartment={group}
           toggle={setOpenSchedule}
           toggleParent={toggle}
+          setSaved={setSaved}
         />
       )}
 

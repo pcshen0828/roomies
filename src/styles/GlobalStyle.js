@@ -15,3 +15,8 @@ export const GlobalStyle = createGlobalStyle`
   }
   
 `;
+
+const mainColor = "#424b5a";
+const subColor = "#c1b18a";
+
+export { mainColor, subColor };

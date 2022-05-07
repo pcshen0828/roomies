@@ -14,15 +14,17 @@ import { MUIDatePicker, MUITimePicker } from "./DateTimePicker";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 import calendar from "../../images/calendar.svg";
-import SuccessfullySavedModal from "./SuccessfullySaved";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
+import { useNavigate } from "react-router-dom";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;
 `;
 
 const NewModal = styled(Modal)`
-  width: 70%;
+  width: 80%;
   min-width: 350px;
+  max-width: 700px;
 `;
 
 const NewBody = styled(Body)`
@@ -31,7 +33,7 @@ const NewBody = styled(Body)`
 `;
 
 const PickerWrapper = styled.div`
-  margin: 20px 0;
+  margin: 0 0 20px;
 `;
 
 const BookedTime = styled(FlexWrapper)`
@@ -60,6 +62,7 @@ export default function BookScheduleModal({
   apartment,
   toggle,
   toggleParent,
+  setSaved,
 }) {
   const date = new Date();
   const isoDateTime = new Date(
@@ -72,7 +75,9 @@ export default function BookScheduleModal({
   const [endTime, setEndTime] = React.useState(isoDateTime);
   const [message, setMessage] = React.useState("");
   const [events, setEvents] = React.useState([]);
-  const [booked, setBooked] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = React.useState(false);
+
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const query = Firebase.query(
@@ -138,7 +143,6 @@ export default function BookScheduleModal({
             });
             api.addNewDoc("chats/" + res.id + "/messages", newMessage);
             createNoticeToOwner();
-            toggle(false);
           } else {
             const newMessage = {
               content: message,
@@ -159,30 +163,35 @@ export default function BookScheduleModal({
             });
             api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
             createNoticeToOwner();
-            toggle(false);
-            setBooked(true);
-            toggleParent("");
           }
         });
-    } else {
-      toggle(false);
-      setBooked(true);
-      toggleParent("");
     }
+    toggle(false);
+    toggleParent("");
+    setSaved(true);
+    setTimeout(() => {
+      navigate("/profile/schedule/pending");
+    }, 1000);
   }
 
   return (
     <HigherOverlay out={false}>
-      {booked && (
-        <SuccessfullySavedModal
-          out={false}
-          toggle={setBooked}
-          message="預約成功！"
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          message={`確認預約：${
+            pickedDate +
+            "-" +
+            startTime.slice(11, -3) +
+            "~" +
+            endTime.slice(11, -3)
+          }？`}
+          action={bookSchedule}
+          toggle={setOpenConfirm}
         />
       )}
       <NewModal>
         <Header>
-          <Title>預約看房</Title>
+          <Title>預約看房｜{apartment.title}</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>
@@ -214,7 +223,13 @@ export default function BookScheduleModal({
             onChange={(e) => setMessage(e.target.value)}
           />
         </NewBody>
-        <Button onClick={bookSchedule}>送出</Button>
+        <Button
+          onClick={() => {
+            setOpenConfirm(true);
+          }}
+        >
+          送出
+        </Button>
       </NewModal>
     </HigherOverlay>
   );

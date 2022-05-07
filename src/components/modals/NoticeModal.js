@@ -86,7 +86,6 @@ const Time = styled.div`
 function NoticeModal({ setActiveIcon }) {
   const { currentUser } = useAuth();
   const [notices, setNotices] = React.useState([]);
-  const [noticeList, setNoticeList] = React.useState([]);
   const stringLimit = 10;
 
   function calcTimeGap(time) {
@@ -119,45 +118,35 @@ function NoticeModal({ setActiveIcon }) {
     );
     Firebase.onSnapshot(query, (snapShot) => {
       const res = snapShot.docs.map((doc) => doc.data());
-      if (!mounted) return;
-      setNoticeList(res);
+      let noticeMessages = [];
+      let promises = [];
+      res.forEach((notice) => {
+        let content = {
+          sender: {},
+          time: calcTimeGap(notice.createTime.toDate()),
+          status: notice.status,
+          type: notice.type,
+          id: notice.id,
+        };
+        promises.push(
+          api
+            .getDataWithSingleQuery("users", "uid", "==", notice.sender)
+            .then((res) => {
+              content.sender.alias = res[0].alias;
+              content.sender.profileImage = res[0].profileImage;
+              noticeMessages.push(content);
+            })
+        );
+      });
+      Promise.all(promises).then((res) => {
+        if (!mounted) return;
+        setNotices(noticeMessages);
+      });
     });
     return function cleanup() {
       mounted = false;
     };
   }, [currentUser]);
-
-  React.useEffect(() => {
-    let mounted = true;
-    let noticeMessages = [];
-    let promises = [];
-    noticeList.forEach((notice) => {
-      let content = {
-        sender: {},
-        time: calcTimeGap(notice.createTime.toDate()),
-        status: notice.status,
-        type: notice.type,
-        id: notice.id,
-      };
-      promises.push(
-        api
-          .getDataWithSingleQuery("users", "uid", "==", notice.sender)
-          .then((res) => {
-            content.sender.alias = res[0].alias;
-            content.sender.profileImage = res[0].profileImage;
-            noticeMessages.push(content);
-          })
-      );
-    });
-    Promise.all(promises).then((res) => {
-      if (!mounted) return;
-      setNotices(noticeMessages);
-    });
-
-    return function cleanup() {
-      mounted = false;
-    };
-  }, [noticeList]);
 
   function setNoticeStatusRead(status, id) {
     if (status === 1) return;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { FlexWrapper, RejectButton } from "../common/Components";
 import {
   Overlay,
   Modal,
@@ -16,7 +17,7 @@ const HigherOverlay = styled(Overlay)`
 const NewModal = styled(Modal)`
   justify-content: center;
   align-items: center;
-  height: 150px;
+  height: 160px;
   padding: 0px 20px 0px;
   max-width: 500px;
   display: flex;
@@ -27,12 +28,15 @@ const NewModal = styled(Modal)`
 const NewHeader = styled(Header)`
   width: 100%;
   align-items: center;
-  height: 20px;
-  margin-bottom: 10px;
+  height: 60px;
+`;
+
+const ButtonsWrapper = styled(FlexWrapper)`
+  align-self: end;
 `;
 
 const ConfirmButton = styled(Button)`
-  margin-bottom: 20px;
+  margin: 20px 0 20px 10px;
 `;
 
 export default function ConfirmBeforeActionModal({ message, action, toggle }) {
@@ -43,14 +47,17 @@ export default function ConfirmBeforeActionModal({ message, action, toggle }) {
           <Title>{message}</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </NewHeader>
-        <ConfirmButton
-          onClick={() => {
-            action();
-            toggle(false);
-          }}
-        >
-          確認
-        </ConfirmButton>
+        <ButtonsWrapper>
+          <RejectButton onClick={() => toggle(false)}>取消</RejectButton>
+          <ConfirmButton
+            onClick={() => {
+              action();
+              toggle(false);
+            }}
+          >
+            確認
+          </ConfirmButton>
+        </ButtonsWrapper>
       </NewModal>
     </HigherOverlay>
   );
