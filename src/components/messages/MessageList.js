@@ -59,10 +59,12 @@ function List({ chats, setChatId }) {
       .map((uids) => uids.find((userid) => userid !== currentUser.uid));
 
     async function getUserData() {
-      if (!mounted) return;
       api
         .getDataWithSingleQuery("users", "uid", "in", chatMates)
-        .then((res) => setChatUserData(res));
+        .then((res) => {
+          if (!mounted) return;
+          setChatUserData(res);
+        });
     }
 
     if (chatMates.length) {
@@ -116,7 +118,7 @@ function List({ chats, setChatId }) {
                             chat.userIDs.find(
                               (userID) => userID !== currentUser.uid
                             )
-                        ).profileImage
+                        )?.profileImage
                       : defaulImage
                   }
                 />

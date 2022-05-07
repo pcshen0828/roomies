@@ -2,34 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import {
   Bold,
-  Title,
   CardWrapper,
   ScheduleCard,
   ScheduleInnerWrapper,
   ScheduleDate,
+  DateTitle,
+  TimeTitle,
   ScheduleInfo,
   CardTop,
   CardBottom,
   FlexWrapper,
+  ConfirmButton,
+  RejectButton,
+  SlicedBold,
+  ScheduleTitle,
 } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
-import check from "../../images/check.svg";
-import cancel from "../../images/cancel.svg";
 import RequestDetailModal from "../modals/RequestDetail";
-import PopupNoticeModal from "../modals/PopupNotice";
-
-const DateTitle = styled(Title)`
-  margin: 10px 0;
-  @media screen and (max-width: 767.98px) {
-    font-size: 18px;
-    margin: 0 10px 0 0;
-  }
-`;
-
-const TimeTitle = styled(Bold)`
-  padding-bottom: 10px;
-`;
+import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import { useNavigate } from "react-router-dom";
 
 const TeamInfoLink = styled.div`
   cursor: pointer;
@@ -43,23 +36,14 @@ const ActionBlock = styled(FlexWrapper)`
   margin-top: 20px;
 `;
 
-const ActionButton = styled(FlexWrapper)`
-  margin-right: 20px;
-  cursor: pointer;
-  &:hover {
-    font-weight: 700;
-  }
-`;
-
-const ActionImg = styled.img`
-  width: 20px;
-  height: 20px;
-  margin-right: 5px;
-`;
-
 export default function Requests({ unConfirmed, user }) {
   const [checkDetail, setCheckDetail] = React.useState(false);
-  const [popup, setPopup] = React.useState(false);
+  const [openConfirmCheck, setOpenConfirmCheck] = React.useState(false);
+  const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
+  const [schedule, setSchedule] = React.useState("");
+  const [checked, setChecked] = React.useState(false);
+
+  const navigate = useNavigate();
 
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
@@ -67,29 +51,52 @@ export default function Requests({ unConfirmed, user }) {
     return newString.slice(index - 1, newString.length);
   }
 
-  function confirmSchedule(id, host) {
+  function confirmSchedule() {
     const time = Firebase.Timestamp.fromDate(new Date());
 
-    api.updateDocData("schedules", id, {
+    api.updateDocData("schedules", schedule.id, {
       updateTime: time,
       status: 1,
     });
-    api.createNoticeByType(user.uid, host, 2);
-    setPopup(true);
+    api.createNoticeByType(user.uid, schedule.host, 2);
+    setChecked(true);
+    setTimeout(() => {
+      navigate("/profile/schedule/booked");
+    }, 1000);
   }
 
-  function rejectSchedule(id, host) {
+  function rejectSchedule() {
     const time = Firebase.Timestamp.fromDate(new Date());
 
-    api.updateDocData("schedules", id, {
+    api.updateDocData("schedules", schedule.id, {
       updateTime: time,
       status: 2,
     });
-    api.createNoticeByType(user.uid, host, 7);
+    api.createNoticeByType(user.uid, schedule.host, 7);
+    setChecked(true);
   }
 
   return (
     <CardWrapper>
+      {openConfirmCheck && (
+        <ConfirmBeforeActionModal
+          message="確認核准行程？"
+          action={confirmSchedule}
+          toggle={setOpenConfirmCheck}
+        />
+      )}
+      {openConfirmReject && (
+        <ConfirmBeforeActionModal
+          message="確認拒絕行程？"
+          action={rejectSchedule}
+          toggle={setOpenConfirmReject}
+        />
+      )}
+
+      {checked && (
+        <SuccessfullySavedModal toggle={setChecked} message="更新成功！" />
+      )}
+
       {unConfirmed.length
         ? unConfirmed.map((request) => (
             <ScheduleCard key={request.extendedProps.id}>
@@ -100,21 +107,23 @@ export default function Requests({ unConfirmed, user }) {
                   toggle={setCheckDetail}
                 />
               )}
-              <ScheduleInnerWrapper>
+              <ScheduleInnerWrapper landlord={true}>
                 <ScheduleDate>
                   <DateTitle>
-                    <div>{new Date(request.start).getFullYear()}</div>
+                    {new Date(request.start).getFullYear() !==
+                      new Date().getFullYear() &&
+                      new Date(request.start).getFullYear()}
                     {new Date(request.start).getMonth() + 1} /
                     {new Date(request.start).getDate()}
                   </DateTitle>
                   <TimeTitle>
-                    <div>{generateReadableDate(request.start)}-</div>
-                    <div>{generateReadableDate(request.end)}</div>
+                    {generateReadableDate(request.start)}-
+                    {generateReadableDate(request.end)}
                   </TimeTitle>
                 </ScheduleDate>
                 <ScheduleInfo>
                   <CardTop>
-                    <Bold>{request.title}</Bold>
+                    <ScheduleTitle>{request.title}</ScheduleTitle>
                   </CardTop>
                   <CardBottom>
                     <TeamInfoLink onClick={() => setCheckDetail(true)}>
@@ -122,35 +131,22 @@ export default function Requests({ unConfirmed, user }) {
                         `${request.extendedProps.members.length}人・查看名單`}
                     </TeamInfoLink>
                     <ActionBlock>
-                      <ActionButton>
-                        <ActionImg src={check} alt="" />
-                        <div
-                          onClick={() => {
-                            confirmSchedule(
-                              request.extendedProps.id,
-                              request.extendedProps.host
-                            );
-                          }}
-                        >
-                          確認
-                        </div>
-                      </ActionButton>
-                      {popup && (
-                        <PopupNoticeModal
-                          message="行程已確認"
-                          toggle={setPopup}
-                        />
-                      )}
-                      <ActionButton>
-                        <ActionImg src={cancel} alt="" />
-                        <div
-                          onClick={() => {
-                            rejectSchedule(request.extendedProps.id);
-                          }}
-                        >
-                          拒絕
-                        </div>
-                      </ActionButton>
+                      <ConfirmButton
+                        onClick={() => {
+                          setSchedule(request.extendedProps);
+                          setOpenConfirmCheck(true);
+                        }}
+                      >
+                        確認
+                      </ConfirmButton>
+                      <RejectButton
+                        onClick={() => {
+                          setSchedule(request.extendedProps);
+                          setOpenConfirmReject(true);
+                        }}
+                      >
+                        拒絕
+                      </RejectButton>
                     </ActionBlock>
                   </CardBottom>
                 </ScheduleInfo>

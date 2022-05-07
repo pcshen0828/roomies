@@ -6,7 +6,7 @@ import Requests from "./Requests";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -31,10 +31,10 @@ const NewTitle = styled(SmallTitle)`
 
 function LandlordSchedule() {
   const { currentUser } = useAuth();
-  const [page, setPage] = React.useState("request");
   const [events, setEvents] = React.useState([]);
   const [unConfirmed, setUnconfirmed] = React.useState([]);
   const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
     const query = api.createQuery("schedules", "owner", "==", currentUser.uid);
@@ -86,18 +86,16 @@ function LandlordSchedule() {
     <Wrapper>
       <TitleWrapper>
         <NewTitle
-          active={page === "request"}
+          active={location.pathname === "/profile/schedule/pending"}
           onClick={() => {
-            setPage("request");
             navigate("/profile/schedule/pending");
           }}
         >
           待回覆的行程
         </NewTitle>
         <NewTitle
-          active={page === "calendar"}
+          active={location.pathname === "/profile/schedule/booked"}
           onClick={() => {
-            setPage("calendar");
             navigate("/profile/schedule/booked");
           }}
         >
@@ -105,10 +103,12 @@ function LandlordSchedule() {
           預約看房行事曆
         </NewTitle>
       </TitleWrapper>
-      {page === "request" && (
+      {location.pathname === "/profile/schedule/pending" && (
         <Requests unConfirmed={unConfirmed} user={currentUser} />
       )}
-      {page === "calendar" && <Schedule events={events} />}
+      {location.pathname === "/profile/schedule/booked" && (
+        <Schedule events={events} />
+      )}
     </Wrapper>
   );
 }

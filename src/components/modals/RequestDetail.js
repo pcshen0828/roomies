@@ -12,6 +12,14 @@ import {
 import { Bold, FlexWrapper, SmallTitle } from "../common/Components";
 import { Link } from "react-router-dom";
 
+const NewModal = styled(Modal)`
+  width: 70%;
+  max-width: 600px;
+  @media screen and (max-width: 767.98px) {
+    width: 80%;
+  }
+`;
+
 const NewBody = styled(Body)`
   height: 300px;
   padding: 10px;
@@ -44,7 +52,7 @@ export default function RequestDetailModal({ members, hostId, toggle }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      <NewModal>
         <Header>
           <Title>群組資訊</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
@@ -76,7 +84,7 @@ export default function RequestDetailModal({ members, hostId, toggle }) {
           ))}
         </NewBody>
         <Button onClick={() => toggle(false)}>關閉</Button>
-      </Modal>
+      </NewModal>
     </Overlay>
   );
 }

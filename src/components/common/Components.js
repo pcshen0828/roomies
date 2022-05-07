@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Link, NavLink } from "react-router-dom";
+import { subColor, mainColor } from "../../styles/GlobalStyle";
 
 const Wrapper = styled.div`
   width: calc(100% - 48px);
@@ -317,77 +318,6 @@ const Button1 = styled.button`
   }
 `;
 
-const CardWrapper = styled(FlexWrapper)`
-  width: 100%;
-  flex-wrap: wrap;
-  @media screen and (max-width: 767.98px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`;
-
-const ScheduleCard = styled(FlexWrapper)`
-  width: 350px;
-  height: 180px;
-  border-radius: 10px;
-  margin: 0 20px 20px 0;
-  padding: 20px;
-  background: #fff;
-  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e8e8e8;
-  @media screen and (max-width: 767.98px) {
-    width: 200px;
-    height: 250px;
-    margin: 0 0 20px;
-    padding: 10px 10px 10px 20px;
-  }
-`;
-
-const ScheduleInnerWrapper = styled(FlexWrapper)`
-  width: 100%;
-  @media screen and (max-width: 767.98px) {
-    flex-direction: column;
-  }
-`;
-
-const ScheduleDate = styled(FlexWrapper)`
-  flex-direction: column;
-  align-items: flex-start;
-  width: 40%;
-  @media screen and (max-width: 767.98px) {
-    flex-direction: row;
-    width: 100%;
-  }
-`;
-
-const ScheduleInfo = styled(FlexWrapper)`
-  flex-direction: column;
-  width: 60%;
-  align-items: flex-start;
-  @media screen and (max-width: 767.98px) {
-    width: 100%;
-  }
-`;
-
-const CardTop = styled(FlexWrapper)`
-  flex-direction: column;
-  height: 40%;
-  border-bottom: 1px solid #dadada;
-  @media screen and (max-width: 767.98px) {
-    margin: 10px 0;
-  }
-`;
-
-const CardBottom = styled(FlexWrapper)`
-  height: 60%;
-  align-items: flex-start;
-  flex-direction: column;
-`;
-
-const Required = styled.span`
-  color: #ed3636;
-`;
-
 const SlicedTitle = styled(Title)`
   white-space: nowrap;
   overflow: hidden;
@@ -409,6 +339,114 @@ const SlicedLink = styled(Link)`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const CardWrapper = styled(FlexWrapper)`
+  width: 100%;
+  flex-wrap: wrap;
+  @media screen and (max-width: 767.98px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+`;
+
+const ScheduleCard = styled(FlexWrapper)`
+  width: 360px;
+  height: 220px;
+  border-radius: 10px;
+  margin: 0 20px 20px 0;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
+  background: ${(props) => (props.src ? `url(${props.src})` : "")};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  align-items: flex-end;
+  overflow: hidden;
+
+  @media screen and (max-width: 767.98px) {
+    width: 300px;
+    height: 250px;
+    margin: 0 0 20px;
+  }
+  @media screen and (max-width: 413.98px) {
+    width: 200px;
+    height: 200px;
+  }
+`;
+
+const ScheduleInnerWrapper = styled(FlexWrapper)`
+  width: 100%;
+  padding: 10px 20px;
+  height: ${(props) => (props.landlord ? "100%" : "50%")};
+  background: rgba(255, 255, 255, 0.9);
+  flex-direction: column;
+  justify-content: center;
+  transition: height 0.8s ease-out;
+  &:hover {
+    height: 100%;
+  }
+`;
+
+const ScheduleDate = styled(FlexWrapper)`
+  width: 100%;
+  align-items: center;
+`;
+
+const DateTitle = styled(Bold)`
+  margin: 0;
+  @media screen and (max-width: 767.98px) {
+    margin: 0 10px 0 0;
+  }
+  @media screen and (max-width: 413.98px) {
+    font-size: 14px;
+  }
+`;
+
+const TimeTitle = styled(Bold)`
+  @media screen and (max-width: 413.98px) {
+    font-size: 14px;
+  }
+`;
+
+const ScheduleInfo = styled(FlexWrapper)`
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+  @media screen and (max-width: 413.98px) {
+    font-size: 14px;
+  }
+`;
+
+const CardTop = styled(FlexWrapper)`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  height: 40%;
+  width: 100%;
+  border-bottom: 1px solid #dadada;
+  @media screen and (max-width: 767.98px) {
+    margin: 10px 0;
+  }
+  @media screen and (max-width: 413.98px) {
+    margin: 10px 0 0;
+  }
+`;
+
+const ScheduleTitle = styled(SlicedBold)`
+  max-width: 300px;
+  @media screen and (max-width: 767.98px) {
+    max-width: 90%;
+  }
+`;
+const CardBottom = styled(FlexWrapper)`
+  height: 60%;
+  align-items: flex-start;
+  flex-direction: column;
+`;
+
+const Required = styled.span`
+  color: #ed3636;
 `;
 
 const ExitButton = styled(FlexWrapper)`
@@ -500,8 +538,11 @@ export {
   SearchButton,
   Button1,
   ScheduleDate,
+  DateTitle,
+  TimeTitle,
   ScheduleInnerWrapper,
   ScheduleInfo,
+  ScheduleTitle,
   CardWrapper,
   ScheduleCard,
   CardTop,

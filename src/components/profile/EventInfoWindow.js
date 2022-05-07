@@ -1,14 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import api from "../../utils/api";
 import { NavModal, CloseButton } from "../modals/ModalElements";
 import { FlexWrapper, Bold, SmallTitle } from "../common/Components";
 import { Link } from "react-router-dom";
 
 const EventInfoWindow = styled(NavModal)`
+  border-radius: 10px;
   z-index: 10;
   width: auto;
   height: auto;
+  max-width: 300px;
+  @media screen and (max-width: 1279.98px) {
+    max-width: 250px;
+    left: 10px !important;
+    top: 300px !important;
+  }
 `;
 
 const Close = styled(CloseButton)`

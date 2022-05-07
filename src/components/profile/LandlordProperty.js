@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   Wrapper,
   FlexWrapper,
@@ -185,10 +185,10 @@ function LandlordProperty() {
   const [saved, setSaved] = React.useState(false);
   const [confirmActive, setConfirmActive] = React.useState(false);
   const [confirmInactive, setConfirmInactive] = React.useState(false);
-  const [tab, setTab] = React.useState("active");
   const [paging, setPaging] = React.useState(1);
   const itemsPerPage = 6;
   const navigate = useNavigate();
+  const location = useLocation();
 
   React.useEffect(() => {
     const query = Firebase.query(
@@ -334,25 +334,25 @@ function LandlordProperty() {
         <NewButton onClick={() => setOpenCreate(true)}>新增房源</NewButton>
         <TabsWrapper>
           <Tab
-            active={tab === "active"}
+            active={location.pathname === "/profile/apartments/active"}
             onClick={() => {
-              setTab("active");
               navigate("/profile/apartments/active");
             }}
           >
             已上架
           </Tab>
           <Tab
-            active={tab === "inactive"}
+            active={location.pathname === "/profile/apartments/inactive"}
             onClick={() => {
-              setTab("inactive");
               navigate("/profile/apartments/inactive");
             }}
           >
             待上架
           </Tab>
         </TabsWrapper>
-        {tab === "active" ? Render(1) : Render(0)}
+        {location.pathname === "/profile/apartments/active"
+          ? Render(1)
+          : Render(0)}
       </NewWrapper>
     </>
   );

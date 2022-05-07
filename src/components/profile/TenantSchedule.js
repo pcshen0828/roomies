@@ -11,13 +11,17 @@ import {
   CardWrapper,
   ScheduleCard,
   ScheduleDate,
+  DateTitle,
+  TimeTitle,
   ScheduleInfo,
   CardTop,
   CardBottom,
   ScheduleInnerWrapper,
+  SlicedBold,
+  ScheduleTitle,
 } from "../common/Components";
 import RequestDetailModal from "../modals/RequestDetail";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -47,18 +51,6 @@ const NewTitle = styled(SmallTitle)`
     props.active ? "2px solid #424B5A" : "2px solid transparent"};
 `;
 
-const DateTitle = styled(Title)`
-  margin: 10px 0;
-  @media screen and (max-width: 767.98px) {
-    font-size: 18px;
-    margin: 0 10px 0 0;
-  }
-`;
-
-const TimeTitle = styled(Bold)`
-  padding-bottom: 10px;
-`;
-
 const TeamInfoLink = styled.div`
   cursor: pointer;
   margin: 10px 0 0;
@@ -73,8 +65,8 @@ export default function TenantSchedule() {
   const [schedules, setSchedules] = React.useState([]);
   const [finished, setFinished] = React.useState([]);
   const [checkDetail, setCheckDetail] = React.useState(false);
-  const [status, setStatus] = React.useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
 
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
@@ -146,7 +138,7 @@ export default function TenantSchedule() {
       <CardWrapper>
         {schedules.length
           ? schedules.map((item) => (
-              <ScheduleCard key={item.id}>
+              <ScheduleCard key={item.id} src={item.apartment.coverImage}>
                 {checkDetail && (
                   <RequestDetailModal
                     members={item.members}
@@ -157,19 +149,21 @@ export default function TenantSchedule() {
                 <ScheduleInnerWrapper>
                   <ScheduleDate>
                     <DateTitle>
-                      <div>{new Date(item.start).getFullYear()}</div>
+                      {new Date(item.start).getFullYear() !==
+                        new Date().getFullYear() &&
+                        new Date(item.start).getFullYear()}
                       {new Date(item.start).getMonth() + 1} /
                       {new Date(item.start).getDate()}
                     </DateTitle>
                     <TimeTitle>
-                      <div>{generateReadableDate(item.start)}-</div>
-                      <div>{generateReadableDate(item.end)}</div>
+                      {generateReadableDate(item.start)}-
+                      {generateReadableDate(item.end)}
                     </TimeTitle>
                   </ScheduleDate>
                   <ScheduleInfo>
                     <CardTop>
                       <StyledLink to={`/apartment/${item.apartment.id}`}>
-                        <Bold>{item.apartment.title}</Bold>
+                        <ScheduleTitle>{item.apartment.title}</ScheduleTitle>
                       </StyledLink>
                     </CardTop>
                     <CardBottom>
@@ -191,36 +185,36 @@ export default function TenantSchedule() {
       <Bold>預約看房管理</Bold>
       <TitleWrapper>
         <NewTitle
-          active={status === 0}
+          active={location.pathname === "/profile/schedule/pending"}
           onClick={() => {
-            setStatus(0);
             navigate("/profile/schedule/pending");
           }}
         >
           待確認行程
         </NewTitle>
         <NewTitle
-          active={status === 1}
+          active={location.pathname === "/profile/schedule/booked"}
           onClick={() => {
-            setStatus(1);
             navigate("/profile/schedule/booked");
           }}
         >
           已確認行程
         </NewTitle>
         <NewTitle
-          active={status === 2}
+          active={location.pathname === "/profile/schedule/finished"}
           onClick={() => {
-            setStatus(2);
             navigate("/profile/schedule/finished");
           }}
         >
           已結束行程
         </NewTitle>
       </TitleWrapper>
-      {status === 0 && RenderScheduleCard(unConfirmed)}
-      {status === 1 && RenderScheduleCard(schedules)}
-      {status === 2 && RenderScheduleCard(finished)}
+      {location.pathname === "/profile/schedule/pending" &&
+        RenderScheduleCard(unConfirmed)}
+      {location.pathname === "/profile/schedule/booked" &&
+        RenderScheduleCard(schedules)}
+      {location.pathname === "/profile/schedule/finished" &&
+        RenderScheduleCard(finished)}
     </Wrapper>
   );
 }
