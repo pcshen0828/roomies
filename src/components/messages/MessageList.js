@@ -4,6 +4,8 @@ import defaulImage from "../../images/default.png";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import { useParams, Link } from "react-router-dom";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const StyledLink = styled(Link)`
   color: #424b5a;
@@ -51,6 +53,7 @@ function List({ chats, setChatId }) {
   const { currentUser } = useAuth();
   const [chatUserData, setChatUserData] = React.useState([]);
   const stringLimit = 6;
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     let mounted = true;
@@ -64,6 +67,7 @@ function List({ chats, setChatId }) {
         .then((res) => {
           if (!mounted) return;
           setChatUserData(res);
+          setLoading(false);
         });
     }
 
@@ -98,7 +102,17 @@ function List({ chats, setChatId }) {
   }
   return (
     <>
-      {chats.length
+      {loading
+        ? Array.from(Array(2).keys()).map((loader, index) => (
+            <Skeleton
+              key={index}
+              width={350}
+              height={80}
+              borderRadius={10}
+              style={{ marginBottom: "10px" }}
+            />
+          ))
+        : chats.length
         ? chats.map((chat) => (
             <StyledLink
               key={chat.id}

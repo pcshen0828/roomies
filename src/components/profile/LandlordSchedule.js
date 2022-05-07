@@ -35,6 +35,7 @@ function LandlordSchedule() {
   const [unConfirmed, setUnconfirmed] = React.useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const query = api.createQuery("schedules", "owner", "==", currentUser.uid);
@@ -74,6 +75,7 @@ function LandlordSchedule() {
                 setEvents(
                   newEvents.filter((event) => event.extendedProps.status === 1)
                 );
+                setLoading(false);
               });
           });
       });
@@ -104,7 +106,11 @@ function LandlordSchedule() {
         </NewTitle>
       </TitleWrapper>
       {location.pathname === "/profile/schedule/pending" && (
-        <Requests unConfirmed={unConfirmed} user={currentUser} />
+        <Requests
+          unConfirmed={unConfirmed}
+          user={currentUser}
+          loading={loading}
+        />
       )}
       {location.pathname === "/profile/schedule/booked" && (
         <Schedule events={events} />

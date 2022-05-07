@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Navigate } from "react-router-dom";
 import Tenant from "../components/profile/Tenant";
 import Landlord from "../components/profile/Landlord";
@@ -7,6 +8,10 @@ import { Wrapper } from "../components/common/Components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
 
+const NewWrapper = styled(Wrapper)`
+  min-height: calc(100vh - 471px);
+`;
+
 function Profile() {
   const auth = Firebase.getAuth();
   const { currentUser } = useAuth();
@@ -14,7 +19,7 @@ function Profile() {
 
   function Render() {
     if (loading) {
-      return <>loading...</>;
+      return <NewWrapper>資料處理中</NewWrapper>;
     }
     if (user) {
       return (currentUser ? currentUser.role : "") === 1 ? (
@@ -31,7 +36,7 @@ function Profile() {
     return <Navigate replace to="/" />;
   }
 
-  return <Wrapper>{Render()}</Wrapper>;
+  return <NewWrapper>{Render()}</NewWrapper>;
 }
 
 export default Profile;

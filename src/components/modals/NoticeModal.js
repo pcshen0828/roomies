@@ -7,6 +7,8 @@ import { NavModalOverlay, NavModal } from "./ModalElements";
 import { Bold, FlexWrapper, SmallTitle } from "../common/Components";
 import { Link } from "react-router-dom";
 import { noticeTypes } from "../../utils/noticeType";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const NewModal = styled(NavModal)`
   max-height: 300px;
@@ -87,6 +89,7 @@ function NoticeModal({ setActiveIcon }) {
   const { currentUser } = useAuth();
   const [notices, setNotices] = React.useState([]);
   const stringLimit = 10;
+  const [loading, setLoading] = React.useState(true);
 
   function calcTimeGap(time) {
     const ObjectTime = Date.parse(new Date(time));
@@ -141,6 +144,7 @@ function NoticeModal({ setActiveIcon }) {
       Promise.all(promises).then((res) => {
         if (!mounted) return;
         setNotices(noticeMessages);
+        setLoading(false);
       });
     });
     return function cleanup() {
@@ -161,7 +165,17 @@ function NoticeModal({ setActiveIcon }) {
         <Bold>通知</Bold>
         <SmallTitle>先前的通知</SmallTitle>
         <NoticeWrapper>
-          {notices.length
+          {loading
+            ? Array.from(Array(3).keys()).map((loader, index) => (
+                <Skeleton
+                  key={index}
+                  width={350}
+                  height={80}
+                  borderRadius={10}
+                  style={{ marginBottom: "10px" }}
+                />
+              ))
+            : notices.length
             ? notices.map((notice) => (
                 <StyledLink
                   to={`${noticeTypes.at(notice.type).path}`}

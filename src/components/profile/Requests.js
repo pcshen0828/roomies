@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import {
-  Bold,
   CardWrapper,
   ScheduleCard,
   ScheduleInnerWrapper,
@@ -14,7 +13,6 @@ import {
   FlexWrapper,
   ConfirmButton,
   RejectButton,
-  SlicedBold,
   ScheduleTitle,
 } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
@@ -23,6 +21,8 @@ import RequestDetailModal from "../modals/RequestDetail";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const TeamInfoLink = styled.div`
   cursor: pointer;
@@ -36,7 +36,7 @@ const ActionBlock = styled(FlexWrapper)`
   margin-top: 20px;
 `;
 
-export default function Requests({ unConfirmed, user }) {
+export default function Requests({ unConfirmed, user, loading }) {
   const [checkDetail, setCheckDetail] = React.useState(false);
   const [openConfirmCheck, setOpenConfirmCheck] = React.useState(false);
   const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
@@ -97,7 +97,17 @@ export default function Requests({ unConfirmed, user }) {
         <SuccessfullySavedModal toggle={setChecked} message="更新成功！" />
       )}
 
-      {unConfirmed.length
+      {loading
+        ? Array.from(Array(2).keys()).map((loader, index) => (
+            <Skeleton
+              key={index}
+              width={360}
+              height={220}
+              borderRadius={20}
+              style={{ margin: "0 20px 20px 0" }}
+            />
+          ))
+        : unConfirmed.length
         ? unConfirmed.map((request) => (
             <ScheduleCard key={request.extendedProps.id}>
               {checkDetail && (

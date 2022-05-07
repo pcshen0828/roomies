@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Wrapper = styled.div`
   width: 100%;
   background: #c1b18a;
-  postion: fixed;
+  postion: sticky;
   bottom: 0;
   left: 0;
   border-top: 1px solid #dadada;

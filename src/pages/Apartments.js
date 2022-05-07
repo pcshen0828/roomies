@@ -5,10 +5,13 @@ import Card from "../components/apartments/ApartmentCard";
 import { Wrapper, Title } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
   position: relative;
+  min-height: 600px;
 `;
 
 const NewTitle = styled(Title)`
@@ -37,6 +40,7 @@ const Anchor = styled.div`
 `;
 
 function Apartments() {
+  const [loading, setLoading] = React.useState(true);
   const [apartments, setApartments] = React.useState([]);
   const [allData, setAllData] = React.useState([]);
   const [paging, setPaging] = React.useState(1);
@@ -87,12 +91,12 @@ function Apartments() {
   }
 
   React.useEffect(() => {
-    // 一開始 mounted 的時候監聽就好，之後都用 allData 處理畫面
     firstRender.current = true;
     fetchApartments(query, (data) => {
       if (firstRender.current) {
-        setAllData(data); // 這個不會變 database
-        setApartments(data); // 處理渲染邏輯
+        setAllData(data);
+        setApartments(data);
+        setLoading(false);
         firstRender.current = false;
         allPages.current = calcAllPages(data);
       }
@@ -105,8 +109,6 @@ function Apartments() {
       if (entry.intersectionRatio <= 0) return;
       if (firstRender.current) return;
 
-      // 這裡是每次觸發 observer 都會進來的地方
-      // 如果有條件篩選，要保留條件的結果，不要 reset
       currentPage.current++;
       if (currentPage.current > allPages.current) return;
       setPaging(currentPage.current);
@@ -127,15 +129,29 @@ function Apartments() {
           calcAllPages={calcAllPages}
           queryList={queryList}
         />
-        <Cards>
-          {apartments.length
-            ? apartments
-                .slice(0, itemsPerPage * paging)
-                .map((apartment, index) => (
-                  <Card key={apartment.basic.id} detail={apartment.basic} />
-                ))
-            : "無符合物件"}
-        </Cards>
+
+        {loading ? (
+          <Cards>
+            {Array.from(Array(6).keys()).map((loader, index) => (
+              <Skeleton
+                key={index}
+                height={350}
+                borderRadius={20}
+                style={{ marginBottom: "20px" }}
+              />
+            ))}
+          </Cards>
+        ) : (
+          <Cards>
+            {apartments.length
+              ? apartments
+                  .slice(0, itemsPerPage * paging)
+                  .map((apartment, index) => (
+                    <Card key={apartment.basic.id} detail={apartment.basic} />
+                  ))
+              : "無符合物件"}
+          </Cards>
+        )}
         <Anchor ref={anchor}></Anchor>
       </NewWrapper>
     </>

@@ -26,6 +26,8 @@ import {
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import api from "../../utils/api";
 import edit from "../../images/edit.svg";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;
@@ -189,6 +191,7 @@ function LandlordProperty() {
   const itemsPerPage = 6;
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const query = Firebase.query(
@@ -198,6 +201,7 @@ function LandlordProperty() {
     );
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
       setProperties(querySnapShot.docs.map((doc) => doc.data()));
+      setLoading(false);
     });
 
     return unsubscribe;
@@ -236,7 +240,17 @@ function LandlordProperty() {
           />
         )}
         <NewFlexWrapper>
-          {data.length ? (
+          {loading ? (
+            Array.from(Array(3).keys()).map((loader, index) => (
+              <Skeleton
+                key={index}
+                width={240}
+                height={280}
+                borderRadius={20}
+                style={{ margin: "0 15px 20px 0" }}
+              />
+            ))
+          ) : data.length ? (
             data
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
               .map((item) => (

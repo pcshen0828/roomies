@@ -6,14 +6,19 @@ import MessageDetail from "../components/messages/MessageDetail";
 import { useAuth } from "../context/AuthContext";
 import { Navigate, Link, useParams } from "react-router-dom";
 import { Wrapper, Button1, FlexWrapper } from "../components/common/Components";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const FullWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  height: calc(100vh - 351px);
+  height: calc(100vh - 200px);
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   background: #fff;
+  position: sticky;
+  top: 80px;
+  margin-bottom: 50px;
   @media screen and (max-width: 995.98px) {
     height: calc(100vh - 130px);
   }
@@ -70,6 +75,7 @@ function Messages() {
   const { currentUser, user, loading, error } = useAuth();
   const [chats, setChats] = React.useState([]);
   const [chatId, setChatId] = React.useState(id);
+  const [loaded, setLoaded] = React.useState(false);
   const selectedChat = chats.find((chat) => chat.id === chatId);
   const myRole =
     selectedChat &&
@@ -81,7 +87,6 @@ function Messages() {
       console.log("loading");
     }
     if (user) {
-      console.log(user);
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "chats"),
         Firebase.where("userIDs", "array-contains", user.uid),
@@ -92,8 +97,8 @@ function Messages() {
         if (!mounted) return;
         const data = querySnapshot.docs.map((doc) => doc.data());
         if (data.length) {
-          console.log(data);
           setChats(data);
+          setLoaded(true);
         }
       });
     }
@@ -114,7 +119,19 @@ function Messages() {
       return chats.length ? (
         <InnerWrapper>
           <MessageList>
-            <List chats={chats} setChatId={setChatId} />
+            {loaded ? (
+              <List chats={chats} setChatId={setChatId} />
+            ) : (
+              Array.from(Array(3).keys()).map((loader, index) => (
+                <Skeleton
+                  key={index}
+                  width={270}
+                  height={80}
+                  borderRadius={10}
+                  style={{ marginBottom: "10px" }}
+                />
+              ))
+            )}
           </MessageList>
           {id === "all" ? (
             <DefaultMessage>點擊聊天室開始</DefaultMessage>
