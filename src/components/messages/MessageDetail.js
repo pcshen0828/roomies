@@ -44,7 +44,7 @@ const CreateTime = styled.div`
   font-size: 12px;
   color: #505d68;
   align-self: center;
-  padding-bottom: 20px;
+  padding: 20px 0;
 `;
 
 const Messages = styled(FlexWrapper)`
@@ -144,6 +144,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
     api.updateDocData("chats", chatId, {
       latestMessage: newMessage,
       updateTime: time,
+      status: 0,
     });
     api.addNewDoc("chats/" + chatId + "/messages", newMessage);
     setMessage("");

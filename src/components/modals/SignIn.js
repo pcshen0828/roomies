@@ -13,6 +13,10 @@ import {
 import { Input, SmallLabel } from "../common/Components";
 import api from "../../utils/api";
 
+const NewModal = styled(Modal)`
+  max-width: 700px;
+`;
+
 const NewBody = styled(Body)`
   border: none;
   height: 200px;
@@ -34,7 +38,7 @@ function SignInModal({ setOpenSignIn }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      <NewModal>
         <Header>
           <Title>登入</Title>
           <CloseButton onClick={() => setOpenSignIn(false)}>×</CloseButton>
@@ -72,7 +76,7 @@ function SignInModal({ setOpenSignIn }) {
         >
           登入
         </NewButton>
-      </Modal>
+      </NewModal>
     </Overlay>
   );
 }

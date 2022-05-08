@@ -5,9 +5,16 @@ import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
 import { useAuth } from "../context/AuthContext";
 import { Navigate, Link, useParams } from "react-router-dom";
-import { Wrapper, Button1, FlexWrapper } from "../components/common/Components";
+import {
+  Wrapper,
+  Button1,
+  FlexWrapper,
+  Title,
+  FlexColumn,
+} from "../components/common/Components";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import api from "../utils/api";
 
 const FullWrapper = styled.div`
   width: 100%;
@@ -43,17 +50,23 @@ const InnerWrapper = styled.div`
   }
 `;
 
-const MessageList = styled.div`
+const ListWrapper = styled(FlexColumn)`
   width: 30%;
   border-right: 1px solid #e8e8e8;
-  display: flex;
-  flex-direction: column;
   padding: 20px;
-  overflow-y: auto;
-  background: #fff;
+  align-items: flex-start;
   @media screen and (max-width: 995.98px) {
     display: none;
   }
+`;
+
+const MessageList = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: #fff;
+  margin-top: 10px;
 `;
 
 const DefaultMessage = styled(FlexWrapper)`
@@ -106,7 +119,15 @@ function Messages() {
     return function cleanup() {
       mounted = false;
     };
-  }, [currentUser]);
+  }, [currentUser, id, loading, user]);
+
+  React.useEffect(() => {
+    if (id !== "all") {
+      api.updateDocData("chats", id, {
+        status: 1,
+      });
+    }
+  }, [chats, id]);
 
   function RenderLoader() {
     return (
@@ -171,21 +192,25 @@ function Messages() {
         RenderLoader()
       ) : chats.length ? (
         <InnerWrapper>
-          <MessageList>
-            {loaded ? (
-              <List chats={chats} setChatId={setChatId} />
-            ) : (
-              Array.from(Array(3).keys()).map((loader, index) => (
-                <Skeleton
-                  key={index}
-                  width={270}
-                  height={80}
-                  borderRadius={10}
-                  style={{ marginBottom: "10px" }}
-                />
-              ))
-            )}
-          </MessageList>
+          <ListWrapper>
+            <Title>聊天室</Title>
+
+            <MessageList>
+              {loaded ? (
+                <List chats={chats} setChatId={setChatId} usage="page" />
+              ) : (
+                Array.from(Array(3).keys()).map((loader, index) => (
+                  <Skeleton
+                    key={index}
+                    width={270}
+                    height={80}
+                    borderRadius={10}
+                    style={{ marginBottom: "10px" }}
+                  />
+                ))
+              )}
+            </MessageList>
+          </ListWrapper>
           {id === "all" ? (
             <DefaultMessage>點擊聊天室開始</DefaultMessage>
           ) : (

@@ -32,17 +32,7 @@ const icons = [
   },
 ];
 
-const Wrapper = styled(FlexWrapper)`
-  ${
-    "" /* @media screen and (max-width: 767.98px) {
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-    left: 0;
-    border: 1px solid red;
-  } */
-  }
-`;
+const Wrapper = styled(FlexWrapper)``;
 
 const IconWrapper = styled.div`
   position: relative;
@@ -74,22 +64,21 @@ function LoggedIn() {
   const location = useLocation();
   const [activeicon, setActiveIcon] = React.useState("");
   const { currentUser } = useAuth();
-  const [unreadMessage, setUnreadMessage] = React.useState();
+  const [unreadChats, setUnreadChats] = React.useState();
+  const [unreadChatCount, setUnreadChatCount] = React.useState();
   const [unreadNotice, setUnreadNotice] = React.useState();
   const [unreadNoticeCount, setUnreadNoticeCount] = React.useState();
 
   React.useEffect(() => {
     let mounted = true;
     if (currentUser) {
-      const query = Firebase.query(
+      const query1 = Firebase.query(
         Firebase.collection(Firebase.db, "notices"),
         Firebase.where("receiver", "==", currentUser.uid),
         Firebase.where("status", "==", 0)
       );
-
-      Firebase.onSnapshot(query, (snapshot) => {
+      Firebase.onSnapshot(query1, (snapshot) => {
         const data = snapshot.docs.map((doc) => doc.data());
-        console.log(data);
         if (!mounted) return;
         if (data.length) {
           setUnreadNotice(true);
@@ -100,11 +89,35 @@ function LoggedIn() {
           setUnreadNotice(false);
         }
       });
+
+      const query2 = Firebase.query(
+        Firebase.collection(Firebase.db, "chats"),
+        Firebase.where("userIDs", "array-contains", currentUser.uid),
+        Firebase.where("status", "==", 0)
+      );
+      Firebase.onSnapshot(query2, (snapshot) => {
+        const data = snapshot.docs.map((doc) => doc.data());
+        if (!mounted) return;
+        if (data.length) {
+          const id = location.pathname.slice(10);
+          const unreadChatRooms = data.filter(
+            (chat) =>
+              chat.latestMessage.sender !==
+                chat.members.find((user) => user.uid === currentUser.uid)
+                  .role && chat.id !== id
+          );
+          setUnreadChats(unreadChatRooms.length ? true : false);
+          setUnreadChatCount(unreadChatRooms.length);
+        } else {
+          setUnreadChats(false);
+        }
+      });
     }
+
     return function cleanup() {
       mounted = false;
     };
-  }, [currentUser]);
+  }, [currentUser, location.pathname]);
 
   return (
     <>
@@ -118,6 +131,8 @@ function LoggedIn() {
           <IconWrapper key={index}>
             {icon.name === "notice" && unreadNotice ? (
               <Unread>{unreadNoticeCount && unreadNoticeCount}</Unread>
+            ) : icon.name === "message" && unreadChats ? (
+              <Unread>{unreadChatCount && unreadChatCount}</Unread>
             ) : (
               ""
             )}

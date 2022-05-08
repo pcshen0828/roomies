@@ -140,6 +140,7 @@ export default function BookScheduleModal({
             api.updateDocData("chats", res.id, {
               latestMessage: newMessage,
               updateTime: time,
+              status: 0,
             });
             api.addNewDoc("chats/" + res.id + "/messages", newMessage);
             createNoticeToOwner();
@@ -160,6 +161,7 @@ export default function BookScheduleModal({
               ],
               updateTime: time,
               userIDs: [host.uid, apartment.owner],
+              status: 0,
             });
             api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
             createNoticeToOwner();

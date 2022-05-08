@@ -86,6 +86,7 @@ function SendMessageLandlordModal({ setOpenModal, objectId, setSaved }) {
           api.updateDocData("chats", res.id, {
             latestMessage: newMessage,
             updateTime: time,
+            status: 0,
           });
           api.addNewDoc("chats/" + res.id + "/messages", newMessage);
           clearMessageAndCloseModal();
@@ -106,6 +107,7 @@ function SendMessageLandlordModal({ setOpenModal, objectId, setSaved }) {
             ],
             updateTime: time,
             userIDs: [currentUser.uid, objectId],
+            status: 0,
           });
           api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
           clearMessageAndCloseModal();

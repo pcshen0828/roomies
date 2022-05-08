@@ -3,10 +3,10 @@ import styled from "styled-components";
 import defaulImage from "../../images/default.png";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
-import { useParams, Link } from "react-router-dom";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Title } from "../common/Components";
+import { FlexWrapper } from "../common/Components";
 
 const StyledLink = styled(Link)`
   color: #424b5a;
@@ -15,6 +15,7 @@ const StyledLink = styled(Link)`
 `;
 
 const MessageItem = styled.div`
+  position: relative;
   border-radius: 10px;
   height: 80px;
   margin-bottom: 10px;
@@ -26,6 +27,25 @@ const MessageItem = styled.div`
   &:hover {
     background: #f2f5f7;
   }
+`;
+
+const UnreadDot = styled.div`
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  right: 15px;
+  top: 36px;
+  background: #424b5a;
+  display: ${(props) => (props.show ? "block" : "none")};
+`;
+
+const LatestMessage = styled.div`
+  font-weight: ${(props) => (props.unread ? "700" : "400")};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
 `;
 
 const MessageImg = styled.img`
@@ -44,17 +64,19 @@ const MessageObjectName = styled.div`
   font-weight: 700;
 `;
 
-const LastMessage = styled.div`
+const LastMessage = styled(FlexWrapper)`
   font-size: 14px;
   color: #505d68;
 `;
 
-function List({ chats, setChatId }) {
+function List({ chats, setChatId, usage, toggle }) {
   const { id } = useParams();
+  const location = useLocation();
+  const chatroomId = location.pathname.slice(10);
   const { currentUser } = useAuth();
   const [chatUserData, setChatUserData] = React.useState([]);
-  const stringLimit = 6;
   const [loading, setLoading] = React.useState(true);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     let mounted = true;
@@ -101,9 +123,30 @@ function List({ chats, setChatId }) {
       ? `${Math.floor(days * 24 * 60)}分鐘`
       : "現在";
   }
+
+  function checkIsUnreadOrNot(chat) {
+    return chatroomId === chat.id
+      ? false
+      : chat.status === 0 &&
+          chat.latestMessage.sender !==
+            chat.members.find((member) => member.uid === currentUser.uid).role;
+  }
+
+  function switchAndReadChatroom(id) {
+    api.updateDocData("chats", id, {
+      status: 1,
+    });
+    if (usage === "page") {
+      setChatId(id);
+    }
+    if (usage === "modal") {
+      toggle("");
+    }
+    navigate(`/messages/${id}`);
+  }
+
   return (
     <>
-      <Title>聊天室</Title>
       {loading
         ? Array.from(Array(2).keys()).map((loader, index) => (
             <Skeleton
@@ -118,13 +161,14 @@ function List({ chats, setChatId }) {
         ? chats.map((chat) => (
             <StyledLink
               key={chat.id}
-              onClick={() => {
-                console.log(chat.id);
-                setChatId(chat.id);
+              onClick={(e) => {
+                e.preventDefault();
+                switchAndReadChatroom(chat.id);
               }}
               to={`/messages/${chat.id}`}
             >
               <MessageItem active={chat.id === id}>
+                <UnreadDot show={checkIsUnreadOrNot(chat)} />
                 <MessageImg
                   src={
                     chatUserData.length
@@ -147,7 +191,7 @@ function List({ chats, setChatId }) {
                             chat.userIDs.find(
                               (userID) => userID !== currentUser.uid
                             )
-                        ).alias
+                        )?.alias
                       : "..."}
                   </MessageObjectName>
                   <LastMessage>
@@ -157,10 +201,9 @@ function List({ chats, setChatId }) {
                     ).role
                       ? "你："
                       : ""}
-                    {`${chat.latestMessage.content.slice(0, stringLimit)}`}
-                    {chat.latestMessage.content.length > stringLimit
-                      ? "..."
-                      : ""}
+                    <LatestMessage unread={checkIsUnreadOrNot(chat)}>
+                      {`${chat.latestMessage.content}`}
+                    </LatestMessage>
                     <span> · {calcTimeGap(chat.updateTime.toDate())}</span>
                   </LastMessage>
                 </MessageOverview>

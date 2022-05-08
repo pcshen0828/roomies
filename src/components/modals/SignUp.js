@@ -18,6 +18,10 @@ import {
 import api from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 
+const NewModal = styled(Modal)`
+  max-width: 700px;
+`;
+
 const NewBody = styled(Body)`
   border: none;
   height: 350px;
@@ -81,7 +85,6 @@ function SignUpModal({ setOpenSignUp }) {
     api
       .signUp(email, password)
       .then((userCredential) => {
-        console.log(userCredential.user);
         const userId = userCredential.user.uid;
         const basicInfo = {
           uid: userId,
@@ -121,7 +124,7 @@ function SignUpModal({ setOpenSignUp }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      <NewModal>
         <Header>
           <Title>註冊</Title>
           <CloseButton onClick={() => setOpenSignUp(false)}>×</CloseButton>
@@ -174,7 +177,7 @@ function SignUpModal({ setOpenSignUp }) {
           {errMessage && <ErrorMessage>{errMessage}</ErrorMessage>}
         </NewBody>
         <NewButton onClick={SignupAndQuickSetUp}>註冊</NewButton>
-      </Modal>
+      </NewModal>
     </Overlay>
   );
 }

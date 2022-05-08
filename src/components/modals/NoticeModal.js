@@ -69,7 +69,7 @@ const LastMessage = styled.div`
   color: #505d68;
 `;
 
-const UnreadNot = styled.div`
+const UnreadDot = styled.div`
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -185,7 +185,7 @@ function NoticeModal({ setActiveIcon }) {
                     setActiveIcon("");
                   }}
                 >
-                  <UnreadNot show={notice.status === 0} />
+                  <UnreadDot show={notice.status === 0} />
                   <MessageItem unread={notice.status === 0}>
                     <MessageImg src={notice.sender.profileImage} />
                     <MessageOverview>

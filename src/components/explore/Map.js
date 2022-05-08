@@ -14,6 +14,8 @@ import { Link } from "react-router-dom";
 import { BodyLeft, BodyRight, FlexWrapper } from "../common/Components";
 import api from "../../utils/api";
 import Card from "../apartments/ApartmentCard";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const libraries = ["places"];
 
@@ -110,6 +112,8 @@ function MyMap() {
   const [query, setQuery] = React.useState("");
   const [locations, setLocations] = React.useState([]);
 
+  const [loading, setLoading] = React.useState(true);
+
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: googleMapsAppKey,
@@ -147,6 +151,7 @@ function MyMap() {
       if (!mounted) return;
       setApartments(res);
       setLocations(res.map((item) => item.geoLocation));
+      setLoading(false);
     });
     return function cleanup() {
       mounted = false;
@@ -173,7 +178,16 @@ function MyMap() {
             />
           </StandaloneSearchBox>
           <Cards>
-            {apartments.length
+            {loading
+              ? Array.from(Array(3).keys()).map((loader, index) => (
+                  <Skeleton
+                    key={index}
+                    height={350}
+                    borderRadius={20}
+                    style={{ marginBottom: "20px" }}
+                  />
+                ))
+              : apartments.length
               ? apartments.map((item) => <Card key={item.id} detail={item} />)
               : ""}
           </Cards>

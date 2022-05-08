@@ -36,7 +36,6 @@ function MessageModal({ setActiveIcon }) {
         Firebase.collection(Firebase.db, "chats"),
         Firebase.where("userIDs", "array-contains", currentUser.uid),
         Firebase.orderBy("updateTime", "desc")
-        // Firebase.limit(10)
       );
 
       Firebase.onSnapshot(query, (querySnapshot) => {
@@ -58,7 +57,7 @@ function MessageModal({ setActiveIcon }) {
       <NewNavModal onClick={(e) => e.stopPropagation()}>
         <Title>聊天室</Title>
         <ChatsWrapper>
-          <List chats={chats} nav={true} />
+          <List chats={chats} nav={true} usage="modal" toggle={setActiveIcon} />
         </ChatsWrapper>
         <MessagesLink to="/messages/all" onClick={() => setActiveIcon("")}>
           查看收件匣
