@@ -18,6 +18,7 @@ import banner3 from "../images/banner3.png";
 import banner4 from "../images/banner4.png";
 import banner5 from "../images/banner5.png";
 import SignUpModal from "../components/modals/SignUp";
+import Footer from "../components/layout/Footer";
 
 const banners = [banner5, banner1, banner3, banner2, banner4];
 
@@ -135,6 +136,7 @@ function Index() {
       <IntroBanner>
         <Title>為奔忙生活的你，打造全新的租屋體驗</Title>
       </IntroBanner>
+      <Footer />
     </>
   );
 }

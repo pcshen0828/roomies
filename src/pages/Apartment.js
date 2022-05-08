@@ -6,6 +6,7 @@ import { FlexWrapper } from "../components/common/Components";
 import api from "../utils/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Footer from "../components/layout/Footer";
 
 const BreadCrumb = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -73,6 +74,7 @@ function Apartment() {
         )}
       </BreadCrumb>
       <ApartmentDetail details={details} loading={loading}></ApartmentDetail>
+      <Footer />
     </>
   );
 }

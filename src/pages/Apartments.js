@@ -7,11 +7,11 @@ import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
   position: relative;
-  min-height: 600px;
 `;
 
 const NewTitle = styled(Title)`
@@ -154,6 +154,7 @@ function Apartments() {
         )}
         <Anchor ref={anchor}></Anchor>
       </NewWrapper>
+      <Footer />
     </>
   );
 }

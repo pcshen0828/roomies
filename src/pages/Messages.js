@@ -13,15 +13,11 @@ const FullWrapper = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 80px);
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   background: #fff;
   position: sticky;
   top: 80px;
-  margin-bottom: 50px;
-  @media screen and (max-width: 995.98px) {
-    height: calc(100vh - 130px);
-  }
 `;
 
 const CenterWrapper = styled(Wrapper)`
@@ -108,15 +104,68 @@ function Messages() {
     };
   }, [currentUser]);
 
+  function RenderLoader() {
+    return (
+      <InnerWrapper>
+        {matchMedia("(max-width: 996px)").matches ? (
+          <div
+            style={{
+              width: "100%",
+              marginTop: "20px",
+            }}
+          >
+            <Skeleton
+              width="100%"
+              count={6}
+              height={30}
+              borderRadius={10}
+              style={{ marginBottom: "10px" }}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              width: "100%",
+              marginTop: "20px",
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <div style={{ width: "30%" }}>
+              <Skeleton
+                width="100%"
+                height={80}
+                count={6}
+                borderRadius={10}
+                style={{ marginBottom: "10px" }}
+              />
+            </div>
+            <div style={{ width: "65%" }}>
+              <Skeleton
+                width="100%"
+                count={6}
+                height={30}
+                borderRadius={10}
+                style={{ marginBottom: "10px" }}
+              />
+            </div>
+          </div>
+        )}
+      </InnerWrapper>
+    );
+  }
+
   function Render() {
     if (loading) {
-      return <>資料處理中...</>;
+      return RenderLoader();
     }
     if (error) {
       return <>Error: {error}</>;
     }
     if (user) {
-      return chats.length ? (
+      return !loaded ? (
+        RenderLoader()
+      ) : chats.length ? (
         <InnerWrapper>
           <MessageList>
             {loaded ? (

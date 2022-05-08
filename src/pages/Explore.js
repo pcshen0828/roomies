@@ -8,6 +8,7 @@ import {
   FlexWrapper,
 } from "../components/common/Components";
 import MyMap from "../components/explore/Map";
+import Footer from "../components/layout/Footer";
 
 const Container = styled(FlexWrapper)`
   flex-direction: column;
@@ -21,15 +22,18 @@ const NewWrapper = styled(Wrapper)`
 
 function Explore() {
   return (
-    <Container>
-      <NewWrapper>
-        <Title>探索附近的租屋</Title>
-        <SubTitle>用地圖快速瀏覽公寓周邊交通與生活機能</SubTitle>
-      </NewWrapper>
-      <BodyWrapper>
-        <MyMap />
-      </BodyWrapper>
-    </Container>
+    <>
+      <Container>
+        <NewWrapper>
+          <Title>探索附近的租屋</Title>
+          <SubTitle>用地圖快速瀏覽公寓周邊交通與生活機能</SubTitle>
+        </NewWrapper>
+        <BodyWrapper>
+          <MyMap />
+        </BodyWrapper>
+      </Container>
+      <Footer />
+    </>
   );
 }
 

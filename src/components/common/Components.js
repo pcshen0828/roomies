@@ -213,7 +213,7 @@ const ProfileItem = styled.div`
 
 const ProfileContent = styled.div`
   width: calc(78% - 40px);
-  min-height: 500px;
+  min-height: 680px;
   background: #fff;
   padding: 20px;
   border-radius: 10px;

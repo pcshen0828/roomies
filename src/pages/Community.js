@@ -10,7 +10,6 @@ import {
 } from "../components/common/Components";
 import api from "../utils/api";
 import { Firebase } from "../utils/firebase";
-import { useAuth } from "../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Navigate } from "react-router-dom";
 import search from "../images/search.svg";
@@ -18,6 +17,7 @@ import HobbyCard from "../components/Community/HobbyCard";
 import UserCard from "../components/Community/UserCard";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
@@ -85,61 +85,71 @@ function Community() {
   function Render() {
     if (loading) {
       return (
-        <NewWrapper>
-          <div style={{ width: "100%" }}>
-            <Skeleton
-              width={320}
-              height={30}
-              style={{ marginBottom: "30px" }}
-            />
-            <Skeleton count={5} width="100%" style={{ marginBottom: "10px" }} />
-          </div>
-        </NewWrapper>
+        <>
+          <NewWrapper>
+            <div style={{ width: "100%" }}>
+              <Skeleton
+                width={320}
+                height={30}
+                style={{ marginBottom: "30px" }}
+              />
+              <Skeleton
+                count={5}
+                width="100%"
+                style={{ marginBottom: "10px" }}
+              />
+            </div>
+          </NewWrapper>
+          <Footer />
+        </>
       );
     }
     if (user) {
       return (
-        <NewWrapper>
-          <NewTitle>在這裡，找到適合共居的夥伴</NewTitle>
-          <SearchWrapper>
-            <SearchInput
-              placeholder="搜尋用戶名稱"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                searchUser(e.target.value);
-              }}
-            />
-            <SearchButton src={search} />
-          </SearchWrapper>
-          <HobbyTags>
-            {hobbies.map((hobby, index) => (
-              <HobbyCard
-                key={index}
-                name={hobby.name}
-                setUsers={setUsers}
-                selected={selected}
-                setSelected={setSelected}
-                setLoading={setSearching}
+        <>
+          <NewWrapper>
+            <NewTitle>在這裡，找到適合共居的夥伴</NewTitle>
+            <SearchWrapper>
+              <SearchInput
+                placeholder="搜尋用戶名稱"
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  searchUser(e.target.value);
+                }}
               />
-            ))}
-          </HobbyTags>
-          <ResultDisplayer>
-            {searching ? (
-              <Skeleton
-                count={5}
-                width={200}
-                height={240}
-                inline={true}
-                style={{ margin: "0 20px 20px 0" }}
-              />
-            ) : users && users.length ? (
-              users.map((user, index) => <UserCard key={index} user={user} />)
-            ) : (
-              ""
-            )}
-          </ResultDisplayer>
-        </NewWrapper>
+              <SearchButton src={search} />
+            </SearchWrapper>
+            <HobbyTags>
+              {hobbies.map((hobby, index) => (
+                <HobbyCard
+                  key={index}
+                  name={hobby.name}
+                  setUsers={setUsers}
+                  selected={selected}
+                  setSelected={setSelected}
+                  setLoading={setSearching}
+                />
+              ))}
+            </HobbyTags>
+            <ResultDisplayer>
+              {searching ? (
+                <Skeleton
+                  count={5}
+                  width={200}
+                  height={240}
+                  inline={true}
+                  style={{ margin: "0 20px 20px 0" }}
+                />
+              ) : users && users.length ? (
+                users.map((user, index) => <UserCard key={index} user={user} />)
+              ) : (
+                ""
+              )}
+            </ResultDisplayer>
+          </NewWrapper>
+          <Footer />
+        </>
       );
     }
     if (error) {

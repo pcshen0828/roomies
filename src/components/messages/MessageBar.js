@@ -30,7 +30,7 @@ const MessageInnerWrapperMe = styled(FlexWrapper)`
   border-radius: 20px 20px 0px 20px;
   padding: 10px 70px 15px 20px;
   align-items: center;
-  max-width: 40%;
+  max-width: 70%;
   position: relative;
   margin-right: 5px;
 `;
@@ -49,7 +49,7 @@ const MessageInnerWrapperOthers = styled(FlexWrapper)`
   border-radius: 20px 20px 20px 0px;
   padding: 10px 70px 15px 20px;
   position: relative;
-  max-width: 40%;
+  max-width: 70%;
   align-items: center;
   margin-left: 5px;
 `;

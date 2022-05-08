@@ -25,6 +25,7 @@ import SuccessfullySavedModal from "../components/modals/SuccessfullySaved";
 import lock from "../images/lock.svg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import Footer from "../components/layout/Footer";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -356,241 +357,245 @@ function Groups() {
   }
 
   return (
-    <Wrapper
-      onClick={() => {
-        setDropdown(false);
-      }}
-    >
-      {saved && (
-        <SuccessfullySavedModal
-          out={false}
-          toggle={setSaved}
-          message="邀請已送出！"
-        />
-      )}
-      {openInviteModal && (
-        <InviteJoinGroupModal
-          groupId={id}
-          toggle={setOpenInviteModal}
-          groupMembers={groupMembers}
-          setSaved={setSaved}
-        />
-      )}
-      {openConfirmQuit && (
-        <ConfirmBeforeActionModal
-          message="確認退出？"
-          action={quitTheGroup}
-          toggle={setOpenConfirmQuit}
-        />
-      )}
-      {openConfirmJoin && (
-        <ConfirmBeforeActionModal
-          message="確認加入？"
-          action={confirmJoinGroup}
-          toggle={setOpenConfirmJoin}
-        />
-      )}
-      {openJoin && (
-        <ConfirmBeforeActionModal
-          message="確認加入？"
-          action={joinGroup}
-          toggle={setOpenJoin}
-        />
-      )}
-      {openConfirmReject && (
-        <ConfirmBeforeActionModal
-          message="確認拒絕？"
-          action={rejectJoinGroup}
-          toggle={setOpenConfirmReject}
-        />
-      )}
-      <BreadCrumb>
-        {loading ? (
-          <Skeleton width={40} count={1} style={{ marginRight: "10px" }} />
-        ) : (
-          <BreadCrumbLink to="/">首頁</BreadCrumbLink>
+    <>
+      <Wrapper
+        onClick={() => {
+          setDropdown(false);
+        }}
+      >
+        {saved && (
+          <SuccessfullySavedModal
+            out={false}
+            toggle={setSaved}
+            message="邀請已送出！"
+          />
         )}
-        <Span>{" > "}</Span>
-        {loading ? (
-          <Skeleton width={60} count={1} style={{ marginRight: "10px" }} />
-        ) : (
-          <BreadCrumbLink to="/apartments">所有房源</BreadCrumbLink>
+        {openInviteModal && (
+          <InviteJoinGroupModal
+            groupId={id}
+            toggle={setOpenInviteModal}
+            groupMembers={groupMembers}
+            setSaved={setSaved}
+          />
         )}
-        <Span>{" > "}</Span>
-        {loading ? (
-          <Skeleton width={200} count={1} style={{ marginRight: "10px" }} />
-        ) : (
-          <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-            {apartmentData.title}
-          </BreadCrumbLink>
+        {openConfirmQuit && (
+          <ConfirmBeforeActionModal
+            message="確認退出？"
+            action={quitTheGroup}
+            toggle={setOpenConfirmQuit}
+          />
         )}
-        <Span>{" > "}</Span>
-        {loading ? <Skeleton width={40} count={1} /> : <Active>社團</Active>}
-      </BreadCrumb>
+        {openConfirmJoin && (
+          <ConfirmBeforeActionModal
+            message="確認加入？"
+            action={confirmJoinGroup}
+            toggle={setOpenConfirmJoin}
+          />
+        )}
+        {openJoin && (
+          <ConfirmBeforeActionModal
+            message="確認加入？"
+            action={joinGroup}
+            toggle={setOpenJoin}
+          />
+        )}
+        {openConfirmReject && (
+          <ConfirmBeforeActionModal
+            message="確認拒絕？"
+            action={rejectJoinGroup}
+            toggle={setOpenConfirmReject}
+          />
+        )}
 
-      {loading ? (
-        <div style={{ width: "100%" }}>
-          <Skeleton
-            width="100%"
-            height={300}
-            borderRadius={10}
-            style={{ marginBottom: "20px" }}
-          />{" "}
-        </div>
-      ) : (
-        <Banner src={apartmentData.coverImage} />
-      )}
-
-      {loading ? (
-        <div style={{ width: "100%" }}>
-          <Skeleton
-            width="100%"
-            height={100}
-            borderRadius={10}
-            style={{ marginBottom: "20px" }}
-          />{" "}
-        </div>
-      ) : (
-        <GroupHeader>
-          <MainSubTitles>
-            <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-              <Title>{apartmentData.title}</Title>
-            </BreadCrumbLink>
-            <SubTitles>
-              <Icon src={room} alt="" />
-              <SubTitle>{`可容納房客：${
-                apartmentData.roomiesCount ? apartmentData.roomiesCount : ""
-              }人 / 間`}</SubTitle>
-            </SubTitles>
-            <SubTitles>
-              <Icon src={member} alt="" />
-              <SubTitle>{`${members.length}位成員`}</SubTitle>
-            </SubTitles>
-          </MainSubTitles>
-          {isInvited &&
-          !members.find((member) => member.uid === currentUser.uid) ? (
-            <Buttons>
-              <Button1
-                onClick={() => {
-                  setOpenConfirmJoin(true);
-                }}
-              >
-                確認加入
-              </Button1>
-              <RejectButton
-                onClick={() => {
-                  setOpenConfirmReject(true);
-                }}
-              >
-                拒絕
-              </RejectButton>
-            </Buttons>
+        <BreadCrumb>
+          {loading ? (
+            <Skeleton width={40} count={1} style={{ marginRight: "10px" }} />
           ) : (
-            ""
+            <BreadCrumbLink to="/">首頁</BreadCrumbLink>
           )}
-          {members.find((member) => member.uid === currentUser.uid) ? (
-            <Buttons>
-              <DropdownWrapper onClick={(e) => e.stopPropagation()}>
-                <HasJoined
+          <Span>{" > "}</Span>
+          {loading ? (
+            <Skeleton width={60} count={1} style={{ marginRight: "10px" }} />
+          ) : (
+            <BreadCrumbLink to="/apartments">所有房源</BreadCrumbLink>
+          )}
+          <Span>{" > "}</Span>
+          {loading ? (
+            <Skeleton width={200} count={1} style={{ marginRight: "10px" }} />
+          ) : (
+            <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
+              {apartmentData.title}
+            </BreadCrumbLink>
+          )}
+          <Span>{" > "}</Span>
+          {loading ? <Skeleton width={40} count={1} /> : <Active>社團</Active>}
+        </BreadCrumb>
+
+        {loading ? (
+          <div style={{ width: "100%" }}>
+            <Skeleton
+              width="100%"
+              height={300}
+              borderRadius={10}
+              style={{ marginBottom: "20px" }}
+            />{" "}
+          </div>
+        ) : (
+          <Banner src={apartmentData.coverImage} />
+        )}
+
+        {loading ? (
+          <div style={{ width: "100%" }}>
+            <Skeleton
+              width="100%"
+              height={100}
+              borderRadius={10}
+              style={{ marginBottom: "20px" }}
+            />{" "}
+          </div>
+        ) : (
+          <GroupHeader>
+            <MainSubTitles>
+              <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
+                <Title>{apartmentData.title}</Title>
+              </BreadCrumbLink>
+              <SubTitles>
+                <Icon src={room} alt="" />
+                <SubTitle>{`可容納房客：${
+                  apartmentData.roomiesCount ? apartmentData.roomiesCount : ""
+                }人 / 間`}</SubTitle>
+              </SubTitles>
+              <SubTitles>
+                <Icon src={member} alt="" />
+                <SubTitle>{`${members.length}位成員`}</SubTitle>
+              </SubTitles>
+            </MainSubTitles>
+            {isInvited &&
+            !members.find((member) => member.uid === currentUser.uid) ? (
+              <Buttons>
+                <Button1
                   onClick={() => {
-                    setDropdown((prev) => !prev);
+                    setOpenConfirmJoin(true);
                   }}
                 >
-                  <Icon src={check} alt="" />
-                  已加入
-                  <Dropdown>▾</Dropdown>
-                </HasJoined>
-                {dropdown && (
-                  <DropdownMenu>
-                    <ExitButton
-                      onClick={() => {
-                        setOpenConfirmQuit(true);
-                      }}
-                    >
-                      <Icon src={exit} alt="" />
-                      退出
-                    </ExitButton>
-                  </DropdownMenu>
-                )}
-              </DropdownWrapper>
-              <InviteButton
+                  確認加入
+                </Button1>
+                <RejectButton
+                  onClick={() => {
+                    setOpenConfirmReject(true);
+                  }}
+                >
+                  拒絕
+                </RejectButton>
+              </Buttons>
+            ) : (
+              ""
+            )}
+            {members.find((member) => member.uid === currentUser.uid) ? (
+              <Buttons>
+                <DropdownWrapper onClick={(e) => e.stopPropagation()}>
+                  <HasJoined
+                    onClick={() => {
+                      setDropdown((prev) => !prev);
+                    }}
+                  >
+                    <Icon src={check} alt="" />
+                    已加入
+                    <Dropdown>▾</Dropdown>
+                  </HasJoined>
+                  {dropdown && (
+                    <DropdownMenu>
+                      <ExitButton
+                        onClick={() => {
+                          setOpenConfirmQuit(true);
+                        }}
+                      >
+                        <Icon src={exit} alt="" />
+                        退出
+                      </ExitButton>
+                    </DropdownMenu>
+                  )}
+                </DropdownWrapper>
+                <InviteButton
+                  onClick={() => {
+                    setOpenInviteModal(true);
+                  }}
+                >
+                  邀請
+                </InviteButton>
+              </Buttons>
+            ) : (
+              ""
+            )}
+          </GroupHeader>
+        )}
+
+        {loading ? (
+          <div style={{ width: "100%" }}>
+            <Skeleton
+              width="100%"
+              height={30}
+              count={5}
+              borderRadius={10}
+              style={{ marginBottom: "20px" }}
+            />{" "}
+          </div>
+        ) : members.length &&
+          members.find((member) => member.uid === currentUser.uid) ? (
+          <GroupBody>
+            <GroupBodyLeft>
+              <GroupTeam
+                roomies={apartmentData.roomiesCount}
+                aid={apartmentData.id}
+                members={groupMembers}
+                groupId={id}
+                groupMemberDetail={members}
+              />
+            </GroupBodyLeft>
+            <GroupBodyRight>
+              <SubtitlesSmall>
+                <Bold>社團守則</Bold>
+              </SubtitlesSmall>
+              <GroupNotice>
+                <Bold>租屋流程</Bold>
+                <ContentList>
+                  <li>加入房源社團，尋找合租的室友</li>
+                  <li>人數到齊後，與屋主預約看房</li>
+                  <li>確認租屋設備、租金、押金等一切細節</li>
+                  <li>與屋主簽訂租屋契約</li>
+                </ContentList>
+                <Bold>租屋須知</Bold>
+                <ContentList>
+                  <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
+                  <li>與屋主預約看房請遵守約定，切勿無故未到</li>
+                  <li>
+                    若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
+                  </li>
+                </ContentList>
+              </GroupNotice>
+              <GroupMember members={members} />
+            </GroupBodyRight>
+          </GroupBody>
+        ) : (
+          <NotMemberWrapper>
+            <Reminder>
+              <Icon src={lock} alt="" />
+              成為社團成員才能預覽內容喔
+            </Reminder>
+            {!isInvited && (
+              <Button1
                 onClick={() => {
-                  setOpenInviteModal(true);
+                  setOpenJoin(true);
                 }}
               >
-                邀請
-              </InviteButton>
-            </Buttons>
-          ) : (
-            ""
-          )}
-        </GroupHeader>
-      )}
-
-      {loading ? (
-        <div style={{ width: "100%" }}>
-          <Skeleton
-            width="100%"
-            height={30}
-            count={5}
-            borderRadius={10}
-            style={{ marginBottom: "20px" }}
-          />{" "}
-        </div>
-      ) : members.length &&
-        members.find((member) => member.uid === currentUser.uid) ? (
-        <GroupBody>
-          <GroupBodyLeft>
-            <GroupTeam
-              roomies={apartmentData.roomiesCount}
-              aid={apartmentData.id}
-              members={groupMembers}
-              groupId={id}
-              groupMemberDetail={members}
-            />
-          </GroupBodyLeft>
-          <GroupBodyRight>
-            <SubtitlesSmall>
-              <Bold>社團守則</Bold>
-            </SubtitlesSmall>
-            <GroupNotice>
-              <Bold>租屋流程</Bold>
-              <ContentList>
-                <li>加入房源社團，尋找合租的室友</li>
-                <li>人數到齊後，與屋主預約看房</li>
-                <li>確認租屋設備、租金、押金等一切細節</li>
-                <li>與屋主簽訂租屋契約</li>
-              </ContentList>
-              <Bold>租屋須知</Bold>
-              <ContentList>
-                <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
-                <li>與屋主預約看房請遵守約定，切勿無故未到</li>
-                <li>
-                  若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
-                </li>
-              </ContentList>
-            </GroupNotice>
-            <GroupMember members={members} />
-          </GroupBodyRight>
-        </GroupBody>
-      ) : (
-        <NotMemberWrapper>
-          <Reminder>
-            <Icon src={lock} alt="" />
-            成為社團成員才能預覽內容喔
-          </Reminder>
-          {!isInvited && (
-            <Button1
-              onClick={() => {
-                setOpenJoin(true);
-              }}
-            >
-              加入
-            </Button1>
-          )}
-        </NotMemberWrapper>
-      )}
-    </Wrapper>
+                加入
+              </Button1>
+            )}
+          </NotMemberWrapper>
+        )}
+      </Wrapper>
+      <Footer />
+    </>
   );
 }
 

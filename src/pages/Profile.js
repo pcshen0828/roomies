@@ -8,6 +8,7 @@ import { FlexColumn, Wrapper } from "../components/common/Components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
 import Loader from "../components/common/Loader";
+import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
   min-height: calc(100vh - 471px);
@@ -47,7 +48,12 @@ function Profile() {
     return <Navigate replace to="/" />;
   }
 
-  return <NewWrapper>{Render()}</NewWrapper>;
+  return (
+    <>
+      <NewWrapper>{Render()}</NewWrapper>
+      <Footer />
+    </>
+  );
 }
 
 export default Profile;

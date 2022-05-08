@@ -10,6 +10,7 @@ import { Navigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Loader from "../components/common/Loader";
+import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
   min-height: calc(100vh - 541px);
@@ -95,7 +96,12 @@ function User() {
     return <Navigate replace to="/" />;
   }
 
-  return <NewWrapper>{Render()}</NewWrapper>;
+  return (
+    <>
+      <NewWrapper>{Render()}</NewWrapper>
+      <Footer />
+    </>
+  );
 }
 
 export default User;
