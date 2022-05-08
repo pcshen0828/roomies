@@ -505,6 +505,16 @@ const Status = styled(FlexWrapper)`
   font-size: 14px;
 `;
 
+const ProfileImage = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: ${(props) => (props.src ? `url(${props.src})` : "")};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
 export {
   Wrapper,
   Title,
@@ -555,4 +565,5 @@ export {
   ExitButton,
   ConfirmButton,
   Status,
+  ProfileImage,
 };

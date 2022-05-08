@@ -6,6 +6,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useParams, Link } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Title } from "../common/Components";
 
 const StyledLink = styled(Link)`
   color: #424b5a;
@@ -102,6 +103,7 @@ function List({ chats, setChatId }) {
   }
   return (
     <>
+      <Title>聊天室</Title>
       {loading
         ? Array.from(Array(2).keys()).map((loader, index) => (
             <Skeleton

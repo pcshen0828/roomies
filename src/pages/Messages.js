@@ -34,6 +34,10 @@ const InnerWrapper = styled.div`
   max-width: 1200px;
   display: flex;
   height: 100%;
+  @media screen and (max-width: 1279.98px) {
+    width: 100%;
+    max-width: 100%;
+  }
   @media screen and (max-width: 995.98px) {
     flex-direction: column;
   }

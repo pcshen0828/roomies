@@ -4,9 +4,28 @@ import { Firebase } from "../../utils/firebase";
 import send from "../../images/send.svg";
 import api from "../../utils/api";
 import { useParams } from "react-router-dom";
-import { FlexWrapper } from "../common/Components";
+import { FlexWrapper, ProfileImage, SlicedTitle } from "../common/Components";
 import MessageBar from "./MessageBar";
-import { checkActionCode } from "firebase/auth";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
+const ChatroomHeader = styled(FlexWrapper)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 20px);
+  padding: 10px 0 0 20px;
+  height: 60px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
+  z-index: 10;
+`;
+
+const NewProfileImage = styled(ProfileImage)`
+  width: 45px;
+  height: 45px;
+  margin: 0 10px 10px 0;
+`;
 
 const MessageContent = styled.div`
   width: 70%;
@@ -16,8 +35,8 @@ const MessageContent = styled.div`
   display: flex;
   flex-direction: column;
   @media screen and (max-width: 995.98px) {
-    width: 100%;
-    padding: 10px 0 20px 0;
+    width: calc(100% - 40px);
+    padding: 10px 20px 20px;
   }
 `;
 
@@ -31,7 +50,7 @@ const CreateTime = styled.div`
 const Messages = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-end;
-  margin-bottom: 60px;
+  margin: 60px 0 60px;
   overflow-y: scroll;
 `;
 
@@ -70,8 +89,6 @@ const SendMessageButton = styled.img`
   cursor: pointer;
 `;
 
-///////////////////////////////////////////////////
-
 function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
   const { id } = useParams();
   const [message, setMessage] = React.useState("");
@@ -79,7 +96,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
   const [members, setMembers] = React.useState([]);
   const messageTop = React.useRef(null);
   const last = React.useRef();
-  // const notFirstRender = React.useRef();
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     let mounted = true;
@@ -91,7 +108,6 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
       const query = Firebase.query(
         snapRef2,
         Firebase.orderBy("timestamp", "desc")
-        // Firebase.limit(10)
       );
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
@@ -109,61 +125,13 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
         )
         .then((res) => {
           setMembers(res);
+          setLoading(false);
         });
     }
     return function cleaup() {
       mounted = false;
     };
   }, [chatId]);
-
-  // React.useEffect(() => {
-  //   let mounted = true;
-  //   const observer = new IntersectionObserver((entries, observer) => {
-  //     const entry = entries[0];
-  //     console.log("entry.isIntersecting", entry.isIntersecting);
-  // const snapRef2 = Firebase.collection(
-  //   Firebase.db,
-  //   "chats/" + chatId + "/messages"
-  // );
-  //     if (entry.isIntersecting) {
-  //       // first render
-  //       if (!notFirstRender.current) {
-  //         const query = Firebase.query(
-  //           snapRef2,
-  //           Firebase.orderBy("timestamp", "desc"),
-  //           Firebase.limit(10)
-  //         );
-  //         Firebase.onSnapshot(query, (snapshot) => {
-  //           if (!mounted) return;
-  //           const fetchedMessages = snapshot.docs.map((doc) => doc.data());
-  //           setMessages(fetchedMessages.reverse());
-  //           const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-  //           last.current = lastVisible;
-  //           notFirstRender.current = true;
-  //         });
-  //       }
-  //       // next render
-  //       if (notFirstRender.current) {
-  //         let mounted = true;
-  //         const query = Firebase.query(
-  //           snapRef2,
-  //           Firebase.orderBy("timestamp", "desc"),
-  //           Firebase.startAfter(last.current),
-  //           Firebase.limit(10)
-  //         );
-  //         Firebase.onSnapshot(query, (snapshot) => {
-  //           if (!mounted) return;
-  //           const fetchedMessages = snapshot.docs.map((doc) => doc.data());
-  //           if (!fetchedMessages.length) return;
-  //           setMessages((prev) => [...fetchedMessages.reverse(), ...prev]);
-  //           const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-  //           last.current = lastVisible;
-  //         });
-  //       }
-  //     }
-  //   });
-  //   observer.observe(messageTop.current);
-  // }, []);
 
   async function updateChat() {
     if (!message.trim()) return;
@@ -188,6 +156,31 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
 
   return (
     <MessageContent>
+      {loading ? (
+        <ChatroomHeader>
+          <Skeleton
+            width={40}
+            height={40}
+            circle={true}
+            inline={true}
+            style={{ marginRight: "10px" }}
+          />
+          <Skeleton width={120} inline={true} />
+        </ChatroomHeader>
+      ) : (
+        <ChatroomHeader>
+          <NewProfileImage
+            src={
+              members.find((member) => member.uid !== currentUser.uid)
+                .profileImage
+            }
+          />
+          <SlicedTitle>
+            {members.find((member) => member.uid !== currentUser.uid).alias}
+          </SlicedTitle>
+        </ChatroomHeader>
+      )}
+
       <Messages>
         <CreateTime ref={messageTop}>
           \ {generateReadableDate(chat.createTime)}建立聊天室 /
@@ -208,6 +201,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
       <SendMessageBlock
         onSubmit={(e) => {
           e.preventDefault();
+
           updateChat();
         }}
       >
