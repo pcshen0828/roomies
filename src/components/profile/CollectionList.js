@@ -4,6 +4,8 @@ import { FlexWrapper, Bold } from "../common/Components";
 import Card from "../apartments/ApartmentCard";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -32,11 +34,12 @@ const CollectionWrapper = styled.div`
 function CollectionList() {
   const { currentUser } = useAuth();
   const [collectionList, setCollectionList] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    console.log(currentUser.collectionList);
     if (!currentUser.collectionList.length) {
       setCollectionList([]);
+      setLoading(false);
       return;
     }
     api
@@ -47,8 +50,8 @@ function CollectionList() {
         currentUser.collectionList
       )
       .then((res) => {
-        console.log(res);
         setCollectionList(res);
+        setLoading(false);
       });
   }, [currentUser]);
 
@@ -56,7 +59,11 @@ function CollectionList() {
     <Wrapper>
       <Bold>我的收藏</Bold>
       <CollectionWrapper>
-        {collectionList.length
+        {loading
+          ? Array.from(Array(3).keys()).map((loader, index) => (
+              <Skeleton key={index} height={350} borderRadius={20} />
+            ))
+          : collectionList.length
           ? collectionList.map((item, index) => (
               <Card key={item.id} detail={item} collected />
             ))

@@ -369,7 +369,7 @@ const ScheduleCard = styled(FlexWrapper)`
     height: 250px;
     margin: 0 0 20px;
   }
-  @media screen and (max-width: 413.98px) {
+  @media screen and (max-width: 414px) {
     width: 200px;
     height: 200px;
   }
@@ -398,13 +398,13 @@ const DateTitle = styled(Bold)`
   @media screen and (max-width: 767.98px) {
     margin: 0 10px 0 0;
   }
-  @media screen and (max-width: 413.98px) {
+  @media screen and (max-width: 414px) {
     font-size: 14px;
   }
 `;
 
 const TimeTitle = styled(Bold)`
-  @media screen and (max-width: 413.98px) {
+  @media screen and (max-width: 414px) {
     font-size: 14px;
   }
 `;
@@ -413,7 +413,7 @@ const ScheduleInfo = styled(FlexWrapper)`
   flex-direction: column;
   width: 100%;
   align-items: flex-start;
-  @media screen and (max-width: 413.98px) {
+  @media screen and (max-width: 414px) {
     font-size: 14px;
   }
 `;
@@ -428,7 +428,7 @@ const CardTop = styled(FlexWrapper)`
   @media screen and (max-width: 767.98px) {
     margin: 10px 0;
   }
-  @media screen and (max-width: 413.98px) {
+  @media screen and (max-width: 414px) {
     margin: 10px 0 0;
   }
 `;

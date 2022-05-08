@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import ApartmentDetail from "../components/apartments/ApartmentDetail";
 import { FlexWrapper } from "../components/common/Components";
 import api from "../utils/api";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const BreadCrumb = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -34,12 +36,14 @@ const Active = styled.div`
 function Apartment() {
   const { id } = useParams();
   const [details, setDetails] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
       if (!mounted) return;
       setDetails(res);
+      setLoading(false);
     });
 
     return function cleanup() {
@@ -50,13 +54,25 @@ function Apartment() {
   return (
     <>
       <BreadCrumb>
-        <StyledLink to="/">首頁</StyledLink>
+        {loading ? (
+          <Skeleton width={40} count={1} style={{ marginRight: "10px" }} />
+        ) : (
+          <StyledLink to="/">首頁</StyledLink>
+        )}
         <Span>{" > "}</Span>
-        <StyledLink to="/apartments">所有房源</StyledLink>
+        {loading ? (
+          <Skeleton width={60} count={1} style={{ marginRight: "10px" }} />
+        ) : (
+          <StyledLink to="/apartments">所有房源</StyledLink>
+        )}
         <Span>{" > "}</Span>
-        <Active>{details.length ? details[0].title : "..."}</Active>
+        {loading ? (
+          <Skeleton width={200} count={1} />
+        ) : (
+          <Active>{details.length ? details[0].title : "..."}</Active>
+        )}
       </BreadCrumb>
-      <ApartmentDetail details={details}></ApartmentDetail>
+      <ApartmentDetail details={details} loading={loading}></ApartmentDetail>
     </>
   );
 }

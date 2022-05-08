@@ -20,6 +20,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import members from "../../images/members.svg";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -180,6 +182,7 @@ function GroupAndTeam() {
   const [invitations, setInvitations] = React.useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = React.useState(true);
 
   const [saved, setSaved] = React.useState(false);
   const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
@@ -231,6 +234,7 @@ function GroupAndTeam() {
       const res = snapshot.docs.map((doc) => doc.data());
       if (res.length === 0) {
         setInvitations([]);
+        setLoading(false);
         return;
       }
       let newList = [];
@@ -259,6 +263,7 @@ function GroupAndTeam() {
                     newObject.sender = res[0];
                     newList.push(newObject);
                     setInvitations(newList);
+                    setLoading(false);
                   });
               });
           });
@@ -398,7 +403,20 @@ function GroupAndTeam() {
       )}
 
       <GroupsWrapper>
-        {location.pathname === "/profile/groupteam/groups" &&
+        {loading ? (
+          <div style={{ width: "100%" }}>
+            {Array.from(Array(2).keys()).map((loader, index) => (
+              <Skeleton
+                key={index}
+                width="calc(100% - 40px)"
+                height={100}
+                borderRadius={10}
+                style={{ margin: "0 10px 20px 0", padding: "10px 20px" }}
+              />
+            ))}
+          </div>
+        ) : (
+          location.pathname === "/profile/groupteam/groups" &&
           apartments.map((group) => (
             <GroupCard key={group.id}>
               <GroupImg src={group.coverImage} />
@@ -411,11 +429,25 @@ function GroupAndTeam() {
                 {group.title}
               </SlicedLink>
             </GroupCard>
-          ))}
+          ))
+        )}
       </GroupsWrapper>
 
       <TeamsWrapper>
-        {location.pathname === "/profile/groupteam/teams" &&
+        {loading ? (
+          <div style={{ width: "100%", display: "grid" }}>
+            {Array.from(Array(2).keys()).map((loader, index) => (
+              <Skeleton
+                key={index}
+                width="calc(100% - 40px)"
+                height={100}
+                borderRadius={10}
+                style={{ margin: "0 10px 20px 0", padding: "10px 20px" }}
+              />
+            ))}
+          </div>
+        ) : (
+          location.pathname === "/profile/groupteam/teams" &&
           teams.map((team) => (
             <TeamCard key={team.id}>
               <FlexWrap>
@@ -461,7 +493,8 @@ function GroupAndTeam() {
                 />
               )}
             </TeamCard>
-          ))}
+          ))
+        )}
       </TeamsWrapper>
     </Wrapper>
   );

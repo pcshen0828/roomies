@@ -3,10 +3,11 @@ import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import {
   FlexWrapper,
   Bold,
-  Title,
   SmallTitle,
   CardWrapper,
   ScheduleCard,
@@ -17,7 +18,6 @@ import {
   CardTop,
   CardBottom,
   ScheduleInnerWrapper,
-  SlicedBold,
   ScheduleTitle,
 } from "../common/Components";
 import RequestDetailModal from "../modals/RequestDetail";
@@ -67,6 +67,7 @@ export default function TenantSchedule() {
   const [checkDetail, setCheckDetail] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const [loading, setLoading] = React.useState(true);
 
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
@@ -125,6 +126,7 @@ export default function TenantSchedule() {
                       new Date(schedule.end).getTime() < new Date().getTime()
                   )
                 );
+                setLoading(false);
               });
           });
       });
@@ -133,10 +135,28 @@ export default function TenantSchedule() {
     return unsubscribe;
   }, [currentUser]);
 
+  function generateSkeletons(width, height, margin) {
+    return Array.from(Array(2).keys()).map((loader, index) => (
+      <Skeleton
+        key={index}
+        width={width}
+        height={height}
+        borderRadius={10}
+        style={{ margin }}
+      />
+    ));
+  }
+
   function RenderScheduleCard(schedules) {
     return (
       <CardWrapper>
-        {schedules.length
+        {loading
+          ? matchMedia("(max-width: 414px)").matches
+            ? generateSkeletons(200, 200, "0 0 20px")
+            : matchMedia("(max-width: 767.98px)").matches
+            ? generateSkeletons(300, 250, "0 0 20px")
+            : generateSkeletons(360, 220, "0 20px 20px 0")
+          : schedules.length
           ? schedules.map((item) => (
               <ScheduleCard key={item.id} src={item.apartment.coverImage}>
                 {checkDetail && (

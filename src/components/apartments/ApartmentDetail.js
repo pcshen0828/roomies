@@ -10,6 +10,8 @@ import OwnerCard from "./ApartmentOwner";
 import { Button1, FlexWrapper, SlicedTitle, Title } from "../common/Components";
 import ApartmentMap from "./ApartmentMap";
 import RecommendCarousel from "./Recommend";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // icons
 import loc from "../../images/loc.svg";
@@ -68,6 +70,7 @@ const icons = [
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
+  min-height: calc(100vh - 441px);
   margin: 20px auto;
   flex-direction: column;
   align-items: flex-start;
@@ -204,7 +207,7 @@ const OtherInfo = styled.div`
   margin-bottom: 10px;
 `;
 
-function ApartmentDetail({ details }) {
+function ApartmentDetail({ details, loading }) {
   const { currentUser } = useAuth();
   const { id } = useParams();
   const [isActive, setIsActive] = React.useState(false);
@@ -295,7 +298,50 @@ function ApartmentDetail({ details }) {
           groupId={groupId}
         />
       )}
-      {details.length ? (
+      {loading ? (
+        <Wrapper>
+          <Head>
+            {matchMedia("(max-width: 1280px)").matches ? (
+              <div style={{ width: "100%" }}>
+                <Skeleton
+                  width="100%"
+                  inline={true}
+                  height={300}
+                  style={{ marginRight: "10px" }}
+                />
+                <Skeleton width="100%" height={40} count={3} inline={false} />
+              </div>
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <div style={{ width: "57%" }}>
+                  <Skeleton width="100%" inline={true} height={420} />
+                </div>
+                <div style={{ width: "40%" }}>
+                  <Skeleton
+                    width="100%"
+                    height={40}
+                    count={5}
+                    style={{ marginBottom: "10px" }}
+                  />
+                  <Skeleton
+                    width={120}
+                    height={60}
+                    count={2}
+                    inline={true}
+                    style={{ margin: "60px 10px 0 0" }}
+                  />
+                </div>
+              </div>
+            )}
+          </Head>
+        </Wrapper>
+      ) : details.length ? (
         <Wrapper>
           <Head>
             <Carousel id={id} />
