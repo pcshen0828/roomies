@@ -4,12 +4,19 @@ import { Navigate } from "react-router-dom";
 import Tenant from "../components/profile/Tenant";
 import Landlord from "../components/profile/Landlord";
 import { useAuth } from "../context/AuthContext";
-import { Wrapper } from "../components/common/Components";
+import { FlexColumn, Wrapper } from "../components/common/Components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
+import Loader from "../components/common/Loader";
 
 const NewWrapper = styled(Wrapper)`
   min-height: calc(100vh - 471px);
+`;
+
+const LoaderWrapper = styled(FlexColumn)`
+  width: 100%;
+  min-height: calc(100vh - 471px);
+  justify-content: center;
 `;
 
 function Profile() {
@@ -19,7 +26,11 @@ function Profile() {
 
   function Render() {
     if (loading) {
-      return <NewWrapper>資料處理中</NewWrapper>;
+      return (
+        <LoaderWrapper>
+          <Loader />
+        </LoaderWrapper>
+      );
     }
     if (user) {
       return (currentUser ? currentUser.role : "") === 1 ? (
