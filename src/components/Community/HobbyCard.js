@@ -21,8 +21,9 @@ const Card = styled.div`
   }
 `;
 
-function HobbyCard({ name, setUsers, selected, setSelected }) {
+function HobbyCard({ name, setUsers, selected, setSelected, setLoading }) {
   async function searchByHobby(hobby) {
+    setLoading(true);
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "users"),
       Firebase.where("role", "==", 1),
@@ -31,13 +32,13 @@ function HobbyCard({ name, setUsers, selected, setSelected }) {
     const querySnapShot = await Firebase.getDocs(query);
     const result = querySnapShot.docs.map((doc) => doc.data());
     setUsers(result);
+    setLoading(false);
   }
 
   return (
     <Card
       active={selected === name}
       onClick={() => {
-        console.log(name);
         searchByHobby(name);
         setSelected(name);
       }}

@@ -8,7 +8,6 @@ import {
   Button1,
   FlexWrapper,
   Bold,
-  SlicedTitle,
   Title,
   RejectButton,
   ExitButton,
@@ -24,6 +23,8 @@ import exit from "../images/exit.svg";
 import InviteJoinGroupModal from "../components/modals/InviteJoinGroup";
 import SuccessfullySavedModal from "../components/modals/SuccessfullySaved";
 import lock from "../images/lock.svg";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
@@ -31,6 +32,7 @@ const Wrapper = styled(FlexWrapper)`
   margin: 20px auto;
   flex-direction: column;
   align-items: flex-start;
+  min-height: calc(100vh - 441px);
 `;
 
 const BreadCrumb = styled(FlexWrapper)`
@@ -89,22 +91,6 @@ const GroupHeader = styled.div`
   @media screen and (max-width: 995.98px) {
     flex-direction: column;
     align-items: flex-start;
-  }
-`;
-
-const NewSLicedTitle = styled(SlicedTitle)`
-  max-width: 400px;
-  @media screen and (max-width: 1279.98px) {
-    max-width: 350px;
-  }
-  @media screen and (max-width: 1099.98px) {
-    max-width: 250px;
-  }
-  @media screen and (max-width: 995.98px) {
-    max-width: 100%;
-  }
-  @media screen and (max-width: 413.98px) {
-    max-width: 300px;
   }
 `;
 
@@ -283,6 +269,7 @@ function Groups() {
 
   const [openInviteModal, setOpenInviteModal] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     let mounted = true;
@@ -303,7 +290,10 @@ function Groups() {
           .then((res) => setApartmentData(res[0]));
         api
           .getDataWithSingleQuery("users", "uid", "in", groupData.members)
-          .then((res) => setMembers(res));
+          .then((res) => {
+            setMembers(res);
+            setLoading(false);
+          });
       });
     }
     getGroupData();
@@ -415,92 +405,140 @@ function Groups() {
         />
       )}
       <BreadCrumb>
-        <BreadCrumbLink to="/">首頁</BreadCrumbLink>
-        <Span>{" > "}</Span>
-        <BreadCrumbLink to="/apartments">所有房源</BreadCrumbLink>
-        <Span>{" > "}</Span>
-        <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-          {apartmentData.title}
-        </BreadCrumbLink>
-        <Span>{" > "}</Span>
-        <Active>社團</Active>
-      </BreadCrumb>
-      <Banner src={apartmentData.coverImage} />
-      <GroupHeader>
-        <MainSubTitles>
-          <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-            <Title>{apartmentData.title}</Title>
-          </BreadCrumbLink>
-          <SubTitles>
-            <Icon src={room} alt="" />
-            <SubTitle>{`可容納房客：${
-              apartmentData.roomiesCount ? apartmentData.roomiesCount : ""
-            }人 / 間`}</SubTitle>
-          </SubTitles>
-          <SubTitles>
-            <Icon src={member} alt="" />
-            <SubTitle>{`${members.length}位成員`}</SubTitle>
-          </SubTitles>
-        </MainSubTitles>
-        {isInvited &&
-        !members.find((member) => member.uid === currentUser.uid) ? (
-          <Buttons>
-            <Button1
-              onClick={() => {
-                setOpenConfirmJoin(true);
-              }}
-            >
-              確認加入
-            </Button1>
-            <RejectButton
-              onClick={() => {
-                setOpenConfirmReject(true);
-              }}
-            >
-              拒絕
-            </RejectButton>
-          </Buttons>
+        {loading ? (
+          <Skeleton width={40} count={1} style={{ marginRight: "10px" }} />
         ) : (
-          ""
+          <BreadCrumbLink to="/">首頁</BreadCrumbLink>
         )}
-        {members.find((member) => member.uid === currentUser.uid) ? (
-          <Buttons>
-            <DropdownWrapper onClick={(e) => e.stopPropagation()}>
-              <HasJoined
+        <Span>{" > "}</Span>
+        {loading ? (
+          <Skeleton width={60} count={1} style={{ marginRight: "10px" }} />
+        ) : (
+          <BreadCrumbLink to="/apartments">所有房源</BreadCrumbLink>
+        )}
+        <Span>{" > "}</Span>
+        {loading ? (
+          <Skeleton width={200} count={1} style={{ marginRight: "10px" }} />
+        ) : (
+          <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
+            {apartmentData.title}
+          </BreadCrumbLink>
+        )}
+        <Span>{" > "}</Span>
+        {loading ? <Skeleton width={40} count={1} /> : <Active>社團</Active>}
+      </BreadCrumb>
+
+      {loading ? (
+        <div style={{ width: "100%" }}>
+          <Skeleton
+            width="100%"
+            height={300}
+            borderRadius={10}
+            style={{ marginBottom: "20px" }}
+          />{" "}
+        </div>
+      ) : (
+        <Banner src={apartmentData.coverImage} />
+      )}
+
+      {loading ? (
+        <div style={{ width: "100%" }}>
+          <Skeleton
+            width="100%"
+            height={100}
+            borderRadius={10}
+            style={{ marginBottom: "20px" }}
+          />{" "}
+        </div>
+      ) : (
+        <GroupHeader>
+          <MainSubTitles>
+            <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
+              <Title>{apartmentData.title}</Title>
+            </BreadCrumbLink>
+            <SubTitles>
+              <Icon src={room} alt="" />
+              <SubTitle>{`可容納房客：${
+                apartmentData.roomiesCount ? apartmentData.roomiesCount : ""
+              }人 / 間`}</SubTitle>
+            </SubTitles>
+            <SubTitles>
+              <Icon src={member} alt="" />
+              <SubTitle>{`${members.length}位成員`}</SubTitle>
+            </SubTitles>
+          </MainSubTitles>
+          {isInvited &&
+          !members.find((member) => member.uid === currentUser.uid) ? (
+            <Buttons>
+              <Button1
                 onClick={() => {
-                  setDropdown((prev) => !prev);
+                  setOpenConfirmJoin(true);
                 }}
               >
-                <Icon src={check} alt="" />
-                已加入
-                <Dropdown>▾</Dropdown>
-              </HasJoined>
-              {dropdown && (
-                <DropdownMenu>
-                  <ExitButton
-                    onClick={() => {
-                      setOpenConfirmQuit(true);
-                    }}
-                  >
-                    <Icon src={exit} alt="" />
-                    退出
-                  </ExitButton>
-                </DropdownMenu>
-              )}
-            </DropdownWrapper>
-            <InviteButton
-              onClick={() => {
-                setOpenInviteModal(true);
-              }}
-            >
-              邀請
-            </InviteButton>
-          </Buttons>
-        ) : (
-          ""
-        )}
-      </GroupHeader>
-      {members.find((member) => member.uid === currentUser.uid) ? (
+                確認加入
+              </Button1>
+              <RejectButton
+                onClick={() => {
+                  setOpenConfirmReject(true);
+                }}
+              >
+                拒絕
+              </RejectButton>
+            </Buttons>
+          ) : (
+            ""
+          )}
+          {members.find((member) => member.uid === currentUser.uid) ? (
+            <Buttons>
+              <DropdownWrapper onClick={(e) => e.stopPropagation()}>
+                <HasJoined
+                  onClick={() => {
+                    setDropdown((prev) => !prev);
+                  }}
+                >
+                  <Icon src={check} alt="" />
+                  已加入
+                  <Dropdown>▾</Dropdown>
+                </HasJoined>
+                {dropdown && (
+                  <DropdownMenu>
+                    <ExitButton
+                      onClick={() => {
+                        setOpenConfirmQuit(true);
+                      }}
+                    >
+                      <Icon src={exit} alt="" />
+                      退出
+                    </ExitButton>
+                  </DropdownMenu>
+                )}
+              </DropdownWrapper>
+              <InviteButton
+                onClick={() => {
+                  setOpenInviteModal(true);
+                }}
+              >
+                邀請
+              </InviteButton>
+            </Buttons>
+          ) : (
+            ""
+          )}
+        </GroupHeader>
+      )}
+
+      {loading ? (
+        <div style={{ width: "100%" }}>
+          <Skeleton
+            width="100%"
+            height={30}
+            count={5}
+            borderRadius={10}
+            style={{ marginBottom: "20px" }}
+          />{" "}
+        </div>
+      ) : members.length &&
+        members.find((member) => member.uid === currentUser.uid) ? (
         <GroupBody>
           <GroupBodyLeft>
             <GroupTeam

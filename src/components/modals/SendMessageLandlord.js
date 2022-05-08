@@ -5,6 +5,11 @@ import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
 import { Button1 } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
+
+const NewModal = styled(Modal)`
+  max-width: 700px;
+`;
 
 const MessageInput = styled.textarea`
   width: calc(100% - 40px);
@@ -47,8 +52,10 @@ const Button = styled(Button1)`
   margin: 20px 20px 40px 0;
 `;
 
-function SendMessageLandlordModal({ setOpenModal, objectId }) {
+function SendMessageLandlordModal({ setOpenModal, objectId, setSaved }) {
   const { currentUser } = useAuth();
+  const [openConfirm, setOpenConfirm] = React.useState(false);
+
   const defaultmessages = [
     "您好，我想了解目前房源的出租情形",
     "您好，我想詢問房源詳細的設備",
@@ -61,6 +68,7 @@ function SendMessageLandlordModal({ setOpenModal, objectId }) {
     function clearMessageAndCloseModal() {
       setMessage("");
       setOpenModal(false);
+      setSaved(true);
     }
     api
       .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
@@ -107,7 +115,14 @@ function SendMessageLandlordModal({ setOpenModal, objectId }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          message="確認送出？"
+          action={sendMyMessage}
+          toggle={setOpenConfirm}
+        />
+      )}
+      <NewModal>
         <Header>
           <Title>發送訊息</Title>
           <CloseButton onClick={() => setOpenModal(false)}>×</CloseButton>
@@ -127,8 +142,15 @@ function SendMessageLandlordModal({ setOpenModal, objectId }) {
             />
           ))}
         </DefaultMessages>
-        <Button onClick={sendMyMessage}>確認送出</Button>
-      </Modal>
+        <Button
+          onClick={() => {
+            if (!message.trim()) return;
+            setOpenConfirm(true);
+          }}
+        >
+          確認送出
+        </Button>
+      </NewModal>
     </Overlay>
   );
 }

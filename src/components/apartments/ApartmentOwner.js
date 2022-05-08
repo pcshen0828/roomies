@@ -11,6 +11,7 @@ import api from "../../utils/api";
 import SendMessageLandlordModal from "../modals/SendMessageLandlord";
 import phone from "../../images/phone.svg";
 import SignInFirstModal from "../modals/SignInFirst";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled(FlexWrapper)`
   width: calc(40% - 60px);
@@ -73,6 +74,8 @@ export default function OwnerCard({ owner, currentUser }) {
   const [ownerInfo, setOwnerInfo] = React.useState();
   const [openModal, setOpenModal] = React.useState(false);
   const [openSignin, setOpenSignin] = React.useState(false);
+  const [saved, setSaved] = React.useState(false);
+
   React.useEffect(() => {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
       setOwnerInfo(res[0]);
@@ -81,10 +84,14 @@ export default function OwnerCard({ owner, currentUser }) {
 
   return (
     <>
+      {saved && (
+        <SuccessfullySavedModal toggle={setSaved} message="訊息已發送！" />
+      )}
       {openModal && (
         <SendMessageLandlordModal
           setOpenModal={setOpenModal}
           objectId={ownerInfo.uid}
+          setSaved={setSaved}
         />
       )}
       {openSignin && <SignInFirstModal setToggle={setOpenSignin} />}
@@ -95,9 +102,7 @@ export default function OwnerCard({ owner, currentUser }) {
             <FlexWrapper>
               <ProfileImage src={ownerInfo.profileImage} />
               <Info>
-                {/* <OwnerLink to={`/users/${ownerInfo.uid}`}> */}
                 <MediumTitle>{ownerInfo.alias}</MediumTitle>
-                {/* </OwnerLink> */}
                 <FlexWrapper>
                   <Icon alt="" src={phone} />
                   <Bold>{ownerInfo.phone}</Bold>

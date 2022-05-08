@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import SendMessageModal from "../modals/SendMessage";
 import { useAuth } from "../../context/AuthContext";
 import { Button1, FlexWrapper } from "../common/Components";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled.div`
   display: flex;
@@ -99,11 +100,19 @@ function GroupMember({ members }) {
   const [openModal, setOpenModal] = React.useState(false);
   const [objectId, setObjectId] = React.useState("");
   const { currentUser } = useAuth();
+  const [saved, setSaved] = React.useState(false);
 
   return (
     <Wrapper>
+      {saved && (
+        <SuccessfullySavedModal toggle={setSaved} message="訊息已發送！" />
+      )}
       {openModal && (
-        <SendMessageModal setOpenModal={setOpenModal} objectId={objectId} />
+        <SendMessageModal
+          setOpenModal={setOpenModal}
+          objectId={objectId}
+          setSaved={setSaved}
+        />
       )}
       <SubtitlesSmall>
         <TitleSmall>成員</TitleSmall>

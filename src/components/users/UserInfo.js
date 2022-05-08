@@ -13,12 +13,14 @@ import search from "../../images/search.svg";
 import { Firebase } from "../../utils/firebase";
 import UserCard from "../Community/UserCard";
 import { Link } from "react-router-dom";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const NewWrapper = styled(FlexWrapper)`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
-  min-height: 590px;
+  min-height: calc(100vh - 541px);
+
   @media screen and (max-width: 995.98px) {
     flex-direction: column;
   }
@@ -160,6 +162,7 @@ function UserInfo({ user, role }) {
   const [query, setQuery] = React.useState("");
   const [users, setUsers] = React.useState([]);
   const [jobs, setJobs] = React.useState([]);
+  const [saved, setSaved] = React.useState(false);
 
   function sendMyMessage() {
     setOpenMessage(true);
@@ -190,7 +193,14 @@ function UserInfo({ user, role }) {
   return (
     <>
       {openMessage && (
-        <SendMessageModal objectId={user.uid} setOpenModal={setOpenMessage} />
+        <SendMessageModal
+          objectId={user.uid}
+          setOpenModal={setOpenMessage}
+          setSaved={setSaved}
+        />
+      )}
+      {saved && (
+        <SuccessfullySavedModal toggle={setSaved} message="訊息已發送！" />
       )}
       <BreadCrumb>
         <StyledLink to="/">首頁</StyledLink>

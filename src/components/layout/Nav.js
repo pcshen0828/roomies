@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,53 +46,67 @@ function NavBar() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
 
-  function Render() {
-    if (loading) {
-      return null;
-    }
-    if (user) {
-      return (
+  function generalNav() {
+    return (
+      <>
         <StyledNavLink
-          to="/community"
+          to="/apartments"
           style={
-            location.pathname === "/community" ||
-            location.pathname.startsWith("/users/")
+            location.pathname === "/apartments" ||
+            location.pathname.startsWith("/apartment/") ||
+            location.pathname.startsWith("/groups/")
               ? activeStyle
               : {}
           }
         >
-          社群
+          所有房源
         </StyledNavLink>
+        <StyledNavLink
+          to="/explore"
+          style={location.pathname === "/explore" ? activeStyle : {}}
+        >
+          探索
+        </StyledNavLink>
+      </>
+    );
+  }
+
+  function Render() {
+    if (loading) {
+      return (
+        <Skeleton
+          width={60}
+          inline={true}
+          count={3}
+          style={{ marginLeft: "30px" }}
+        />
+      );
+    }
+    if (user) {
+      return (
+        <>
+          {generalNav()}
+          <StyledNavLink
+            to="/community"
+            style={
+              location.pathname === "/community" ||
+              location.pathname.startsWith("/users/")
+                ? activeStyle
+                : {}
+            }
+          >
+            社群
+          </StyledNavLink>
+        </>
       );
     }
     if (error) {
       return null;
     }
+    return generalNav();
   }
 
-  return (
-    <Wrapper>
-      <StyledNavLink
-        to="/apartments"
-        style={
-          location.pathname === "/apartments" ||
-          location.pathname.startsWith("/apartment/") ||
-          location.pathname.startsWith("/groups/")
-            ? activeStyle
-            : {}
-        }
-      >
-        所有房源
-      </StyledNavLink>
-      <StyledNavLink
-        to="/explore"
-        style={location.pathname === "/explore" ? activeStyle : {}}
-      >
-        探索
-      </StyledNavLink>
-      {Render()}
-    </Wrapper>
-  );
+  return <Wrapper>{Render()}</Wrapper>;
 }
 
 export default NavBar;

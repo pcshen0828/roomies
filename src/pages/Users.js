@@ -1,19 +1,29 @@
 import React from "react";
+import styled from "styled-components";
 import { Wrapper } from "../components/common/Components";
 import { useParams } from "react-router-dom";
 import api from "../utils/api";
 import UserInfo from "../components/users/UserInfo";
 import { Firebase } from "../utils/firebase";
-import { useAuth } from "../context/AuthContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Navigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import Loader from "../components/common/Loader";
+
+const NewWrapper = styled(Wrapper)`
+  min-height: calc(100vh - 541px);
+  @media screen and (max-width: 1279.98px) {
+    min-height: calc(100vh - 401px);
+  }
+`;
 
 function User() {
   const { id } = useParams();
-  const { currentUser } = useAuth();
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
   const [targetUser, setTargetUser] = React.useState();
+  const [loaded, setLoaded] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -22,6 +32,7 @@ function User() {
       if (!res.length) return;
       if (!mounted) return;
       setTargetUser(res[0]);
+      setLoaded(true);
     });
 
     return function cleanup() {
@@ -29,21 +40,53 @@ function User() {
     };
   }, []);
 
+  function generateSkeleton() {
+    return (
+      <div
+        style={{
+          width: "100%",
+          minHeight: "calc(100vh - 441px)",
+          margin: "50px 0",
+        }}
+      >
+        <Skeleton width={300} style={{ marginBottom: "20px" }} />
+        <div style={{ width: "100%" }}>
+          <Skeleton
+            inline={true}
+            width="60%"
+            height={320}
+            style={{ marginRight: "30px" }}
+          />
+          <Skeleton
+            inline={true}
+            width="30%"
+            height={500}
+            style={{ marginBottom: "20px" }}
+          />
+        </div>
+      </div>
+    );
+  }
+
   function Render() {
     if (loading) {
-      return <>loading...</>;
+      return <Loader />;
     }
     if (user) {
-      return targetUser && targetUser.status === 1 ? (
-        targetUser.role === 1 ? (
-          <UserInfo user={targetUser} role={1} />
-        ) : targetUser.role === 2 ? (
-          <UserInfo user={targetUser} role={2} />
+      return loaded ? (
+        targetUser && targetUser.status === 1 ? (
+          targetUser.role === 1 ? (
+            <UserInfo user={targetUser} role={1} />
+          ) : targetUser.role === 2 ? (
+            <UserInfo user={targetUser} role={2} />
+          ) : (
+            ""
+          )
         ) : (
-          ""
+          "查無用戶"
         )
       ) : (
-        "查無用戶"
+        generateSkeleton()
       );
     }
     if (error) {
@@ -52,7 +95,7 @@ function User() {
     return <Navigate replace to="/" />;
   }
 
-  return <Wrapper>{Render()}</Wrapper>;
+  return <NewWrapper>{Render()}</NewWrapper>;
 }
 
 export default User;

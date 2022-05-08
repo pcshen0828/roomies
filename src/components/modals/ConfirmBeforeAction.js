@@ -23,6 +23,7 @@ const NewModal = styled(Modal)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: visible;
 `;
 
 const NewHeader = styled(Header)`

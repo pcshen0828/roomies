@@ -16,9 +16,12 @@ import { Navigate } from "react-router-dom";
 import search from "../images/search.svg";
 import HobbyCard from "../components/Community/HobbyCard";
 import UserCard from "../components/Community/UserCard";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
+  min-height: calc(100vh - 441px);
 `;
 
 const NewTitle = styled(Title)`
@@ -38,13 +41,14 @@ const ResultDisplayer = styled(FlexWrapper)`
 `;
 
 function Community() {
-  const { currentUser } = useAuth();
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
   const [users, setUsers] = React.useState();
   const [hobbies, setHobbies] = React.useState([]);
   const [selected, setSelected] = React.useState("");
   const [query, setQuery] = React.useState("");
+
+  const [searching, setSearching] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -58,8 +62,11 @@ function Community() {
   }, []);
 
   async function searchUser(queryName) {
+    setSearching(true);
+
     if (!queryName.trim()) {
       setUsers([]);
+      setSearching(false);
       return;
     }
     const query = Firebase.query(
@@ -72,11 +79,23 @@ function Community() {
     const querySnapShot = await Firebase.getDocs(query);
     const result = querySnapShot.docs.map((doc) => doc.data());
     setUsers(result);
+    setSearching(false);
   }
 
   function Render() {
     if (loading) {
-      return <>loading...</>;
+      return (
+        <NewWrapper>
+          <div style={{ width: "100%" }}>
+            <Skeleton
+              width={320}
+              height={30}
+              style={{ marginBottom: "30px" }}
+            />
+            <Skeleton count={5} width="100%" style={{ marginBottom: "10px" }} />
+          </div>
+        </NewWrapper>
+      );
     }
     if (user) {
       return (
@@ -101,13 +120,24 @@ function Community() {
                 setUsers={setUsers}
                 selected={selected}
                 setSelected={setSelected}
+                setLoading={setSearching}
               />
             ))}
           </HobbyTags>
           <ResultDisplayer>
-            {users && users.length
-              ? users.map((user, index) => <UserCard key={index} user={user} />)
-              : ""}
+            {searching ? (
+              <Skeleton
+                count={5}
+                width={200}
+                height={240}
+                inline={true}
+                style={{ margin: "0 20px 20px 0" }}
+              />
+            ) : users && users.length ? (
+              users.map((user, index) => <UserCard key={index} user={user} />)
+            ) : (
+              ""
+            )}
           </ResultDisplayer>
         </NewWrapper>
       );

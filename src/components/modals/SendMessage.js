@@ -5,6 +5,11 @@ import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
 import { Button1 } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
+
+const NewModal = styled(Modal)`
+  max-width: 700px;
+`;
 
 const MessageInput = styled.textarea`
   width: calc(100% - 40px);
@@ -47,10 +52,11 @@ const Button = styled(Button1)`
   margin: 20px 20px 40px 0;
 `;
 
-function SendMessageModal({ setOpenModal, objectId }) {
+function SendMessageModal({ setOpenModal, objectId, setSaved }) {
   const { currentUser } = useAuth();
   const defaultmessages = ["Hi，你好！", "我正在尋找室友"];
   const [message, setMessage] = React.useState("");
+  const [openConfirm, setOpenConfirm] = React.useState(false);
 
   async function sendMyMessage() {
     if (!message.trim()) return;
@@ -58,6 +64,7 @@ function SendMessageModal({ setOpenModal, objectId }) {
     function clearMessageAndCloseModal() {
       setMessage("");
       setOpenModal(false);
+      setSaved(true);
     }
     api
       .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
@@ -104,7 +111,14 @@ function SendMessageModal({ setOpenModal, objectId }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          message="確認送出？"
+          action={sendMyMessage}
+          toggle={setOpenConfirm}
+        />
+      )}
+      <NewModal>
         <Header>
           <Title>發送訊息</Title>
           <CloseButton onClick={() => setOpenModal(false)}>×</CloseButton>
@@ -124,8 +138,15 @@ function SendMessageModal({ setOpenModal, objectId }) {
             />
           ))}
         </DefaultMessages>
-        <Button onClick={sendMyMessage}>確認送出</Button>
-      </Modal>
+        <Button
+          onClick={() => {
+            if (!message.trim()) return;
+            setOpenConfirm(true);
+          }}
+        >
+          確認送出
+        </Button>
+      </NewModal>
     </Overlay>
   );
 }

@@ -5,7 +5,7 @@ import Card from "../components/apartments/ApartmentCard";
 import { Wrapper, Title } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const NewWrapper = styled(Wrapper)`

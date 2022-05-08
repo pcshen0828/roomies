@@ -9,6 +9,9 @@ import { FlexWrapper } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import menu from "../../images/menu.svg";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { subColor } from "../../styles/GlobalStyle";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -27,11 +30,17 @@ const InnerWrapper = styled.div`
   max-width: 1200px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 `;
 
 const IndexLink = styled(Link)`
   color: #424b5a;
+  font-size: 20px;
+  padding-bottom: 3px;
+  font-family: "Noto Serif TC", serif;
+  &:hover {
+    color: ${subColor};
+  }
   @media screen and (max-width: 767.98px) {
     display: none;
   }
@@ -57,7 +66,16 @@ function Header() {
 
   function Render() {
     if (loading) {
-      return <>...</>;
+      return (
+        <Skeleton
+          width={30}
+          height={30}
+          inline={true}
+          count={3}
+          style={{ marginLeft: "20px" }}
+          circle={true}
+        />
+      );
     }
     if (user) {
       return <LoggedIn />;
@@ -72,7 +90,7 @@ function Header() {
       <InnerWrapper>
         <FlexWrapper>
           <Menu src={menu} onClick={() => setToggleMenu(true)} />
-          <IndexLink to="/">logo</IndexLink>
+          <IndexLink to="/">Roomies</IndexLink>
           <NavBar />
           {toggleMenu && <MobileNavBar toggle={setToggleMenu} />}
         </FlexWrapper>
