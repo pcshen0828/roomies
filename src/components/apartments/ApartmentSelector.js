@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import {
   Bold,
   Button1,
@@ -8,6 +8,17 @@ import {
   SmallTitle,
 } from "../common/Components";
 import SearchBox from "./SearchBox";
+
+const fadeIn = keyframes`
+  0%   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+  100% { 
+    opacity: 1; 
+    visibility: visible;
+  }
+`;
 
 const Toggler = styled.div`
   width: 100%;
@@ -23,13 +34,6 @@ const Toggler = styled.div`
   border-radius: 0 0 10px 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
-  ${
-    "" /* display: none;
-
-  @media screen and (max-width: 1279.98px) {
-    display: block;
-  } */
-  }
 `;
 
 const CloseButton = styled(Button1)`
@@ -50,6 +54,7 @@ const Container = styled(FlexWrapper)`
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border-radius: 0 0 10px 10px;
+  animation: ${fadeIn} 0.8s ease;
 `;
 
 const Wrapper = styled(FlexWrapper)`
@@ -98,9 +103,7 @@ const InputWrapper = styled(FlexWrapper)`
   margin-right: 10px;
   margin-bottom: 15px;
 `;
-const HiddenInput = styled.input`
-  ${"" /* display: none; */}
-`;
+const HiddenInput = styled.input``;
 
 const ClearAll = styled(Bold)`
   position: absolute;
@@ -167,10 +170,9 @@ function Selector({
   allPages,
   calcAllPages,
   queryList,
+  anchor,
 }) {
   const [isClose, setIsClose] = React.useState(false);
-  // const [prevScrollPos, setPrevScrollPos] = React.useState(0);
-  // const [visible, setVisible] = React.useState(true);
   const toFilterData = allData;
 
   function ShowMatchedApartments({ e, name }) {
@@ -194,20 +196,23 @@ function Selector({
     { list: furnitureList, name: "家具" },
   ];
 
-  // function handleScroll() {
-  //   const currentScrollPos = window.pageYOffset;
-  //   setVisible(
-  //     (prevScrollPos > currentScrollPos &&
-  //       prevScrollPos - currentScrollPos > 90) ||
-  //       currentScrollPos < 90
-  //   );
-  //   setPrevScrollPos(currentScrollPos);
-  // }
+  React.useEffect(() => {
+    let mounted = true;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (!mounted) return;
+      if (entry.intersectionRatio <= 0) {
+        setIsClose(true);
+      } else {
+        setIsClose(false);
+      }
+    });
+    intersectionObserver.observe(anchor.current);
 
-  // React.useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll);
-  //   return () => window.removeEventListener("scroll", handleScroll);
-  // }, []);
+    return function cleanup() {
+      mounted = false;
+    };
+  }, []);
 
   function displayAllApartments() {
     queryList.current = [];

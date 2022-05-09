@@ -23,7 +23,7 @@ const Cards = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, 340px);
   justify-content: space-between;
-  margin: 20px auto 0;
+  margin: -10px auto 0;
 
   @media screen and (max-width: 1280px) {
     grid-template-columns: repeat(auto-fill, calc((100% - 10px) / 2));
@@ -50,6 +50,7 @@ function Apartments() {
   const currentPage = React.useRef(1);
   const allPages = React.useRef();
   const queryList = React.useRef([]);
+  const filterAnchor = React.useRef(null);
 
   const query = Firebase.query(
     Firebase.collection(Firebase.db, "apartments"),
@@ -128,8 +129,9 @@ function Apartments() {
           allPages={allPages}
           calcAllPages={calcAllPages}
           queryList={queryList}
+          anchor={filterAnchor}
         />
-
+        <Anchor ref={filterAnchor}></Anchor>
         {loading ? (
           <Cards>
             {Array.from(Array(6).keys()).map((loader, index) => (
