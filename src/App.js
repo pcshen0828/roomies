@@ -14,8 +14,6 @@ import PageNotFound from "./pages/NotFound";
 import Community from "./pages/Community";
 
 function App() {
-  // 網址不要用大寫
-  // profile 頁面的 path 要再重新設計
   return (
     <BrowserRouter>
       <GlobalStyle></GlobalStyle>

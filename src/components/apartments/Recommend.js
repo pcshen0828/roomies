@@ -54,7 +54,7 @@ function RecommendCarousel({ id }) {
     return function cleanup() {
       mounted = false;
     };
-  }, []);
+  }, [id]);
 
   return (
     <Wrapper

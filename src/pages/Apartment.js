@@ -50,7 +50,7 @@ function Apartment() {
     return function cleanup() {
       mounted = false;
     };
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -73,7 +73,11 @@ function Apartment() {
           <Active>{details.length ? details[0].title : "..."}</Active>
         )}
       </BreadCrumb>
-      <ApartmentDetail details={details} loading={loading}></ApartmentDetail>
+      <ApartmentDetail
+        details={details}
+        loading={loading}
+        id={id}
+      ></ApartmentDetail>
       <Footer />
     </>
   );

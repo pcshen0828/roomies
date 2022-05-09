@@ -7,7 +7,7 @@ import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 import SignInFirstModal from "../modals/SignInFirst";
 import OwnerCard from "./ApartmentOwner";
-import { Button1, FlexWrapper, SlicedTitle, Title } from "../common/Components";
+import { Button1, FlexWrapper, Title } from "../common/Components";
 import ApartmentMap from "./ApartmentMap";
 import RecommendCarousel from "./Recommend";
 import Skeleton from "react-loading-skeleton";
@@ -129,7 +129,7 @@ const Details = styled(FlexWrapper)`
 const Detail = styled(FlexWrapper)`
   color: #8c8989;
   align-items: center;
-  margin-bottom: 8px;
+  margin-bottom: ${(props) => (props.last ? "-8px" : "8px")};
 `;
 
 const DetailIcon = styled.img`
@@ -189,32 +189,34 @@ const DescriptionWrapper = styled(FlexWrapper)`
   padding-bottom: 20px;
   border-bottom: 1px solid #dadada;
   flex-direction: ${(props) => (props.column ? "column" : "row")};
+  flex-direction: column;
   align-items: flex-start;
 `;
 
 const Icon = styled.img`
-  width: 30px;
-  height: 30px;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
 `;
 
 const ConditionWrapper = styled(FlexWrapper)`
-  flex-direction: column;
+  ${"" /* flex-direction: column; */}
   align-items: center;
-  margin-right: 30px;
+  margin: 0 10px 20px 0;
+  width: 130px;
 `;
 
 const OtherInfo = styled.div`
   margin-bottom: 10px;
 `;
 
-function ApartmentDetail({ details, loading }) {
+function ApartmentDetail({ details, loading, id }) {
   const { currentUser } = useAuth();
-  const { id } = useParams();
   const [isActive, setIsActive] = React.useState(false);
-  const [hasJoined, setHasJoined] = React.useState(false);
-  const [hasCollected, setHasCollected] = React.useState(false);
+  const [hasJoined, setHasJoined] = React.useState();
+  const [hasCollected, setHasCollected] = React.useState();
   const [groupId, setGroupId] = React.useState();
-  const [hasNotSignIn, setHasNotSignIn] = React.useState(false);
+  const [hasNotSignIn, setHasNotSignIn] = React.useState();
   const [conditions, setConditions] = React.useState([]);
   const [facilities, setFacilities] = React.useState([]);
   const [furnitures, setFurnitures] = React.useState([]);
@@ -229,6 +231,7 @@ function ApartmentDetail({ details, loading }) {
 
   React.useEffect(() => {
     let mounted = true;
+
     queryList.forEach((subcollection) => {
       api
         .getAllDocsFromCollection("apartments/" + id + `/${subcollection.name}`)
@@ -238,27 +241,25 @@ function ApartmentDetail({ details, loading }) {
         });
     });
 
-    async function checkHasJoinedGroupOrNot() {
+    function checkHasJoinedGroupOrNot() {
       if (!mounted) return;
       api
         .getDataWithSingleQuery("groups", "apartmentId", "==", id)
         .then((res) => {
           if (res.length) {
             setGroupId(res[0].id);
+            console.log(res[0].id);
             setHasJoined(res[0].members.includes(currentUser.uid));
           }
         });
     }
-
-    if (currentUser) {
-      checkHasJoinedGroupOrNot();
-      setHasCollected(currentUser.collectionList.includes(id));
-    }
+    checkHasJoinedGroupOrNot();
+    setHasCollected(currentUser?.collectionList.includes(id));
 
     return function cleanup() {
       mounted = false;
     };
-  }, [currentUser]);
+  }, [details, currentUser, id]);
 
   function openConfirmModal() {
     if (!currentUser) {
@@ -359,13 +360,13 @@ function ApartmentDetail({ details, loading }) {
                   <Detail>
                     <DetailIcon src={loc} alt="" />
                     {details[0].address}
-                    {otherInfo.find((item) => item.id === "floor").value}樓
+                    {otherInfo.find((item) => item.id === "floor")?.value}樓
                   </Detail>
                   <Detail>
                     <DetailIcon src={square} alt="" />
                     坪數{" "}
                     {
-                      otherInfo.find((item) => item.id === "squareFeet").value
+                      otherInfo.find((item) => item.id === "squareFeet")?.value
                     }{" "}
                     坪
                   </Detail>
@@ -377,7 +378,7 @@ function ApartmentDetail({ details, loading }) {
                     <DetailIcon src={room} alt="" />
                     房數 {details[0].rooms} 間
                   </Detail>
-                  <Detail>
+                  <Detail last={true}>
                     <DetailIcon src={rent} alt="" />
                     每月房租 NTD.
                     <RentPrice>
@@ -386,15 +387,13 @@ function ApartmentDetail({ details, loading }) {
                     / 間
                   </Detail>
                 </Details>
-                {currentUser &&
-                currentUser.role === 2 &&
-                details[0].owner === currentUser.uid ? (
+                {currentUser?.role === 2 &&
+                details[0].owner === currentUser?.uid ? (
                   <ActionArea>
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
                   </ActionArea>
-                ) : currentUser &&
-                  currentUser.role === 2 &&
-                  details[0].owner !== currentUser.uid ? (
+                ) : currentUser?.role === 2 &&
+                  details[0].owner !== currentUser?.uid ? (
                   ""
                 ) : (
                   <ActionArea>
@@ -429,11 +428,12 @@ function ApartmentDetail({ details, loading }) {
               </DetailInfo>
             )}
           </Head>
+
           <Body>
             <BodyLeft>
               <SubTitle>房源簡介</SubTitle>
               <DescriptionWrapper>
-                {otherInfo.find((item) => item.id === "feature").value}
+                {otherInfo.find((item) => item.id === "feature")?.value}
               </DescriptionWrapper>
               <SubTitle>設施條件</SubTitle>
               <DescriptionWrapper>

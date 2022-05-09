@@ -70,7 +70,7 @@ const Icon = styled.img`
   margin-right: 6px;
 `;
 
-export default function OwnerCard({ owner, currentUser }) {
+export default function OwnerCard({ owner, currentUser, id }) {
   const [ownerInfo, setOwnerInfo] = React.useState();
   const [openModal, setOpenModal] = React.useState(false);
   const [openSignin, setOpenSignin] = React.useState(false);
@@ -80,7 +80,7 @@ export default function OwnerCard({ owner, currentUser }) {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
       setOwnerInfo(res[0]);
     });
-  }, []);
+  }, [owner, id]);
 
   return (
     <>
