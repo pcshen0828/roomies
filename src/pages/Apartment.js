@@ -73,11 +73,7 @@ function Apartment() {
           <Active>{details.length ? details[0].title : "..."}</Active>
         )}
       </BreadCrumb>
-      <ApartmentDetail
-        details={details}
-        loading={loading}
-        id={id}
-      ></ApartmentDetail>
+      <ApartmentDetail details={details} loading={loading}></ApartmentDetail>
       <Footer />
     </>
   );

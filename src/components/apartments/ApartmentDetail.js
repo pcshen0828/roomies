@@ -210,13 +210,14 @@ const OtherInfo = styled.div`
   margin-bottom: 10px;
 `;
 
-function ApartmentDetail({ details, loading, id }) {
+function ApartmentDetail({ details, loading }) {
   const { currentUser } = useAuth();
+  const { id } = useParams();
   const [isActive, setIsActive] = React.useState(false);
-  const [hasJoined, setHasJoined] = React.useState();
-  const [hasCollected, setHasCollected] = React.useState();
+  const [hasJoined, setHasJoined] = React.useState(false);
+  const [hasCollected, setHasCollected] = React.useState(false);
   const [groupId, setGroupId] = React.useState();
-  const [hasNotSignIn, setHasNotSignIn] = React.useState();
+  const [hasNotSignIn, setHasNotSignIn] = React.useState(false);
   const [conditions, setConditions] = React.useState([]);
   const [facilities, setFacilities] = React.useState([]);
   const [furnitures, setFurnitures] = React.useState([]);
@@ -231,7 +232,6 @@ function ApartmentDetail({ details, loading, id }) {
 
   React.useEffect(() => {
     let mounted = true;
-
     queryList.forEach((subcollection) => {
       api
         .getAllDocsFromCollection("apartments/" + id + `/${subcollection.name}`)
@@ -248,18 +248,20 @@ function ApartmentDetail({ details, loading, id }) {
         .then((res) => {
           if (res.length) {
             setGroupId(res[0].id);
-            console.log(res[0].id);
             setHasJoined(res[0].members.includes(currentUser.uid));
           }
         });
     }
-    checkHasJoinedGroupOrNot();
-    setHasCollected(currentUser?.collectionList.includes(id));
+
+    if (currentUser) {
+      checkHasJoinedGroupOrNot();
+      setHasCollected(currentUser.collectionList.includes(id));
+    }
 
     return function cleanup() {
       mounted = false;
     };
-  }, [details, currentUser, id]);
+  }, [currentUser]);
 
   function openConfirmModal() {
     if (!currentUser) {
@@ -294,8 +296,8 @@ function ApartmentDetail({ details, loading, id }) {
       {hasNotSignIn && <SignInFirstModal setToggle={setHasNotSignIn} />}
       {isActive && (
         <JoinConfirmModal
-          apartmentId={details[0].id}
           setIsActive={setIsActive}
+          apartmentId={details[0].id}
           groupId={groupId}
         />
       )}
@@ -360,13 +362,13 @@ function ApartmentDetail({ details, loading, id }) {
                   <Detail>
                     <DetailIcon src={loc} alt="" />
                     {details[0].address}
-                    {otherInfo.find((item) => item.id === "floor")?.value}樓
+                    {otherInfo.find((item) => item.id === "floor").value}樓
                   </Detail>
                   <Detail>
                     <DetailIcon src={square} alt="" />
                     坪數{" "}
                     {
-                      otherInfo.find((item) => item.id === "squareFeet")?.value
+                      otherInfo.find((item) => item.id === "squareFeet").value
                     }{" "}
                     坪
                   </Detail>
@@ -387,13 +389,15 @@ function ApartmentDetail({ details, loading, id }) {
                     / 間
                   </Detail>
                 </Details>
-                {currentUser?.role === 2 &&
-                details[0].owner === currentUser?.uid ? (
+                {currentUser &&
+                currentUser.role === 2 &&
+                details[0].owner === currentUser.uid ? (
                   <ActionArea>
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
                   </ActionArea>
-                ) : currentUser?.role === 2 &&
-                  details[0].owner !== currentUser?.uid ? (
+                ) : currentUser &&
+                  currentUser.role === 2 &&
+                  details[0].owner !== currentUser.uid ? (
                   ""
                 ) : (
                   <ActionArea>
@@ -433,7 +437,7 @@ function ApartmentDetail({ details, loading, id }) {
             <BodyLeft>
               <SubTitle>房源簡介</SubTitle>
               <DescriptionWrapper>
-                {otherInfo.find((item) => item.id === "feature")?.value}
+                {otherInfo.find((item) => item.id === "feature").value}
               </DescriptionWrapper>
               <SubTitle>設施條件</SubTitle>
               <DescriptionWrapper>

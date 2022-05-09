@@ -6,9 +6,9 @@ import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import List from "../messages/MessageList";
 
-const NewNavModal = styled(NavModal)`
-  max-height: 300px;
-`;
+// const NewNavModal = styled(NavModal)`
+//   max-height: 300px;
+// `;
 
 const ChatsWrapper = styled(FlexWrapper)`
   flex-direction: column;
@@ -54,7 +54,7 @@ function MessageModal({ setActiveIcon }) {
 
   return (
     <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
-      <NewNavModal onClick={(e) => e.stopPropagation()}>
+      <NavModal onClick={(e) => e.stopPropagation()}>
         <Title>聊天室</Title>
         <ChatsWrapper>
           <List chats={chats} nav={true} usage="modal" toggle={setActiveIcon} />
@@ -62,7 +62,7 @@ function MessageModal({ setActiveIcon }) {
         <MessagesLink to="/messages/all" onClick={() => setActiveIcon("")}>
           查看收件匣
         </MessagesLink>
-      </NewNavModal>
+      </NavModal>
     </NavModalOverlay>
   );
 }

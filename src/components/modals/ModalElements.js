@@ -82,7 +82,7 @@ const Button = styled(Button1)`
 const NavModalOverlay = styled.div`
   position: fixed;
   left: 0;
-  top: 80px;
+  top: 0px;
   width: 100vw;
   height: 100vh;
   z-index: 999;
@@ -93,8 +93,9 @@ const NavModalOverlay = styled.div`
 
 const NavModal = styled.div`
   width: 350px;
+  max-height: 300px;
   position: absolute;
-  top: 0;
+  top: 80px;
   right: 0px;
   background: #ffffff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);

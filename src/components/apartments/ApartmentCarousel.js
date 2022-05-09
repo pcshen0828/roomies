@@ -44,13 +44,12 @@ function Carousel({ id }) {
       if (!mounted) return;
       setImages(res[0].images);
       setCover(res[0].coverImage);
-      console.log(res);
     });
 
     return function cleanup() {
       mounted = false;
     };
-  }, [id]);
+  }, []);
 
   return (
     <Wrapper

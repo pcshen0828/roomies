@@ -80,7 +80,7 @@ export default function OwnerCard({ owner, currentUser, id }) {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
       setOwnerInfo(res[0]);
     });
-  }, [owner, id]);
+  }, []);
 
   return (
     <>

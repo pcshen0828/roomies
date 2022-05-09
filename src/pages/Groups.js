@@ -274,56 +274,50 @@ function Groups() {
 
   React.useEffect(() => {
     let mounted = true;
-    async function getGroupData() {
-      const query = api.createQuery("groups", "id", "==", id);
-      Firebase.onSnapshot(query, (snapshot) => {
-        if (!mounted) return;
-        const groupData = snapshot.docs.map((doc) => doc.data())[0];
-        if (!groupData) return;
-        setGroupMembers(groupData.members);
-        api
-          .getDataWithSingleQuery(
-            "apartments",
-            "id",
-            "==",
-            groupData.apartmentId
-          )
-          .then((res) => setApartmentData(res[0]));
-        api
-          .getDataWithSingleQuery("users", "uid", "in", groupData.members)
-          .then((res) => {
-            setMembers(res);
-            setLoading(false);
-          });
-      });
-    }
-    getGroupData();
 
-    function checkCurrentUserStatus() {
-      const query = Firebase.query(
-        Firebase.collection(Firebase.db, "groupInvitations"),
-        Firebase.where("groupId", "==", id)
+    const query1 = api.createQuery("groups", "id", "==", id);
+    Firebase.onSnapshot(query1, (snapshot) => {
+      if (!mounted) return;
+      const groupData = snapshot.docs.map((doc) => doc.data())[0];
+      if (!groupData) return;
+      api
+        .getDataWithSingleQuery("apartments", "id", "==", groupData.apartmentId)
+        .then((res) => setApartmentData(res[0]));
+      api
+        .getDataWithSingleQuery(
+          "users",
+          "uid",
+          "in",
+          groupData.members.length ? groupData.members : [1]
+        )
+        .then((res) => {
+          setMembers(res);
+        });
+      setGroupMembers(groupData.members);
+      setLoading(false);
+    });
+
+    const query2 = Firebase.query(
+      Firebase.collection(Firebase.db, "groupInvitations"),
+      Firebase.where("groupId", "==", id)
+    );
+
+    Firebase.onSnapshot(query2, (snapshot) => {
+      const res = snapshot.docs.map((doc) => doc.data());
+      if (!mounted) return;
+      setInvitation(
+        res.find((data) => data.receiver === (currentUser && currentUser.uid))
       );
-
-      Firebase.onSnapshot(query, (snapshot) => {
-        const res = snapshot.docs.map((doc) => doc.data());
-        if (!mounted) return;
-        setInvitation(
-          res.find((data) => data.receiver === (currentUser && currentUser.uid))
-        );
-        setIsInvited(
-          res.filter(
-            (data) => data.receiver === (currentUser && currentUser.uid)
-          ).length
-        );
-      });
-    }
-    checkCurrentUserStatus();
+      setIsInvited(
+        res.filter((data) => data.receiver === (currentUser && currentUser.uid))
+          .length
+      );
+    });
 
     return function cleanup() {
       mounted = false;
     };
-  }, [currentUser]);
+  }, [currentUser, id]);
 
   function quitTheGroup() {
     const userID = currentUser.uid;

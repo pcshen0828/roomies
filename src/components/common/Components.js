@@ -14,6 +14,16 @@ const Wrapper = styled.div`
   }
 `;
 
+const BannerTitle = styled.div`
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 10px;
+
+  @media screen and (max-width: 1279.98px) {
+    font-size: 24px;
+  }
+`;
+
 const Title = styled.div`
   font-size: 24px;
   font-weight: 700;
@@ -21,6 +31,16 @@ const Title = styled.div`
 
   @media screen and (max-width: 1279.98px) {
     font-size: 20px;
+  }
+`;
+
+const TitleSub = styled.div`
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 10px;
+
+  @media screen and (max-width: 1279.98px) {
+    font-size: 18px;
   }
 `;
 
@@ -517,7 +537,9 @@ const ProfileImage = styled.div`
 
 export {
   Wrapper,
+  BannerTitle,
   Title,
+  TitleSub,
   MediumTitle,
   SubTitle,
   Bold,

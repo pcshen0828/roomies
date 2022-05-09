@@ -45,7 +45,6 @@ function RecommendCarousel({ id }) {
       );
       const querySnapShot = await Firebase.getDocs(query);
       const result = querySnapShot.docs.map((doc) => doc.data());
-      console.log(result);
       if (!mounted) return;
       setApartments(result);
     }
@@ -54,7 +53,7 @@ function RecommendCarousel({ id }) {
     return function cleanup() {
       mounted = false;
     };
-  }, [id]);
+  }, []);
 
   return (
     <Wrapper

@@ -36,11 +36,12 @@ const Checkbox = styled.input`
 `;
 
 function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
+  console.log(groupId);
   const { currentUser } = useAuth();
   const [isConfirmed, setIsConfirmed] = React.useState(false);
   const navigate = useNavigate();
 
-  async function joinGroup() {
+  function joinGroup() {
     if (!isConfirmed) return;
     api
       .getDataWithSingleQuery("groups", "apartmentId", "==", apartmentId)
@@ -52,7 +53,6 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
           });
           navigate(`/groups/${groupId}`);
         } else {
-          //建立 group 資料
           const newGroupRef = api.createNewDocRef("groups");
           api.setNewDoc(newGroupRef, {
             id: newGroupRef.id,

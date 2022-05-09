@@ -10,9 +10,9 @@ import { noticeTypes } from "../../utils/noticeType";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const NewModal = styled(NavModal)`
-  max-height: 300px;
-`;
+// const NewModal = styled(NavModal)`
+//   max-height: 300px;
+// `;
 
 const NoticeWrapper = styled(FlexWrapper)`
   width: 100%;
@@ -161,7 +161,7 @@ function NoticeModal({ setActiveIcon }) {
 
   return (
     <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
-      <NewModal onClick={(e) => e.stopPropagation()}>
+      <NavModal onClick={(e) => e.stopPropagation()}>
         <Bold>通知</Bold>
         <SmallTitle>先前的通知</SmallTitle>
         <NoticeWrapper>
@@ -207,7 +207,7 @@ function NoticeModal({ setActiveIcon }) {
               ))
             : "尚無通知"}
         </NoticeWrapper>
-      </NewModal>
+      </NavModal>
     </NavModalOverlay>
   );
 }
