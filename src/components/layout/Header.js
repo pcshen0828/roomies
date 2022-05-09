@@ -30,7 +30,7 @@ const InnerWrapper = styled.div`
   max-width: 1200px;
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
+  align-items: center;
 `;
 
 const IndexLink = styled(Link)`

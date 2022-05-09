@@ -22,6 +22,10 @@ const BannerTitle = styled.div`
   @media screen and (max-width: 1279.98px) {
     font-size: 24px;
   }
+
+  @media screen and (max-width: 575.98px) {
+    font-size: 20px;
+  }
 `;
 
 const Title = styled.div`
