@@ -92,7 +92,8 @@ function Messages() {
   const selectedChat = chats.find((chat) => chat.id === chatId);
   const myRole =
     selectedChat &&
-    selectedChat.members.find((member) => member.uid === currentUser.uid).role;
+    selectedChat.members.find((member) => member.uid === currentUser?.uid)
+      ?.role;
 
   React.useEffect(() => {
     let mounted = true;
@@ -118,16 +119,13 @@ function Messages() {
 
     return function cleanup() {
       mounted = false;
+      if (id !== "all" && selectedChat?.latestMessage.sender !== myRole) {
+        api.updateDocData("chats", id, {
+          status: 1,
+        });
+      }
     };
-  }, [currentUser, id, loading, user]);
-
-  React.useEffect(() => {
-    if (id !== "all") {
-      // api.updateDocData("chats", id, {
-      //   status: 1,
-      // });
-    }
-  }, [chats, id]);
+  }, [currentUser, id, loading, user, myRole, selectedChat]);
 
   function RenderLoader() {
     return (

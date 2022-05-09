@@ -85,51 +85,55 @@ export default function TenantSchedule() {
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
       let newSchedules = [];
       const res = querySnapShot.docs.map((doc) => doc.data());
-      res.forEach((schedule) => {
-        let newSchedule = {
-          start: schedule.start,
-          end: schedule.end,
-          id: schedule.id,
-          status: schedule.status,
-          host: schedule.host,
-          title: schedule.title,
-        };
-        api
-          .getDataWithSingleQuery(
-            "apartments",
-            "id",
-            "==",
-            schedule.apartmentID
-          )
-          .then((res) => {
-            newSchedule.apartment = { ...res[0] };
-          })
-          .then(() => {
-            api
-              .getDataWithSingleQuery("users", "uid", "in", schedule.members)
-              .then((res) => {
-                newSchedule.members = [...res];
-                newSchedules.push(newSchedule);
-                setSchedules(
-                  newSchedules.filter(
-                    (schedule) =>
-                      schedule.status === 1 &&
-                      new Date(schedule.end).getTime() >= new Date().getTime()
-                  )
-                );
-                setUnconfirmed(
-                  newSchedules.filter((schedule) => schedule.status === 0)
-                );
-                setFinished(
-                  newSchedules.filter(
-                    (schedule) =>
-                      new Date(schedule.end).getTime() < new Date().getTime()
-                  )
-                );
-                setLoading(false);
-              });
-          });
-      });
+      if (res.length) {
+        res.forEach((schedule) => {
+          let newSchedule = {
+            start: schedule.start,
+            end: schedule.end,
+            id: schedule.id,
+            status: schedule.status,
+            host: schedule.host,
+            title: schedule.title,
+          };
+          api
+            .getDataWithSingleQuery(
+              "apartments",
+              "id",
+              "==",
+              schedule.apartmentID
+            )
+            .then((res) => {
+              newSchedule.apartment = { ...res[0] };
+            })
+            .then(() => {
+              api
+                .getDataWithSingleQuery("users", "uid", "in", schedule.members)
+                .then((res) => {
+                  newSchedule.members = [...res];
+                  newSchedules.push(newSchedule);
+                  setSchedules(
+                    newSchedules.filter(
+                      (schedule) =>
+                        schedule.status === 1 &&
+                        new Date(schedule.end).getTime() >= new Date().getTime()
+                    )
+                  );
+                  setUnconfirmed(
+                    newSchedules.filter((schedule) => schedule.status === 0)
+                  );
+                  setFinished(
+                    newSchedules.filter(
+                      (schedule) =>
+                        new Date(schedule.end).getTime() < new Date().getTime()
+                    )
+                  );
+                  setLoading(false);
+                });
+            });
+        });
+      } else {
+        setLoading(false);
+      }
     });
 
     return unsubscribe;

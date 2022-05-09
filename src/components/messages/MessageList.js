@@ -96,6 +96,8 @@ function List({ chats, setChatId, usage, toggle }) {
 
     if (chatMates.length) {
       getUserData();
+    } else {
+      setLoading(false);
     }
 
     return function cleanup() {

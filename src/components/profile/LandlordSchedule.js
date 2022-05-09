@@ -42,43 +42,51 @@ function LandlordSchedule() {
     const unsubscribe = Firebase.onSnapshot(query, (snapshot) => {
       const res = snapshot.docs.map((doc) => doc.data());
       let newEvents = [];
-      res.forEach((event) => {
-        const apartment = event.apartmentID;
-        const members = event.members;
-        let newEvent = {};
-        newEvent.extendedProps = {};
-        api
-          .getDataWithSingleQuery("apartments", "id", "==", apartment)
-          .then((res) => {
-            newEvent.title = res[0].title;
-          })
-          .then(() => {
-            api
-              .getDataWithSingleQuery("users", "uid", "in", members)
-              .then((res) => {
-                newEvent.extendedProps.members = res;
-              })
-              .then(() => {
-                newEvent.extendedProps.id = event.id;
-                newEvent.extendedProps.host = event.host;
-                newEvent.extendedProps.status = event.status;
-                newEvent.start = event.start;
-                newEvent.end = event.end;
-                newEvent.backgroundColor = "#c1b18a";
-                newEvent.borderColor = "#c1b18a";
-                newEvent.textColor = "#fff";
+      if (res.length) {
+        res.forEach((event) => {
+          const apartment = event.apartmentID;
+          const members = event.members;
+          let newEvent = {};
+          newEvent.extendedProps = {};
+          api
+            .getDataWithSingleQuery("apartments", "id", "==", apartment)
+            .then((res) => {
+              newEvent.title = res[0].title;
+            })
+            .then(() => {
+              api
+                .getDataWithSingleQuery("users", "uid", "in", members)
+                .then((res) => {
+                  newEvent.extendedProps.members = res;
+                })
+                .then(() => {
+                  newEvent.extendedProps.id = event.id;
+                  newEvent.extendedProps.host = event.host;
+                  newEvent.extendedProps.status = event.status;
+                  newEvent.start = event.start;
+                  newEvent.end = event.end;
+                  newEvent.backgroundColor = "#c1b18a";
+                  newEvent.borderColor = "#c1b18a";
+                  newEvent.textColor = "#fff";
 
-                newEvents.push(newEvent);
-                setUnconfirmed(
-                  newEvents.filter((event) => event.extendedProps.status === 0)
-                );
-                setEvents(
-                  newEvents.filter((event) => event.extendedProps.status === 1)
-                );
-                setLoading(false);
-              });
-          });
-      });
+                  newEvents.push(newEvent);
+                  setUnconfirmed(
+                    newEvents.filter(
+                      (event) => event.extendedProps.status === 0
+                    )
+                  );
+                  setEvents(
+                    newEvents.filter(
+                      (event) => event.extendedProps.status === 1
+                    )
+                  );
+                  setLoading(false);
+                });
+            });
+        });
+      } else {
+        setLoading(false);
+      }
     });
 
     return unsubscribe;
