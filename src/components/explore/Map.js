@@ -11,7 +11,7 @@ import {
 import { googleMapsAppKey } from "../../appkeys";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { BodyLeft, BodyRight, FlexWrapper } from "../common/Components";
+import { BodyLeft, BodyRight } from "../common/Components";
 import api from "../../utils/api";
 import Card from "../apartments/ApartmentCard";
 import Skeleton from "react-loading-skeleton";
@@ -105,9 +105,10 @@ function MyMap() {
   const [map, setMap] = React.useState(null);
   const [center, setCenter] = React.useState(defaultCenter);
   const [circleCenter, setCircleCenter] = React.useState(defaultCenter);
-  const [zoom, setZoom] = React.useState(11);
+  const [zoom, setZoom] = React.useState(9);
   const [marker, setMarker] = React.useState(center);
   const [apartments, setApartments] = React.useState([]);
+  const [allData, setAllData] = React.useState([]);
   const [searchBox, setSearchBox] = React.useState(null);
   const [query, setQuery] = React.useState("");
   const [locations, setLocations] = React.useState([]);
@@ -143,12 +144,22 @@ function MyMap() {
     setCircleCenter(newCenter);
     setZoom(16);
     setQuery("");
+    setApartments(
+      allData.filter(
+        (item) =>
+          item.geoLocation.lat === newCenter.lat &&
+          // item.geoLocation.lat >= newCenter.lat - 0.1 &&
+          item.geoLocation.lng === newCenter.lng
+        // item.geoLocation.lng >= newCenter.lng - 0.1
+      )
+    );
   };
 
   React.useEffect(() => {
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "status", "==", 1).then((res) => {
       if (!mounted) return;
+      setAllData(res);
       setApartments(res);
       setLocations(res.map((item) => item.geoLocation));
       setLoading(false);
@@ -157,10 +168,6 @@ function MyMap() {
       mounted = false;
     };
   }, []);
-
-  function createKey(location) {
-    return location.lat + location.lng;
-  }
 
   const renderMap = () => {
     return (
@@ -200,17 +207,38 @@ function MyMap() {
             onLoad={onLoad}
             onUnmount={onUnmount}
           >
-            <MarkerClusterer>
+            <MarkerClusterer
+              maxZoom={20}
+              zoomOnClick={true}
+              onClusteringBegin={() => {
+                console.log("start clustering");
+              }}
+              onClusteringEnd={() => {
+                console.log("end clustering");
+              }}
+            >
               {(clusterer) => {
-                return apartments.map((apartment, index) => (
+                return allData.map((apartment, index) => (
                   <Marker
                     key={apartment.id}
                     position={apartment.geoLocation}
-                    onClick={() => setMarker(apartment.geoLocation)}
+                    onClick={(cluster) => {
+                      setMarker(apartment.geoLocation);
+                      setApartments(
+                        allData.filter(
+                          (item) => item.geoLocation === apartment.geoLocation
+                        )
+                      );
+                    }}
                     clusterer={clusterer}
                   >
                     {marker === apartment.geoLocation ? (
-                      <InfoWindow onCloseClick={() => setMarker(null)}>
+                      <InfoWindow
+                        onCloseClick={() => {
+                          setMarker(null);
+                          setApartments(allData);
+                        }}
+                      >
                         <InfoModal>
                           {apartment.title}
                           <StyledLink to={`/apartment/${apartment.id}`}>

@@ -86,7 +86,7 @@ const api = {
   async signIn(email, password, setError) {
     Firebase.signInWithEmailAndPassword(this.auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential.user);
+        // console.log(userCredential.user);
       })
       .catch((error) => {
         setError(this.handleError(error));
