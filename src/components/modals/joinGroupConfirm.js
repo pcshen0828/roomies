@@ -48,8 +48,11 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
       .then((res) => {
         console.log(res);
         if (res.length) {
+          const currentMembers = res[0].members.length
+            ? [...res[0].members, currentUser.uid]
+            : [currentUser.uid];
           api.updateDocData("groups", res[0].id, {
-            members: [...res[0].members, currentUser.uid],
+            members: currentMembers,
           });
           navigate(`/groups/${groupId}`);
         } else {

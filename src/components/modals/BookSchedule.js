@@ -127,10 +127,10 @@ export default function BookScheduleModal({
           apartment.owner
         )
         .then((res) => {
-          return res.filter((data) => data.userIDs.includes(host.uid))[0];
+          return res.filter((data) => data.userIDs.includes(host.uid));
         })
         .then((res) => {
-          if (res) {
+          if (res.length) {
             const newMessage = {
               content: message,
               sender: res.members.find((member) => member.uid === host.uid)
@@ -143,7 +143,6 @@ export default function BookScheduleModal({
               status: 0,
             });
             api.addNewDoc("chats/" + res.id + "/messages", newMessage);
-            createNoticeToOwner();
           } else {
             const newMessage = {
               content: message,
@@ -164,7 +163,6 @@ export default function BookScheduleModal({
               status: 0,
             });
             api.addNewDoc("chats/" + newChatRef.id + "/messages", newMessage);
-            createNoticeToOwner();
           }
         });
     }

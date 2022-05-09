@@ -248,7 +248,7 @@ function ApartmentDetail({ details, loading }) {
         .then((res) => {
           if (res.length) {
             setGroupId(res[0].id);
-            setHasJoined(res[0].members.includes(currentUser.uid));
+            setHasJoined(res[0].members?.includes(currentUser.uid));
           }
         });
     }

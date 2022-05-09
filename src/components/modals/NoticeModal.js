@@ -121,6 +121,7 @@ function NoticeModal({ setActiveIcon }) {
     );
     Firebase.onSnapshot(query, (snapShot) => {
       const res = snapShot.docs.map((doc) => doc.data());
+      console.log(res);
       let noticeMessages = [];
       let promises = [];
       res.forEach((notice) => {

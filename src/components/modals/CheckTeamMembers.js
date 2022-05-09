@@ -13,6 +13,10 @@ import { Button1 } from "../common/Components";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
 
+const NewModal = styled(Modal)`
+  max-width: 700px;
+`;
+
 const NewBody = styled(Body)`
   height: 400px;
 `;
@@ -107,7 +111,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
 
   return (
     <Overlay out={false}>
-      <Modal>
+      <NewModal>
         <Header>
           <Title>群組成員</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
@@ -157,7 +161,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
               : "loading..."}
           </Members>
         </NewBody>
-      </Modal>
+      </NewModal>
     </Overlay>
   );
 }

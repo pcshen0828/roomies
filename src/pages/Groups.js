@@ -282,19 +282,21 @@ function Groups() {
       if (!groupData) return;
       api
         .getDataWithSingleQuery("apartments", "id", "==", groupData.apartmentId)
-        .then((res) => setApartmentData(res[0]));
+        .then((res) => {
+          setApartmentData(res[0]);
+          setLoading(false);
+        });
       api
         .getDataWithSingleQuery(
           "users",
           "uid",
           "in",
-          groupData.members.length ? groupData.members : [1]
+          groupData.members?.length ? groupData.members : [1]
         )
         .then((res) => {
           setMembers(res);
         });
       setGroupMembers(groupData.members);
-      setLoading(false);
     });
 
     const query2 = Firebase.query(
@@ -534,7 +536,7 @@ function Groups() {
               style={{ marginBottom: "20px" }}
             />{" "}
           </div>
-        ) : members.length &&
+        ) : apartmentData.owner === currentUser?.uid ||
           members.find((member) => member.uid === currentUser.uid) ? (
           <GroupBody>
             <GroupBodyLeft>

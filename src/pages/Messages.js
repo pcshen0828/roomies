@@ -123,9 +123,9 @@ function Messages() {
 
   React.useEffect(() => {
     if (id !== "all") {
-      api.updateDocData("chats", id, {
-        status: 1,
-      });
+      // api.updateDocData("chats", id, {
+      //   status: 1,
+      // });
     }
   }, [chats, id]);
 

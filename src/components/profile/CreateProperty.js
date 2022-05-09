@@ -377,6 +377,13 @@ function CreatePropertyModal({ toggle, setSaved }) {
     setIsLoading(true);
     const time = Firebase.Timestamp.fromDate(new Date());
 
+    const newGroupRef = api.createNewDocRef("groups");
+    api.setNewDoc(newGroupRef, {
+      id: newGroupRef.id,
+      apartmentId,
+      member: [],
+    });
+
     conditions.forEach((condition) => {
       api.updateSubCollectionDocData(
         "apartments",
