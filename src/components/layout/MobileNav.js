@@ -34,11 +34,12 @@ const activeStyle = {
 };
 
 const MobileWrapper = styled(Overlay)`
-  top: 80px;
+  top: 0px;
 `;
 
 const MobileModal = styled(FlexWrapper)`
   width: 250px;
+  height: 100vh;
   padding: 70px 0 50px;
   flex-direction: column;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
