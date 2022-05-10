@@ -208,9 +208,12 @@ const SloganWrapper = styled(FlexWrapper)`
 `;
 
 const CallToActionBlock = styled(FlexColumn)`
-  height: 90px;
+  height: 100px;
   justify-content: space-between;
   margin: 60px 0 80px;
+  @media screen and (max-width: 575.98px) {
+    height: 90px;
+  }
 `;
 
 function Index() {

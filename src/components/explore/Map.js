@@ -148,9 +148,7 @@ function MyMap() {
       allData.filter(
         (item) =>
           item.geoLocation.lat === newCenter.lat &&
-          // item.geoLocation.lat >= newCenter.lat - 0.1 &&
           item.geoLocation.lng === newCenter.lng
-        // item.geoLocation.lng >= newCenter.lng - 0.1
       )
     );
   };
@@ -211,10 +209,10 @@ function MyMap() {
               maxZoom={20}
               zoomOnClick={true}
               onClusteringBegin={() => {
-                console.log("start clustering");
+                // console.log("start clustering");
               }}
               onClusteringEnd={() => {
-                console.log("end clustering");
+                // console.log("end clustering");
               }}
             >
               {(clusterer) => {

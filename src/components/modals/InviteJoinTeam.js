@@ -106,7 +106,7 @@ export default function InviteJoinTeamModal({
     <Overlay out={false}>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          message="確認建立群組？"
+          message="確認邀請？"
           action={inviteNewMember}
           toggle={setOpenConfirm}
         />
