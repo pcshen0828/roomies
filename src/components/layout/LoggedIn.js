@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import member from "../../images/member.svg";
-import memberActive from "../../images/member-active.svg";
+import more from "../../images/more.svg";
 import notice from "../../images/notice.svg";
 import noticeActive from "../../images/notice-active.svg";
 import message from "../../images/message.svg";
@@ -15,11 +14,6 @@ import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 
 const icons = [
-  {
-    name: "member",
-    src: member,
-    activeSrc: memberActive,
-  },
   {
     name: "message",
     src: message,
@@ -39,9 +33,16 @@ const IconWrapper = styled.div`
 `;
 
 const Icon = styled.img`
-  width: 30px;
+  width: ${(props) => (props.name === "more" ? "8px" : "30px")};
+  height: ${(props) => (props.name === "more" ? "8px" : "30px")};
+  margin-left: ${(props) => (props.name === "more" ? "5px" : "20px")};
+  padding-bottom: ${(props) => (props.name === "more" ? "2px" : "0")};
+  cursor: pointer;
+`;
+
+const WelcomeText = styled.div`
   height: 30px;
-  margin-left: 20px;
+  font-weight: 700;
   cursor: pointer;
 `;
 
@@ -127,6 +128,14 @@ function LoggedIn() {
       )}
       {activeicon === "notice" && <NoticeModal setActiveIcon={setActiveIcon} />}
       <Wrapper>
+        <WelcomeText
+          onClick={() => {
+            setActiveIcon("member");
+          }}
+        >
+          你好，{currentUser?.alias}
+          <Icon src={more} name="more" />
+        </WelcomeText>
         {icons.map((icon, index) => (
           <IconWrapper key={index}>
             {icon.name === "notice" && unreadNotice ? (
@@ -136,22 +145,18 @@ function LoggedIn() {
             ) : (
               ""
             )}
-            <Icon
-              src={
-                activeicon === icon.name ||
-                (icon.name === "member" &&
-                  location.pathname.startsWith("/profile/")) ||
-                (icon.name === "message" &&
-                  location.pathname.startsWith("/messages/"))
-                  ? icon.activeSrc
-                  : icon.src
-              }
-              onClick={() => {
-                setActiveIcon(icon.name);
-                if (icon.name === "notice") {
-                }
-              }}
-            />
+            {icon.name === "message" &&
+            location.pathname.startsWith("/messages/") ? (
+              ""
+            ) : (
+              <Icon
+                name=""
+                src={activeicon === icon.name ? icon.activeSrc : icon.src}
+                onClick={() => {
+                  setActiveIcon(icon.name);
+                }}
+              />
+            )}
           </IconWrapper>
         ))}
       </Wrapper>

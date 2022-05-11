@@ -12,8 +12,9 @@ import LandlordSchedule from "./LandlordSchedule";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 const Wrapper = styled(BodyWrapper)`
-  margin-top: 0px;
+  margin-top: 10px;
   min-height: calc(100vh - 471px);
+  width: 100%;
   @media screen and (max-width: 1279.98px) {
     flex-direction: cloumn;
     justify-content: flex-start;

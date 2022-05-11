@@ -5,7 +5,8 @@ import { Wrapper, Button1 } from "../components/common/Components";
 import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
-  height: calc(100vh - 80px - 371px);
+  min-height: calc(100vh - 371px);
+  align-items: flex-start;
 `;
 const Reminder = styled.div`
   margin-bottom: 20px;

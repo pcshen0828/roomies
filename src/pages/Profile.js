@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import Tenant from "../components/profile/Tenant";
 import Landlord from "../components/profile/Landlord";
 import { useAuth } from "../context/AuthContext";
-import { FlexColumn, Wrapper } from "../components/common/Components";
+import { FlexColumn, Title, Wrapper } from "../components/common/Components";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
 import Loader from "../components/common/Loader";
@@ -50,7 +50,10 @@ function Profile() {
 
   return (
     <>
-      <NewWrapper>{Render()}</NewWrapper>
+      <NewWrapper>
+        <Title>會員專區</Title>
+        {Render()}
+      </NewWrapper>
       <Footer />
     </>
   );

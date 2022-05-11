@@ -131,7 +131,7 @@ function Apartments() {
           queryList={queryList}
           anchor={filterAnchor}
         />
-        <Anchor filter={true} ref={filterAnchor}></Anchor>
+        <Anchor filter="true" ref={filterAnchor}></Anchor>
         {loading ? (
           <Cards>
             {Array.from(Array(6).keys()).map((loader, index) => (

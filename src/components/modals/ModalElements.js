@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { Button1 } from "../common/Components";
+import { Button1, FlexWrapper } from "../common/Components";
 
 const fadeIn = keyframes`
   from {
@@ -40,7 +40,8 @@ const Overlay = styled.div`
 
 const Modal = styled.div`
   width: 70%;
-  overflow-y: scroll;
+  max-height: 90%;
+  overflow-y: auto;
   background: #fff;
   border-radius: 10px;
   position: relative;
@@ -56,10 +57,18 @@ const Header = styled.div`
   justify-content: space-between;
 `;
 
-const CloseButton = styled.div`
+const CloseButton = styled(FlexWrapper)`
   font-size: 20px;
   font-weight: 700;
   cursor: pointer;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  border-radius: 50%;
+  align-self: end;
+  &:hover {
+    background: #e8e8e8;
+  }
 `;
 
 const Title = styled.div`

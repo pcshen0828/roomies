@@ -2,7 +2,6 @@ import React from "react";
 import {
   GoogleMap,
   useLoadScript,
-  MarkerClusterer,
   Marker,
   InfoWindow,
   StandaloneSearchBox,
@@ -105,13 +104,12 @@ function MyMap() {
   const [map, setMap] = React.useState(null);
   const [center, setCenter] = React.useState(defaultCenter);
   const [circleCenter, setCircleCenter] = React.useState(defaultCenter);
-  const [zoom, setZoom] = React.useState(9);
+  const [zoom, setZoom] = React.useState(11);
   const [marker, setMarker] = React.useState(center);
   const [apartments, setApartments] = React.useState([]);
   const [allData, setAllData] = React.useState([]);
   const [searchBox, setSearchBox] = React.useState(null);
   const [query, setQuery] = React.useState("");
-  const [locations, setLocations] = React.useState([]);
 
   const [loading, setLoading] = React.useState(true);
 
@@ -159,7 +157,6 @@ function MyMap() {
       if (!mounted) return;
       setAllData(res);
       setApartments(res);
-      setLocations(res.map((item) => item.geoLocation));
       setLoading(false);
     });
     return function cleanup() {
@@ -205,50 +202,36 @@ function MyMap() {
             onLoad={onLoad}
             onUnmount={onUnmount}
           >
-            <MarkerClusterer
-              maxZoom={20}
-              zoomOnClick={true}
-              onClusteringBegin={() => {
-                // console.log("start clustering");
-              }}
-              onClusteringEnd={() => {
-                // console.log("end clustering");
-              }}
-            >
-              {(clusterer) => {
-                return allData.map((apartment, index) => (
-                  <Marker
-                    key={apartment.id}
-                    position={apartment.geoLocation}
-                    onClick={(cluster) => {
-                      setMarker(apartment.geoLocation);
-                      setApartments(
-                        allData.filter(
-                          (item) => item.geoLocation === apartment.geoLocation
-                        )
-                      );
+            {allData.map((apartment, index) => (
+              <Marker
+                key={apartment.id}
+                position={apartment.geoLocation}
+                onClick={(cluster) => {
+                  setMarker(apartment.geoLocation);
+                  setApartments(
+                    allData.filter(
+                      (item) => item.geoLocation === apartment.geoLocation
+                    )
+                  );
+                }}
+              >
+                {marker === apartment.geoLocation ? (
+                  <InfoWindow
+                    onCloseClick={() => {
+                      setMarker(null);
+                      setApartments(allData);
                     }}
-                    clusterer={clusterer}
                   >
-                    {marker === apartment.geoLocation ? (
-                      <InfoWindow
-                        onCloseClick={() => {
-                          setMarker(null);
-                          setApartments(allData);
-                        }}
-                      >
-                        <InfoModal>
-                          {apartment.title}
-                          <StyledLink to={`/apartment/${apartment.id}`}>
-                            查看房源
-                          </StyledLink>
-                        </InfoModal>
-                      </InfoWindow>
-                    ) : null}
-                  </Marker>
-                ));
-              }}
-            </MarkerClusterer>
+                    <InfoModal>
+                      {apartment.title}
+                      <StyledLink to={`/apartment/${apartment.id}`}>
+                        查看房源
+                      </StyledLink>
+                    </InfoModal>
+                  </InfoWindow>
+                ) : null}
+              </Marker>
+            ))}
             {<Circle center={circleCenter} options={options} />}
           </GoogleMap>
         </BodyRight>

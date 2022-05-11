@@ -25,6 +25,11 @@ import down from "../images/down.svg";
 import corner from "../images/corner.png";
 import mates from "../images/mates.png";
 import checked from "../images/checked.svg";
+import { useAuth } from "../context/AuthContext";
+import { Firebase } from "../utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+import Loader from "../components/common/Loader";
 
 const banners = [banner5, banner1, banner3, banner2, banner4];
 
@@ -105,6 +110,7 @@ const Intro = styled.div`
 
 const ActionButtons = styled(FlexWrapper)`
   margin-top: 40px;
+  height: 50px;
   justify-content: space-between;
   width: 240px;
   animation: ${fadeIn} 1.5s ease-in;
@@ -217,9 +223,43 @@ const CallToActionBlock = styled(FlexColumn)`
 `;
 
 function Index() {
+  const auth = Firebase.getAuth();
+  const [user, loading, error] = useAuthState(auth);
   const [openSignup, setOpenSignUp] = React.useState(false);
   const [show, setShow] = React.useState(false);
   const scrollRef = React.useRef(null);
+  const navigate = useNavigate();
+
+  function RenderCTAButton(area) {
+    if (loading) {
+      return <Loader />;
+    }
+    if (user) {
+      if (area === 1) {
+        return (
+          <>
+            <Button1 onClick={() => navigate("/community")}>尋找室友</Button1>
+            <StyledLink to="/apartments">查看所有房源</StyledLink>
+          </>
+        );
+      } else {
+        return (
+          <Button1 onClick={() => navigate("/apartments")}>查看房源</Button1>
+        );
+      }
+    }
+    if (error) {
+      return null;
+    }
+    return area === 1 ? (
+      <>
+        <Button1 onClick={() => setOpenSignUp(true)}>立即註冊</Button1>
+        <StyledLink to="/apartments">查看所有房源</StyledLink>
+      </>
+    ) : (
+      <Button1 onClick={() => setOpenSignUp(true)}>開始使用</Button1>
+    );
+  }
 
   React.useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -239,10 +279,7 @@ function Index() {
           <IntroWrapper>
             <Intro>寓見 Roomies</Intro>
             ｜單層公寓合租平台
-            <ActionButtons show={show}>
-              <Button1 onClick={() => setOpenSignUp(true)}>立即註冊</Button1>
-              <StyledLink to="/apartments">查看所有房源</StyledLink>
-            </ActionButtons>
+            <ActionButtons show={show}>{RenderCTAButton(1)}</ActionButtons>
             <DownWrapper
               onClick={() => {
                 scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -309,7 +346,7 @@ function Index() {
       </IntroBanner>
       <CallToActionBlock>
         <BannerTitle>立即開始，打造理想公寓生活</BannerTitle>
-        <Button1 onClick={() => setOpenSignUp(true)}>開始使用</Button1>
+        {RenderCTAButton(2)}
       </CallToActionBlock>
       <Footer />
     </>

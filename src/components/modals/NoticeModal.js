@@ -121,8 +121,6 @@ function NoticeModal({ setActiveIcon }) {
     );
     Firebase.onSnapshot(query, (snapShot) => {
       const res = snapShot.docs.map((doc) => doc.data());
-      console.log(res);
-      let noticeMessages = [];
       let promises = [];
       res.forEach((notice) => {
         let content = {
@@ -138,13 +136,13 @@ function NoticeModal({ setActiveIcon }) {
             .then((res) => {
               content.sender.alias = res[0].alias;
               content.sender.profileImage = res[0].profileImage;
-              noticeMessages.push(content);
+              return content;
             })
         );
       });
       Promise.all(promises).then((res) => {
         if (!mounted) return;
-        setNotices(noticeMessages);
+        setNotices(res);
         setLoading(false);
       });
     });

@@ -13,7 +13,9 @@ export const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
   }
-  
+  form {
+    width: 100%;
+  }
 `;
 
 const mainColor = "#424b5a";

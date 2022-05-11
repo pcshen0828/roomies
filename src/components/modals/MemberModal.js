@@ -1,15 +1,41 @@
 import React from "react";
 import styled from "styled-components";
 import { NavModalOverlay, NavModal } from "./ModalElements";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { StyledLink, Button1, Bold } from "../common/Components";
+import { StyledLink, Button1, Bold, FlexColumn } from "../common/Components";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
+import { mainColor } from "../../styles/GlobalStyle";
+
+const NewLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  margin: 10px 0 20px;
+  ${"" /* justify-content: center; */}
+  color: ${mainColor};
+  width: 100%;
+  border-radius: 10px;
+  height: 80px;
+  cursor: pointer;
+  &:hover {
+    background: #f2f5f7;
+  }
+`;
+
+const ProfileImg = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin: 0 10px;
+`;
+
+const NewFlexColumn = styled(FlexColumn)`
+  align-items: flex-start;
+`;
 
 const SignoutButton = styled(Button1)`
   width: 90px;
   height: 35px;
-  margin-top: 30px;
 `;
 
 function MemberModal({ setActiveIcon }) {
@@ -28,11 +54,14 @@ function MemberModal({ setActiveIcon }) {
         />
       )}
       <NavModal onClick={(e) => e.stopPropagation()}>
-        <Bold>會員</Bold>
-        <>{currentUser.email}</>
-        <StyledLink to="/profile/info/edit" onClick={() => setActiveIcon("")}>
-          會員專區
-        </StyledLink>
+        <Bold>{currentUser?.role === 1 ? "房客" : "屋主"}</Bold>
+        <NewLink to="/profile/info/edit" onClick={() => setActiveIcon("")}>
+          <ProfileImg src={currentUser?.profileImage} />
+          <NewFlexColumn>
+            <Bold>{currentUser?.email}</Bold>
+            查看會員專區
+          </NewFlexColumn>
+        </NewLink>
         <SignoutButton
           onClick={() => {
             setOpenConfirm(true);
