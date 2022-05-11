@@ -9,15 +9,18 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallLabel, Button1 } from "../common/Components";
+import { SmallLabel, Button1, FlexWrapper, Bold } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
+import AvatarEditor from "react-avatar-editor";
+import { mainColor } from "../../styles/GlobalStyle";
 
-const NewOverlay = styled(Overlay)``;
+const NewOverlay = styled(Overlay)`
+  overflow-y: auto;
+`;
 
 const NewModal = styled(Modal)`
-  height: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
+  height: auto;
+  max-height: 100vh;
   @media screen and (max-width: 767.98px) {
     width: 90%;
   }
@@ -44,20 +47,42 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
+const EditorWrapper = styled(FlexWrapper)`
+  align-items: flex-start;
+  min-height: 320px;
+`;
+
 const FileWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-right: 20px;
 `;
 
 const FileImage = styled.img`
-  width: 50%;
-  margin-bottom: 10px;
+  width: 150px;
+  height: 150px;
+  margin: 10px 0;
+  border-radius: 50%;
 `;
 
-const FileCancelButton = styled(Button1)`
+const ButtonWrapper = styled(FlexWrapper)`
+  margin-top: 20px;
+`;
+
+const CheckButton = styled(Button1)`
   width: 90px;
   height: 35px;
-  font-size: 14px;
+`;
+
+const ResetButton = styled(Button1)`
+  width: 90px;
+  height: 35px;
+  margin-right: 10px;
+  background: #e8e8e8;
+  color: ${mainColor};
+  &:hover {
+    background: #dadada;
+  }
 `;
 
 const Error = styled.div`
@@ -71,6 +96,7 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
   const [url, setUrl] = React.useState("");
   const [error, setError] = React.useState("");
   const fileRef = React.useRef(null);
+  const editor = React.useRef(null);
 
   return (
     <NewOverlay out={false}>
@@ -93,25 +119,66 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
               }
               setError("");
               setFile(e.target.files[0]);
-              const objectUrl = URL.createObjectURL(e.target.files[0]);
-              setUrl(objectUrl);
             }}
           />
           {error && <Error>{error}</Error>}
-          {url && (
-            <FileWrapper>
-              <FileImage src={url} alt="" />
-              <FileCancelButton
-                onClick={() => {
-                  setFile(null);
-                  setUrl("");
-                  fileRef.current.value = null;
-                }}
-              >
-                重新選擇
-              </FileCancelButton>
-            </FileWrapper>
-          )}
+          <EditorWrapper>
+            {file && (
+              <FileWrapper>
+                <AvatarEditor
+                  ref={editor}
+                  image={file}
+                  width={250}
+                  height={250}
+                  borderRadius={125}
+                  color={[0, 0, 0, 0.3]} // RGBA
+                  scale={1.2}
+                  rotate={0}
+                />
+                <ButtonWrapper>
+                  <ResetButton
+                    onClick={() => {
+                      setFile(null);
+                      setUrl("");
+                      fileRef.current.value = null;
+                    }}
+                  >
+                    重新選擇
+                  </ResetButton>
+                  <CheckButton
+                    onClick={() => {
+                      if (editor.current) {
+                        const img = editor.current.getImageScaledToCanvas();
+                        img.toBlob((blob) => {
+                          if (blob) {
+                            const newUrl = URL.createObjectURL(blob);
+                            setUrl(newUrl);
+                            fetch(newUrl)
+                              .then((res) => res.blob())
+                              .then((blobFile) =>
+                                setFile(
+                                  new File([blobFile], "profile", {
+                                    type: "image/png",
+                                  })
+                                )
+                              );
+                          }
+                        });
+                      }
+                    }}
+                  >
+                    確認裁切
+                  </CheckButton>
+                </ButtonWrapper>
+              </FileWrapper>
+            )}
+            {url && (
+              <FileWrapper>
+                <Bold>預覽結果：</Bold>
+                <FileImage src={url} alt="" />
+              </FileWrapper>
+            )}
+          </EditorWrapper>
         </NewBody>
         <Button
           onClick={() => {
