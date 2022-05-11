@@ -11,7 +11,6 @@ const NewLink = styled(Link)`
   display: flex;
   align-items: center;
   margin: 10px 0 20px;
-  ${"" /* justify-content: center; */}
   color: ${mainColor};
   width: 100%;
   border-radius: 10px;

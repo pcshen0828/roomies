@@ -108,7 +108,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
 
   function handleUpload(file) {
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
-      setError("檔案大小過大，請重新上傳");
+      setError("檔案過大，請重新上傳");
       return;
     }
     setError("");

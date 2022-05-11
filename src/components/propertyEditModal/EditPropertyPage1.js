@@ -184,7 +184,7 @@ function EditPropertyPage1({ apartment, paging, setPaging }) {
           accept="image/*"
           onChange={(e) => {
             if ((e.target.files[0].size / 1024 / 1024).toFixed(4) >= 1.5) {
-              setError("檔案大小過大，請重新上傳");
+              setError("檔案過大，請重新上傳");
               return;
             }
             setError("");

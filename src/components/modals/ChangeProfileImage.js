@@ -12,8 +12,36 @@ import {
 import { SmallLabel, Button1 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 
+const NewOverlay = styled(Overlay)``;
+
+const NewModal = styled(Modal)`
+  height: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  @media screen and (max-width: 767.98px) {
+    width: 90%;
+  }
+`;
+
 const NewBody = styled(Body)`
   height: auto;
+  min-height: 400px;
+  border: none;
+  overflow-y: auto;
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+`;
+
+const UploadButton = styled(SmallLabel)`
+  padding: 15px 20px;
+  border-radius: 5px;
+  background: #e8e8e8;
+  cursor: pointer;
+`;
+
+const HiddenInput = styled.input`
+  display: none;
 `;
 
 const FileWrapper = styled.div`
@@ -45,22 +73,22 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
   const fileRef = React.useRef(null);
 
   return (
-    <Overlay out={false}>
-      <Modal>
+    <NewOverlay out={false}>
+      <NewModal>
         <Header>
-          <Title>更換大頭照</Title>
+          <Title>更新大頭照</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SmallLabel htmlFor="profile">選擇照片</SmallLabel>
-          <input
+          <UploadButton htmlFor="profile">＋ 上傳照片</UploadButton>
+          <HiddenInput
             ref={fileRef}
             id="profile"
             type="file"
             accept="image/*"
             onChange={(e) => {
               if ((e.target.files[0].size / 1024 / 1024).toFixed(4) >= 1) {
-                setError("檔案大小過大，請重新上傳");
+                setError("檔案過大，請重新上傳");
                 return;
               }
               setError("");
@@ -93,8 +121,8 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
         >
           確認
         </Button>
-      </Modal>
-    </Overlay>
+      </NewModal>
+    </NewOverlay>
   );
 }
 

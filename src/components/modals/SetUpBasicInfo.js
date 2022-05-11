@@ -5,18 +5,10 @@ import {
   Modal,
   Header,
   CloseButton,
-  Title,
   Body,
   Button,
 } from "./ModalElements";
-import {
-  SmallLabel,
-  Input,
-  Select,
-  Textarea,
-  SubTitle,
-} from "../common/Components";
-import api from "../../utils/api";
+import { TitleSub } from "../common/Components";
 import { useNavigate } from "react-router-dom";
 
 const HigherOverlay = styled(Overlay)`
@@ -24,55 +16,55 @@ const HigherOverlay = styled(Overlay)`
 `;
 
 const NewModal = styled(Modal)`
-  width: 80%;
+  max-width: 600px;
+  @media screen and (max-width: 575.98px) {
+    width: 90%;
+  }
+`;
+
+const NewHeader = styled(Header)`
+  justify-content: flex-end;
 `;
 
 const NewBody = styled(Body)`
-  height: 400px;
   padding: 10px 0 0 10px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+`;
+
+const NewButton = styled(Button)`
+  align-self: center;
+  margin: 0 0 30px 0;
 `;
 
 const Required = styled.span`
   color: #ed3636;
 `;
 
-function TenantBasicInfoModal() {
+export default function BasicInfoModal({ role }) {
   const [toggle, setToggle] = React.useState(true);
-  const navigate = useNavigate();
 
   return (
     toggle && (
       <HigherOverlay out={false}>
         <NewModal>
-          <Header>
-            <Title>基本資料快速設定</Title>
+          <NewHeader>
             <CloseButton onClick={() => setToggle(false)}>×</CloseButton>
-          </Header>
-          <NewBody></NewBody>
-          <Button onClick={() => setToggle(false)}>關閉</Button>
+          </NewHeader>
+          <NewBody>
+            <TitleSub>使用提示</TitleSub>
+            <>
+              <div>
+                更新並公開你的職稱、興趣等個人資訊，開始連結更多的用戶！
+              </div>
+            </>
+          </NewBody>
+          <NewButton onClick={() => setToggle(false)}>關閉</NewButton>
         </NewModal>
       </HigherOverlay>
     )
   );
 }
-
-function LandlordBasicInfoModal() {
-  const [toggle, setToggle] = React.useState(true);
-
-  return (
-    toggle && (
-      <HigherOverlay out={false}>
-        <Modal>
-          <Header>
-            <Title>基本資料快速設定</Title>
-            <CloseButton onClick={() => setToggle(false)}>×</CloseButton>
-          </Header>
-          <NewBody></NewBody>
-          <Button onClick={() => setToggle(false)}>完成</Button>
-        </Modal>
-      </HigherOverlay>
-    )
-  );
-}
-
-export { TenantBasicInfoModal, LandlordBasicInfoModal };

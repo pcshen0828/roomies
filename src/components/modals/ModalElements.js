@@ -86,6 +86,7 @@ const Body = styled.div`
 const Button = styled(Button1)`
   align-self: end;
   margin: 20px 20px 40px 0;
+  flex-shrink: 0;
 `;
 
 const NavModalOverlay = styled.div`

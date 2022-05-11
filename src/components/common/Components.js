@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link, NavLink } from "react-router-dom";
 import { subColor, mainColor } from "../../styles/GlobalStyle";
 
@@ -105,13 +105,14 @@ const FlexColumn = styled(FlexWrapper)`
 
 const Input = styled.input`
   width: 90%;
-  height: 30px;
+  height: 38px;
   border: 1px solid #dadada;
   margin-bottom: 20px;
   padding-left: 10px;
   color: #424b5a;
   flex-shrink: 0;
   background: #fff;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -121,12 +122,13 @@ const Input = styled.input`
 
 const Select = styled.select`
   width: 90%;
-  height: 30px;
+  height: 38px;
   border: 1px solid #dadada;
   margin-bottom: 20px;
   padding-left: 10px;
   color: #424b5a;
   flex-shrink: 0;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -135,7 +137,7 @@ const Select = styled.select`
 `;
 
 const Textarea = styled.textarea`
-  width: 90%;
+  width: calc(90% - 20px);
   height: 120px;
   border: 1px solid #dadada;
   margin-bottom: 20px;
@@ -144,7 +146,7 @@ const Textarea = styled.textarea`
   background: #fff;
   flex-shrink: 0;
   font-family: "Noto Sans TC", sans-serif;
-
+  resize: none;
   &:focus {
     outline: none;
     border: 1px solid #c1b18a;
@@ -187,6 +189,17 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const fadeIn = keyframes`
+  0%   { 
+    opacity: 0; 
+    visibility: hidden;
+  }
+  100% { 
+    opacity: 1; 
+    visibility: visible;
+  }
+`;
+
 const ProfileList = styled.div`
   width: calc(20%);
   display: flex;
@@ -205,7 +218,26 @@ const ProfileList = styled.div`
   }
   @media screen and (max-width: 767.98px) {
     flex-wrap: wrap;
+    animation: ${fadeIn} 0.8s ease;
+    display: ${(props) => (props.show ? "flex" : "none")};
   }
+`;
+
+const Toggler = styled.div`
+  margin-bottom: 10px;
+  text-align: center;
+  cursor: pointer;
+  display: none;
+  @media screen and (max-width: 767.98px) {
+    display: block;
+  }
+`;
+
+const Toggle = styled.img`
+  width: 12px;
+  height: 12px;
+  margin-left: 10px;
+  animation: ${fadeIn} 0.8s ease;
 `;
 
 const ProfileItem = styled.div`
@@ -232,6 +264,10 @@ const ProfileItem = styled.div`
   @media screen and (max-width: 767.98px) {
     padding: 10px;
     width: calc(100% - 20px);
+    justify-content: flex-start;
+    border-bottom: ${(props) =>
+      props.active ? "2px solid #c1b18a" : "2px solid transparent"};
+    background: none;
   }
 `;
 
@@ -473,6 +509,12 @@ const Required = styled.span`
   color: #ed3636;
 `;
 
+const ErrorMessage = styled.div`
+  color: #ed3636;
+  font-size: 14px;
+  height: 20px;
+`;
+
 const ExitButton = styled(FlexWrapper)`
   background: none;
   color: #424b5a;
@@ -568,6 +610,8 @@ export {
   PrevStepButton,
   LoadingButton,
   PagingList,
+  Toggler,
+  Toggle,
   PagingItem,
   SearchWrapper,
   SearchInput,
@@ -584,6 +628,7 @@ export {
   CardTop,
   CardBottom,
   Required,
+  ErrorMessage,
   SlicedTitle,
   SlicedBold,
   SlicedLink,

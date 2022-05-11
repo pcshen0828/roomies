@@ -150,7 +150,7 @@ function List({ chats, setChatId, usage, toggle }) {
   return (
     <>
       {loading
-        ? Array.from(Array(2).keys()).map((loader, index) => (
+        ? Array.from(Array(1).keys()).map((loader, index) => (
             <Skeleton
               key={index}
               width={350}

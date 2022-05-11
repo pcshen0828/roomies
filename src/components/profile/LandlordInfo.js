@@ -12,7 +12,7 @@ import {
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
-import { LandlordBasicInfoModal } from "../modals/SetUpBasicInfo";
+import BasicInfoModal from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
@@ -168,19 +168,7 @@ function LandlordInfo() {
         {saved && (
           <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
         )}
-        {(!currentUser.name || !currentUser.alias) && (
-          <LandlordBasicInfoModal
-            user={currentUser}
-            name={name}
-            setName={setName}
-            alias={alias}
-            setAlias={setAlias}
-            gender={gender}
-            setGender={setGender}
-            selfIntro={selfIntro}
-            setSelfIntro={setSelfIntro}
-          />
-        )}
+        {/* {!currentUser.name && <BasicInfoModal role="landlord" />} */}
         {openModal && (
           <ChangeProfileImageModal
             toggle={setOpenModal}

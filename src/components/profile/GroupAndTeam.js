@@ -204,8 +204,9 @@ function GroupAndTeam() {
       const res = snapshot.docs.map((doc) => doc.data());
       setGroups(res);
       const apartmentIds = res.map((item) => item.apartmentId);
+      if (!apartmentIds.length) return;
       api
-        .getDataWithSingleQuery("apartments", "id", "in", apartmentIds)
+        .getDataWithSingleQuery("apartments", "id", "in", apartmentIds.length)
         .then((res) => {
           setApartments(res);
         });

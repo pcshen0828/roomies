@@ -8,14 +8,16 @@ import {
   Select,
   Textarea,
   Button1,
+  ErrorMessage,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
-import { TenantBasicInfoModal } from "../modals/SetUpBasicInfo";
+import BasicInfoModal from "../modals/SetUpBasicInfo";
 import { Firebase } from "../../utils/firebase";
 import Creatable from "react-select/creatable";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import { mainColor, subColor } from "../../styles/GlobalStyle";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -106,7 +108,7 @@ const Loading = styled(Button1)`
 
 const ConfirmWrapper = styled(FlexWrapper)`
   width: 100%;
-  margin-top: 20px;
+  margin: 20px 0 10px;
   align-items: center;
   @media screen and (max-width: 767.98px) {
     align-items: flex-start;
@@ -124,8 +126,8 @@ function TenantInfo() {
   const { currentUser } = useAuth();
   const [openModal, setOpenModal] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [allHobbies, setAllHobbies] = React.useState(false);
-  const [options, setOptions] = React.useState([]);
+  const [allHobbies, setAllHobbies] = React.useState([]);
+  const [hobbyOptions, setHobbyOptions] = React.useState([]);
   const [saved, setSaved] = React.useState(false);
 
   const customStyles = {
@@ -133,19 +135,28 @@ function TenantInfo() {
       ...provided,
       width: "100%",
       borderBottom: "1px solid #dadada",
-      color: state.isSelected ? "#e8e8e8" : "#424b5a",
+      color: mainColor,
+      background: state.isSelected ? "#e8e8e8" : "#fff",
       fontSize: "14px",
       "&:hover": {
         background: "#e8e8e8",
       },
     }),
-    container: (provided, state) => ({
+    singleValue: (provided) => ({
       ...provided,
-      width: "calc(90% + 12px)",
-      marginBottom: "20px",
+      fontSize: "14px",
+      color: mainColor,
+    }),
+    container: (provided) => ({
+      ...provided,
+      width: "90%",
+      margin: "0 0 20px 0",
+      boxSizing: "border-box",
     }),
     control: (base, state) => ({
       ...base,
+      borderRadius: "0px",
+      height: "35px",
       border: state.isFocused ? "1px solid #c1b18a" : "1px solid #dadada",
       boxShadow: state.isFocused ? 0 : 0,
       "&:hover": {
@@ -159,6 +170,14 @@ function TenantInfo() {
         background: "#fff",
       },
     }),
+    placeholder: (defaultStyles) => ({
+      ...defaultStyles,
+      fontSize: "13px",
+    }),
+    input: (defaultStyles) => ({
+      ...defaultStyles,
+      fontSize: "14px",
+    }),
   };
 
   const [file, setFile] = React.useState();
@@ -167,14 +186,19 @@ function TenantInfo() {
   const [gender, setGender] = React.useState(currentUser.gender);
   const [birthday, setBirthday] = React.useState(currentUser.birthday);
   const [phone, setPhone] = React.useState(currentUser.phone);
-  const [jobTitle, setJobTitle] = React.useState(currentUser.jobTitle);
+
   const [employment, setEmployment] = React.useState(currentUser.employment);
   const [selfIntro, setSelfIntro] = React.useState(currentUser.selfIntro);
+
+  const [allJobs, setAllJobs] = React.useState([]);
+  const [jobOptions, setJobOptions] = React.useState([]);
+  const [jobTitle, setJobTitle] = React.useState(currentUser.jobTitle);
   const [hobbies, setHobbies] = React.useState(currentUser.hobbies);
   const [profileImage, setProfileImage] = React.useState(
     currentUser.profileImage
   );
   const [status, setStatus] = React.useState(currentUser.status);
+  const [error, setError] = React.useState("");
 
   const employments = [
     { name: "待業中", value: 0 },
@@ -202,6 +226,7 @@ function TenantInfo() {
       hobbies,
       status,
     };
+
     const newHobbies = hobbies.filter((item) => !allHobbies.includes(item));
     if (newHobbies.length) {
       newHobbies.forEach((name) => {
@@ -212,6 +237,16 @@ function TenantInfo() {
         });
       });
     }
+
+    // 將使用者新增的職稱加入資料庫
+    if (!allJobs.includes(jobTitle)) {
+      const newDocRef = api.createNewDocRef("jobTitles");
+      api.setNewDoc(newDocRef, {
+        id: newDocRef.id,
+        name: jobTitle,
+      });
+    }
+
     if (file) {
       const storageRef = Firebase.ref(
         Firebase.storage,
@@ -243,9 +278,19 @@ function TenantInfo() {
       const initData = res.map((item) => item.name);
       if (!mounted) return;
       setAllHobbies(initData);
-      setOptions(
+      setHobbyOptions(
         initData
           .filter((name) => !hobbies.includes(name))
+          .map((item) => ({ label: item, value: item }))
+      );
+    });
+    api.getAllDocsFromCollection("jobTitles").then((res) => {
+      const initData = res.map((item) => item.name);
+      if (!mounted) return;
+      setAllJobs(initData);
+      setJobOptions(
+        initData
+          .filter((name) => name !== jobTitle)
           .map((item) => ({ label: item, value: item }))
       );
     });
@@ -260,20 +305,8 @@ function TenantInfo() {
         {saved && (
           <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
         )}
-        {(!currentUser.name || !currentUser.alias || !currentUser.jobTitle) && (
-          <TenantBasicInfoModal
-            user={currentUser}
-            name={name}
-            setName={setName}
-            alias={alias}
-            setAlias={setAlias}
-            gender={gender}
-            setGender={setGender}
-            jobTitle={jobTitle}
-            setJobTitle={setJobTitle}
-            selfIntro={selfIntro}
-            setSelfIntro={setSelfIntro}
-          />
+        {(!currentUser.name || !currentUser.jobTitle) && (
+          <BasicInfoModal role="tenant" />
         )}
         {openModal && (
           <ChangeProfileImageModal
@@ -302,7 +335,12 @@ function TenantInfo() {
                 id="fullname"
                 placeholder="請填寫中文或英文全名"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
               />
 
               <SmallLabel htmlFor="alias">
@@ -312,7 +350,12 @@ function TenantInfo() {
                 id="alias"
                 placeholder="顯示在社群上的名字"
                 value={alias}
-                onChange={(e) => setAlias(e.target.value)}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setAlias(e.target.value);
+                }}
               />
 
               <SmallLabel htmlFor="gender">
@@ -321,7 +364,12 @@ function TenantInfo() {
               <Select
                 id="gender"
                 value={gender}
-                onChange={(e) => setGender(parseInt(e.target.value))}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setGender(parseInt(e.target.value));
+                }}
               >
                 {genders.map((g, index) => (
                   <option key={index} value={g.value}>
@@ -330,50 +378,72 @@ function TenantInfo() {
                 ))}
               </Select>
 
-              <SmallLabel htmlFor="birth">
-                生日<Required>*</Required>
-              </SmallLabel>
+              <SmallLabel htmlFor="birth">生日</SmallLabel>
               <Input
                 id="birth"
                 placeholder="1991/01/01"
                 value={birthday}
-                onChange={(e) => setBirthday(e.target.value)}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setBirthday(e.target.value);
+                }}
               />
 
-              <SmallLabel htmlFor="phone">
-                聯絡電話<Required>*</Required>
-              </SmallLabel>
+              <SmallLabel htmlFor="phone">聯絡電話</SmallLabel>
               <Input
                 id="phone"
                 placeholder="0987654321"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value.trim())}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setPhone(e.target.value.trim());
+                }}
               />
             </Block>
             <Block>
               <NewTitle>進階資訊</NewTitle>
 
               <SmallLabel htmlFor="hobbies">興趣標籤</SmallLabel>
-
               <Creatable
+                id="hobbies"
                 isClearable
                 isMulti
-                onChange={(value) =>
-                  setHobbies(value.map((item) => item.label))
-                }
-                options={options}
+                placeholder="請選擇興趣標籤"
+                styled={{ fontSize: "14px" }}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(value) => {
+                  setHobbies(value.map((item) => item.label));
+                }}
+                options={hobbyOptions}
                 value={hobbies.map((hobby) => ({ label: hobby, value: hobby }))}
                 styles={customStyles}
               />
 
-              <SmallLabel htmlFor="job">職稱</SmallLabel>
-              <Input
+              <SmallLabel htmlFor="job">
+                職稱<Required>*</Required>
+              </SmallLabel>
+              <Creatable
                 id="job"
+                isClearable
                 placeholder={
-                  currentUser.jobTitle ? currentUser.jobTitle : "工程師"
+                  currentUser.jobTitle ? currentUser.jobTitle : "請選擇職稱"
                 }
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
+                styled={{ fontSize: "14px" }}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(value) => {
+                  setJobTitle(value?.label || "");
+                }}
+                options={jobOptions}
+                value={{ label: jobTitle, value: jobTitle }}
+                styles={customStyles}
               />
 
               <SmallLabel htmlFor="emplyment">工作型態</SmallLabel>
@@ -381,7 +451,12 @@ function TenantInfo() {
                 id="emplyment"
                 name="emplyment"
                 value={employment}
-                onChange={(e) => setEmployment(parseInt(e.target.value))}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setEmployment(parseInt(e.target.value));
+                }}
               >
                 {employments.map((e, index) => (
                   <option key={index} value={e.value}>
@@ -395,7 +470,12 @@ function TenantInfo() {
                 id="intro"
                 placeholder="介紹自己，讓其他人更認識你！"
                 value={selfIntro}
-                onChange={(e) => setSelfIntro(e.target.value)}
+                onFocus={() => {
+                  setError("");
+                }}
+                onChange={(e) => {
+                  setSelfIntro(e.target.value);
+                }}
               />
             </Block>
           </InnerWrapper>
@@ -404,12 +484,21 @@ function TenantInfo() {
               id="public"
               type="checkbox"
               checked={status === 1 ? true : false}
-              onChange={(e) => setStatus(e.target.checked === true ? 1 : 0)}
+              onChange={(e) => {
+                if (!jobTitle || !hobbies.length || !selfIntro) {
+                  setError(
+                    "公開個人資訊之前，請確認填寫興趣標籤、職稱和社群簡介喔！"
+                  );
+                  return;
+                }
+                setStatus(e.target.checked === true ? 1 : 0);
+              }}
             />
             <NewLabel htmlFor="public">
               公開個人資訊（讓其他使用者可以看到你的職稱、興趣和簡介）
             </NewLabel>
           </ConfirmWrapper>
+          <ErrorMessage>{error}</ErrorMessage>
           {isLoading ? (
             <Loading>上傳中</Loading>
           ) : (
