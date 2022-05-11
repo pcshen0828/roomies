@@ -122,7 +122,7 @@ function Card({ detail }) {
         <CardContent>
           <Title>{detail.title}</Title>
           <>
-            {detail.rooms}房｜室友 {detail.rooms} 人
+            {detail.rooms}房｜室友 {detail.roomiesCount} 人
           </>
           <Price>{detail.monthlyRent.toLocaleString(2)} 元/月</Price>
         </CardContent>

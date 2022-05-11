@@ -309,7 +309,7 @@ function Index() {
       </IntroBanner>
       <CallToActionBlock>
         <BannerTitle>立即開始，打造理想公寓生活</BannerTitle>
-        <Button1 onClick={() => setOpenSignUp(true)}>註冊會員</Button1>
+        <Button1 onClick={() => setOpenSignUp(true)}>開始使用</Button1>
       </CallToActionBlock>
       <Footer />
     </>

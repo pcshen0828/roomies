@@ -173,7 +173,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
           <NewProfileImage
             src={
               members.find((member) => member.uid !== currentUser.uid)
-                .profileImage
+                ?.profileImage
             }
           />
           <SlicedTitle>
