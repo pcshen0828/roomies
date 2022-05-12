@@ -112,17 +112,21 @@ export default function OwnerCard({ owner, currentUser, id }) {
             <Intro>{ownerInfo.selfIntro}</Intro>
           </>
         )}
-        <Button1
-          onClick={() => {
-            if (!currentUser) {
-              setOpenSignin(true);
-              return;
-            }
-            setOpenModal(true);
-          }}
-        >
-          發送訊息
-        </Button1>
+        {ownerInfo && ownerInfo.uid === currentUser.uid ? (
+          ""
+        ) : (
+          <Button1
+            onClick={() => {
+              if (!currentUser) {
+                setOpenSignin(true);
+                return;
+              }
+              setOpenModal(true);
+            }}
+          >
+            發送訊息
+          </Button1>
+        )}
       </Wrapper>
     </>
   );

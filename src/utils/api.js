@@ -65,7 +65,7 @@ const api = {
     return this.Doc(this.Collection(this.DB, collectionName));
   },
   createNewDocRefWithDocID(collectionName, docID) {
-    return this.Doc(this.Collection(this.DB, collectionName, docID));
+    return this.Doc(this.DB, collectionName, docID);
   },
   setNewDoc(docRef, data) {
     this.SetDoc(docRef, data);

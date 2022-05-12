@@ -10,6 +10,7 @@ import {
   PagingList,
   PagingItem,
   SmallText,
+  RejectButton,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "../modals/EditProperty";
@@ -25,7 +26,6 @@ import {
 } from "../modals/ModalElements";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import api from "../../utils/api";
-import edit from "../../images/edit.svg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -118,19 +118,24 @@ const StatusButton = styled(Button1)`
   }
 `;
 
-const EditButton = styled.img`
-  width: 25px;
-  height: 25px;
-  margin-left: 15px;
-  cursor: pointer;
+const EditButton = styled(Button1)`
+  width: 80px;
+  height: 36px;
+  margin-right: 15px;
 `;
 
 const EditWrapper = styled(FlexWrapper)`
-  justify-content: flex-end;
+  justify-content: flex-start;
 `;
 
 const NewModal = styled(Modal)`
   max-width: 600px;
+`;
+
+const Buttons = styled(FlexWrapper)`
+  align-self: end;
+  margin-right: 20px;
+  height: 90px;
 `;
 
 function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
@@ -171,7 +176,16 @@ function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
             ×
           </CloseButton>
         </Header>
-        <Button onClick={updateStatus}>確認</Button>
+        <Buttons>
+          <Button1 onClick={updateStatus}>確認</Button1>
+          <RejectButton
+            onClick={() => {
+              toggle(false);
+            }}
+          >
+            取消
+          </RejectButton>
+        </Buttons>
       </NewModal>
     </Overlay>
   );
@@ -272,6 +286,14 @@ function LandlordProperty() {
                       <CardTitle title={item.title}>{item.title}</CardTitle>
                     </StyledLink>
                     <EditWrapper>
+                      <EditButton
+                        onClick={() => {
+                          setOpenEdit(true);
+                          setApartment(item);
+                        }}
+                      >
+                        編輯
+                      </EditButton>
                       {status === 0 ? (
                         <StatusButton
                           onClick={() => {
@@ -291,13 +313,6 @@ function LandlordProperty() {
                           下架
                         </StatusButton>
                       )}
-                      <EditButton
-                        src={edit}
-                        onClick={() => {
-                          setOpenEdit(true);
-                          setApartment(item);
-                        }}
-                      />
                     </EditWrapper>
                   </CardBody>
                 </Card>

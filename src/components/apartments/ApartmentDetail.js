@@ -362,13 +362,13 @@ function ApartmentDetail({ details, loading }) {
                   <Detail>
                     <DetailIcon src={loc} alt="" />
                     {details[0].address}
-                    {otherInfo.find((item) => item.id === "floor").value}樓
+                    {otherInfo.find((item) => item.id === "floor")?.value}樓
                   </Detail>
                   <Detail>
                     <DetailIcon src={square} alt="" />
                     坪數{" "}
                     {
-                      otherInfo.find((item) => item.id === "squareFeet").value
+                      otherInfo.find((item) => item.id === "squareFeet")?.value
                     }{" "}
                     坪
                   </Detail>
@@ -389,9 +389,11 @@ function ApartmentDetail({ details, loading }) {
                     / 間
                   </Detail>
                 </Details>
-                {currentUser &&
-                currentUser.role === 2 &&
-                details[0].owner === currentUser.uid ? (
+                {details[0].status === 0 ? (
+                  ""
+                ) : currentUser &&
+                  currentUser.role === 2 &&
+                  details[0].owner === currentUser.uid ? (
                   <ActionArea>
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
                   </ActionArea>
@@ -437,7 +439,7 @@ function ApartmentDetail({ details, loading }) {
             <BodyLeft>
               <SubTitle>房源簡介</SubTitle>
               <DescriptionWrapper>
-                {otherInfo.find((item) => item.id === "feature").value}
+                {otherInfo.find((item) => item.id === "feature")?.value}
               </DescriptionWrapper>
               <SubTitle>設施條件</SubTitle>
               <DescriptionWrapper>

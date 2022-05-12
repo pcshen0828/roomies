@@ -338,11 +338,11 @@ function CreatePropertyModal({ toggle, setSaved }) {
     setIsLoading(true);
 
     const time = Firebase.Timestamp.fromDate(new Date());
+
     const newApartmentRef = api.createNewDocRefWithDocID(
       "apartments",
       apartmentId
     );
-
     api.setNewDoc(newApartmentRef, {
       id: apartmentId,
       createTime: time,
@@ -366,16 +366,20 @@ function CreatePropertyModal({ toggle, setSaved }) {
       member: [],
     });
 
+    let promises = [];
+
     conditions.forEach((condition) => {
       const newDocRef = Firebase.doc(
         Firebase.db,
         `apartments/${apartmentId}/conditions/${condition.id}`
       );
-      api.setNewDoc(newDocRef, {
-        id: condition.id,
-        name: condition.name,
-        value: condition.value,
-      });
+      promises.push(
+        api.setNewDoc(newDocRef, {
+          id: condition.id,
+          name: condition.name,
+          value: condition.value,
+        })
+      );
     });
 
     facilities.forEach((facility) => {
@@ -383,11 +387,13 @@ function CreatePropertyModal({ toggle, setSaved }) {
         Firebase.db,
         `apartments/${apartmentId}/facilities/${facility.id}`
       );
-      api.updateDocData(newDocRef, {
-        id: facility.id,
-        name: facility.name,
-        value: facility.value,
-      });
+      promises.push(
+        api.setNewDoc(newDocRef, {
+          id: facility.id,
+          name: facility.name,
+          value: facility.value,
+        })
+      );
     });
 
     furnitures.forEach((furniture) => {
@@ -395,29 +401,35 @@ function CreatePropertyModal({ toggle, setSaved }) {
         Firebase.db,
         `apartments/${apartmentId}/furnitures/${furniture.id}`
       );
-      api.updateDocData(newDocRef, {
-        id: furniture.id,
-        name: furniture.name,
-        value: furniture.value,
-      });
+      promises.push(
+        api.setNewDoc(newDocRef, {
+          id: furniture.id,
+          name: furniture.name,
+          value: furniture.value,
+        })
+      );
     });
 
     otherInfo.forEach((item) => {
       const newDocRef = Firebase.doc(
         Firebase.db,
-        ` apartments/${apartmentId}/otherInfo/${item.id}`
+        `apartments/${apartmentId}/otherInfo/${item.id}`
       );
-      api.updateDocData(newDocRef, {
-        id: item.id,
-        name: item.name,
-        value: item.value,
-      });
+      promises.push(
+        api.setNewDoc(newDocRef, {
+          id: item.id,
+          name: item.name,
+          value: item.value,
+        })
+      );
     });
 
-    setIsLoading(false);
-    toggle(false);
-    navigate("/profile/apartments/inactive");
-    setSaved(true);
+    Promise.all(promises).then((res) => {
+      setIsLoading(false);
+      toggle(false);
+      navigate("/profile/apartments/inactive");
+      setSaved(true);
+    });
   }
 
   return (
