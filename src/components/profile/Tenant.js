@@ -17,12 +17,11 @@ import less from "../../images/less.svg";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 10px;
-  min-height: calc(100vh - 471px);
+  min-height: calc(100vh - 80px - 271px);
   width: 100%;
   @media screen and (max-width: 1279.98px) {
     flex-direction: cloumn;
     justify-content: flex-start;
-    min-height: calc(100vh - 431px);
   }
 `;
 

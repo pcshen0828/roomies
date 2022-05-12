@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { SmallTitle, FlexWrapper, Error } from "../../common/Components";
 import api from "../../../utils/api";
 import { Firebase } from "../../../utils/firebase";
+import { subColor } from "../../../styles/GlobalStyle";
 
 const Image = styled.div`
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
@@ -24,11 +25,13 @@ const DeleteButton = styled.div`
   right: 20px;
   cursor: pointer;
   display: none;
+  padding: 5px;
   font-size: 30px;
   font-weight: 700;
+  border-radius: 50%;
 
   &:hover {
-    color: #dadada;
+    color: ${subColor};
   }
 `;
 

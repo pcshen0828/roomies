@@ -129,7 +129,7 @@ const Details = styled(FlexWrapper)`
 const Detail = styled(FlexWrapper)`
   color: #8c8989;
   align-items: center;
-  margin-bottom: ${(props) => (props.last ? "-8px" : "8px")};
+  min-height: 35px;
 `;
 
 const DetailIcon = styled.img`
@@ -200,7 +200,6 @@ const Icon = styled.img`
 `;
 
 const ConditionWrapper = styled(FlexWrapper)`
-  ${"" /* flex-direction: column; */}
   align-items: center;
   margin: 0 10px 20px 0;
   width: 130px;
@@ -380,7 +379,7 @@ function ApartmentDetail({ details, loading }) {
                     <DetailIcon src={room} alt="" />
                     房數 {details[0].rooms} 間
                   </Detail>
-                  <Detail last={true}>
+                  <Detail>
                     <DetailIcon src={rent} alt="" />
                     每月房租 NTD.
                     <RentPrice>

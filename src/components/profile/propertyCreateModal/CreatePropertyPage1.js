@@ -99,7 +99,6 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
     setSearchBox(ref);
   };
   const onPlacesChanged = () => {
-    console.log(searchBox.getPlaces());
     const place = searchBox.getPlaces()[0];
     const newCenter = {
       lat: place.geometry.location.lat(),

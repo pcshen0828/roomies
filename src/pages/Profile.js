@@ -16,7 +16,7 @@ const NewWrapper = styled(Wrapper)`
 
 const LoaderWrapper = styled(FlexColumn)`
   width: 100%;
-  min-height: calc(100vh - 471px);
+  min-height: calc(100vh - 80px - 271px);
   justify-content: center;
 `;
 

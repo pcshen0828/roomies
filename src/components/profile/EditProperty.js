@@ -153,6 +153,8 @@ function EditPropertyModal({ toggle, apartment, currentUser, setSaved }) {
         setOtherInfo(res);
       });
 
+    setImages(apartment.images);
+
     return function cleanup() {
       mounted = false;
     };

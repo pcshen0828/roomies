@@ -11,6 +11,7 @@ import {
   PagingItem,
   SmallText,
   RejectButton,
+  FlexColumn,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "./EditProperty";
@@ -30,13 +31,12 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;
+  width: 100%;
 `;
 
-const NewFlexWrapper = styled(FlexWrapper)`
-  flex-wrap: wrap;
+const NewFlexWrapper = styled(FlexColumn)`
   margin-top: 20px;
   min-height: 610px;
-  align-items: flex-start;
 `;
 
 const NewButton = styled(Button1)`
@@ -55,43 +55,36 @@ const NewButton = styled(Button1)`
 
 const StyledLink = styled(Link)`
   color: #424b5a;
-  display: block;
-  margin: 5px 0 20px;
+  display: flex;
+  flex-grow: 1;
   &:hover {
     text-decoration: underline;
   }
+  @media screen and (max-width: 575.98px) {
+    max-width: 50%;
+  }
 `;
 
-const Card = styled.div`
-  margin: 0 15px 20px 0;
-  width: 240px;
-  height: 280px;
+const Card = styled(FlexWrapper)`
+  margin-bottom: 10px;
+  width: calc(100% - 40px);
+  padding: 0 20px;
+  height: 90px;
   border: 1px solid #e8e8e8;
   display: flex;
-  flex-direction: column;
-  border-radius: 20px;
+  border-radius: 10px;
   overflow: hidden;
   position: relative;
+  justify-content: space-between;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-`;
-
-const CardImage = styled.div`
-  height: 60%;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-`;
-
-const CardBody = styled.div`
-  height: 40%;
-  padding: 20px;
 `;
 
 const CardTitle = styled(Bold)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-grow: 1;
+  max-width: 80%;
 `;
 
 const TabsWrapper = styled(FlexWrapper)`
@@ -115,12 +108,21 @@ const StatusButton = styled(Button1)`
   &:hover {
     background: #dadada;
   }
+  @media screen and (max-width: 575.98px) {
+    width: 50px;
+    font-size: 14px;
+  }
 `;
 
 const EditButton = styled(Button1)`
   width: 80px;
   height: 36px;
   margin-right: 15px;
+  @media screen and (max-width: 575.98px) {
+    width: 60px;
+    font-size: 14px;
+    margin-right: 10px;
+  }
 `;
 
 const EditWrapper = styled(FlexWrapper)`
@@ -201,7 +203,7 @@ function LandlordProperty() {
   const [confirmActive, setConfirmActive] = React.useState(false);
   const [confirmInactive, setConfirmInactive] = React.useState(false);
   const [paging, setPaging] = React.useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 5;
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = React.useState(true);
@@ -254,21 +256,21 @@ function LandlordProperty() {
         )}
         <NewFlexWrapper>
           {loading ? (
-            Array.from(Array(3).keys()).map((loader, index) => (
+            <div style={{ width: "100%" }}>
               <Skeleton
-                key={index}
-                width={240}
-                height={280}
+                width="100%"
+                height={90}
+                count={3}
                 borderRadius={20}
                 style={{ margin: "0 15px 20px 0" }}
               />
-            ))
+            </div>
           ) : data.length ? (
             data
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
               .map((item) => (
                 <Card key={item.id}>
-                  {status === 0 && (
+                  {/* {status === 0 && (
                     <CloseButton
                       onClick={() => {
                         Firebase.deleteDoc(
@@ -278,63 +280,60 @@ function LandlordProperty() {
                     >
                       ×
                     </CloseButton>
-                  )}
-                  <CardImage src={item.coverImage}></CardImage>
-                  <CardBody>
-                    <StyledLink to={`/apartment/${item.id}`}>
-                      <CardTitle title={item.title}>{item.title}</CardTitle>
-                    </StyledLink>
-                    <EditWrapper>
-                      <EditButton
+                  )} */}
+                  <StyledLink to={`/apartment/${item.id}`}>
+                    <CardTitle title={item.title}>{item.title}</CardTitle>
+                  </StyledLink>
+                  <EditWrapper>
+                    <EditButton
+                      onClick={() => {
+                        setOpenEdit(true);
+                        setApartment(item);
+                      }}
+                    >
+                      編輯
+                    </EditButton>
+                    {status === 0 ? (
+                      <StatusButton
                         onClick={() => {
-                          setOpenEdit(true);
-                          setApartment(item);
+                          setStatusItem(item);
+                          handleActiveStatus(status);
                         }}
                       >
-                        編輯
-                      </EditButton>
-                      {status === 0 ? (
-                        <StatusButton
-                          onClick={() => {
-                            setStatusItem(item);
-                            handleActiveStatus(status);
-                          }}
-                        >
-                          上架
-                        </StatusButton>
-                      ) : (
-                        <StatusButton
-                          onClick={() => {
-                            setStatusItem(item);
-                            handleActiveStatus(status);
-                          }}
-                        >
-                          下架
-                        </StatusButton>
-                      )}
-                    </EditWrapper>
-                  </CardBody>
+                        上架
+                      </StatusButton>
+                    ) : (
+                      <StatusButton
+                        onClick={() => {
+                          setStatusItem(item);
+                          handleActiveStatus(status);
+                        }}
+                      >
+                        下架
+                      </StatusButton>
+                    )}
+                  </EditWrapper>
                 </Card>
               ))
           ) : (
             <SmallText>尚無資料</SmallText>
           )}
-        </NewFlexWrapper>
-        <PagingList>
-          {data.length
-            ? createPaging(Math.ceil(data.length / itemsPerPage)).map(
-                (number, index) => (
-                  <PagingItem
-                    key={index}
-                    onClick={() => setPaging(number + 1)}
-                    active={paging === number + 1}
-                  >
-                    {number + 1}
-                  </PagingItem>
+          <PagingList>
+            {data.length
+              ? createPaging(Math.ceil(data.length / itemsPerPage)).map(
+                  (number, index) => (
+                    <PagingItem
+                      key={index}
+                      onClick={() => setPaging(number + 1)}
+                      active={paging === number + 1}
+                    >
+                      {number + 1}
+                    </PagingItem>
+                  )
                 )
-              )
-            : ""}
-        </PagingList>
+              : ""}
+          </PagingList>
+        </NewFlexWrapper>
       </>
     );
   }

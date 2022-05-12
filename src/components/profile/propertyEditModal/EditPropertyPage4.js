@@ -10,6 +10,7 @@ import {
 } from "../../common/Components";
 import api from "../../../utils/api";
 import { Firebase } from "../../../utils/firebase";
+import { subColor } from "../../../styles/GlobalStyle";
 
 const Image = styled.div`
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
@@ -29,6 +30,12 @@ const DeleteButton = styled.div`
   display: none;
   font-size: 30px;
   font-weight: 700;
+  border-radius: 50%;
+  padding: 0px 5px;
+
+  &:hover {
+    color: ${subColor};
+  }
 `;
 
 const ImageContainer = styled.div`
