@@ -113,6 +113,8 @@ function Messages() {
         if (data.length) {
           setChats(data);
           setLoaded(true);
+        } else {
+          setLoaded(true);
         }
       });
     }

@@ -57,7 +57,16 @@ function MessageModal({ setActiveIcon }) {
       <NavModal onClick={(e) => e.stopPropagation()}>
         <Title>聊天室</Title>
         <ChatsWrapper>
-          <List chats={chats} nav={true} usage="modal" toggle={setActiveIcon} />
+          {chats.length ? (
+            <List
+              chats={chats}
+              nav={true}
+              usage="modal"
+              toggle={setActiveIcon}
+            />
+          ) : (
+            "尚無訊息"
+          )}
         </ChatsWrapper>
         <MessagesLink to="/messages/all" onClick={() => setActiveIcon("")}>
           查看收件匣

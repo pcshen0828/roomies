@@ -1,6 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { SmallTitle, SmallLabel, Input, Error } from "../../common/Components";
+import {
+  SmallTitle,
+  SmallLabel,
+  Input,
+  Error,
+  Required,
+  Select,
+} from "../../common/Components";
 import api from "../../../utils/api";
 import {
   GoogleMap,
@@ -40,6 +47,7 @@ const ChooseImageButton = styled.label`
   align-items: center;
   font-size: 14px;
   cursor: pointer;
+  margin-bottom: 20px;
 
   &:hover {
     background: #dadada;
@@ -66,10 +74,9 @@ const SearchBox = styled.input`
 
 const libraries = ["places"];
 
-function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
+function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
   const coverFileRef = React.useRef(null);
   const [error, setError] = React.useState("");
-
   const [searchBox, setSearchBox] = React.useState(null);
   const [map, setMap] = React.useState(null);
 
@@ -116,15 +123,29 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
       .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, file)
       .then((snapshot) => {
         Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          setBasicInfo({ ...basicInfo, coverImage: downloadURL });
+          setBasicInfo({
+            ...basicInfo,
+            coverImage: downloadURL,
+            coverFile: file,
+          });
           coverFileRef.current.value = null;
         });
       });
   }
 
+  function checkIsNaN(e) {
+    handleError("");
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault();
+      handleError("只能輸入數字！");
+    }
+  }
+
   return (
     <>
-      <SmallTitle htmlFor="title">封面照片（建議比例：16:9）</SmallTitle>
+      <SmallTitle htmlFor="title">
+        封面照片（建議比例：16:9）<Required>*</Required>
+      </SmallTitle>
       <CoverImageDisplayer>
         <Image src={basicInfo.coverImage} />
         <ChooseImageButton htmlFor="coverImage">上傳封面照片</ChooseImageButton>
@@ -140,14 +161,26 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
         {error && <Error>{error}</Error>}
       </CoverImageDisplayer>
 
-      <SmallLabel htmlFor="title">房源名稱</SmallLabel>
+      <SmallLabel htmlFor="title">
+        房源名稱<Required>*</Required>
+      </SmallLabel>
       <Input
         id="title"
         value={basicInfo.title}
-        onChange={(e) => setBasicInfo({ ...basicInfo, title: e.target.value })}
+        onFocus={() => {
+          handleError("");
+        }}
+        onChange={(e) => {
+          setBasicInfo({ ...basicInfo, title: e.target.value });
+          if (!e.target.value.trim()) {
+            handleError("請輸入房源名稱");
+          }
+        }}
       />
 
-      <SmallLabel htmlFor="geoLocation">房源地址</SmallLabel>
+      <SmallLabel htmlFor="geoLocation">
+        房源地址<Required>*</Required>
+      </SmallLabel>
       {isLoaded ? (
         <>
           <StandaloneSearchBox
@@ -158,9 +191,15 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
               placeholder="請輸入地點"
               id="geoLocation"
               value={basicInfo.query}
-              onChange={(e) =>
-                setBasicInfo({ ...basicInfo, query: e.target.value })
-              }
+              onFocus={() => {
+                handleError("");
+              }}
+              onChange={(e) => {
+                setBasicInfo({ ...basicInfo, query: e.target.value });
+                if (!e.target.value.trim()) {
+                  handleError("請輸入房源地址");
+                }
+              }}
             />
           </StandaloneSearchBox>
           <GoogleMap
@@ -176,30 +215,70 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id }) {
         </>
       ) : null}
 
-      <SmallLabel htmlFor="monthlyRent">每月房租（間）</SmallLabel>
+      <SmallLabel htmlFor="monthlyRent">
+        每月房租（間）<Required>*</Required>
+      </SmallLabel>
       <Input
         id="monthlyRent"
+        type="tel"
         value={basicInfo.monthlyRent}
-        onChange={(e) =>
-          setBasicInfo({ ...basicInfo, monthlyRent: e.target.value })
-        }
+        onFocus={() => {
+          handleError("");
+        }}
+        onKeyPress={(event) => {
+          checkIsNaN(event);
+        }}
+        onChange={(e) => {
+          if (!e.target.value.trim()) {
+            handleError("請輸入每月房租");
+          }
+          if (parseInt(e.target.value) < 1) {
+            handleError("請輸入有效數值");
+            e.target.value = "";
+          }
+          setBasicInfo({ ...basicInfo, monthlyRent: e.target.value });
+        }}
       />
 
-      <SmallLabel htmlFor="roomiesCount">可住人數</SmallLabel>
-      <Input
+      <SmallLabel htmlFor="roomiesCount">
+        可住人數<Required>*</Required>
+      </SmallLabel>
+      <Select
         id="roomiesCount"
         value={basicInfo.roomiesCount}
-        onChange={(e) =>
-          setBasicInfo({ ...basicInfo, roomiesCount: e.target.value })
-        }
-      />
+        onFocus={() => {
+          handleError("");
+        }}
+        onChange={(e) => {
+          setBasicInfo({ ...basicInfo, roomiesCount: e.target.value });
+        }}
+      >
+        {Array.from(Array(10).keys()).map((num) => (
+          <option key={num} value={num + 1}>
+            {num + 1}
+          </option>
+        ))}
+      </Select>
 
-      <SmallLabel htmlFor="rooms">房間數</SmallLabel>
-      <Input
+      <SmallLabel htmlFor="rooms">
+        房間數<Required>*</Required>
+      </SmallLabel>
+      <Select
         id="rooms"
         value={basicInfo.rooms}
-        onChange={(e) => setBasicInfo({ ...basicInfo, rooms: e.target.value })}
-      />
+        onFocus={() => {
+          handleError("");
+        }}
+        onChange={(e) => {
+          setBasicInfo({ ...basicInfo, rooms: e.target.value });
+        }}
+      >
+        {Array.from(Array(10).keys()).map((num) => (
+          <option key={num} value={num + 1}>
+            {num + 1}
+          </option>
+        ))}
+      </Select>
     </>
   );
 }

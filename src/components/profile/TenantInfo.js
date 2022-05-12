@@ -238,7 +238,6 @@ function TenantInfo() {
       });
     }
 
-    // 將使用者新增的職稱加入資料庫
     if (!allJobs.includes(jobTitle)) {
       const newDocRef = api.createNewDocRef("jobTitles");
       api.setNewDoc(newDocRef, {
@@ -314,6 +313,7 @@ function TenantInfo() {
             setProfileImage={setProfileImage}
             file={file}
             setFile={setFile}
+            setSaved={setSaved}
           />
         )}
         <Wrapper>

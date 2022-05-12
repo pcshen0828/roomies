@@ -20,24 +20,28 @@ const AlertMessage = styled(Bold)`
   margin-bottom: 20px;
 `;
 
-function ConfirmBeforeQuitModal({ toggle, apartmentId }) {
+function ConfirmBeforeQuitModal({ toggle, apartmentId, file }) {
   async function closeAndDeleteDoc() {
-    toggle(false);
-    // fix me
-    await Firebase.deleteDoc(
-      Firebase.doc(Firebase.db, "apartments", apartmentId)
-    );
-    const desertRef = Firebase.ref(
-      Firebase.storage,
-      `apartments/${apartmentId}/cover/cover`
-    );
-    Firebase.deleteObject(desertRef)
-      .then(() => {
-        console.log("deleted");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (file) {
+      await Firebase.deleteDoc(
+        Firebase.doc(Firebase.db, "apartments", apartmentId)
+      );
+      const desertRef = Firebase.ref(
+        Firebase.storage,
+        `apartments/${apartmentId}/cover/cover`
+      );
+      Firebase.deleteObject(desertRef)
+        .then(() => {
+          console.log("deleted");
+          toggle(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          toggle(false);
+        });
+    } else {
+      toggle(false);
+    }
   }
   return (
     <HigherOverlay out={false}>

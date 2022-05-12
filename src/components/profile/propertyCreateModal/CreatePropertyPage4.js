@@ -57,7 +57,7 @@ const UploadNewImage = styled.label`
   font-size: 60px;
 `;
 
-function CreatePropertyPage4({ id, images, setImages }) {
+function CreatePropertyPage4({ id, images, setImages, handleError }) {
   const fileRef = React.useRef(null);
   const [error, setError] = React.useState("");
 

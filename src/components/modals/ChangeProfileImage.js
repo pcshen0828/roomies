@@ -13,6 +13,8 @@ import { SmallLabel, Button1, FlexWrapper, Bold } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import AvatarEditor from "react-avatar-editor";
 import { mainColor } from "../../styles/GlobalStyle";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
 
 const NewOverlay = styled(Overlay)`
   overflow-y: auto;
@@ -21,6 +23,7 @@ const NewOverlay = styled(Overlay)`
 const NewModal = styled(Modal)`
   height: auto;
   max-height: 100vh;
+  max-width: 600px;
   @media screen and (max-width: 767.98px) {
     width: 90%;
   }
@@ -31,7 +34,7 @@ const NewBody = styled(Body)`
   min-height: 400px;
   border: none;
   overflow-y: auto;
-  align-items: flex-start;
+  align-items: center;
   display: flex;
   flex-direction: column;
 `;
@@ -55,7 +58,7 @@ const EditorWrapper = styled(FlexWrapper)`
 const FileWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  align-items: center;
 `;
 
 const FileImage = styled.img`
@@ -91,12 +94,52 @@ const Error = styled.div`
   margin-top: 10px;
 `;
 
-function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
+const Loading = styled(Button1)`
+  align-self: end;
+  margin: 20px;
+  cursor: not-allowed;
+  background: #dadada;
+  color: #424b5a;
+  &:hover {
+    background: #dadada;
+  }
+`;
+
+function ChangeProfileImageModal({
+  toggle,
+  setProfileImage,
+  file,
+  setFile,
+  setSaved,
+}) {
   const { currentUser } = useAuth();
   const [url, setUrl] = React.useState("");
   const [error, setError] = React.useState("");
   const fileRef = React.useRef(null);
   const editor = React.useRef(null);
+  const [showPreview, setShowPreview] = React.useState(false);
+  const [isUploading, setIsUploading] = React.useState(false);
+
+  function updateProfileImage() {
+    setProfileImage(url ? url : currentUser.profileImage);
+    if (file) {
+      setIsUploading(true);
+      const storageRef = Firebase.ref(
+        Firebase.storage,
+        `users/${currentUser.uid}/profile`
+      );
+      Firebase.uploadBytes(storageRef, file).then((snapshot) => {
+        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
+          api.updateDocData("users", currentUser.uid, {
+            profileImage: downloadURL,
+          });
+          setIsUploading(false);
+          toggle(false);
+          setSaved(true);
+        });
+      });
+    }
+  }
 
   return (
     <NewOverlay out={false}>
@@ -123,7 +166,7 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
           />
           {error && <Error>{error}</Error>}
           <EditorWrapper>
-            {file && (
+            {file && !showPreview ? (
               <FileWrapper>
                 <AvatarEditor
                   ref={editor}
@@ -131,7 +174,7 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
                   width={250}
                   height={250}
                   borderRadius={125}
-                  color={[0, 0, 0, 0.3]} // RGBA
+                  color={[0, 0, 0, 0.3]}
                   scale={1.2}
                   rotate={0}
                 />
@@ -152,16 +195,19 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
                         img.toBlob((blob) => {
                           if (blob) {
                             const newUrl = URL.createObjectURL(blob);
-                            setUrl(newUrl);
                             fetch(newUrl)
                               .then((res) => res.blob())
-                              .then((blobFile) =>
+                              .then((blobFile) => {
                                 setFile(
                                   new File([blobFile], "profile", {
                                     type: "image/png",
                                   })
-                                )
-                              );
+                                );
+                              })
+                              .then(() => {
+                                setUrl(newUrl);
+                                setShowPreview(true);
+                              });
                           }
                         });
                       }
@@ -171,23 +217,38 @@ function ChangeProfileImageModal({ toggle, setProfileImage, file, setFile }) {
                   </CheckButton>
                 </ButtonWrapper>
               </FileWrapper>
+            ) : (
+              ""
             )}
-            {url && (
+            {showPreview && (
               <FileWrapper>
                 <Bold>預覽結果：</Bold>
                 <FileImage src={url} alt="" />
+                <ResetButton
+                  onClick={() => {
+                    setFile(null);
+                    setUrl("");
+                    fileRef.current.value = null;
+                    setShowPreview(false);
+                  }}
+                >
+                  重新選擇
+                </ResetButton>
               </FileWrapper>
             )}
           </EditorWrapper>
         </NewBody>
-        <Button
-          onClick={() => {
-            setProfileImage(url ? url : currentUser.profileImage);
-            toggle(false);
-          }}
-        >
-          確認
-        </Button>
+        {isUploading ? (
+          <Loading>上傳中</Loading>
+        ) : (
+          <Button
+            onClick={() => {
+              updateProfileImage();
+            }}
+          >
+            確認上傳
+          </Button>
+        )}
       </NewModal>
     </NewOverlay>
   );

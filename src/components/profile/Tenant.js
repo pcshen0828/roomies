@@ -9,7 +9,6 @@ import {
   Toggle,
 } from "../common/Components";
 import TenantInfo from "./TenantInfo";
-import CollectionList from "./CollectionList";
 import GroupAndTeam from "./GroupAndTeam";
 import TenantSchedule from "./TenantSchedule";
 import { useNavigate, useParams, useLocation } from "react-router-dom";

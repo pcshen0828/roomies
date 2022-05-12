@@ -5,11 +5,15 @@ import {
   ProfileList,
   ProfileItem,
   ProfileContent,
+  Toggler,
+  Toggle,
 } from "../common/Components";
 import LandlordInfo from "./LandlordInfo";
 import LandlordProperty from "./LandlordProperty";
 import LandlordSchedule from "./LandlordSchedule";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import more from "../../images/more.svg";
+import less from "../../images/less.svg";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 10px;
@@ -51,6 +55,7 @@ function Landlord() {
   const navigate = useNavigate();
   const location = useLocation();
   const { id, status } = useParams();
+  const [show, setShow] = React.useState(false);
 
   React.useEffect(() => {
     const current = profilelist.find(
@@ -61,12 +66,21 @@ function Landlord() {
 
   return (
     <Wrapper>
-      <ProfileList>
+      <Toggler
+        onClick={() => {
+          setShow((prev) => !prev);
+        }}
+      >
+        {show ? "收合選單" : "展開選單"}
+        {show ? <Toggle src={less} /> : <Toggle src={more} />}
+      </Toggler>
+      <ProfileList show={show}>
         {profilelist.map((item, index) => (
           <ProfileItem
             key={index}
             active={location.pathname.startsWith(item.to)}
             onClick={() => {
+              setShow(false);
               setListIndex(item.id);
               navigate(`${item.to}/${item.defaultStatus}`);
             }}

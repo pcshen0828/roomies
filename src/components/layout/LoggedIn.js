@@ -5,7 +5,7 @@ import notice from "../../images/notice.svg";
 import noticeActive from "../../images/notice-active.svg";
 import message from "../../images/message.svg";
 import messageActive from "../../images/message-active.svg";
-import { FlexWrapper } from "../common/Components";
+import { FlexWrapper, SlicedBold } from "../common/Components";
 import MemberModal from "../modals/MemberModal";
 import MessageModal from "../modals/MessageModal";
 import NoticeModal from "../modals/NoticeModal";
@@ -40,10 +40,23 @@ const Icon = styled.img`
   cursor: pointer;
 `;
 
-const WelcomeText = styled.div`
+const WelcomeText = styled(FlexWrapper)`
   height: 30px;
   font-weight: 700;
   cursor: pointer;
+`;
+
+const SlicedAlias = styled(SlicedBold)`
+  max-width: 300px;
+  @media screen and (max-width: 995.98px) {
+    max-width: 150px;
+  }
+  @media screen and (max-width: 450px) {
+    max-width: 120px;
+  }
+  @media screen and (max-width: 414px) {
+    max-width: 90px;
+  }
 `;
 
 const Unread = styled(FlexWrapper)`
@@ -133,7 +146,7 @@ function LoggedIn() {
             setActiveIcon("member");
           }}
         >
-          你好，{currentUser?.alias}
+          你好，<SlicedAlias>{currentUser?.alias}</SlicedAlias>
           <Icon src={more} name="more" />
         </WelcomeText>
         {icons.map((icon, index) => (
@@ -146,6 +159,7 @@ function LoggedIn() {
               ""
             )}
             {icon.name === "message" &&
+            matchMedia("(min-width: 997px)").matches &&
             location.pathname.startsWith("/messages/") ? (
               ""
             ) : (

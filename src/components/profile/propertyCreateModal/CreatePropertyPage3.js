@@ -6,6 +6,7 @@ import {
   Input,
   FlexWrapper,
   Textarea,
+  Required,
 } from "../../common/Components";
 
 const CheckboxWrapper = styled(FlexWrapper)`
@@ -17,19 +18,38 @@ const CheckboxLabel = styled(SmallLabel)`
   margin: 3px 10px 5px 3px;
 `;
 
-function CreatePropertyPage3({ otherInfo, setOtherInfo }) {
+function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
   const stringToBoolean = (string) => (string === "false" ? false : !!string);
+
+  function checkIsNaN(e) {
+    handleError("");
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault();
+      handleError("只能輸入數字！");
+    }
+  }
 
   return (
     <>
       {otherInfo.map((info, index) => (
         <React.Fragment key={index}>
-          <SmallLabel htmlFor={info.id}>{info.name}</SmallLabel>
+          <SmallLabel htmlFor={info.id}>
+            {info.name}
+            {(info.name === "所在樓層" || info.name === "房源特色") && (
+              <Required>*</Required>
+            )}
+          </SmallLabel>
           {info.id === "feature" ? (
             <Textarea
               id={info.id}
               value={info.value}
+              onFocus={() => {
+                handleError("");
+              }}
               onChange={(e) => {
+                if (!e.target.value.trim()) {
+                  handleError("請輸入房源特色");
+                }
                 setOtherInfo((prev) =>
                   prev.map((item) =>
                     item.id === info.id
@@ -52,6 +72,9 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo }) {
                     checked={info.value === choice.value}
                     type="radio"
                     value={choice.value}
+                    onFocus={() => {
+                      handleError("");
+                    }}
                     onChange={(e) => {
                       setOtherInfo((prev) =>
                         prev.map((item) =>
@@ -75,7 +98,25 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo }) {
             <Input
               id={info.id}
               value={info.value}
+              onKeyPress={(event) => {
+                if (info.name === "所在樓層" || info.name === "坪數") {
+                  checkIsNaN(event);
+                }
+              }}
+              onFocus={() => {
+                handleError("");
+              }}
               onChange={(e) => {
+                if (
+                  (info.name === "所在樓層" || info.name === "坪數") &&
+                  parseInt(e.target.value) < 1
+                ) {
+                  handleError("請輸入有效數值");
+                  e.target.value = "";
+                }
+                if (info.name === "所在樓層" && !e.target.value.trim()) {
+                  handleError("請輸入所在樓層");
+                }
                 setOtherInfo((prev) =>
                   prev.map((item) =>
                     item.id === info.id
