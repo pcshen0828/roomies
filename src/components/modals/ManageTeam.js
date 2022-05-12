@@ -206,7 +206,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
             <FlexWrapper>
               <NewTitle>{team.name}</NewTitle>｜{team.members.length}
               位成員
-              <Status>{group.roomiesCount}人成團</Status>
+              <Status>{group?.roomiesCount}人成團</Status>
             </FlexWrapper>
             <CloseButton onClick={() => toggle("")}>×</CloseButton>
           </Header>
@@ -220,7 +220,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
               }}
             />
             <SmallLabel>房源名稱</SmallLabel>
-            <Input value={group.title} readOnly />
+            <Input value={group?.title} readOnly />
             <SmallLabel>團主</SmallLabel>
             <MemberWrapper>
               <ProfileImage
@@ -228,14 +228,14 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
                   selfStatus !== 0
                     ? otherMembers.length &&
                       otherMembers.find((user) => user.uid === host)
-                        .profileImage
+                        ?.profileImage
                     : currentUser.profileImage
                 }
               />
               <Alias>
                 {selfStatus !== 0
                   ? otherMembers.length &&
-                    otherMembers.find((user) => user.uid === host).alias
+                    otherMembers.find((user) => user.uid === host)?.alias
                   : currentUser.alias}
               </Alias>
             </MemberWrapper>
@@ -283,7 +283,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
               ))}
           </NewBody>
           <Buttons>
-            {team.members.length === group.roomiesCount &&
+            {team.members.length === group?.roomiesCount &&
               selfStatus === 0 &&
               team.members
                 .filter((member) => member.status !== 0)

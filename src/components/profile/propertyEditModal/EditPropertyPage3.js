@@ -6,12 +6,7 @@ import {
   Input,
   FlexWrapper,
   Textarea,
-  LoadingButton,
-  PagingList,
-  Button1,
-} from "../common/Components";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
+} from "../../common/Components";
 
 const CheckboxWrapper = styled(FlexWrapper)`
   align-items: center;
@@ -22,47 +17,16 @@ const CheckboxLabel = styled(SmallLabel)`
   margin: 3px 10px 5px 3px;
 `;
 
-function EditPropertyPage3({ apartment, paging, setPaging }) {
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [otherInfo, setOtherInfo] = React.useState([]);
-
-  // 處理被轉成字串的 boolean value
+function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
   const stringToBoolean = (string) => (string === "false" ? false : !!string);
 
-  React.useEffect(() => {
-    console.log(apartment);
-    api
-      .getAllDocsFromCollection("apartments/" + apartment.id + "/otherInfo")
-      .then((res) => {
-        console.log(res);
-        setOtherInfo(res);
-      });
-  }, [apartment]);
-
-  function updateApartmentInfo() {
-    setIsLoading(true);
-    otherInfo.forEach((info) => {
-      api.updateSubCollectionDocData(
-        "apartments",
-        apartment.id,
-        "otherInfo",
-        info.id,
-        {
-          id: info.id,
-          name: info.name,
-          value: info.value,
-        }
-      );
-    });
-    const time = Firebase.Timestamp.fromDate(new Date());
-    api.updateDocData("apartments", apartment.id, {
-      ...apartment,
-      updateTime: time,
-    });
-    setIsLoading(false);
-    setPaging((prev) => (prev < 4 ? prev + 1 : 4));
+  function checkIsNaN(e) {
+    handleError("");
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault();
+      handleError("只能輸入數字！");
+    }
   }
-
   return (
     <>
       {otherInfo.map((info, index) => (
@@ -72,7 +36,13 @@ function EditPropertyPage3({ apartment, paging, setPaging }) {
             <Textarea
               id={info.id}
               value={info.value}
+              onFocus={() => {
+                handleError("");
+              }}
               onChange={(e) => {
+                if (!e.target.value.trim()) {
+                  handleError("請輸入房源特色");
+                }
                 setOtherInfo((prev) =>
                   prev.map((item) =>
                     item.id === info.id
@@ -118,7 +88,28 @@ function EditPropertyPage3({ apartment, paging, setPaging }) {
             <Input
               id={info.id}
               value={info.value}
+              onKeyPress={(event) => {
+                if (info.name === "所在樓層" || info.name === "坪數") {
+                  checkIsNaN(event);
+                }
+              }}
+              onFocus={() => {
+                handleError("");
+              }}
               onChange={(e) => {
+                if (
+                  (info.name === "所在樓層" || info.name === "坪數") &&
+                  parseInt(e.target.value) < 1
+                ) {
+                  handleError("請輸入有效數值");
+                  e.target.value = "";
+                }
+                if (info.name === "所在樓層" && !e.target.value.trim()) {
+                  handleError("請輸入所在樓層");
+                }
+                if (info.name === "坪數" && !e.target.value.trim()) {
+                  handleError("請輸入房源坪數");
+                }
                 setOtherInfo((prev) =>
                   prev.map((item) =>
                     item.id === info.id
@@ -131,30 +122,6 @@ function EditPropertyPage3({ apartment, paging, setPaging }) {
           )}
         </React.Fragment>
       ))}
-      <PagingList>
-        {paging > 1 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1
-              onClick={() => setPaging((prev) => (prev > 1 ? prev - 1 : 1))}
-            >
-              上一頁
-            </Button1>
-          ))}
-        {paging < 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1 onClick={updateApartmentInfo}>儲存並繼續</Button1>
-          ))}
-        {paging === 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1>儲存並完成</Button1>
-          ))}
-      </PagingList>
     </>
   );
 }

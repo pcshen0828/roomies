@@ -22,7 +22,6 @@ import CreatePropertyPage2 from "./propertyCreateModal/CreatePropertyPage2";
 import CreatePropertyPage3 from "./propertyCreateModal/CreatePropertyPage3";
 import CreatePropertyPage4 from "./propertyCreateModal/CreatePropertyPage4";
 import ConfirmBeforeQuitModal from "../modals/ConfirmBeforeQuit";
-import { useAuth } from "../../context/AuthContext";
 import { FlexWrapper } from "../common/Components";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
@@ -196,8 +195,7 @@ const otherInfoList = [
 
 const newApartmentId = uuidv4();
 
-function CreatePropertyModal({ toggle, setSaved }) {
-  const { currentUser } = useAuth();
+function CreatePropertyModal({ toggle, setSaved, currentUser }) {
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [apartmentId, setApartmentId] = React.useState("");
   const [paging, setPaging] = React.useState(1);
@@ -298,8 +296,6 @@ function CreatePropertyModal({ toggle, setSaved }) {
     setFurnitures(furnitureList);
     setOtherInfo(otherInfoList);
 
-    console.log(apartmentId);
-
     return function cleanup() {
       mounted = false;
     };
@@ -328,7 +324,12 @@ function CreatePropertyModal({ toggle, setSaved }) {
 
     if (
       otherInfo
-        .filter((item) => item.name === "所在樓層" || item.name === "房源特色")
+        .filter(
+          (item) =>
+            item.name === "所在樓層" ||
+            item.name === "房源特色" ||
+            item.name === "坪數"
+        )
         .some((item) => !item.value)
     ) {
       setWarning("請確認填寫其他資訊");

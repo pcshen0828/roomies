@@ -206,7 +206,7 @@ function GroupAndTeam() {
       const apartmentIds = res.map((item) => item.apartmentId);
       if (!apartmentIds.length) return;
       api
-        .getDataWithSingleQuery("apartments", "id", "in", apartmentIds.length)
+        .getDataWithSingleQuery("apartments", "id", "in", apartmentIds)
         .then((res) => {
           setApartments(res);
         });

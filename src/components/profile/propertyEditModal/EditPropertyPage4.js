@@ -7,9 +7,9 @@ import {
   LoadingButton,
   PagingList,
   Button1,
-} from "../common/Components";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
+} from "../../common/Components";
+import api from "../../../utils/api";
+import { Firebase } from "../../../utils/firebase";
 
 const Image = styled.div`
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
@@ -56,31 +56,14 @@ const UploadNewImage = styled.label`
   font-size: 60px;
 `;
 
-function EditPropertyPage4({ apartment, paging, setPaging, toggle }) {
-  const [isLoading, setIsLoading] = React.useState(false);
+function EditPropertyPage4({ apartment, images, setImages }) {
   const fileRef = React.useRef(null);
   const [error, setError] = React.useState("");
-  const [images, setImages] = React.useState(apartment.images);
-
-  React.useEffect(() => {
-    console.log(apartment);
-  }, [apartment]);
-
-  function updateApartmentInfo() {
-    setIsLoading(true);
-    const time = Firebase.Timestamp.fromDate(new Date());
-    api.updateDocData("apartments", apartment.id, {
-      ...apartment,
-      images,
-      updateTime: time,
-    });
-    setIsLoading(false);
-    toggle(false);
-  }
 
   function uploadImageFile(e) {
     const file = e.target.files[0];
-    if ((file.size / 1024 / 1024).toFixed(4) >= 1.5) {
+    if (!file) return;
+    if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案過大，請重新上傳");
       return;
     }
@@ -114,7 +97,6 @@ function EditPropertyPage4({ apartment, paging, setPaging, toggle }) {
         console.log(error);
       });
   }
-
   return (
     <>
       <SmallTitle htmlFor="title">其他照片</SmallTitle>
@@ -139,34 +121,6 @@ function EditPropertyPage4({ apartment, paging, setPaging, toggle }) {
           />
         </FlexWrapper>
       </ImagesDisplayer>
-      <PagingList>
-        {paging > 1 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1
-              onClick={() => setPaging((prev) => (prev > 1 ? prev - 1 : 1))}
-            >
-              上一頁
-            </Button1>
-          ))}
-        {paging < 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1
-              onClick={() => setPaging((prev) => (prev < 4 ? prev + 1 : 4))}
-            >
-              儲存並繼續
-            </Button1>
-          ))}
-        {paging === 4 &&
-          (isLoading ? (
-            <LoadingButton>上傳中</LoadingButton>
-          ) : (
-            <Button1 onClick={updateApartmentInfo}>儲存並完成</Button1>
-          ))}
-      </PagingList>
     </>
   );
 }

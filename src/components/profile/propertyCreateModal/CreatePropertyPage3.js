@@ -117,6 +117,9 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
                 if (info.name === "所在樓層" && !e.target.value.trim()) {
                   handleError("請輸入所在樓層");
                 }
+                if (info.name === "坪數" && !e.target.value.trim()) {
+                  handleError("請輸入房源坪數");
+                }
                 setOtherInfo((prev) =>
                   prev.map((item) =>
                     item.id === info.id

@@ -13,7 +13,7 @@ import {
   RejectButton,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
-import EditPropertyModal from "../modals/EditProperty";
+import EditPropertyModal from "./EditProperty";
 import CreatePropertyModal from "./CreateProperty";
 import { Firebase } from "../../utils/firebase";
 import {
@@ -21,7 +21,6 @@ import {
   Modal,
   Header,
   Title,
-  Button,
   CloseButton,
 } from "../modals/ModalElements";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
@@ -347,13 +346,14 @@ function LandlordProperty() {
           toggle={setOpenEdit}
           apartment={apartment}
           setSaved={setSaved}
+          currentUser={currentUser}
         />
       )}
       {openCreate && (
         <CreatePropertyModal
           toggle={setOpenCreate}
-          apartment={apartment}
           setSaved={setSaved}
+          currentUser={currentUser}
         />
       )}
       {saved && (
