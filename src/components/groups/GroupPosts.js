@@ -4,6 +4,7 @@ import { FlexColumn, FlexWrapper } from "../common/Components";
 import CreateNewPostModal from "../modals/CreateNewPost";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
+import Post from "./Post";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -109,7 +110,7 @@ export default function GroupPosts({ currentUser, groupID, setPosted }) {
       </SubtitlesSmall>
       <FlexColumn>
         {posts.length
-          ? posts.map((post) => <div key={post.id}>{post.id}</div>)
+          ? posts.map((post) => <Post key={post.id} post={post} />)
           : "尚無貼文"}
       </FlexColumn>
     </Wrapper>

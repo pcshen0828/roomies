@@ -7,6 +7,7 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { FlexWrapper } from "../common/Components";
+import { calcTimeGap } from "../../utils/calculate";
 
 const StyledLink = styled(Link)`
   color: #424b5a;
@@ -104,27 +105,6 @@ function List({ chats, setChatId, usage, toggle }) {
       mounted = false;
     };
   }, [chats]);
-
-  function calcTimeGap(time) {
-    const ObjectTime = Date.parse(new Date(time));
-    const now = Date.parse(new Date());
-    const milleSecondsPerDay = 24 * 3600 * 1000;
-    const gapMilleSeconds = now - ObjectTime;
-    const days = gapMilleSeconds / milleSecondsPerDay;
-    return Math.floor(days) > 365
-      ? `${Math.floor(days / 365)}年`
-      : Math.floor(days) > 30
-      ? `${Math.floor(days / 30)}個月`
-      : Math.floor(days) > 7
-      ? `${Math.floor(days / 7)}週`
-      : Math.floor(days) >= 1
-      ? `${Math.floor(days)}天`
-      : Math.floor(days * 24) >= 1
-      ? `${Math.floor(days * 24)}小時`
-      : Math.floor(days * 24 * 60) >= 1
-      ? `${Math.floor(days * 24 * 60)}分鐘`
-      : "現在";
-  }
 
   function checkIsUnreadOrNot(chat) {
     return chatroomId === chat.id
