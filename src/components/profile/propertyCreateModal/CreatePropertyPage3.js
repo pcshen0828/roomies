@@ -35,9 +35,7 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
         <React.Fragment key={index}>
           <SmallLabel htmlFor={info.id}>
             {info.name}
-            {(info.name === "所在樓層" || info.name === "房源特色") && (
-              <Required>*</Required>
-            )}
+            <Required>*</Required>
           </SmallLabel>
           {info.id === "feature" ? (
             <Textarea
@@ -114,11 +112,15 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
                   handleError("請輸入有效數值");
                   e.target.value = "";
                 }
-                if (info.name === "所在樓層" && !e.target.value.trim()) {
-                  handleError("請輸入所在樓層");
-                }
-                if (info.name === "坪數" && !e.target.value.trim()) {
-                  handleError("請輸入房源坪數");
+                if (
+                  (info.id === "availableTime" ||
+                    info.id === "depositMonth" ||
+                    info.id === "floor" ||
+                    info.id === "minLeaseTerm" ||
+                    info.id === "squareFeet") &&
+                  !e.target.value.trim()
+                ) {
+                  handleError("請完整填寫其他資訊");
                 }
                 setOtherInfo((prev) =>
                   prev.map((item) =>

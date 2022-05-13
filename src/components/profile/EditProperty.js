@@ -178,7 +178,14 @@ function EditPropertyModal({ toggle, apartment, currentUser, setSaved }) {
 
     if (
       otherInfo
-        .filter((item) => item.name === "所在樓層" || item.name === "房源特色")
+        .filter(
+          (info) =>
+            info.id === "availableTime" ||
+            info.id === "depositMonth" ||
+            info.id === "floor" ||
+            info.id === "minLeaseTerm" ||
+            info.id === "squareFeet"
+        )
         .some((item) => !item.value)
     ) {
       setWarning("請確認填寫其他資訊");

@@ -53,18 +53,6 @@ const NewButton = styled(Button1)`
   }
 `;
 
-const StyledLink = styled(Link)`
-  color: #424b5a;
-  display: flex;
-  flex-grow: 1;
-  &:hover {
-    text-decoration: underline;
-  }
-  @media screen and (max-width: 575.98px) {
-    max-width: 50%;
-  }
-`;
-
 const Card = styled(FlexWrapper)`
   margin-bottom: 10px;
   width: calc(100% - 40px);
@@ -79,12 +67,33 @@ const Card = styled(FlexWrapper)`
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
 `;
 
+const TitleWrapper = styled.div`
+  max-width: 80%;
+  flex-grow: 1;
+  max-width: 60%;
+  @media screen and (max-width: 575.98px) {
+    flex-grow: 0;
+    max-width: 50%;
+  }
+  @media screen and (max-width: 413.98px) {
+    max-width: 100px;
+  }
+`;
+
+const StyledLink = styled(Link)`
+  color: #424b5a;
+  display: flex;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const CardTitle = styled(Bold)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex-grow: 1;
-  max-width: 80%;
+  max-width: 100%;
 `;
 
 const TabsWrapper = styled(FlexWrapper)`
@@ -281,9 +290,11 @@ function LandlordProperty() {
                       ×
                     </CloseButton>
                   )} */}
-                  <StyledLink to={`/apartment/${item.id}`}>
-                    <CardTitle title={item.title}>{item.title}</CardTitle>
-                  </StyledLink>
+                  <TitleWrapper>
+                    <StyledLink to={`/apartment/${item.id}`}>
+                      <CardTitle title={item.title}>{item.title}</CardTitle>
+                    </StyledLink>
+                  </TitleWrapper>
                   <EditWrapper>
                     <EditButton
                       onClick={() => {

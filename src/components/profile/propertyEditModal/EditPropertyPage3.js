@@ -6,6 +6,7 @@ import {
   Input,
   FlexWrapper,
   Textarea,
+  Required,
 } from "../../common/Components";
 
 const CheckboxWrapper = styled(FlexWrapper)`
@@ -31,7 +32,10 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
     <>
       {otherInfo.map((info, index) => (
         <React.Fragment key={index}>
-          <SmallLabel htmlFor={info.id}>{info.name}</SmallLabel>
+          <SmallLabel htmlFor={info.id}>
+            {info.name}
+            <Required>*</Required>
+          </SmallLabel>
           {info.id === "feature" ? (
             <Textarea
               id={info.id}
@@ -104,12 +108,17 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
                   handleError("請輸入有效數值");
                   e.target.value = "";
                 }
-                if (info.name === "所在樓層" && !e.target.value.trim()) {
-                  handleError("請輸入所在樓層");
+                if (
+                  (info.id === "availableTime" ||
+                    info.id === "depositMonth" ||
+                    info.id === "floor" ||
+                    info.id === "minLeaseTerm" ||
+                    info.id === "squareFeet") &&
+                  !e.target.value.trim()
+                ) {
+                  handleError("請完整填寫其他資訊");
                 }
-                if (info.name === "坪數" && !e.target.value.trim()) {
-                  handleError("請輸入房源坪數");
-                }
+
                 setOtherInfo((prev) =>
                   prev.map((item) =>
                     item.id === info.id

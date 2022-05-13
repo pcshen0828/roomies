@@ -325,10 +325,12 @@ function CreatePropertyModal({ toggle, setSaved, currentUser }) {
     if (
       otherInfo
         .filter(
-          (item) =>
-            item.name === "所在樓層" ||
-            item.name === "房源特色" ||
-            item.name === "坪數"
+          (info) =>
+            info.id === "availableTime" ||
+            info.id === "depositMonth" ||
+            info.id === "floor" ||
+            info.id === "minLeaseTerm" ||
+            info.id === "squareFeet"
         )
         .some((item) => !item.value)
     ) {
