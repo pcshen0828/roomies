@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
-import GroupNews from "../components/groups/GroupNews";
+import GroupPosts from "../components/groups/GroupPosts";
 import api from "../utils/api";
 import {
   Button1,
@@ -220,7 +220,7 @@ const GroupBody = styled(FlexWrapper)`
 `;
 
 const GroupBodyLeft = styled(FlexWrapper)`
-  width: 60%;
+  width: 58%;
   flex-direction: column;
   align-items: flex-start;
   z-index: 2;
@@ -233,12 +233,13 @@ const GroupBodyLeft = styled(FlexWrapper)`
 `;
 
 const GroupBodyRight = styled(FlexWrapper)`
-  width: 38%;
+  width: 40%;
   flex-direction: column;
   align-items: flex-start;
   @media screen and (max-width: 995.98px) {
     width: 100%;
     order: 1;
+    display: ${(props) => (props.active ? "block" : "none")};
   }
 `;
 
@@ -301,6 +302,10 @@ const Tab = styled.div`
   &:hover {
     background: #e8e8e8;
   }
+  display: ${(props) => (props.type === "other" ? "none" : "block")};
+  @media screen and (max-width: 995.98px) {
+    display: ${(props) => (props.type === "other" ? "block" : "block")};
+  }
 `;
 
 function Groups() {
@@ -325,6 +330,7 @@ function Groups() {
   const anchor = React.useRef(null);
   const [sticky, setSticky] = React.useState(false);
   const [tab, setTab] = React.useState("news");
+  const [posted, setPosted] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -438,6 +444,13 @@ function Groups() {
             out={false}
             toggle={setSaved}
             message="邀請已送出！"
+          />
+        )}
+        {posted && (
+          <SuccessfullySavedModal
+            out={false}
+            toggle={setPosted}
+            message="貼文已發佈！"
           />
         )}
         {openInviteModal && (
@@ -626,6 +639,15 @@ function Groups() {
             >
               組隊看房
             </Tab>
+            <Tab
+              type="other"
+              onClick={() => {
+                setTab("other");
+              }}
+              active={tab === "other"}
+            >
+              關於
+            </Tab>
           </TabsWrapper>
 
           {loading ? (
@@ -642,7 +664,13 @@ function Groups() {
             members.find((member) => member.uid === currentUser.uid) ? (
             <GroupBody>
               <GroupBodyLeft>
-                {tab === "news" && <GroupNews currentUser={currentUser} />}
+                {tab === "news" && (
+                  <GroupPosts
+                    currentUser={currentUser}
+                    groupID={id}
+                    setPosted={setPosted}
+                  />
+                )}
                 {tab === "teams" && (
                   <GroupTeam
                     roomies={apartmentData.roomiesCount}
@@ -655,29 +683,32 @@ function Groups() {
                 )}
               </GroupBodyLeft>
 
-              <GroupBodyRight>
-                <SubtitlesSmall>
-                  <Bold>社團守則</Bold>
-                </SubtitlesSmall>
-                <GroupNotice>
-                  <Bold>租屋流程</Bold>
-                  <ContentList>
-                    <li>加入房源社團，尋找合租的室友</li>
-                    <li>人數到齊後，與屋主預約看房</li>
-                    <li>確認租屋設備、租金、押金等一切細節</li>
-                    <li>與屋主簽訂租屋契約</li>
-                  </ContentList>
-                  <Bold>租屋須知</Bold>
-                  <ContentList>
-                    <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
-                    <li>與屋主預約看房請遵守約定，切勿無故未到</li>
-                    <li>
-                      若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
-                    </li>
-                  </ContentList>
-                </GroupNotice>
-                <GroupMember members={members} />
-              </GroupBodyRight>
+              {(matchMedia("(min-width: 996px)").matches ||
+                tab === "other") && (
+                <GroupBodyRight active={tab === "other"}>
+                  <SubtitlesSmall>
+                    <Bold>社團守則</Bold>
+                  </SubtitlesSmall>
+                  <GroupNotice>
+                    <Bold>租屋流程</Bold>
+                    <ContentList>
+                      <li>加入房源社團，尋找合租的室友</li>
+                      <li>人數到齊後，與屋主預約看房</li>
+                      <li>確認租屋設備、租金、押金等一切細節</li>
+                      <li>與屋主簽訂租屋契約</li>
+                    </ContentList>
+                    <Bold>租屋須知</Bold>
+                    <ContentList>
+                      <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
+                      <li>與屋主預約看房請遵守約定，切勿無故未到</li>
+                      <li>
+                        若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
+                      </li>
+                    </ContentList>
+                  </GroupNotice>
+                  <GroupMember members={members} />
+                </GroupBodyRight>
+              )}
             </GroupBody>
           ) : (
             <NotMemberWrapper>

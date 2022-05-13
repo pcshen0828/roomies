@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { FlexColumn, FlexWrapper } from "../common/Components";
 import CreateNewPostModal from "../modals/CreateNewPost";
+import api from "../../utils/api";
+import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -45,7 +47,7 @@ const Profile = styled.div`
 `;
 
 const FakeInput = styled(FlexWrapper)`
-  width: calc(100% - 80px);
+  width: calc(100% - 60px);
   height: 45px;
   background: #f2f5f7;
   border-radius: 20px;
@@ -60,12 +62,38 @@ const FakeInput = styled(FlexWrapper)`
   }
 `;
 
-export default function GroupNews({ currentUser }) {
+export default function GroupPosts({ currentUser, groupID, setPosted }) {
   const [openPost, setOpenPost] = React.useState(false);
+  const [posts, setPosts] = React.useState([]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    const query = Firebase.query(
+      Firebase.collection(Firebase.db, "posts"),
+      Firebase.where("groupID", "==", groupID),
+      Firebase.orderBy("createTime", "desc")
+    );
+    Firebase.onSnapshot(query, (snapshot) => {
+      if (!mounted) return;
+      console.log(snapshot.docs.map((doc) => doc.data()));
+      setPosts(snapshot.docs.map((doc) => doc.data()));
+    });
+
+    return function cleanup() {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <Wrapper>
-      {openPost && <CreateNewPostModal toggle={setOpenPost} />}
+      {openPost && (
+        <CreateNewPostModal
+          toggle={setOpenPost}
+          currentUser={currentUser}
+          groupID={groupID}
+          setPosted={setPosted}
+        />
+      )}
       <NewPostButton>
         <Profile src={currentUser.profileImage} />
         <FakeInput
@@ -79,6 +107,11 @@ export default function GroupNews({ currentUser }) {
       <SubtitlesSmall>
         <TitleSmall>所有貼文</TitleSmall>
       </SubtitlesSmall>
+      <FlexColumn>
+        {posts.length
+          ? posts.map((post) => <div key={post.id}>{post.id}</div>)
+          : "尚無貼文"}
+      </FlexColumn>
     </Wrapper>
   );
 }

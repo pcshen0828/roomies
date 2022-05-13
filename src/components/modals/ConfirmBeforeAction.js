@@ -38,6 +38,9 @@ const ButtonsWrapper = styled(FlexWrapper)`
 
 const ConfirmButton = styled(Button)`
   margin: 20px 0 20px 10px;
+  @media screen and (max-width: 767.98px) {
+    font-size: 14px;
+  }
 `;
 
 export default function ConfirmBeforeActionModal({ message, action, toggle }) {

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SendMessageModal from "../modals/SendMessage";
 import { useAuth } from "../../context/AuthContext";
-import { Button1, FlexWrapper } from "../common/Components";
+import { Button1, FlexWrapper, SlicedBold } from "../common/Components";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled.div`
@@ -66,12 +66,20 @@ const MemberInfo = styled.div`
   flex-direction: column;
 `;
 
-const MemberName = styled.div`
-  font-weight: 700;
+const MemberName = styled(SlicedBold)`
+  max-width: 120px;
+  @media screen and (max-width: 413.98px) {
+    max-width: 60px;
+  }
 `;
 
-const MemberJobTitle = styled.div`
+const MemberJobTitle = styled(SlicedBold)`
+  max-width: 120px;
+  @media screen and (max-width: 413.98px) {
+    max-width: 80px;
+  }
   font-size: 14px;
+  font-weight: 400;
 `;
 
 const MessageButton = styled(Button1)`
