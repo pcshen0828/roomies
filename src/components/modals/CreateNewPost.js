@@ -9,6 +9,7 @@ import {
   Body,
   Button,
 } from "./ModalElements";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 
 const NewModal = styled(Modal)`
   max-width: 700px;
@@ -23,13 +24,30 @@ const NewBody = styled(Body)`
   border: none;
 `;
 
-export default function CreateNewPostModal() {
+export default function CreateNewPostModal({ toggle }) {
+  const [openConfirm, setOpenConfirm] = React.useState(false);
+
   return (
     <Overlay>
+      {openConfirm && (
+        <ConfirmBeforeActionModal
+          toggle={setOpenConfirm}
+          message="尚未發佈，確認離開？"
+          action={() => {
+            toggle(false);
+          }}
+        />
+      )}
       <NewModal>
         <Header>
           <Title>建立貼文</Title>
-          <CloseButton>×</CloseButton>
+          <CloseButton
+            onClick={() => {
+              setOpenConfirm(true);
+            }}
+          >
+            ×
+          </CloseButton>
         </Header>
         <NewBody></NewBody>
         <Button>發佈</Button>

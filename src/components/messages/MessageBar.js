@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { FlexWrapper } from "../common/Components";
+import Linkify from "react-linkify";
 
 const SendDate = styled.div`
   font-size: 12px;
@@ -9,13 +10,20 @@ const SendDate = styled.div`
   margin: 30px 0 20px;
 `;
 
+const Wrapper = styled(Linkify)`
+  display: flex;
+  justify-content: flex-start;
+`;
+
 const SendTime = styled.div`
   font-size: 12px;
   color: #505d68;
   margin: 0 0 10px;
-  position: absolute;
+  ${
+    "" /* position: absolute;
   right: 10px;
-  bottom: 5px;
+  bottom: 5px; */
+  }
 `;
 
 const MessageSentByMe = styled(FlexWrapper)`
@@ -25,14 +33,19 @@ const MessageSentByMe = styled(FlexWrapper)`
   justify-content: flex-end;
 `;
 
-const MessageInnerWrapperMe = styled(FlexWrapper)`
+const MessageInnerWrapperMe = styled.div`
   background: #c2d1d9;
   border-radius: 20px 20px 0px 20px;
-  padding: 10px 70px 15px 20px;
+  padding: 10px 20px 15px 20px;
   align-items: center;
-  max-width: 70%;
+  max-width: calc(90% - 40px);
   position: relative;
   margin-right: 5px;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 `;
 
 const MessageSentByOthers = styled(FlexWrapper)`
@@ -42,16 +55,21 @@ const MessageSentByOthers = styled(FlexWrapper)`
   justify-content: flex-start;
 `;
 
-const MessageInnerWrapperOthers = styled(FlexWrapper)`
+const MessageInnerWrapperOthers = styled.div`
   background: #f2f5f7;
   border-radius: 20px 20px 20px 0px;
   padding: 10px 70px 15px 20px;
   border-radius: 20px 20px 20px 0px;
-  padding: 10px 70px 15px 20px;
+  padding: 10px 20px 15px 20px;
   position: relative;
-  max-width: 70%;
+  max-width: calc(90% - 40px);
   align-items: center;
   margin-left: 5px;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 `;
 const ProfileImage = styled.div`
   width: 30px;
@@ -63,7 +81,7 @@ const ProfileImage = styled.div`
   background-repeat: no-repeat;
 `;
 
-function MessageBar({ detail, myRole, generateReadableDate, members, self }) {
+function MessageBar({ detail, myRole, members, self }) {
   const scrollRef = React.useRef();
   const [myProfile, setMyProfile] = React.useState("");
   const [objectProfile, setObjectProfile] = React.useState("");
@@ -86,33 +104,28 @@ function MessageBar({ detail, myRole, generateReadableDate, members, self }) {
   }, [detail]);
 
   function generateReadableTime(time) {
-    const startIndex =
-      new Date(time.toDate()).toLocaleString().indexOf("午") - 1;
+    const startIndex = new Date(time.toDate()).toLocaleString();
     return new Date(time.toDate()).toLocaleString().slice(startIndex, -3);
   }
 
   return detail.sender === myRole ? (
-    <>
-      <SendDate>{generateReadableDate(detail.timestamp)}</SendDate>
-      <MessageSentByMe ref={scrollRef}>
-        <MessageInnerWrapperMe>
-          {detail.content}
-          <SendTime>{generateReadableTime(detail.timestamp)}</SendTime>
-        </MessageInnerWrapperMe>
-        <ProfileImage src={myProfile && myProfile} />
-      </MessageSentByMe>
-    </>
+    <Wrapper>
+      <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
+      <FlexWrapper>
+        <MessageSentByMe ref={scrollRef}>
+          <MessageInnerWrapperMe>{detail.content}</MessageInnerWrapperMe>
+          <ProfileImage src={myProfile && myProfile} />
+        </MessageSentByMe>
+      </FlexWrapper>
+    </Wrapper>
   ) : (
-    <>
-      <SendDate>{generateReadableDate(detail.timestamp)}</SendDate>
+    <Wrapper>
+      <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
       <MessageSentByOthers ref={scrollRef}>
         <ProfileImage src={objectProfile && objectProfile} />
-        <MessageInnerWrapperOthers>
-          {detail.content}
-          <SendTime>{generateReadableTime(detail.timestamp)}</SendTime>
-        </MessageInnerWrapperOthers>
+        <MessageInnerWrapperOthers>{detail.content}</MessageInnerWrapperOthers>
       </MessageSentByOthers>
-    </>
+    </Wrapper>
   );
 }
 

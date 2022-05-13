@@ -65,7 +65,7 @@ export default function GroupNews({ currentUser }) {
 
   return (
     <Wrapper>
-      {openPost && <CreateNewPostModal />}
+      {openPost && <CreateNewPostModal toggle={setOpenPost} />}
       <NewPostButton>
         <Profile src={currentUser.profileImage} />
         <FakeInput
