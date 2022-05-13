@@ -18,16 +18,15 @@ const defaultCardStyle = `
   border: 1px solid #e8e8e8;
 `;
 
-// #c1b18a
-
 const Wrapper = styled(FlexWrapper)`
   ${defaultCardStyle}
   width: 99.5%;
-  height: 200px;
+  height: ${(props) => (props.isOwner ? "180px" : "200px")};
   flex-direction: column;
+  justify-content: ${(props) => (props.isOwner ? "center" : "flex-start")};
   align-items: flex-start;
   border-radius: 10px;
-  padding: 30px 0 10px;
+  padding: ${(props) => (props.isOwner ? "0" : "30px 0 10px")};
   @media screen and (max-width: 995.98px) {
     height: 180px;
   }
@@ -35,7 +34,7 @@ const Wrapper = styled(FlexWrapper)`
 
 const Top = styled(FlexWrapper)`
   width: 90%;
-  height: 55%;
+  height: ${(props) => (props.isOwner ? "100%" : "55%")};
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
@@ -87,7 +86,7 @@ const InviteButton = styled(Button1)`
   margin-left: 10px;
 `;
 
-function TeamCard({ team, roomies, groupMemberDetail }) {
+function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
   const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
   const [openInviteModal, setOpenInviteModal] = React.useState(false);
@@ -133,7 +132,7 @@ function TeamCard({ team, roomies, groupMemberDetail }) {
           toggle={setOpenConfirm}
         />
       )}
-      <Wrapper>
+      <Wrapper isOwner={isOwner}>
         <Top>
           <Title>{team.name}</Title>
           <TeamName onClick={() => setOpenMemberListModal(true)}>
@@ -144,34 +143,38 @@ function TeamCard({ team, roomies, groupMemberDetail }) {
             <div>{team.members.length}人</div>
           </FlexWrapper>
         </Top>
-        <Bottom>
-          {userStatus === 0 || userStatus === 1 ? (
-            <ShowStatus>已加入</ShowStatus>
-          ) : userStatus === 2 ? (
-            <ShowStatus>邀請中</ShowStatus>
-          ) : userStatus === 3 ? (
-            <ShowStatus>待核准</ShowStatus>
-          ) : team.members.length < roomies ? (
-            <JoinButton
-              onClick={() => {
-                setOpenConfirm(true);
-              }}
-            >
-              申請加入
-            </JoinButton>
-          ) : (
-            <ShowStatus>已額滿</ShowStatus>
-          )}
-          {userStatus === 0 && team.members.length < roomies && (
-            <InviteButton
-              onClick={() => {
-                setOpenInviteModal(true);
-              }}
-            >
-              邀請
-            </InviteButton>
-          )}
-        </Bottom>
+        {isOwner ? (
+          ""
+        ) : (
+          <Bottom>
+            {userStatus === 0 || userStatus === 1 ? (
+              <ShowStatus>已加入</ShowStatus>
+            ) : userStatus === 2 ? (
+              <ShowStatus>邀請中</ShowStatus>
+            ) : userStatus === 3 ? (
+              <ShowStatus>待核准</ShowStatus>
+            ) : team.members.length < roomies ? (
+              <JoinButton
+                onClick={() => {
+                  setOpenConfirm(true);
+                }}
+              >
+                申請加入
+              </JoinButton>
+            ) : (
+              <ShowStatus>已額滿</ShowStatus>
+            )}
+            {userStatus === 0 && team.members.length < roomies && (
+              <InviteButton
+                onClick={() => {
+                  setOpenInviteModal(true);
+                }}
+              >
+                邀請
+              </InviteButton>
+            )}
+          </Bottom>
+        )}
       </Wrapper>
     </>
   );

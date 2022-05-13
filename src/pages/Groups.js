@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
+import GroupNews from "../components/groups/GroupNews";
 import api from "../utils/api";
 import {
   Button1,
@@ -26,18 +27,20 @@ import lock from "../images/lock.svg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Footer from "../components/layout/Footer";
+import { mainColor } from "../styles/GlobalStyle";
 
 const Wrapper = styled(FlexWrapper)`
-  width: calc(100% - 48px);
-  max-width: 1200px;
+  width: 100%;
   margin: 20px auto;
   flex-direction: column;
   align-items: flex-start;
   min-height: calc(100vh - 441px);
+  position: relative;
 `;
 
 const BreadCrumb = styled(FlexWrapper)`
-  width: 100%;
+  width: calc(100% - 48px);
+  max-width: 1200px;
   max-width: 1200px;
   margin: 10px auto 20px;
   font-size: 14px;
@@ -67,13 +70,14 @@ const Active = styled.div`
 `;
 
 const Banner = styled.div`
-  width: 100%;
+  width: calc(100% - 48px);
+  max-width: 1200px;
   height: 300px;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
   border-radius: 10px;
   overflow: hidden;
 
@@ -82,16 +86,43 @@ const Banner = styled.div`
   }
 `;
 
-const GroupHeader = styled.div`
+const HeaderBody = styled.div`
   width: 100%;
+`;
+
+const stickyStyle = `
+  box-shadow: 0px 2px 30px rgb(0 0 0 / 6%);
+  background: #fff;
+  position: sticky;
+  top: 80px;
+  z-index: 5;
+`;
+
+const HeaderWrapper = styled.div`
+  width: 100%;
+  ${(props) => (props.sticky ? stickyStyle : "")};
+`;
+
+const GroupHeader = styled.div`
+  width: calc(100% - 48px);
+  max-width: 1200px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin: 0 auto;
+  padding: 15px 24px;
 
   @media screen and (max-width: 995.98px) {
     flex-direction: column;
     align-items: flex-start;
+  }
+`;
+
+const NewTitle = styled(Title)`
+  font-size: ${(props) => (props.sticky ? "16px" : "20px")};
+  margin-bottom: ${(props) => (props.sticky ? "0" : "10px")};
+  @media screen and (max-width: 1279.98px) {
+    font-size: ${(props) => (props.sticky ? "16px" : "18px")};
   }
 `;
 
@@ -178,9 +209,10 @@ const DropdownMenu = styled(Modal)`
 `;
 
 const GroupBody = styled(FlexWrapper)`
-  width: 100%;
+  width: calc(100% - 48px);
+  max-width: 1200px;
+  margin: 0 auto 20px;
   justify-content: space-between;
-  margin-bottom: 20px;
   align-items: flex-start;
   @media screen and (max-width: 995.98px) {
     flex-direction: column;
@@ -192,8 +224,7 @@ const GroupBodyLeft = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   z-index: 2;
-  position: sticky;
-  top: 90px;
+
   @media screen and (max-width: 995.98px) {
     width: 100%;
     position: static;
@@ -253,6 +284,25 @@ const Reminder = styled(FlexWrapper)`
   align-items: center;
 `;
 
+const TabsWrapper = styled(FlexWrapper)`
+  width: calc(100% - 48px);
+  max-width: 1200px;
+  border-bottom: 1px solid #e8e8e8;
+  margin: 0 auto 30px;
+  padding: 0 24px;
+`;
+
+const Tab = styled.div`
+  padding: 10px 15px;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  border-bottom: ${(props) =>
+    props.active ? `3px solid ${mainColor}` : "3px solid transparent"};
+  &:hover {
+    background: #e8e8e8;
+  }
+`;
+
 function Groups() {
   const { id } = useParams();
   const [apartmentData, setApartmentData] = React.useState({});
@@ -271,6 +321,10 @@ function Groups() {
   const [openInviteModal, setOpenInviteModal] = React.useState(false);
   const [saved, setSaved] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
+
+  const anchor = React.useRef(null);
+  const [sticky, setSticky] = React.useState(false);
+  const [tab, setTab] = React.useState("news");
 
   React.useEffect(() => {
     let mounted = true;
@@ -321,6 +375,25 @@ function Groups() {
       mounted = false;
     };
   }, [currentUser, id]);
+
+  React.useEffect(() => {
+    let mounted = true;
+    if (loading) return;
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (!mounted) return;
+      if (entry.intersectionRatio <= 0) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    });
+    intersectionObserver.observe(anchor.current);
+
+    return function cleanup() {
+      mounted = false;
+    };
+  }, [loading]);
 
   function quitTheGroup() {
     const userID = currentUser.uid;
@@ -429,7 +502,7 @@ function Groups() {
         </BreadCrumb>
 
         {loading ? (
-          <div style={{ width: "100%" }}>
+          <div style={{ width: "calc(100% - 48px)", margin: "0 auto" }}>
             <Skeleton
               width="100%"
               height={300}
@@ -438,158 +511,192 @@ function Groups() {
             />{" "}
           </div>
         ) : (
-          <Banner src={apartmentData.coverImage} />
+          <Banner src={apartmentData.coverImage} ref={anchor} />
         )}
 
-        {loading ? (
-          <div style={{ width: "100%" }}>
-            <Skeleton
-              width="100%"
-              height={100}
-              borderRadius={10}
-              style={{ marginBottom: "20px" }}
-            />{" "}
-          </div>
-        ) : (
-          <GroupHeader>
-            <MainSubTitles>
-              <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-                <Title>{apartmentData.title}</Title>
-              </BreadCrumbLink>
-              <SubTitles>
-                <Icon src={room} alt="" />
-                <SubTitle>{`可容納房客：${
-                  apartmentData.roomiesCount ? apartmentData.roomiesCount : ""
-                }人 / 間`}</SubTitle>
-              </SubTitles>
-              <SubTitles>
-                <Icon src={member} alt="" />
-                <SubTitle>{`${members.length}位成員`}</SubTitle>
-              </SubTitles>
-            </MainSubTitles>
-            {isInvited &&
-            !members.find((member) => member.uid === currentUser.uid) ? (
-              <Buttons>
-                <Button1
-                  onClick={() => {
-                    setOpenConfirmJoin(true);
-                  }}
-                >
-                  確認加入
-                </Button1>
-                <RejectButton
-                  onClick={() => {
-                    setOpenConfirmReject(true);
-                  }}
-                >
-                  拒絕
-                </RejectButton>
-              </Buttons>
-            ) : (
-              ""
-            )}
-            {members.find((member) => member.uid === currentUser.uid) ? (
-              <Buttons>
-                <DropdownWrapper onClick={(e) => e.stopPropagation()}>
-                  <HasJoined
-                    onClick={() => {
-                      setDropdown((prev) => !prev);
-                    }}
-                  >
-                    <Icon src={check} alt="" />
-                    已加入
-                    <Dropdown>▾</Dropdown>
-                  </HasJoined>
-                  {dropdown && (
-                    <DropdownMenu>
-                      <ExitButton
+        <HeaderBody>
+          {loading ? (
+            <div style={{ width: "calc(100% - 48px)", margin: "0 auto" }}>
+              <Skeleton
+                width="100%"
+                height={100}
+                borderRadius={10}
+                style={{ marginBottom: "20px" }}
+              />{" "}
+            </div>
+          ) : (
+            <HeaderWrapper sticky={sticky}>
+              <GroupHeader>
+                <MainSubTitles>
+                  <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
+                    <NewTitle sticky={sticky}>{apartmentData.title}</NewTitle>
+                  </BreadCrumbLink>
+                  <SubTitles>
+                    <Icon src={room} alt="" />
+                    <SubTitle>{`可住人數：${
+                      apartmentData.roomiesCount
+                        ? apartmentData.roomiesCount
+                        : ""
+                    }人 / 間`}</SubTitle>
+                  </SubTitles>
+                  <SubTitles>
+                    <Icon src={member} alt="" />
+                    <SubTitle>
+                      {members.length
+                        ? `${members.length}位成員已加入`
+                        : "尚無成員"}
+                    </SubTitle>
+                  </SubTitles>
+                </MainSubTitles>
+                {isInvited &&
+                !members.find((member) => member.uid === currentUser.uid) ? (
+                  <Buttons>
+                    <Button1
+                      onClick={() => {
+                        setOpenConfirmJoin(true);
+                      }}
+                    >
+                      確認加入
+                    </Button1>
+                    <RejectButton
+                      onClick={() => {
+                        setOpenConfirmReject(true);
+                      }}
+                    >
+                      拒絕
+                    </RejectButton>
+                  </Buttons>
+                ) : (
+                  ""
+                )}
+                {members.find((member) => member.uid === currentUser.uid) ? (
+                  <Buttons>
+                    <DropdownWrapper onClick={(e) => e.stopPropagation()}>
+                      <HasJoined
                         onClick={() => {
-                          setOpenConfirmQuit(true);
+                          setDropdown((prev) => !prev);
                         }}
                       >
-                        <Icon src={exit} alt="" />
-                        退出
-                      </ExitButton>
-                    </DropdownMenu>
-                  )}
-                </DropdownWrapper>
-                <InviteButton
+                        <Icon src={check} alt="" />
+                        已加入
+                        <Dropdown>▾</Dropdown>
+                      </HasJoined>
+                      {dropdown && (
+                        <DropdownMenu>
+                          <ExitButton
+                            onClick={() => {
+                              setOpenConfirmQuit(true);
+                            }}
+                          >
+                            <Icon src={exit} alt="" />
+                            退出
+                          </ExitButton>
+                        </DropdownMenu>
+                      )}
+                    </DropdownWrapper>
+                    <InviteButton
+                      onClick={() => {
+                        setOpenInviteModal(true);
+                      }}
+                    >
+                      邀請
+                    </InviteButton>
+                  </Buttons>
+                ) : (
+                  ""
+                )}
+              </GroupHeader>
+            </HeaderWrapper>
+          )}
+
+          <TabsWrapper>
+            <Tab
+              onClick={() => {
+                setTab("news");
+              }}
+              active={tab === "news"}
+            >
+              最新動態
+            </Tab>
+            <Tab
+              onClick={() => {
+                setTab("teams");
+              }}
+              active={tab === "teams"}
+            >
+              組隊看房
+            </Tab>
+          </TabsWrapper>
+
+          {loading ? (
+            <div style={{ width: "100%" }}>
+              <Skeleton
+                width="100%"
+                height={30}
+                count={5}
+                borderRadius={10}
+                style={{ marginBottom: "20px" }}
+              />{" "}
+            </div>
+          ) : apartmentData.owner === currentUser?.uid ||
+            members.find((member) => member.uid === currentUser.uid) ? (
+            <GroupBody>
+              <GroupBodyLeft>
+                {tab === "news" && <GroupNews currentUser={currentUser} />}
+                {tab === "teams" && (
+                  <GroupTeam
+                    roomies={apartmentData.roomiesCount}
+                    aid={apartmentData.id}
+                    members={groupMembers}
+                    groupId={id}
+                    groupMemberDetail={members}
+                    isOwner={apartmentData.owner === currentUser?.uid}
+                  />
+                )}
+              </GroupBodyLeft>
+
+              <GroupBodyRight>
+                <SubtitlesSmall>
+                  <Bold>社團守則</Bold>
+                </SubtitlesSmall>
+                <GroupNotice>
+                  <Bold>租屋流程</Bold>
+                  <ContentList>
+                    <li>加入房源社團，尋找合租的室友</li>
+                    <li>人數到齊後，與屋主預約看房</li>
+                    <li>確認租屋設備、租金、押金等一切細節</li>
+                    <li>與屋主簽訂租屋契約</li>
+                  </ContentList>
+                  <Bold>租屋須知</Bold>
+                  <ContentList>
+                    <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
+                    <li>與屋主預約看房請遵守約定，切勿無故未到</li>
+                    <li>
+                      若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
+                    </li>
+                  </ContentList>
+                </GroupNotice>
+                <GroupMember members={members} />
+              </GroupBodyRight>
+            </GroupBody>
+          ) : (
+            <NotMemberWrapper>
+              <Reminder>
+                <Icon src={lock} alt="" />
+                成為社團成員才能預覽內容喔
+              </Reminder>
+              {!isInvited && (
+                <Button1
                   onClick={() => {
-                    setOpenInviteModal(true);
+                    setOpenJoin(true);
                   }}
                 >
-                  邀請
-                </InviteButton>
-              </Buttons>
-            ) : (
-              ""
-            )}
-          </GroupHeader>
-        )}
-
-        {loading ? (
-          <div style={{ width: "100%" }}>
-            <Skeleton
-              width="100%"
-              height={30}
-              count={5}
-              borderRadius={10}
-              style={{ marginBottom: "20px" }}
-            />{" "}
-          </div>
-        ) : apartmentData.owner === currentUser?.uid ||
-          members.find((member) => member.uid === currentUser.uid) ? (
-          <GroupBody>
-            <GroupBodyLeft>
-              <GroupTeam
-                roomies={apartmentData.roomiesCount}
-                aid={apartmentData.id}
-                members={groupMembers}
-                groupId={id}
-                groupMemberDetail={members}
-              />
-            </GroupBodyLeft>
-            <GroupBodyRight>
-              <SubtitlesSmall>
-                <Bold>社團守則</Bold>
-              </SubtitlesSmall>
-              <GroupNotice>
-                <Bold>租屋流程</Bold>
-                <ContentList>
-                  <li>加入房源社團，尋找合租的室友</li>
-                  <li>人數到齊後，與屋主預約看房</li>
-                  <li>確認租屋設備、租金、押金等一切細節</li>
-                  <li>與屋主簽訂租屋契約</li>
-                </ContentList>
-                <Bold>租屋須知</Bold>
-                <ContentList>
-                  <li>在社團中與他人互動，請保持禮貌，互相尊重</li>
-                  <li>與屋主預約看房請遵守約定，切勿無故未到</li>
-                  <li>
-                    若同時加入多筆房源社團，確認選定一處租屋後，請確實告知其他房源的合租夥伴，讓大家都能順利找到租屋
-                  </li>
-                </ContentList>
-              </GroupNotice>
-              <GroupMember members={members} />
-            </GroupBodyRight>
-          </GroupBody>
-        ) : (
-          <NotMemberWrapper>
-            <Reminder>
-              <Icon src={lock} alt="" />
-              成為社團成員才能預覽內容喔
-            </Reminder>
-            {!isInvited && (
-              <Button1
-                onClick={() => {
-                  setOpenJoin(true);
-                }}
-              >
-                加入
-              </Button1>
-            )}
-          </NotMemberWrapper>
-        )}
+                  加入
+                </Button1>
+              )}
+            </NotMemberWrapper>
+          )}
+        </HeaderBody>
       </Wrapper>
       <Footer />
     </>

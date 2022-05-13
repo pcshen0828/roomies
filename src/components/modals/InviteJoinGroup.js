@@ -130,7 +130,7 @@ export default function InviteJoinGroupModal({
       )}
       <NewModal>
         <Header>
-          <Title>邀請新成員</Title>
+          <Title>邀請新用戶加入此租屋社團</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>

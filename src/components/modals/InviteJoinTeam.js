@@ -113,7 +113,7 @@ export default function InviteJoinTeamModal({
       )}
       <NewModal>
         <Header>
-          <Title>邀請新成員</Title>
+          <Title>邀請新成員加入隊伍</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>

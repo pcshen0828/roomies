@@ -15,9 +15,10 @@ const TeamBlockWrapper = styled(FlexWrapper)`
   width: 100%;
   flex-direction: column;
   overflow-y: auto;
-  height: 900px;
-  @media screen and (max-width: 995.98px) {
+  ${
+    "" /* @media screen and (max-width: 995.98px) {
     height: auto;
+  } */
   }
 `;
 
@@ -41,7 +42,14 @@ const SubtitleSmall = styled.div`
   color: #a1aeb7;
 `;
 
-function GroupTeam({ aid, members, groupId, roomies, groupMemberDetail }) {
+function GroupTeam({
+  aid,
+  members,
+  groupId,
+  roomies,
+  groupMemberDetail,
+  isOwner,
+}) {
   const [teams, setTeams] = React.useState([]);
   React.useEffect(() => {
     let mounted = true;
@@ -72,12 +80,16 @@ function GroupTeam({ aid, members, groupId, roomies, groupMemberDetail }) {
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>
-          <CreateTeam
-            aid={aid}
-            members={members}
-            groupId={groupId}
-            groupMemberDetail={groupMemberDetail}
-          />
+          {isOwner ? (
+            ""
+          ) : (
+            <CreateTeam
+              aid={aid}
+              members={members}
+              groupId={groupId}
+              groupMemberDetail={groupMemberDetail}
+            />
+          )}
           {teams.length
             ? teams.map((team, index) => (
                 <TeamCard
@@ -85,6 +97,7 @@ function GroupTeam({ aid, members, groupId, roomies, groupMemberDetail }) {
                   team={team}
                   roomies={roomies}
                   groupMemberDetail={groupMemberDetail}
+                  isOwner={isOwner}
                 />
               ))
             : ""}

@@ -114,60 +114,70 @@ function GroupMember({ members }) {
           setSaved={setSaved}
         />
       )}
-      <SubtitlesSmall>
-        <TitleSmall>成員</TitleSmall>
-        <SubtitleSmall>・{members.length}人</SubtitleSmall>
-      </SubtitlesSmall>
-      <MemberBlockWrapper>
-        <MembersBlock>
-          <MemberBlockCard>
-            {members
-              .map((user) => user.uid)
-              .includes(currentUser && currentUser.uid) && (
-              <Member key={currentUser && currentUser.uid}>
-                <FlexWrapper>
-                  <MemberLink to={`/users/${currentUser && currentUser.uid}`}>
-                    <MemberImage
-                      src={currentUser && currentUser.profileImage}
-                    />
-                  </MemberLink>
-                  <MemberInfo>
-                    <MemberName>{currentUser && currentUser.alias}</MemberName>
-                    <MemberJobTitle>
-                      {currentUser && currentUser.jobTitle}
-                    </MemberJobTitle>
-                  </MemberInfo>
-                </FlexWrapper>
-              </Member>
-            )}
-            {members
-              .filter(
-                (member) => member.uid !== (currentUser && currentUser.uid)
-              )
-              .map((member, index) => (
-                <Member key={index}>
-                  <FlexWrapper>
-                    <MemberLink to={`/users/${member.uid}`}>
-                      <MemberImage src={member.profileImage} />
-                    </MemberLink>
-                    <MemberInfo>
-                      <MemberName>{member.alias}</MemberName>
-                      <MemberJobTitle>{member.jobTitle}</MemberJobTitle>
-                    </MemberInfo>
-                  </FlexWrapper>
-                  <MessageButton
-                    onClick={() => {
-                      setOpenModal(true);
-                      setObjectId(member.uid);
-                    }}
-                  >
-                    發送訊息
-                  </MessageButton>
-                </Member>
-              ))}
-          </MemberBlockCard>
-        </MembersBlock>
-      </MemberBlockWrapper>
+      {members.length ? (
+        <>
+          <SubtitlesSmall>
+            <TitleSmall>成員</TitleSmall>
+            <SubtitleSmall>・{members.length}人</SubtitleSmall>
+          </SubtitlesSmall>
+          <MemberBlockWrapper>
+            <MembersBlock>
+              <MemberBlockCard>
+                {members
+                  .map((user) => user.uid)
+                  .includes(currentUser && currentUser.uid) && (
+                  <Member key={currentUser && currentUser.uid}>
+                    <FlexWrapper>
+                      <MemberLink
+                        to={`/users/${currentUser && currentUser.uid}`}
+                      >
+                        <MemberImage
+                          src={currentUser && currentUser.profileImage}
+                        />
+                      </MemberLink>
+                      <MemberInfo>
+                        <MemberName>
+                          {currentUser && currentUser.alias}
+                        </MemberName>
+                        <MemberJobTitle>
+                          {currentUser && currentUser.jobTitle}
+                        </MemberJobTitle>
+                      </MemberInfo>
+                    </FlexWrapper>
+                  </Member>
+                )}
+                {members
+                  .filter(
+                    (member) => member.uid !== (currentUser && currentUser.uid)
+                  )
+                  .map((member, index) => (
+                    <Member key={index}>
+                      <FlexWrapper>
+                        <MemberLink to={`/users/${member.uid}`}>
+                          <MemberImage src={member.profileImage} />
+                        </MemberLink>
+                        <MemberInfo>
+                          <MemberName>{member.alias}</MemberName>
+                          <MemberJobTitle>{member.jobTitle}</MemberJobTitle>
+                        </MemberInfo>
+                      </FlexWrapper>
+                      <MessageButton
+                        onClick={() => {
+                          setOpenModal(true);
+                          setObjectId(member.uid);
+                        }}
+                      >
+                        發送訊息
+                      </MessageButton>
+                    </Member>
+                  ))}
+              </MemberBlockCard>
+            </MembersBlock>
+          </MemberBlockWrapper>
+        </>
+      ) : (
+        ""
+      )}
     </Wrapper>
   );
 }

@@ -18,8 +18,6 @@ import loc from "../../images/loc.svg";
 import calendar from "../../images/calendar.svg";
 import members from "../../images/members.svg";
 import rent from "../../images/rent.svg";
-import heart from "../../images/heart.svg";
-import heartFill from "../../images/heartFill.svg";
 import room from "../../images/room.svg";
 import square from "../../images/square.svg";
 
@@ -149,16 +147,9 @@ const ActionArea = styled(FlexWrapper)`
   margin-top: 20px;
 `;
 
-const HeartButton = styled(FlexWrapper)`
+const MembersCount = styled(FlexWrapper)`
   align-itmes: center;
   margin-left: 20px;
-`;
-
-const HeartIcon = styled.img`
-  width: 28px;
-  height: 30px;
-  margin-right: 6px;
-  cursor: pointer;
 `;
 
 const Body = styled(FlexWrapper)`
@@ -214,13 +205,13 @@ function ApartmentDetail({ details, loading }) {
   const { id } = useParams();
   const [isActive, setIsActive] = React.useState(false);
   const [hasJoined, setHasJoined] = React.useState(false);
-  const [hasCollected, setHasCollected] = React.useState(false);
   const [groupId, setGroupId] = React.useState();
   const [hasNotSignIn, setHasNotSignIn] = React.useState(false);
   const [conditions, setConditions] = React.useState([]);
   const [facilities, setFacilities] = React.useState([]);
   const [furnitures, setFurnitures] = React.useState([]);
   const [otherInfo, setOtherInfo] = React.useState([]);
+  const [membersCount, setMembersCount] = React.useState("");
 
   const queryList = [
     { name: "conditions", method: (res) => setConditions(res) },
@@ -248,13 +239,13 @@ function ApartmentDetail({ details, loading }) {
           if (res.length) {
             setGroupId(res[0].id);
             setHasJoined(res[0].members?.includes(currentUser.uid));
+            setMembersCount(res[0].members.length);
           }
         });
     }
 
     if (currentUser) {
       checkHasJoinedGroupOrNot();
-      setHasCollected(currentUser.collectionList.includes(id));
     }
 
     return function cleanup() {
@@ -268,22 +259,6 @@ function ApartmentDetail({ details, loading }) {
       return;
     }
     setIsActive(true);
-  }
-
-  function cancelCollect() {
-    api.updateDocData("users", currentUser.uid, {
-      collectionList: currentUser.collectionList.filter((item) => item !== id),
-    });
-  }
-
-  function addToCollectionList() {
-    if (!currentUser) {
-      setHasNotSignIn(true);
-      return;
-    }
-    api.updateDocData("users", currentUser.uid, {
-      collectionList: [...currentUser.collectionList, id],
-    });
   }
 
   function getImageIcon(variable) {
@@ -395,6 +370,7 @@ function ApartmentDetail({ details, loading }) {
                   details[0].owner === currentUser.uid ? (
                   <ActionArea>
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
+                    <MembersCount>{membersCount}人已加入</MembersCount>
                   </ActionArea>
                 ) : currentUser &&
                   currentUser.role === 2 &&
@@ -409,25 +385,7 @@ function ApartmentDetail({ details, loading }) {
                     ) : (
                       <Button1 onClick={openConfirmModal}>加入租屋</Button1>
                     )}
-                    {hasCollected ? (
-                      <HeartButton>
-                        <HeartIcon
-                          alt=""
-                          src={heartFill}
-                          onClick={cancelCollect}
-                        />
-                        已收藏
-                      </HeartButton>
-                    ) : (
-                      <HeartButton>
-                        <HeartIcon
-                          alt=""
-                          src={heart}
-                          onClick={addToCollectionList}
-                        />
-                        收藏房源
-                      </HeartButton>
-                    )}
+                    <MembersCount>{membersCount}人已加入</MembersCount>
                   </ActionArea>
                 )}
               </DetailInfo>
