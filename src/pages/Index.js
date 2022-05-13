@@ -266,6 +266,8 @@ function Index() {
       setShow(true);
     }, 2000);
 
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     return function cleanup() {
       clearTimeout(timeoutId);
     };
@@ -282,7 +284,12 @@ function Index() {
             <ActionButtons show={show}>{RenderCTAButton(1)}</ActionButtons>
             <DownWrapper
               onClick={() => {
-                scrollRef.current.scrollIntoView({ behavior: "smooth" });
+                const scrollHeight =
+                  scrollRef.current.getBoundingClientRect().top;
+                window.scrollTo({
+                  top: scrollHeight - 100,
+                  behavior: "smooth",
+                });
               }}
             >
               <Down src={down} />

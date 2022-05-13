@@ -8,6 +8,11 @@ const StyldSearchWrapper = styled(SearchWrapper)`
   margin: 0 auto;
 `;
 
+const NewButton = styled(SearchButton)`
+  top: 5px;
+  right: 18px;
+`;
+
 function SearchBox({
   apartments,
   setApartments,
@@ -40,7 +45,7 @@ function SearchBox({
           searchKeyWords(e.target.value);
         }}
       />
-      <SearchButton src={search} />
+      <NewButton src={search} />
     </StyldSearchWrapper>
   );
 }

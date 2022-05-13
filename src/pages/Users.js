@@ -28,6 +28,8 @@ function User() {
 
   React.useEffect(() => {
     let mounted = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     api.getDataWithSingleQuery("users", "uid", "==", id).then((res) => {
       console.log(res);
       if (!res.length) return;

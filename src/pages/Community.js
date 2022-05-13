@@ -51,6 +51,8 @@ function Community() {
   const [searching, setSearching] = React.useState(false);
 
   React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     let mounted = true;
     api.getAllDocsFromCollection("hobbies").then((res) => {
       if (!mounted) return;

@@ -36,7 +36,7 @@ const Cards = styled.div`
 
 const Anchor = styled.div`
   width: 100%;
-  height: 40px;
+  height: ${(props) => (props.role === "filter" ? "20px" : "40px")};
 `;
 
 function Apartments() {
@@ -105,6 +105,8 @@ function Apartments() {
   }, []);
 
   React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.intersectionRatio <= 0) return;
@@ -131,7 +133,7 @@ function Apartments() {
           queryList={queryList}
           anchor={filterAnchor}
         />
-        <Anchor filter="true" ref={filterAnchor}></Anchor>
+        <Anchor role="filter" ref={filterAnchor}></Anchor>
         {loading ? (
           <Cards>
             {Array.from(Array(6).keys()).map((loader, index) => (

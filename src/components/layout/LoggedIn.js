@@ -36,6 +36,7 @@ const Icon = styled.img`
   width: ${(props) => (props.name === "more" ? "8px" : "30px")};
   height: ${(props) => (props.name === "more" ? "8px" : "30px")};
   margin-left: ${(props) => (props.name === "more" ? "5px" : "20px")};
+  margin-top: ${(props) => (props.name === "more" ? "3px" : "0px")};
   padding-bottom: ${(props) => (props.name === "more" ? "2px" : "0")};
   cursor: pointer;
 `;

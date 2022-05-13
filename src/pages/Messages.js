@@ -97,6 +97,8 @@ function Messages() {
 
   React.useEffect(() => {
     let mounted = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
     if (loading) {
       console.log("loading");
     }

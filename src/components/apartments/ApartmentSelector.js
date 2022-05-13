@@ -24,7 +24,7 @@ const Toggler = styled.div`
   width: 100%;
   height: 30px;
   position: sticky;
-  top: 80px;
+  top: 79.5px;
   padding: 20px 0;
   left: 0;
   z-index: 10;
@@ -48,7 +48,7 @@ const Container = styled(FlexWrapper)`
   width: 100%;
   position: sticky;
   top: 80px;
-  padding: 20px 0;
+  padding: 20px 0 10px;
   left: 0;
   z-index: 10;
   background: #fff;

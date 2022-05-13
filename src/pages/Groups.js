@@ -274,6 +274,7 @@ function Groups() {
 
   React.useEffect(() => {
     let mounted = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     const query1 = api.createQuery("groups", "id", "==", id);
     Firebase.onSnapshot(query1, (snapshot) => {

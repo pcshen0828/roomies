@@ -25,6 +25,10 @@ function Profile() {
   const { currentUser } = useAuth();
   const [user, loading, error] = useAuthState(auth);
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   function Render() {
     if (loading) {
       return (

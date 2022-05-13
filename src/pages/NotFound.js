@@ -13,6 +13,9 @@ const Reminder = styled.div`
 `;
 
 function PageNotFound() {
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
   return (
     <>
       <NewWrapper>
