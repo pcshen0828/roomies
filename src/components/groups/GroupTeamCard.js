@@ -4,10 +4,12 @@ import CheckTeamMembersModal from "../modals/CheckTeamMembers";
 import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
-import { Button1, FlexWrapper, Title } from "../common/Components";
+import { Button1, ExitButton, FlexWrapper, Title } from "../common/Components";
 import member from "../../images/members.svg";
+import exit from "../../images/exit.svg";
 import InviteJoinTeamModal from "../modals/InviteJoinTeam";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const defaultCardStyle = `
   border-radius: 10px;
@@ -69,10 +71,11 @@ const JoinButton = styled(Button1)`
 
 const ShowStatus = styled(Button1)`
   width: 100px;
-  height: 35px;
-  background: #dadada;
+  height: 38px;
+  background: #e8e8e8;
   color: #424b5a;
-  cursor: default;
+  cursor: ${(props) => (props.pointer ? "pointer" : "default")};
+  position: relative;
 
   &:hover {
     background: #dadada;
@@ -86,12 +89,43 @@ const InviteButton = styled(Button1)`
   margin-left: 10px;
 `;
 
+const QuitTeamModal = styled(FlexWrapper)`
+  width: 200px;
+  padding: 10px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+  position: absolute;
+  top: 40px;
+  left: 0;
+`;
+
+const Dropdown = styled.span`
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 3px;
+  font-size: 20px;
+  padding-bottom: 3px;
+`;
+
+const DropDownWrapper = styled(FlexWrapper)`
+  justify-content: center;
+`;
+
 function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
   const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
   const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
   const [openInviteModal, setOpenInviteModal] = React.useState(false);
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const { currentUser } = useAuth();
+
+  const [openQuit, setOpenQuit] = React.useState(false);
+  const [openQuitConfirm, setOpenQuitConfirm] = React.useState(false);
+  const [quitted, setQuitted] = React.useState(false);
 
   async function joinTeam() {
     api.updateDocData("teams", team.id, {
@@ -107,8 +141,23 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
   );
   const userStatus = ifUserincludes ? ifUserincludes.status : 4;
 
+  function quitTeam() {
+    api.updateDocData("teams", team.id, {
+      members: [
+        ...team.members.filter((member) => member.uid !== currentUser.uid),
+      ],
+      userIDs: [...team.userIDs.filter((uid) => uid !== currentUser.uid)],
+    });
+    const host = team.members.find((member) => member.status === 0).uid;
+    api.createNoticeByType(currentUser.uid, host, 11);
+    setQuitted(true);
+  }
+
   return (
     <>
+      {quitted && (
+        <SuccessfullySavedModal message="成功退出" toggle={setQuitted} />
+      )}
       {openAppliedModal && <ApplyJoinModal toggle={setOpenAppliedModal} />}
       {openMemberListModal && (
         <CheckTeamMembersModal
@@ -132,7 +181,19 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
           toggle={setOpenConfirm}
         />
       )}
-      <Wrapper isOwner={isOwner}>
+      {openQuitConfirm && (
+        <ConfirmBeforeActionModal
+          message="確認退出群組？"
+          action={quitTeam}
+          toggle={setOpenQuitConfirm}
+        />
+      )}
+      <Wrapper
+        isOwner={isOwner}
+        onClick={() => {
+          setOpenQuit(false);
+        }}
+      >
         <Top>
           <Title>{team.name}</Title>
           <TeamName onClick={() => setOpenMemberListModal(true)}>
@@ -148,7 +209,31 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
         ) : (
           <Bottom>
             {userStatus === 0 || userStatus === 1 ? (
-              <ShowStatus>已加入</ShowStatus>
+              <ShowStatus
+                pointer={userStatus === 1}
+                onClick={(e) => {
+                  if (userStatus === 0) return;
+                  e.stopPropagation();
+                  setOpenQuit(true);
+                }}
+              >
+                <DropDownWrapper>
+                  已加入
+                  {userStatus === 1 && <Dropdown>▾</Dropdown>}
+                </DropDownWrapper>
+                {userStatus === 1 && openQuit && (
+                  <QuitTeamModal>
+                    <ExitButton
+                      onClick={() => {
+                        setOpenQuitConfirm(true);
+                      }}
+                    >
+                      <Icon src={exit} />
+                      退出
+                    </ExitButton>
+                  </QuitTeamModal>
+                )}
+              </ShowStatus>
             ) : userStatus === 2 ? (
               <ShowStatus>邀請中</ShowStatus>
             ) : userStatus === 3 ? (

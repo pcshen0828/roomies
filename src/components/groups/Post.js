@@ -11,6 +11,11 @@ import { calcTimeGap } from "../../utils/calculate";
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import ImagesDisplayer from "./ImagesDisplayer";
 import more from "../../images/dots.svg";
+import { Link } from "react-router-dom";
+import edit from "../../images/edit.svg";
+import drop from "../../images/delete.svg";
+import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
+import { Firebase } from "../../utils/firebase";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -70,6 +75,7 @@ const Content = styled.div`
   width: calc(100% - 40px);
   padding: 0 0 20px;
   line-height: 150%;
+  white-space: pre-line;
 `;
 
 const MoreContent = styled.span`
@@ -175,9 +181,8 @@ const More = styled.img`
   width: 20px;
 `;
 
-const MoreModal = styled(FlexWrapper)`
+const MoreModal = styled(FlexColumn)`
   width: 200px;
-  height: 100px;
   background: #fff;
   border: 1px solid #e8e8e8;
   padding: 10px;
@@ -209,17 +214,26 @@ const EditButton = styled(FlexWrapper)`
   }
 `;
 
+const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+`;
+
 const tester =
   "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/posts%2Fea101c0e-c283-4d43-9927-28fe27912e46%2Fgood.png?alt=media&token=8a6792c0-ded4-4f1f-abda-6a932a108b04";
 const defaultImageUrl =
   "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/apartments%2Fdefault%2Fimgplaceholder.png?alt=media&token=603bce20-3d5b-489f-9ffa-98ee2a3f8aba";
 
-export default function Post({ post, currentUser }) {
+export default function Post({ post, currentUser, setDeleted }) {
   const [creatorInfo, setCreatorInfo] = React.useState({});
   const [showMore, setShowMore] = React.useState(false);
   const [showContent, setShowContent] = React.useState(false);
   const [showImages, setShowImages] = React.useState(false);
   const defaultContentLength = 100;
+
+  const [deleteID, setDeleteID] = React.useState("");
+  const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -229,17 +243,59 @@ export default function Post({ post, currentUser }) {
       });
   }, []);
 
+  function editPost() {}
+
+  function deletePost() {
+    Firebase.deleteDoc(Firebase.doc(Firebase.db, "posts", deleteID));
+    if (post.images.length) {
+      let promises = [];
+      post.images.forEach((image) => {
+        const desertRef = Firebase.ref(
+          Firebase.storage,
+          `posts/${deleteID}/${image.name}`
+        );
+        promises.push(
+          Firebase.deleteObject(desertRef)
+            .then(() => {
+              console.log("deleted");
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        );
+      });
+      Promise.all(promises).then((res) => {
+        setDeleted(true);
+        return;
+      });
+    }
+    setDeleted(true);
+  }
+
   return (
     <Wrapper
       onClick={() => {
         setShowMore(false);
       }}
     >
+      {openDeleteConfirm && (
+        <ConfirmBeforeActionModal
+          message="確認刪除？"
+          toggle={setOpenDeleteConfirm}
+          action={deletePost}
+        />
+      )}
       {showImages && (
         <ImagesDisplayer images={post.images} toggle={setShowImages} />
       )}
       <TopInfo>
-        <NewProfile src={creatorInfo.profileImage} />
+        {creatorInfo.role === 1 ? (
+          <Link to={`/users/${creatorInfo.uid}`}>
+            <NewProfile src={creatorInfo.profileImage} />
+          </Link>
+        ) : (
+          <NewProfile src={creatorInfo.profileImage} />
+        )}
         <NameTime>
           <Bold>{creatorInfo.alias}</Bold>
           <SubtitleSmall>
@@ -260,7 +316,19 @@ export default function Post({ post, currentUser }) {
             <More src={more} />
             {
               <MoreModal active={showMore} onClick={(e) => e.stopPropagation()}>
-                <EditButton>編輯貼文</EditButton>
+                <EditButton onClick={editPost}>
+                  <Icon src={edit} />
+                  編輯貼文
+                </EditButton>
+                <EditButton
+                  onClick={() => {
+                    setDeleteID(post.id);
+                    setOpenDeleteConfirm(true);
+                  }}
+                >
+                  <Icon src={drop} />
+                  刪除貼文
+                </EditButton>
               </MoreModal>
             }
           </MoreButton>
@@ -269,7 +337,7 @@ export default function Post({ post, currentUser }) {
 
       <Content>
         {showContent
-          ? post.content
+          ? `${post.content}`
           : post.content.slice(0, defaultContentLength)}
         {!showContent && post.content.length > defaultContentLength && (
           <MoreContent>

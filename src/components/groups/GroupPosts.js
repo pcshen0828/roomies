@@ -5,6 +5,7 @@ import CreateNewPostModal from "../modals/CreateNewPost";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import Post from "./Post";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -28,7 +29,7 @@ const SubtitleSmall = styled.div`
 
 const NewPostButton = styled(FlexWrapper)`
   width: calc(100% - 40px);
-  height: 100px;
+  height: 85px;
   border-radius: 10px;
   border: 1px solid #e8e8e8;
   background: #fff;
@@ -67,7 +68,12 @@ const Posts = styled(FlexColumn)`
   width: 100%;
 `;
 
-export default function GroupPosts({ currentUser, groupID, setPosted }) {
+export default function GroupPosts({
+  currentUser,
+  groupID,
+  setPosted,
+  setDeleted,
+}) {
   const [openPost, setOpenPost] = React.useState(false);
   const [posts, setPosts] = React.useState([]);
 
@@ -99,6 +105,7 @@ export default function GroupPosts({ currentUser, groupID, setPosted }) {
           setPosted={setPosted}
         />
       )}
+
       <NewPostButton>
         <Profile src={currentUser.profileImage} />
         <FakeInput
@@ -109,14 +116,37 @@ export default function GroupPosts({ currentUser, groupID, setPosted }) {
           發佈貼文
         </FakeInput>
       </NewPostButton>
+
+      <SubtitlesSmall>
+        <TitleSmall>置頂貼文</TitleSmall>
+      </SubtitlesSmall>
+      <Posts>
+        {posts.length && posts.find((post) => post.isOnTop) ? (
+          <Post
+            key={posts.find((post) => post.isOnTop).id}
+            post={posts.find((post) => post.isOnTop)}
+            currentUser={currentUser}
+            setDeleted={setDeleted}
+          />
+        ) : (
+          "尚無貼文"
+        )}
+      </Posts>
       <SubtitlesSmall>
         <TitleSmall>所有貼文</TitleSmall>
       </SubtitlesSmall>
       <Posts>
-        {posts.length
-          ? posts.map((post) => (
-              <Post key={post.id} post={post} currentUser={currentUser} />
-            ))
+        {posts.filter((post) => !post.isOnTop).length
+          ? posts
+              .filter((post) => !post.isOnTop)
+              .map((post) => (
+                <Post
+                  key={post.id}
+                  post={post}
+                  currentUser={currentUser}
+                  setDeleted={setDeleted}
+                />
+              ))
           : "尚無貼文"}
       </Posts>
     </Wrapper>

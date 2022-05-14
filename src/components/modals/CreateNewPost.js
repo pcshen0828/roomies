@@ -10,13 +10,7 @@ import {
   Button,
 } from "./ModalElements";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import {
-  Bold,
-  Error,
-  FlexColumn,
-  FlexWrapper,
-  Textarea,
-} from "../common/Components";
+import { Bold, Error, FlexWrapper, Textarea } from "../common/Components";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import { v4 as uuidv4 } from "uuid";
@@ -61,13 +55,10 @@ const ContentBlock = styled.div`
 const NewTextarea = styled(Textarea)`
   margin: 10px 0;
   width: calc(100% - 20px);
-  height: 120px;
+  height: 140px;
   overflow-y: auto;
   font-size: 16px;
-  border: 1px solid transparent;
-  &:focus {
-    border: 1px solid transparent;
-  }
+  border: none;
 `;
 
 const OptionBlock = styled.label`
@@ -266,7 +257,7 @@ export default function CreateNewPostModal({
               placeholder="建立公開貼文......"
               value={content}
               onChange={(e) => {
-                setContent(e.target.value);
+                setContent(`${e.target.value}`);
               }}
             ></NewTextarea>
             {images.length ? (

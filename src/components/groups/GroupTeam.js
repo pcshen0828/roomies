@@ -9,17 +9,12 @@ const TeamsBlock = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: auto;
 `;
 
 const TeamBlockWrapper = styled(FlexWrapper)`
   width: 100%;
   flex-direction: column;
-  overflow-y: auto;
-  ${
-    "" /* @media screen and (max-width: 995.98px) {
-    height: auto;
-  } */
-  }
 `;
 
 const TeamBlockCards = styled(FlexWrapper)`

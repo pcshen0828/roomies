@@ -331,6 +331,7 @@ function Groups() {
   const [sticky, setSticky] = React.useState(false);
   const [tab, setTab] = React.useState("news");
   const [posted, setPosted] = React.useState(false);
+  const [deleted, setDeleted] = React.useState(false);
 
   React.useEffect(() => {
     let mounted = true;
@@ -452,6 +453,9 @@ function Groups() {
             toggle={setPosted}
             message="貼文已發佈！"
           />
+        )}
+        {deleted && (
+          <SuccessfullySavedModal message="貼文已刪除！" toggle={setDeleted} />
         )}
         {openInviteModal && (
           <InviteJoinGroupModal
@@ -669,6 +673,7 @@ function Groups() {
                     currentUser={currentUser}
                     groupID={id}
                     setPosted={setPosted}
+                    setDeleted={setDeleted}
                   />
                 )}
                 {tab === "teams" && (
