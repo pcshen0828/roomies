@@ -10,10 +10,15 @@ import {
   Button,
 } from "./ModalElements";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import { Bold, Error, FlexWrapper, Textarea } from "../common/Components";
+import {
+  Bold,
+  Error,
+  FlexWrapper,
+  LoadingButton,
+  Textarea,
+} from "../common/Components";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
-import { v4 as uuidv4 } from "uuid";
 import { subColor } from "../../styles/GlobalStyle";
 
 const NewModal = styled(Modal)`
@@ -58,7 +63,6 @@ const NewTextarea = styled(Textarea)`
   height: 140px;
   overflow-y: auto;
   font-size: 16px;
-  border: none;
   border: 1px solid transparent;
   &:hover,
   &:focus {
@@ -144,77 +148,90 @@ const Image = styled.div`
   width: 100%;
   height: 100%;
   margin-right: 10px;
+  flex-shrink: 0;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
-const newPostID = uuidv4();
-
-export default function CreateNewPostModal({
-  toggle,
+export default function EditPostModal({
   currentUser,
-  groupID,
-  setPosted,
+  toggle,
+  post,
+  setUpdated,
 }) {
   const [openConfirm, setOpenConfirm] = React.useState(false);
   const [postConfirm, setPostConfirm] = React.useState(false);
-  const [content, setContent] = React.useState("");
-  const [images, setImages] = React.useState([]);
+  const [content, setContent] = React.useState(post.content);
+  const [images, setImages] = React.useState(post.images);
   const newImage = React.useRef(null);
   const [error, setError] = React.useState("");
 
-  function uploadImageFile(e) {
+  const [newFiles, setNewFiles] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
+
+  function displayFileImage(e) {
     const file = e.target.files[0];
     if (!file) return;
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案過大，請重新上傳");
       return;
     }
-    api
-      .uploadFileAndGetDownloadUrl(`posts/${newPostID}/${file.name}`, file)
-      .then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          setImages((prev) => [...prev, { name: file.name, url: downloadURL }]);
-        });
-      })
-      .then(() => {
-        setError("");
-        newImage.current = null;
-      });
+    setNewFiles((prev) => [...prev, file]);
+    const newUrl = URL.createObjectURL(file);
+    setImages((prev) => [...prev, { name: file.name, url: newUrl }]);
+    setError("");
+    newImage.current = null;
   }
 
-  function deleteImage(indexToDelete) {
-    setImages((prev) => prev.filter((image, index) => index !== indexToDelete));
-    const desertRef = Firebase.ref(
-      Firebase.storage,
-      `posts/${newPostID}/${images[indexToDelete].name}`
-    );
-    Firebase.deleteObject(desertRef)
-      .then(() => {
-        console.log("deleted");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  function hideImage(indexToHide, fileName) {
+    setImages((prev) => prev.filter((image, index) => index !== indexToHide));
+    setNewFiles((prev) => [...prev.filter((file) => file.name !== fileName)]);
   }
 
-  function createNewPost() {
+  function updatePost() {
+    setLoading(true);
     const time = Firebase.Timestamp.fromDate(new Date());
-    const newPostDocRef = api.createNewDocRefWithDocID("posts", newPostID);
-    api.setNewDoc(newPostDocRef, {
-      id: newPostID,
-      creator: currentUser.uid,
+
+    const names = images.map((image) => image.name);
+    post.images
+      .filter((image) => !names.includes(image.name))
+      .forEach((image) => {
+        const desertRef = Firebase.ref(
+          Firebase.storage,
+          `posts/${post.id}/${image.name}`
+        );
+        Firebase.deleteObject(desertRef)
+          .then(() => {
+            console.log("deleted");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+
+    newFiles.forEach((file) => {
+      api
+        .uploadFileAndGetDownloadUrl(`posts/${post.id}/${file.name}`, file)
+        .then((snapshot) => {
+          Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
+            setImages((prev) => [
+              ...prev.filter((image) => image.name !== file.name),
+              { name: file.name, url: downloadURL },
+            ]);
+          });
+        });
+    });
+
+    api.updateDocData("posts", post.id, {
       content,
       images,
-      groupID,
-      createTime: time,
       updateTime: time,
-      isOnTop: false,
     });
+    setLoading(false);
+    setUpdated(true);
     toggle(false);
-    setPosted(true);
   }
 
   return (
@@ -222,11 +239,8 @@ export default function CreateNewPostModal({
       {openConfirm && (
         <ConfirmBeforeActionModal
           toggle={setOpenConfirm}
-          message="尚未發佈，確認離開？"
+          message="尚未儲存，確認離開？"
           action={() => {
-            images.forEach((image, index) => {
-              deleteImage(index);
-            });
             toggle(false);
           }}
         />
@@ -234,9 +248,9 @@ export default function CreateNewPostModal({
       {postConfirm && (
         <ConfirmBeforeActionModal
           toggle={setPostConfirm}
-          message="確認發佈？"
+          message="確認更新？"
           action={() => {
-            createNewPost();
+            updatePost();
           }}
         />
       )}
@@ -269,7 +283,7 @@ export default function CreateNewPostModal({
                 {images.map((image, index) => (
                   <ImageContainer key={index}>
                     <Image src={image.url} />
-                    <DeleteButton onClick={() => deleteImage(index)}>
+                    <DeleteButton onClick={() => hideImage(index, image.name)}>
                       ×
                     </DeleteButton>
                   </ImageContainer>
@@ -289,21 +303,25 @@ export default function CreateNewPostModal({
             accept="image/*"
             ref={newImage}
             onChange={(event) => {
-              uploadImageFile(event);
+              displayFileImage(event);
             }}
           />
         </NewBody>
         {error && <Error>{error}</Error>}
         {content ? (
-          <PostButton
-            onClick={() => {
-              setPostConfirm(true);
-            }}
-          >
-            發佈
-          </PostButton>
+          loading ? (
+            <LoadingButton>更新中</LoadingButton>
+          ) : (
+            <PostButton
+              onClick={() => {
+                setPostConfirm(true);
+              }}
+            >
+              更新
+            </PostButton>
+          )
         ) : (
-          <PendingButton>發佈</PendingButton>
+          <PendingButton>更新</PendingButton>
         )}
       </NewModal>
     </Overlay>

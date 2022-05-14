@@ -236,9 +236,15 @@ const GroupBodyRight = styled(FlexWrapper)`
   width: 40%;
   flex-direction: column;
   align-items: flex-start;
+  position: sticky;
+  top: 90px;
+  right: 0;
+  overflow-y: auto;
   @media screen and (max-width: 995.98px) {
     width: 100%;
     order: 1;
+    position: static;
+    overflow-y: visible;
     display: ${(props) => (props.active ? "block" : "none")};
   }
 `;
@@ -331,6 +337,7 @@ function Groups() {
   const [sticky, setSticky] = React.useState(false);
   const [tab, setTab] = React.useState("news");
   const [posted, setPosted] = React.useState(false);
+  const [updated, setUpdated] = React.useState(false);
   const [deleted, setDeleted] = React.useState(false);
 
   React.useEffect(() => {
@@ -452,6 +459,13 @@ function Groups() {
             out={false}
             toggle={setPosted}
             message="貼文已發佈！"
+          />
+        )}
+        {updated && (
+          <SuccessfullySavedModal
+            out={false}
+            toggle={setUpdated}
+            message="貼文已更新！"
           />
         )}
         {deleted && (
@@ -673,6 +687,7 @@ function Groups() {
                     currentUser={currentUser}
                     groupID={id}
                     setPosted={setPosted}
+                    setUpdated={setUpdated}
                     setDeleted={setDeleted}
                   />
                 )}

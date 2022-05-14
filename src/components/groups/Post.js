@@ -16,6 +16,7 @@ import edit from "../../images/edit.svg";
 import drop from "../../images/delete.svg";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import { Firebase } from "../../utils/firebase";
+import EditPostModal from "../modals/EditPost";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -225,15 +226,15 @@ const tester =
 const defaultImageUrl =
   "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/apartments%2Fdefault%2Fimgplaceholder.png?alt=media&token=603bce20-3d5b-489f-9ffa-98ee2a3f8aba";
 
-export default function Post({ post, currentUser, setDeleted }) {
+export default function Post({ post, currentUser, setUpdated, setDeleted }) {
   const [creatorInfo, setCreatorInfo] = React.useState({});
   const [showMore, setShowMore] = React.useState(false);
   const [showContent, setShowContent] = React.useState(false);
   const [showImages, setShowImages] = React.useState(false);
   const defaultContentLength = 100;
 
-  const [deleteID, setDeleteID] = React.useState("");
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   React.useEffect(() => {
     api
@@ -243,16 +244,14 @@ export default function Post({ post, currentUser, setDeleted }) {
       });
   }, []);
 
-  function editPost() {}
-
   function deletePost() {
-    Firebase.deleteDoc(Firebase.doc(Firebase.db, "posts", deleteID));
+    Firebase.deleteDoc(Firebase.doc(Firebase.db, "posts", post.id));
     if (post.images.length) {
       let promises = [];
       post.images.forEach((image) => {
         const desertRef = Firebase.ref(
           Firebase.storage,
-          `posts/${deleteID}/${image.name}`
+          `posts/${post.id}/${image.name}`
         );
         promises.push(
           Firebase.deleteObject(desertRef)
@@ -278,6 +277,14 @@ export default function Post({ post, currentUser, setDeleted }) {
         setShowMore(false);
       }}
     >
+      {openEdit && (
+        <EditPostModal
+          post={post}
+          toggle={setOpenEdit}
+          currentUser={currentUser}
+          setUpdated={setUpdated}
+        />
+      )}
       {openDeleteConfirm && (
         <ConfirmBeforeActionModal
           message="確認刪除？"
@@ -316,13 +323,16 @@ export default function Post({ post, currentUser, setDeleted }) {
             <More src={more} />
             {
               <MoreModal active={showMore} onClick={(e) => e.stopPropagation()}>
-                <EditButton onClick={editPost}>
+                <EditButton
+                  onClick={() => {
+                    setOpenEdit(true);
+                  }}
+                >
                   <Icon src={edit} />
                   編輯貼文
                 </EditButton>
                 <EditButton
                   onClick={() => {
-                    setDeleteID(post.id);
                     setOpenDeleteConfirm(true);
                   }}
                 >

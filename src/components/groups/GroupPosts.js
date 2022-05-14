@@ -72,6 +72,7 @@ export default function GroupPosts({
   currentUser,
   groupID,
   setPosted,
+  setUpdated,
   setDeleted,
 }) {
   const [openPost, setOpenPost] = React.useState(false);
@@ -144,6 +145,7 @@ export default function GroupPosts({
                   key={post.id}
                   post={post}
                   currentUser={currentUser}
+                  setUpdated={setUpdated}
                   setDeleted={setDeleted}
                 />
               ))
