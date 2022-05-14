@@ -11,6 +11,8 @@ import {
   SmallText,
   Status,
   FlexWrap,
+  PagingList,
+  PagingItem,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -193,6 +195,9 @@ function GroupAndTeam() {
     invitation: {},
   });
 
+  const [paging, setPaging] = React.useState(1);
+  const itemsPerPage = 6;
+
   React.useEffect(() => {
     const query1 = api.createQuery(
       "groups",
@@ -310,6 +315,14 @@ function GroupAndTeam() {
       : "";
   }
 
+  function createPaging(num) {
+    return Array.from(Array(num).keys());
+  }
+
+  function getCurrentTab() {
+    return location.pathname === "/profile/groupteam/groups" ? groups : teams;
+  }
+
   return (
     <Wrapper>
       <Bold>社團 / 群組管理</Bold>
@@ -318,6 +331,8 @@ function GroupAndTeam() {
           active={location.pathname === "/profile/groupteam/groups"}
           onClick={() => {
             navigate("/profile/groupteam/groups");
+            getCurrentTab();
+            setPaging(1);
           }}
         >
           社團
@@ -326,6 +341,8 @@ function GroupAndTeam() {
           active={location.pathname === "/profile/groupteam/teams"}
           onClick={() => {
             navigate("/profile/groupteam/teams");
+            getCurrentTab();
+            setPaging(1);
           }}
         >
           群組
@@ -417,20 +434,25 @@ function GroupAndTeam() {
             ))}
           </div>
         ) : (
-          location.pathname === "/profile/groupteam/groups" &&
-          apartments.map((group) => (
-            <GroupCard key={group.id}>
-              <GroupImg src={group.coverImage} />
-              <SlicedLink
-                to={`/groups/${
-                  groups &&
-                  groups.find((item) => item.apartmentId === group.id).id
-                }`}
-              >
-                {group.title}
-              </SlicedLink>
-            </GroupCard>
-          ))
+          location.pathname === "/profile/groupteam/groups" && (
+            <>
+              {apartments
+                .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
+                .map((group) => (
+                  <GroupCard key={group.id}>
+                    <GroupImg src={group.coverImage} />
+                    <SlicedLink
+                      to={`/groups/${
+                        groups &&
+                        groups.find((item) => item.apartmentId === group.id).id
+                      }`}
+                    >
+                      {group.title}
+                    </SlicedLink>
+                  </GroupCard>
+                ))}
+            </>
+          )
         )}
       </GroupsWrapper>
 
@@ -448,55 +470,83 @@ function GroupAndTeam() {
             ))}
           </div>
         ) : (
-          location.pathname === "/profile/groupteam/teams" &&
-          teams.map((team) => (
-            <TeamCard key={team.id}>
-              <FlexWrap>
-                <SlicedBold>{team.name}</SlicedBold>
-                <FlexWrapper>
-                  <Icon src={members} alt="" />・
-                  <SmallText>
-                    {team.members.length}
-                    <Option> 位成員</Option>
-                  </SmallText>
-                </FlexWrapper>
-                <Status>{getUserStatus(team.members)}</Status>
-              </FlexWrap>
-              <ActionButtons>
-                <ConfirmButton onClick={() => setTeamId(team.id)}>
-                  <UnreadNot
-                    show={
-                      (team.members.find((member) => member.status === 0)
-                        ?.uid === currentUser.uid &&
-                        team.members.find((member) => member.status === 3)) ||
-                      getUserStatus(team.members) === "邀請中" ||
-                      (apartments.length &&
-                        apartments.find((item) => item.id === team.apartmentID)
-                          ?.roomiesCount === team.members?.length &&
-                        team.members
-                          .filter((member) => member.status !== 0)
-                          .every((member) => member.status === 1) &&
-                        team.members.find((member) => member.status === 0)
-                          ?.uid === currentUser.uid)
-                    }
-                  />
-                  查看
-                </ConfirmButton>
-              </ActionButtons>
-              {teamId === team.id && (
-                <ManageTeamModal
-                  setSaved={setSaved}
-                  team={team}
-                  group={apartments.find(
-                    (item) => item.id === team.apartmentID
-                  )}
-                  toggle={setTeamId}
-                />
-              )}
-            </TeamCard>
-          ))
+          location.pathname === "/profile/groupteam/teams" && (
+            <>
+              {teams
+                .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
+                .map((team) => (
+                  <TeamCard key={team.id}>
+                    <FlexWrap>
+                      <SlicedBold>{team.name}</SlicedBold>
+                      <FlexWrapper>
+                        <Icon src={members} alt="" />・
+                        <SmallText>
+                          {team.members.length}
+                          <Option> 位成員</Option>
+                        </SmallText>
+                      </FlexWrapper>
+                      <Status>{getUserStatus(team.members)}</Status>
+                    </FlexWrap>
+                    <ActionButtons>
+                      <ConfirmButton onClick={() => setTeamId(team.id)}>
+                        <UnreadNot
+                          show={
+                            (team.members.find((member) => member.status === 0)
+                              ?.uid === currentUser.uid &&
+                              team.members.find(
+                                (member) => member.status === 3
+                              )) ||
+                            getUserStatus(team.members) === "邀請中" ||
+                            (apartments.length &&
+                              apartments.find(
+                                (item) => item.id === team.apartmentID
+                              )?.roomiesCount === team.members?.length &&
+                              team.members
+                                .filter((member) => member.status !== 0)
+                                .every((member) => member.status === 1) &&
+                              team.members.find((member) => member.status === 0)
+                                ?.uid === currentUser.uid)
+                          }
+                        />
+                        查看
+                      </ConfirmButton>
+                    </ActionButtons>
+                    {teamId === team.id && (
+                      <ManageTeamModal
+                        setSaved={setSaved}
+                        team={team}
+                        group={apartments.find(
+                          (item) => item.id === team.apartmentID
+                        )}
+                        toggle={setTeamId}
+                      />
+                    )}
+                  </TeamCard>
+                ))}
+            </>
+          )
         )}
       </TeamsWrapper>
+      {!loading && (
+        <PagingList>
+          {getCurrentTab().length
+            ? createPaging(
+                Math.ceil(getCurrentTab().length / itemsPerPage)
+              ).map((number, index) => (
+                <PagingItem
+                  key={index}
+                  onClick={() => {
+                    setPaging(number + 1);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  active={paging === number + 1}
+                >
+                  {number + 1}
+                </PagingItem>
+              ))
+            : ""}
+        </PagingList>
+      )}
     </Wrapper>
   );
 }

@@ -335,7 +335,10 @@ function LandlordProperty() {
                   (number, index) => (
                     <PagingItem
                       key={index}
-                      onClick={() => setPaging(number + 1)}
+                      onClick={() => {
+                        setPaging(number + 1);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
                       active={paging === number + 1}
                     >
                       {number + 1}
