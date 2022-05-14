@@ -454,7 +454,11 @@ function ApartmentDetail({ details, loading }) {
                   ))}
               </DescriptionWrapper>
             </BodyLeft>
-            <OwnerCard owner={details[0].owner} currentUser={currentUser} />
+            <OwnerCard
+              owner={details[0].owner}
+              currentUser={currentUser}
+              page="apartment"
+            />
           </Body>
           <SubTitle>地圖位置</SubTitle>
           <ApartmentMap geoLocation={details[0].geoLocation} />

@@ -23,9 +23,8 @@ import { subColor } from "../../styles/GlobalStyle";
 
 const NewModal = styled(Modal)`
   max-width: 700px;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
-  margin-top: 80px;
 
   @media screen and (max-width: 767.98px) {
     width: 90%;
@@ -33,7 +32,8 @@ const NewModal = styled(Modal)`
 `;
 
 const NewBody = styled(Body)`
-  overflow-y: visible;
+  max-height: 350px;
+  overflow-y: auto;
   border: none;
   height: auto;
 `;
@@ -51,18 +51,16 @@ const Profile = styled.div`
 
 const ContentBlock = styled.div`
   width: 100%;
-  height: 200px;
-  overflow-y: auto;
   justify-content: space-between;
   margin: 20px 0;
 `;
 
 const NewTextarea = styled(Textarea)`
-  margin: 10px 0;
+  margin: -10px 0 10px;
   width: calc(100% - 22px);
   height: 140px;
-  overflow-y: auto;
   font-size: 16px;
+  padding: 10px 10px 10px 0;
   border: 1px solid transparent;
   &:hover,
   &:focus {
@@ -73,10 +71,11 @@ const NewTextarea = styled(Textarea)`
 const OptionBlock = styled.label`
   display: flex;
   align-items: center;
-  width: calc(100% - 20px);
+  width: calc(100% - 50px);
+  margin: 10px auto 30px;
   height: 50px;
   border-radius: 10px;
-  padding: 0 10px;
+  padding: 0 0 0 10px;
   justify-content: space-between;
   cursor: pointer;
   background: #f2f5f7;
@@ -105,7 +104,7 @@ const PendingButton = styled(Button)`
 const AddImageButton = styled.div`
   font-size: 40px;
   font-weight: 700;
-  margin-right: 5px;
+  margin-right: 20px;
   align-self: end;
 `;
 
@@ -153,6 +152,13 @@ const Image = styled.div`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+`;
+
+const NewError = styled(Error)`
+  width: calc(100% - 40px);
+  padding: 20px;
+  margin: -30px auto 0;
+  height: 30px;
 `;
 
 export default function EditPostModal({
@@ -256,7 +262,7 @@ export default function EditPostModal({
       )}
       <NewModal>
         <Header>
-          <Title>建立貼文</Title>
+          <Title>編輯貼文</Title>
           <CloseButton
             onClick={() => {
               setOpenConfirm(true);
@@ -293,21 +299,21 @@ export default function EditPostModal({
               ""
             )}
           </ContentBlock>
-          <OptionBlock htmlFor="image">
-            新增圖片到貼文
-            <AddImageButton>+</AddImageButton>
-          </OptionBlock>
-          <HiddenInput
-            id="image"
-            type="file"
-            accept="image/*"
-            ref={newImage}
-            onChange={(event) => {
-              displayFileImage(event);
-            }}
-          />
         </NewBody>
-        {error && <Error>{error}</Error>}
+        <OptionBlock htmlFor="image">
+          新增圖片到貼文
+          <AddImageButton>+</AddImageButton>
+        </OptionBlock>
+        <HiddenInput
+          id="image"
+          type="file"
+          accept="image/*"
+          ref={newImage}
+          onChange={(event) => {
+            displayFileImage(event);
+          }}
+        />
+        {error && <NewError>{error}</NewError>}
         {content ? (
           loading ? (
             <LoadingButton>更新中</LoadingButton>

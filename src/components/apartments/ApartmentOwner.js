@@ -14,25 +14,21 @@ import SignInFirstModal from "../modals/SignInFirst";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled(FlexWrapper)`
-  width: calc(40% - 60px);
+  width: ${(props) =>
+    props.page === "apartment" ? "calc(40% - 60px)" : "calc(100% - 42px)"};
   border-radius: 10px;
   background: #ffffff;
   border: 1px solid #e8e8e8;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   flex-direction: column;
   align-items: flex-start;
-  padding: 30px 30px 40px;
+  padding: ${(props) =>
+    props.page === "apartment" ? "30px 30px 40px" : "20px"};
 
   @media screen and (max-width: 1279.98px) {
-    width: calc(100% - 60px);
+    width: ${(props) =>
+      props.page === "apartment" ? "calc(100% - 60px)" : "calc(100% - 42px)"};
     margin-bottom: 20px;
-  }
-`;
-
-const OwnerLink = styled(StyledLink)`
-  &:hover {
-    border-bottom: 1px solid transparent;
-    color: #c1b18a;
   }
 `;
 
@@ -44,8 +40,8 @@ const SubTitle = styled.div`
 `;
 
 const ProfileImage = styled.div`
-  width: 90px;
-  height: 90px;
+  width: ${(props) => (props.page === "apartment" ? "90px" : "60px")};
+  height: ${(props) => (props.page === "apartment" ? "90px" : "60px")};
   border-radius: 50%;
   margin-right: 10px;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
@@ -62,6 +58,7 @@ const Info = styled(FlexWrapper)`
 
 const Intro = styled.div`
   margin: 20px 0;
+  font-size: ${(props) => (props.page === "apartment" ? "16px" : "14px")};
 `;
 
 const Icon = styled.img`
@@ -70,7 +67,7 @@ const Icon = styled.img`
   margin-right: 6px;
 `;
 
-export default function OwnerCard({ owner, currentUser, id }) {
+export default function OwnerCard({ owner, currentUser, page }) {
   const [ownerInfo, setOwnerInfo] = React.useState();
   const [openModal, setOpenModal] = React.useState(false);
   const [openSignin, setOpenSignin] = React.useState(false);
@@ -95,12 +92,12 @@ export default function OwnerCard({ owner, currentUser, id }) {
         />
       )}
       {openSignin && <SignInFirstModal setToggle={setOpenSignin} />}
-      <Wrapper>
-        <SubTitle>屋主資訊</SubTitle>
+      <Wrapper page={page}>
+        {page === "apartment" && <SubTitle>屋主資訊</SubTitle>}
         {ownerInfo && (
           <>
             <FlexWrapper>
-              <ProfileImage src={ownerInfo.profileImage} />
+              <ProfileImage src={ownerInfo.profileImage} page={page} />
               <Info>
                 <MediumTitle>{ownerInfo.alias}</MediumTitle>
                 <FlexWrapper>

@@ -2,10 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { FlexColumn, FlexWrapper } from "../common/Components";
 import CreateNewPostModal from "../modals/CreateNewPost";
-import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import Post from "./Post";
-import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;

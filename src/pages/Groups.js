@@ -28,6 +28,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Footer from "../components/layout/Footer";
 import { mainColor } from "../styles/GlobalStyle";
+import OwnerCard from "../components/apartments/ApartmentOwner";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -223,7 +224,7 @@ const GroupBodyLeft = styled(FlexWrapper)`
   width: 58%;
   flex-direction: column;
   align-items: flex-start;
-  z-index: 2;
+  ${"" /* z-index: 2; */}
 
   @media screen and (max-width: 995.98px) {
     width: 100%;
@@ -233,13 +234,12 @@ const GroupBodyLeft = styled(FlexWrapper)`
 `;
 
 const GroupBodyRight = styled(FlexWrapper)`
-  width: 40%;
+  width: calc(40% - 2px);
   flex-direction: column;
   align-items: flex-start;
   position: sticky;
   top: 90px;
   right: 0;
-  overflow-y: auto;
   @media screen and (max-width: 995.98px) {
     width: 100%;
     order: 1;
@@ -254,7 +254,7 @@ const GroupNotice = styled(FlexWrapper)`
   font-size: 14px;
   border-radius: 10px;
   display: flex;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   flex-direction: column;
   align-items: flex-start;
   padding: 20px;
@@ -317,6 +317,7 @@ const Tab = styled.div`
 function Groups() {
   const { id } = useParams();
   const [apartmentData, setApartmentData] = React.useState({});
+  const [owner, setOwner] = React.useState({});
   const [members, setMembers] = React.useState([]);
   const [groupMembers, setGroupMembers] = React.useState([]);
   const { currentUser } = useAuth();
@@ -353,6 +354,7 @@ function Groups() {
         .getDataWithSingleQuery("apartments", "id", "==", groupData.apartmentId)
         .then((res) => {
           setApartmentData(res[0]);
+          setOwner(res[0].owner);
           setLoading(false);
         });
       api
@@ -726,6 +728,14 @@ function Groups() {
                       </li>
                     </ContentList>
                   </GroupNotice>
+                  <SubtitlesSmall>
+                    <Bold>聯絡屋主</Bold>
+                  </SubtitlesSmall>
+                  <OwnerCard
+                    owner={owner}
+                    currentUser={currentUser}
+                    page="group"
+                  />
                   <GroupMember members={members} />
                 </GroupBodyRight>
               )}
