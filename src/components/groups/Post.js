@@ -92,16 +92,11 @@ const ShowMoreButton = styled.span`
 `;
 
 const SinglemageDisplayer = styled.img`
-  width: 100%;
+  width: calc(100% - 4px);
   height: auto;
   border: 1px solid #e8e8e8;
   cursor: pointer;
-  ${
-    "" /* background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat; */
-  }
+  border: 2px solid #fff;
 `;
 
 const TwoImagesDisplayer = styled(FlexWrapper)`
@@ -116,16 +111,20 @@ const MultiImageDisplayer = styled(FlexColumn)`
   height: 480px;
   border: 1px solid #e8e8e8;
   cursor: pointer;
+  @media screen and (max-width: 575.98px) {
+    height: 300px;
+  }
 `;
 
 const FirstImage = styled.div`
-  width: 100%;
+  width: calc(100% - 4px);
   height: 65%;
   border: 1px solid #e8e8e8;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  border: 2px solid #fff;
 `;
 
 const MultiImages = styled(FlexWrapper)`
@@ -159,9 +158,10 @@ const ShowMoreImage = styled(FlexWrapper)`
   position: absolute;
   top: 0;
   left: 0;
+  @media screen and (max-width: 575.98px) {
+    font-size: 24px;
+  }
 `;
-
-const ImageDisplayer = styled.div``;
 
 const MoreButton = styled(FlexWrapper)`
   justify-content: center;

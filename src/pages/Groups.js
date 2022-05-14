@@ -669,7 +669,7 @@ function Groups() {
           </TabsWrapper>
 
           {loading ? (
-            <div style={{ width: "100%" }}>
+            <div style={{ width: "calc(100% - 48px)", margin: "0 auto" }}>
               <Skeleton
                 width="100%"
                 height={30}

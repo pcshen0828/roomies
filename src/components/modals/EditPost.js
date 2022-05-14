@@ -139,6 +139,8 @@ const ImageContainer = styled.div`
   width: 200px;
   height: 100%;
   position: relative;
+  margin-right: 10px;
+  flex-shrink: 0;
   &:hover ${DeleteButton} {
     display: block;
   }
@@ -147,8 +149,6 @@ const ImageContainer = styled.div`
 const Image = styled.div`
   width: 100%;
   height: 100%;
-  margin-right: 10px;
-  flex-shrink: 0;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
   background-size: cover;
   background-position: center;
