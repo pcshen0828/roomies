@@ -100,7 +100,7 @@ const stickyStyle = `
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  ${(props) => (props.sticky ? stickyStyle : "")};
+  ${"" /* ${(props) => (props.sticky ? stickyStyle : "")}; */}
 `;
 
 const GroupHeader = styled.div`

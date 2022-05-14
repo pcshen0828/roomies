@@ -63,6 +63,10 @@ const FakeInput = styled(FlexWrapper)`
   }
 `;
 
+const Posts = styled(FlexColumn)`
+  width: 100%;
+`;
+
 export default function GroupPosts({ currentUser, groupID, setPosted }) {
   const [openPost, setOpenPost] = React.useState(false);
   const [posts, setPosts] = React.useState([]);
@@ -108,11 +112,13 @@ export default function GroupPosts({ currentUser, groupID, setPosted }) {
       <SubtitlesSmall>
         <TitleSmall>所有貼文</TitleSmall>
       </SubtitlesSmall>
-      <FlexColumn>
+      <Posts>
         {posts.length
-          ? posts.map((post) => <Post key={post.id} post={post} />)
+          ? posts.map((post) => (
+              <Post key={post.id} post={post} currentUser={currentUser} />
+            ))
           : "尚無貼文"}
-      </FlexColumn>
+      </Posts>
     </Wrapper>
   );
 }

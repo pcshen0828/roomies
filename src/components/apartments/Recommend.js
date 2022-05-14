@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import api from "../../utils/api";
 import Card from "./ApartmentCard";
 import { Firebase } from "../../utils/firebase";
 
