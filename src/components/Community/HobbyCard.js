@@ -26,10 +26,19 @@ function HobbyCard({
   setSelected,
   setLoading,
   allUsers,
+  page,
+  setPaging,
+  allPages,
+  calcAllPages,
 }) {
   function searchByHobby(hobby) {
     setLoading(true);
-    setUsers(allUsers.filter((user) => user.hobbies.includes(hobby)));
+    setPaging(1);
+    const filteredData = allUsers.filter((user) =>
+      user.hobbies.includes(hobby)
+    );
+    allPages.current = calcAllPages(filteredData);
+    setUsers(filteredData);
     setLoading(false);
   }
 
@@ -37,6 +46,7 @@ function HobbyCard({
     <Card
       active={selected === name}
       onClick={() => {
+        page.current = 1;
         searchByHobby(name);
         setSelected(name);
       }}

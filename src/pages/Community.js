@@ -28,6 +28,11 @@ const NewTitle = styled(Title)`
   margin: 0px 0 30px;
 `;
 
+const NewButton = styled(SearchButton)`
+  right: 18px;
+  top: 5px;
+`;
+
 const HobbyTags = styled(FlexWrapper)`
   margin-top: 20px;
   flex-wrap: wrap;
@@ -67,6 +72,11 @@ const Card = styled.div`
   }
 `;
 
+const Anchor = styled.div`
+  width: 100%;
+  height: 40px;
+`;
+
 function Community() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
@@ -78,35 +88,29 @@ function Community() {
 
   const [searching, setSearching] = React.useState(false);
 
-  const firstRender = React.useRef(null);
-  const itemsPerPage = 10;
+  const [paging, setPaging] = React.useState(1);
+  const itemsPerPage = 6;
+  const anchor = React.useRef();
+  const firstRender = React.useRef();
+  const currentPage = React.useRef(1);
+  const allPages = React.useRef();
 
   function calcAllPages(data) {
-    return Math.ceil(data / itemsPerPage);
+    return Math.ceil(data.length / itemsPerPage);
   }
+
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    // firstRender.current = true;
-
-    // fetchApartments(query, (data) => {
-    //   if (firstRender.current) {
-    //     setAllData(data);
-    //     setApartments(data);
-    //     setLoading(false);
-    //     firstRender.current = false;
-    //     allPages.current = calcAllPages(data);
-    //   }
-    // });
+    firstRender.current = true;
 
     let mounted = true;
 
-    api.getAllDocsFromCollection("hobbies").then((res) => {
-      if (!mounted) return;
-      setHobbies(res);
-    });
-
     async function getAllUsers() {
       if (!mounted) return;
+      api.getAllDocsFromCollection("hobbies").then((res) => {
+        if (!mounted) return;
+        setHobbies(res);
+      });
       setSearching(true);
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "users"),
@@ -118,28 +122,31 @@ function Community() {
       setAllUsers(result);
       setUsers(result);
       setSearching(false);
+      firstRender.current = false;
+      allPages.current = calcAllPages(result);
     }
-    getAllUsers();
+
+    if (firstRender.current) {
+      getAllUsers();
+    }
 
     return function cleanup() {
       mounted = false;
     };
   }, []);
 
-  // React.useEffect(() => {
-  //   window.scrollTo({ top: 0, behavior: "smooth" });
+  React.useEffect(() => {
+    const intersectionObserver = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (entry.intersectionRatio <= 0) return;
+      if (firstRender.current) return;
 
-  //   const intersectionObserver = new IntersectionObserver((entries) => {
-  //     const entry = entries[0];
-  //     if (entry.intersectionRatio <= 0) return;
-  //     if (firstRender.current) return;
-
-  //     currentPage.current++;
-  //     if (currentPage.current > allPages.current) return;
-  //     setPaging(currentPage.current);
-  //   });
-  //   intersectionObserver.observe(anchor.current);
-  // }, []);
+      currentPage.current++;
+      if (currentPage.current > allPages.current) return;
+      setPaging(currentPage.current);
+    });
+    intersectionObserver.observe(anchor.current);
+  }, []);
 
   function searchUser(queryName) {
     setSearching(true);
@@ -185,16 +192,27 @@ function Community() {
                 placeholder="搜尋用戶名稱"
                 value={query}
                 onChange={(e) => {
+                  if (!e.target.value.trim()) {
+                    setPaging(1);
+                    setUsers(allUsers);
+                    allPages.current = calcAllPages(allUsers);
+                  }
+                  currentPage.current = 1;
                   setQuery(e.target.value);
                   searchUser(e.target.value);
                 }}
               />
-              <SearchButton src={search} />
+              <NewButton src={search} />
             </SearchWrapper>
             <HobbyTags>
               <Card
+                active={selected === "all"}
                 onClick={() => {
+                  setSelected("all");
                   setUsers(allUsers);
+                  setPaging(1);
+                  allPages.current = calcAllPages(allUsers);
+                  currentPage.current = 1;
                 }}
               >
                 全部
@@ -208,6 +226,10 @@ function Community() {
                   setSelected={setSelected}
                   setLoading={setSearching}
                   allUsers={allUsers}
+                  page={currentPage}
+                  setPaging={setPaging}
+                  allPages={allPages}
+                  calcAllPages={calcAllPages}
                 />
               ))}
             </HobbyTags>
@@ -221,11 +243,14 @@ function Community() {
                   style={{ margin: "0 20px 20px 0" }}
                 />
               ) : users && users.length ? (
-                users.map((user, index) => <UserCard key={index} user={user} />)
+                users
+                  .slice(0, itemsPerPage * paging)
+                  .map((user, index) => <UserCard key={index} user={user} />)
               ) : (
                 "查無用戶"
               )}
             </ResultDisplayer>
+            <Anchor ref={anchor}></Anchor>
           </NewWrapper>
           <Footer />
         </>
