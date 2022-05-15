@@ -36,9 +36,9 @@ const InnerWrapper = styled.div`
 
 const IndexLink = styled(Link)`
   color: #424b5a;
-  font-size: 18px;
+  font-size: 20px;
   padding-bottom: 3px;
-  font-family: "Noto Serif TC", serif;
+  letter-spacing: 5px;
   display: flex;
   align-items: center;
   &:hover {
@@ -99,10 +99,7 @@ function Header() {
       <InnerWrapper>
         <FlexWrapper>
           <Menu src={menu} onClick={() => setToggleMenu(true)} />
-          <IndexLink to="/">
-            <Logo src={logo} />
-            oomies
-          </IndexLink>
+          <IndexLink to="/">{/* <Logo src={logo} /> */}Roomies</IndexLink>
           <NavBar />
           {toggleMenu && <MobileNavBar toggle={setToggleMenu} />}
         </FlexWrapper>

@@ -108,6 +108,15 @@ const Intro = styled.div`
   }
 `;
 
+const Span = styled.span`
+  letter-spacing: 10px;
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 32px;
+  @media screen and (max-width: 767.98px) {
+    font-size: 24px;
+  }
+`;
+
 const ActionButtons = styled(FlexWrapper)`
   margin-top: 40px;
   height: 50px;
@@ -279,7 +288,9 @@ function Index() {
         {openSignup && <SignUpModal setOpenSignUp={setOpenSignUp} />}
         <InnerWrapper>
           <IntroWrapper>
-            <Intro>寓見 Roomies</Intro>
+            <Intro>
+              寓見<Span> Roomies</Span>
+            </Intro>
             ｜單層公寓合租平台
             <ActionButtons show={show}>{RenderCTAButton(1)}</ActionButtons>
             <DownWrapper

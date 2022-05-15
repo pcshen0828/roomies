@@ -61,6 +61,19 @@ const Logo = styled(Title)`
   left: 20px;
   top: 20px;
   font-family: "Noto Serif TC", serif;
+  display: flex;
+  align-items: center;
+`;
+
+const Span = styled.span`
+  letter-spacing: 5px;
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 18px;
+  margin-left: 5px;
+
+  @media screen and (max-width: 1279.98px) {
+    font-size: 16px;
+  }
 `;
 
 const CloseButton = styled.div`
@@ -103,7 +116,9 @@ function MobileNavBar({ toggle }) {
   return (
     <MobileWrapper out={false} onClick={() => toggle(false)}>
       <MobileModal onClick={(e) => e.stopPropagation()}>
-        <Logo>寓見 Roomies</Logo>
+        <Logo>
+          寓見<Span>｜Roomies</Span>
+        </Logo>
         <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         <StyledNavLink
           to="/"
