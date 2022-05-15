@@ -19,7 +19,7 @@ const NewWrapper = styled(FlexWrapper)`
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
-  min-height: calc(100vh - 541px);
+  min-height: calc(100vh - 371px);
 
   @media screen and (max-width: 995.98px) {
     flex-direction: column;

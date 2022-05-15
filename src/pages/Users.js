@@ -13,9 +13,8 @@ import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
-  min-height: calc(100vh - 541px);
+  min-height: calc(100vh - 271px);
   @media screen and (max-width: 1279.98px) {
-    min-height: calc(100vh - 401px);
   }
 `;
 

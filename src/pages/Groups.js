@@ -37,7 +37,7 @@ const Wrapper = styled(FlexWrapper)`
   background: #f0f2f5;
   flex-direction: column;
   align-items: flex-start;
-  min-height: calc(100vh - 441px);
+  min-height: calc(100vh - 241px);
   position: relative;
 `;
 

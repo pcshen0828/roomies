@@ -14,7 +14,7 @@ const Container = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 40px;
-  min-height: calc(100vh - 471px);
+  min-height: calc(100vh - 221px);
 `;
 
 const NewWrapper = styled(Wrapper)`

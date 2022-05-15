@@ -21,7 +21,7 @@ import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
-  min-height: calc(100vh - 441px);
+  min-height: calc(100vh - 221px);
 `;
 
 const NewTitle = styled(Title)`

@@ -69,7 +69,7 @@ const icons = [
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
-  min-height: calc(100vh - 441px);
+  min-height: calc(100vh - 241px);
   margin: 20px auto;
   flex-direction: column;
   align-items: flex-start;

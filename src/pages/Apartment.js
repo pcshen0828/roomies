@@ -40,6 +40,7 @@ function Apartment() {
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
       if (!mounted) return;

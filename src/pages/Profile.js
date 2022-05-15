@@ -11,12 +11,12 @@ import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
 
 const NewWrapper = styled(Wrapper)`
-  min-height: calc(100vh - 471px);
+  min-height: calc(100vh - 301px);
 `;
 
 const LoaderWrapper = styled(FlexColumn)`
   width: 100%;
-  min-height: calc(100vh - 80px - 271px);
+  min-height: calc(100vh - 80px - 121px);
   justify-content: center;
 `;
 
