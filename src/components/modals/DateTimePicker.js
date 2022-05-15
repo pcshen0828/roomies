@@ -41,6 +41,7 @@ function MUIDatePicker({ value, setValue }) {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
         <DatePicker
+          minDate={new Date()}
           renderInput={(props) => <TextField {...props} variant="outlined" />}
           label=""
           value={value}
@@ -64,6 +65,7 @@ function MUITimePicker({ value, setValue }) {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
         <TimePicker
+          // minTime={new Date()}
           renderInput={(props) => <TextField {...props} variant="outlined" />}
           label=""
           value={value}

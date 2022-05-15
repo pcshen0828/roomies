@@ -34,7 +34,7 @@ const profilelist = [
     component: <TenantInfo key="1" />,
   },
   {
-    name: "社團 / 群組管理",
+    name: "租屋活動管理",
     id: 2,
     to: "/profile/groupteam",
     defaultStatus: "groups",

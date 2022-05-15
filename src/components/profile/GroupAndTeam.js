@@ -61,10 +61,7 @@ const GroupCard = styled(FlexWrapper)`
   padding: 10px 20px;
 
   @media screen and (max-width: 767.98px) {
-    width: calc(100%);
-  }
-  @media screen and (max-width: 465.98px) {
-    width: 180px;
+    width: calc(100% - 50px);
   }
 `;
 
@@ -325,7 +322,7 @@ function GroupAndTeam() {
 
   return (
     <Wrapper>
-      <Bold>社團 / 群組管理</Bold>
+      <Bold>管理我的租屋</Bold>
       <TabsWrapper>
         <Tab
           active={location.pathname === "/profile/groupteam/groups"}
@@ -335,7 +332,7 @@ function GroupAndTeam() {
             setPaging(1);
           }}
         >
-          社團
+          已加入社團
         </Tab>
         <Tab
           active={location.pathname === "/profile/groupteam/teams"}
@@ -345,7 +342,7 @@ function GroupAndTeam() {
             setPaging(1);
           }}
         >
-          群組
+          組隊看房
         </Tab>
       </TabsWrapper>
 
