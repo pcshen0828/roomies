@@ -12,6 +12,7 @@ import ApartmentMap from "./ApartmentMap";
 import RecommendCarousel from "./Recommend";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import CompleteProfileBeforeJoinModal from "../modals/CompleteProfileBeforeJoin";
 
 // icons
 import loc from "../../images/loc.svg";
@@ -212,6 +213,7 @@ function ApartmentDetail({ details, loading }) {
   const [furnitures, setFurnitures] = React.useState([]);
   const [otherInfo, setOtherInfo] = React.useState([]);
   const [membersCount, setMembersCount] = React.useState("");
+  const [openWarning, setOpenWarning] = React.useState(false);
 
   const queryList = [
     { name: "conditions", method: (res) => setConditions(res) },
@@ -265,6 +267,19 @@ function ApartmentDetail({ details, loading }) {
     return icons.find((icon) => icon.name === variable).src;
   }
 
+  function checkUserProfileBeforeJoinGroup() {
+    if (
+      !currentUser.hobbies.length ||
+      !currentUser.jobTitle ||
+      !currentUser.alias ||
+      currentUser.status === 0
+    ) {
+      setOpenWarning(true);
+      return;
+    }
+    openConfirmModal();
+  }
+
   return (
     <>
       {hasNotSignIn && <SignInFirstModal setToggle={setHasNotSignIn} />}
@@ -273,6 +288,12 @@ function ApartmentDetail({ details, loading }) {
           setIsActive={setIsActive}
           apartmentId={details[0].id}
           groupId={groupId}
+        />
+      )}
+      {openWarning && (
+        <CompleteProfileBeforeJoinModal
+          toggle={setOpenWarning}
+          currentUser={currentUser}
         />
       )}
       {loading ? (
@@ -383,7 +404,9 @@ function ApartmentDetail({ details, loading }) {
                         查看社團
                       </StyledLink>
                     ) : (
-                      <Button1 onClick={openConfirmModal}>加入租屋</Button1>
+                      <Button1 onClick={checkUserProfileBeforeJoinGroup}>
+                        加入租屋
+                      </Button1>
                     )}
                     <MembersCount>{membersCount}人已加入</MembersCount>
                   </ActionArea>

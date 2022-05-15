@@ -407,7 +407,9 @@ function TenantInfo() {
             <Block>
               <NewTitle>進階資訊</NewTitle>
 
-              <SmallLabel htmlFor="hobbies">興趣標籤</SmallLabel>
+              <SmallLabel htmlFor="hobbies">
+                興趣標籤<Required>*</Required>
+              </SmallLabel>
               <Creatable
                 id="hobbies"
                 isClearable
@@ -465,7 +467,9 @@ function TenantInfo() {
                 ))}
               </Select>
 
-              <SmallLabel htmlFor="intro">社群簡介</SmallLabel>
+              <SmallLabel htmlFor="intro">
+                社群簡介<Required>*</Required>
+              </SmallLabel>
               <Textarea
                 id="intro"
                 placeholder="介紹自己，讓其他人更認識你！"

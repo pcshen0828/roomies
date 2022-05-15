@@ -198,6 +198,9 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
               />
             ))
           : "查無聊天紀錄！"}
+        {/* 
+            測試 scroll anchor
+           */}
       </Messages>
       <SendMessageBlock
         onSubmit={(e) => {

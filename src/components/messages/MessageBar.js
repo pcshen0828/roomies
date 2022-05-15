@@ -15,17 +15,6 @@ const Wrapper = styled(Linkify)`
   justify-content: flex-start;
 `;
 
-const SendTime = styled.div`
-  font-size: 12px;
-  color: #505d68;
-  margin: 0 0 10px;
-  ${
-    "" /* position: absolute;
-  right: 10px;
-  bottom: 5px; */
-  }
-`;
-
 const MessageSentByMe = styled(FlexWrapper)`
   align-self: flex-end;
   margin-bottom: 5px;
@@ -100,6 +89,7 @@ function MessageBar({ detail, myRole, members, self }) {
   }, [self, members]);
 
   React.useEffect(() => {
+    console.log(scrollRef.current);
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [detail]);
 
@@ -112,8 +102,10 @@ function MessageBar({ detail, myRole, members, self }) {
     <Wrapper>
       <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
       <FlexWrapper>
-        <MessageSentByMe ref={scrollRef}>
-          <MessageInnerWrapperMe>{detail.content}</MessageInnerWrapperMe>
+        <MessageSentByMe>
+          <MessageInnerWrapperMe ref={scrollRef}>
+            {detail.content}
+          </MessageInnerWrapperMe>
           <ProfileImage src={myProfile && myProfile} />
         </MessageSentByMe>
       </FlexWrapper>
@@ -121,9 +113,11 @@ function MessageBar({ detail, myRole, members, self }) {
   ) : (
     <Wrapper>
       <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
-      <MessageSentByOthers ref={scrollRef}>
+      <MessageSentByOthers>
         <ProfileImage src={objectProfile && objectProfile} />
-        <MessageInnerWrapperOthers>{detail.content}</MessageInnerWrapperOthers>
+        <MessageInnerWrapperOthers ref={scrollRef}>
+          {detail.content}
+        </MessageInnerWrapperOthers>
       </MessageSentByOthers>
     </Wrapper>
   );
