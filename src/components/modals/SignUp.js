@@ -136,6 +136,7 @@ function SignUpModal({ setOpenSignUp }) {
           email,
           password,
           profileImage: defaultImageUrl,
+          coverImage: "",
           name: "",
           alias,
           phone: "",

@@ -44,7 +44,7 @@ const ImageContainer = styled.div`
 
 const ImagesDisplayer = styled(FlexWrapper)`
   width: 95%;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const HiddenInputFilePicker = styled.input`
@@ -80,7 +80,7 @@ function CreatePropertyPage4({ id, images, setImages, handleError }) {
       })
       .then(() => {
         setError("");
-        fileRef.current = null;
+        fileRef.current.value = null;
       });
   }
 

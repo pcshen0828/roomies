@@ -187,7 +187,7 @@ export default function CreateNewPostModal({
       })
       .then(() => {
         setError("");
-        newImage.current = null;
+        newImage.current.value = null;
       });
   }
 

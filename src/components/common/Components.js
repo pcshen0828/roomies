@@ -279,6 +279,7 @@ const ProfileContent = styled.div`
   border-radius: 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
+  overflow: hidden;
 
   @media screen and (max-width: 1279.98px) {
     width: calc(100% - 40px);

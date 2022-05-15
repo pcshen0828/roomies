@@ -97,7 +97,7 @@ const Cards = styled.div`
     height: 400px;
   }
   height: 648px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 function MyMap() {

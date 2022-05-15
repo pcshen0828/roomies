@@ -15,7 +15,7 @@ const ChatsWrapper = styled(FlexWrapper)`
   width: 100%;
   margin: 10px 0;
   align-items: flex-start;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const MessagesLink = styled(StyledLink)`

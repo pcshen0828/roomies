@@ -15,7 +15,7 @@ const MessageInput = styled.textarea`
   width: calc(100% - 40px);
   border: 1px solid #dadada;
   height: 200px;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 20px auto;
   font-family: "Noto Sans TC", sans-serif;
   color: #424b5a;
@@ -30,7 +30,7 @@ const DefaultMessages = styled.div`
   display: flex;
   width: calc(100% - 40px);
   margin: 0 auto 10px;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const DefaultMessage = styled.input`

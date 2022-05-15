@@ -188,7 +188,7 @@ export default function EditPostModal({
     const newUrl = URL.createObjectURL(file);
     setImages((prev) => [...prev, { name: file.name, url: newUrl }]);
     setError("");
-    newImage.current = null;
+    newImage.current.value = null;
   }
 
   function hideImage(indexToHide, fileName) {

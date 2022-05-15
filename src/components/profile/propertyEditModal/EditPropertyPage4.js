@@ -47,7 +47,7 @@ const ImageContainer = styled.div`
 
 const ImagesDisplayer = styled(FlexWrapper)`
   width: 95%;
-  overflow-x: scroll;
+  overflow-x: auto;
 `;
 
 const HiddenInputFilePicker = styled.input`
@@ -86,7 +86,7 @@ function EditPropertyPage4({ apartment, images, setImages }) {
       })
       .then(() => {
         setError("");
-        fileRef.current = null;
+        fileRef.current.value = null;
       });
   }
 

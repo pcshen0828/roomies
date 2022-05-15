@@ -33,16 +33,44 @@ const HobbyTags = styled(FlexWrapper)`
   flex-wrap: wrap;
 `;
 
-const ResultDisplayer = styled(FlexWrapper)`
-  margin-top: 40px;
-  flex-wrap: wrap;
-  min-height: 400px;
-  align-items: flex-start;
+const ResultDisplayer = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 390px);
+  justify-content: space-between;
+  margin: 20px auto 0;
+
+  @media screen and (max-width: 1280px) {
+    grid-template-columns: repeat(auto-fill, calc((100% - 10px) / 2));
+  }
+
+  @media screen and (max-width: 600px) {
+    grid-template-columns: repeat(auto-fill, 100%);
+  }
+`;
+
+const Card = styled.div`
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin: 0px 10px 10px 0;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
+
+  background: ${(props) => (props.active ? "#c1b18a" : "#fff")};
+  color: ${(props) => (props.active ? "#fff" : "#424b5a")};
+  &:hover {
+    background: #c1b18a;
+    color: #fff;
+    border: 1px solid #fff;
+  }
 `;
 
 function Community() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
+  const [allUsers, setAllUsers] = React.useState([]);
   const [users, setUsers] = React.useState();
   const [hobbies, setHobbies] = React.useState([]);
   const [selected, setSelected] = React.useState("");
@@ -50,37 +78,78 @@ function Community() {
 
   const [searching, setSearching] = React.useState(false);
 
+  const firstRender = React.useRef(null);
+  const itemsPerPage = 10;
+
+  function calcAllPages(data) {
+    return Math.ceil(data / itemsPerPage);
+  }
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    // firstRender.current = true;
+
+    // fetchApartments(query, (data) => {
+    //   if (firstRender.current) {
+    //     setAllData(data);
+    //     setApartments(data);
+    //     setLoading(false);
+    //     firstRender.current = false;
+    //     allPages.current = calcAllPages(data);
+    //   }
+    // });
 
     let mounted = true;
+
     api.getAllDocsFromCollection("hobbies").then((res) => {
       if (!mounted) return;
       setHobbies(res);
     });
+
+    async function getAllUsers() {
+      if (!mounted) return;
+      setSearching(true);
+      const query = Firebase.query(
+        Firebase.collection(Firebase.db, "users"),
+        Firebase.where("role", "==", 1),
+        Firebase.where("status", "==", 1)
+      );
+      const querySnapShot = await Firebase.getDocs(query);
+      const result = querySnapShot.docs.map((doc) => doc.data());
+      setAllUsers(result);
+      setUsers(result);
+      setSearching(false);
+    }
+    getAllUsers();
+
     return function cleanup() {
       mounted = false;
     };
   }, []);
 
-  async function searchUser(queryName) {
+  // React.useEffect(() => {
+  //   window.scrollTo({ top: 0, behavior: "smooth" });
+
+  //   const intersectionObserver = new IntersectionObserver((entries) => {
+  //     const entry = entries[0];
+  //     if (entry.intersectionRatio <= 0) return;
+  //     if (firstRender.current) return;
+
+  //     currentPage.current++;
+  //     if (currentPage.current > allPages.current) return;
+  //     setPaging(currentPage.current);
+  //   });
+  //   intersectionObserver.observe(anchor.current);
+  // }, []);
+
+  function searchUser(queryName) {
     setSearching(true);
 
     if (!queryName.trim()) {
-      setUsers([]);
+      setUsers(allUsers);
       setSearching(false);
       return;
     }
-    const query = Firebase.query(
-      Firebase.collection(Firebase.db, "users"),
-      Firebase.where("role", "==", 1),
-      Firebase.where("status", "==", 1),
-      Firebase.where("alias", ">=", queryName),
-      Firebase.where("alias", "<=", queryName + "\uf8ff")
-    );
-    const querySnapShot = await Firebase.getDocs(query);
-    const result = querySnapShot.docs.map((doc) => doc.data());
-    setUsers(result);
+    setUsers(allUsers.filter((user) => user.alias.includes(queryName)));
     setSearching(false);
   }
 
@@ -123,6 +192,13 @@ function Community() {
               <SearchButton src={search} />
             </SearchWrapper>
             <HobbyTags>
+              <Card
+                onClick={() => {
+                  setUsers(allUsers);
+                }}
+              >
+                全部
+              </Card>
               {hobbies.map((hobby, index) => (
                 <HobbyCard
                   key={index}
@@ -131,6 +207,7 @@ function Community() {
                   selected={selected}
                   setSelected={setSelected}
                   setLoading={setSearching}
+                  allUsers={allUsers}
                 />
               ))}
             </HobbyTags>
@@ -146,7 +223,7 @@ function Community() {
               ) : users && users.length ? (
                 users.map((user, index) => <UserCard key={index} user={user} />)
               ) : (
-                ""
+                "查無用戶"
               )}
             </ResultDisplayer>
           </NewWrapper>

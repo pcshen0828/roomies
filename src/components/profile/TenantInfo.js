@@ -9,6 +9,7 @@ import {
   Textarea,
   Button1,
   ErrorMessage,
+  Bold,
 } from "../common/Components";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -25,26 +26,45 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   margin-top: 10px;
+  position: relative;
+`;
+
+const CoverWrapper = styled.div`
+  width: calc(100% + 40px);
+  height: 200px;
+  position: absolute;
+  top: -30px;
+  left: -20px;
+  background: ${(props) =>
+    props.src
+      ? `url(${props.src})`
+      : "linear-gradient(180deg, rgba(193, 177, 138, 0.5) 0%, rgba(66, 75, 90, 0.5) 100%)"};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
 `;
 
 const ImageWrapper = styled(FlexWrapper)`
-  margin: 0 0 40px;
+  margin: 170px 0 20px;
   font-size: 14px;
   @media screen and (max-width: 767.98px) {
     flex-direction: column;
   }
+  z-index: 1;
 `;
 
 const ProfileImage = styled.div`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  margin-right: 20px;
+  margin: -50px 20px 0 0;
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   flex-shrink: 0;
+  border: 2px solid #fff;
 
   @media screen and (max-width: 767.98px) {
     margin: 0 0 10px;
@@ -59,6 +79,29 @@ const ImageButton = styled(Button1)`
   @media screen and (max-width: 767.98px) {
     margin: 10px 0 0;
   }
+`;
+
+const ImageLabel = styled.label`
+  width: 120px;
+  height: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 5px;
+  position: absolute;
+  right: 15px;
+  bottom: 15px;
+  &:hover {
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+  }
+`;
+
+const HiddenInput = styled.input`
+  display: none;
 `;
 
 const NewTitle = styled(Title)`
@@ -134,6 +177,7 @@ function TenantInfo() {
     option: (provided, state) => ({
       ...provided,
       width: "100%",
+      height: "auto",
       borderBottom: "1px solid #dadada",
       color: mainColor,
       background: state.isSelected ? "#e8e8e8" : "#fff",
@@ -156,7 +200,7 @@ function TenantInfo() {
     control: (base, state) => ({
       ...base,
       borderRadius: "0px",
-      height: "35px",
+      minHeight: "35px",
       border: state.isFocused ? "1px solid #c1b18a" : "1px solid #dadada",
       boxShadow: state.isFocused ? 0 : 0,
       "&:hover": {
@@ -179,6 +223,9 @@ function TenantInfo() {
       fontSize: "14px",
     }),
   };
+
+  const coverRef = React.useRef(null);
+  const [warning, setWarning] = React.useState(false);
 
   const [file, setFile] = React.useState();
   const [name, setName] = React.useState(currentUser.name);
@@ -246,28 +293,10 @@ function TenantInfo() {
       });
     }
 
-    if (file) {
-      const storageRef = Firebase.ref(
-        Firebase.storage,
-        `users/${currentUser.uid}/profile`
-      );
-      Firebase.uploadBytes(storageRef, file).then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          api.updateDocData("users", currentUser.uid, {
-            ...currentUser,
-            ...basicInfo,
-            profileImage: downloadURL,
-          });
-          setIsLoading(false);
-        });
-      });
-    } else {
-      api.updateDocData("users", currentUser.uid, {
-        ...currentUser,
-        ...basicInfo,
-      });
-      setIsLoading(false);
-    }
+    api.updateDocData("users", currentUser.uid, {
+      ...basicInfo,
+    });
+    setIsLoading(false);
     setSaved(true);
   }
 
@@ -302,7 +331,7 @@ function TenantInfo() {
     return (
       <>
         {saved && (
-          <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
+          <SuccessfullySavedModal toggle={setSaved} message="更新成功！" />
         )}
         {(!currentUser.name || !currentUser.jobTitle) && (
           <BasicInfoModal role="tenant" />
@@ -316,10 +345,48 @@ function TenantInfo() {
             setSaved={setSaved}
           />
         )}
+        {warning && (
+          <SuccessfullySavedModal
+            message="檔案過大，請重新上傳！"
+            toggle={setWarning}
+          />
+        )}
+
         <Wrapper>
+          <CoverWrapper src={currentUser.coverImage}>
+            <ImageLabel htmlFor="coverImage">編輯封面照片</ImageLabel>
+            <HiddenInput
+              id="coverImage"
+              type="file"
+              accept="image/*"
+              ref={coverRef}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
+                  setWarning(true);
+                  return;
+                }
+                coverRef.current = null;
+
+                const storageRef = Firebase.ref(
+                  Firebase.storage,
+                  `users/${currentUser.uid}/cover`
+                );
+                Firebase.uploadBytes(storageRef, file).then((snapshot) => {
+                  Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
+                    api.updateDocData("users", currentUser.uid, {
+                      coverImage: downloadURL,
+                    });
+                    setSaved(true);
+                  });
+                });
+              }}
+            />
+          </CoverWrapper>
+
           <ImageWrapper>
             <ProfileImage src={profileImage} />
-            <>{currentUser.email}</>
+            <Bold>{currentUser.email}</Bold>
             <ImageButton onClick={() => setOpenModal(true)}>
               更換大頭照
             </ImageButton>

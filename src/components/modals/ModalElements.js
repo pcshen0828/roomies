@@ -79,7 +79,7 @@ const Body = styled.div`
   width: calc(100% - 40px);
   border: 1px solid #dadada;
   height: 250px;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 20px auto;
 `;
 

@@ -5,7 +5,7 @@
 @media screen and (max-width: 900px) {
   .fc-view-harness.fc-view-harness-active {
     width: 100%;
-    overflow-x: scroll;
+    overflow-x: auto;
   }
   .fc-daygrid.fc-dayGridMonth-view.fc-view,
   .fc-timegrid.fc-timeGridWeek-view.fc-view,

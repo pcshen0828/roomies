@@ -51,7 +51,7 @@ const Messages = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-end;
   margin: 60px 0 60px;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const SendMessageBlock = styled.form`

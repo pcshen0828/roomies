@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
 
 const Card = styled.div`
   border: 1px solid transparent;
@@ -21,17 +19,17 @@ const Card = styled.div`
   }
 `;
 
-function HobbyCard({ name, setUsers, selected, setSelected, setLoading }) {
-  async function searchByHobby(hobby) {
+function HobbyCard({
+  name,
+  setUsers,
+  selected,
+  setSelected,
+  setLoading,
+  allUsers,
+}) {
+  function searchByHobby(hobby) {
     setLoading(true);
-    const query = Firebase.query(
-      Firebase.collection(Firebase.db, "users"),
-      Firebase.where("role", "==", 1),
-      Firebase.where("hobbies", "array-contains", hobby)
-    );
-    const querySnapShot = await Firebase.getDocs(query);
-    const result = querySnapShot.docs.map((doc) => doc.data());
-    setUsers(result);
+    setUsers(allUsers.filter((user) => user.hobbies.includes(hobby)));
     setLoading(false);
   }
 
