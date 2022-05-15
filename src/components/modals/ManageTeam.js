@@ -211,7 +211,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
             <CloseButton onClick={() => toggle("")}>×</CloseButton>
           </Header>
           <NewBody>
-            <SmallLabel>群組名稱</SmallLabel>
+            <SmallLabel>隊伍名稱</SmallLabel>
             <Input
               value={name}
               readOnly={selfStatus !== 0}

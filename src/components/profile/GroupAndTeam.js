@@ -322,7 +322,7 @@ function GroupAndTeam() {
 
   return (
     <Wrapper>
-      <Bold>管理我的租屋</Bold>
+      <Bold>管理我的租屋活動</Bold>
       <TabsWrapper>
         <Tab
           active={location.pathname === "/profile/groupteam/groups"}

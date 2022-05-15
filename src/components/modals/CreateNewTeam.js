@@ -123,20 +123,20 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
     <Overlay out={false}>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          message="確認建立群組？"
+          message="確認建立看房隊伍？"
           action={createTeam}
           toggle={setOpenConfirm}
         />
       )}
       <Modal>
         <Header>
-          <Title>建立群組</Title>
+          <Title>建立看房隊伍</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>
-          <SmallTitle>群組名稱</SmallTitle>
+          <SmallTitle>隊伍名稱</SmallTitle>
           <Input
-            placeholder="請輸入群組名稱"
+            placeholder="請輸入隊伍名稱"
             value={teamName}
             onChange={(e) => setTeamName(e.target.value)}
           />
@@ -181,7 +181,7 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
             setOpenConfirm(true);
           }}
         >
-          建立群組
+          確認建立
         </Button>
       </Modal>
     </Overlay>

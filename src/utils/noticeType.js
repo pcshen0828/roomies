@@ -1,12 +1,12 @@
 export const noticeTypes = [
   {
     type: 0,
-    message: "申請加入你成立的租屋群組",
+    message: "申請加入你成立的看房隊伍",
     path: "/profile/groupteam/teams",
   },
   {
     type: 1,
-    message: "成功加入了你的租屋群組",
+    message: "成功加入了你的看房隊伍",
     path: "/profile/groupteam/teams",
   },
   {
@@ -16,12 +16,12 @@ export const noticeTypes = [
   },
   {
     type: 3,
-    message: "已核准將你加入租屋群組",
+    message: "已核准將你加入看房隊伍",
     path: "/profile/groupteam/teams",
   },
   {
     type: 4,
-    message: "邀請你加入新成立的租屋群組",
+    message: "邀請你加入新成立的看房隊伍",
     path: "/profile/groupteam/teams",
   },
   {
@@ -48,7 +48,7 @@ export const noticeTypes = [
   },
   {
     type: 11,
-    message: "退出了你成立的租屋群組",
+    message: "退出了你成立的看房隊伍",
     path: "/profile/groupteam/groups",
   },
 ];

@@ -32,7 +32,7 @@ function ApplyJoinModal({ toggle }) {
         </NewHeader>
         <Body>
           <Maintext>已送出申請！</Maintext>
-          <>待群組成員核准後，即可加入該群組</>
+          <>待成員核准後，即可加入該看房隊伍</>
         </Body>
         <NewButton onClick={() => toggle(false)}>關閉</NewButton>
       </Modal>

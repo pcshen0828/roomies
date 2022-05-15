@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { subColor } from "../../styles/GlobalStyle";
 import { FlexWrapper } from "../common/Components";
 import NewTeamModal from "../modals/CreateNewTeam";
 
@@ -17,7 +18,7 @@ const Wrapper = styled(FlexWrapper)`
   font-size: 80px;
   cursor: pointer;
   &:hover {
-    background: #e8e8e8;
+    color: ${subColor};
   }
   @media screen and (max-width: 995.98px) {
     height: 100px;
@@ -39,7 +40,7 @@ function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
           groupMemberDetail={groupMemberDetail}
         />
       )}
-      <Wrapper title="建立群組" onClick={() => setOpenNewTeamModal(true)}>
+      <Wrapper title="組隊看房" onClick={() => setOpenNewTeamModal(true)}>
         +
       </Wrapper>
     </>

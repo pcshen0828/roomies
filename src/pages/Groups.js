@@ -32,7 +32,9 @@ import OwnerCard from "../components/apartments/ApartmentOwner";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
-  margin: 20px auto;
+  margin: 0 auto;
+  padding: 20px 0;
+  background: #f0f2f5;
   flex-direction: column;
   align-items: flex-start;
   min-height: calc(100vh - 441px);
@@ -141,7 +143,7 @@ const SubTitles = styled(FlexWrapper)`
 `;
 
 const SubTitle = styled.div`
-  color: #a1aeb7;
+  color: ${mainColor};
   margin-right: 30px;
   @media screen and (max-width: 1279.98px) {
     font-size: 14px;
@@ -176,9 +178,10 @@ const DropdownWrapper = styled.div`
 const HasJoined = styled(FlexWrapper)`
   width: 128px;
   height: 42px;
-  background: #e8e8e8;
+  background: #fff;
+  border: 1px solid #dadada;
   border-radius: 5px;
-  color: #424b5a;
+  color: ${mainColor};
   justify-content: center;
   align-items: center;
   margin-right: 10px;
@@ -294,7 +297,7 @@ const Reminder = styled(FlexWrapper)`
 const TabsWrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
-  border-bottom: 1px solid #e8e8e8;
+  border-bottom: 1px solid #dadada;
   margin: 0 auto 30px;
   padding: 0 24px;
 `;
@@ -305,9 +308,7 @@ const Tab = styled.div`
   cursor: pointer;
   border-bottom: ${(props) =>
     props.active ? `3px solid ${mainColor}` : "3px solid transparent"};
-  &:hover {
-    background: #e8e8e8;
-  }
+
   display: ${(props) => (props.type === "other" ? "none" : "block")};
   @media screen and (max-width: 995.98px) {
     display: ${(props) => (props.type === "other" ? "block" : "block")};

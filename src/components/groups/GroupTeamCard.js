@@ -183,7 +183,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
       )}
       {openQuitConfirm && (
         <ConfirmBeforeActionModal
-          message="確認退出群組？"
+          message="確認退出此隊伍？"
           action={quitTeam}
           toggle={setOpenQuitConfirm}
         />

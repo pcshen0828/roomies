@@ -54,7 +54,7 @@ export default function RequestDetailModal({ members, hostId, toggle }) {
     <Overlay out={false}>
       <NewModal>
         <Header>
-          <Title>群組資訊</Title>
+          <Title>隊伍資訊</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>

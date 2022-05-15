@@ -113,7 +113,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
     <Overlay out={false}>
       <NewModal>
         <Header>
-          <Title>群組成員</Title>
+          <Title>隊伍成員</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>

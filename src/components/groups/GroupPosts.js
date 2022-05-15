@@ -23,6 +23,7 @@ const TitleSmall = styled.div`
 const SubtitleSmall = styled.div`
   font-size: 14px;
   color: #a1aeb7;
+  font-weight: 700;
 `;
 
 const NewPostButton = styled(FlexWrapper)`

@@ -35,6 +35,7 @@ const TitleSmall = styled.div`
 const SubtitleSmall = styled.div`
   font-size: 14px;
   color: #a1aeb7;
+  font-weight: 700;
 `;
 
 function GroupTeam({
@@ -70,7 +71,7 @@ function GroupTeam({
   return (
     <TeamsBlock>
       <SubtitlesSmall>
-        <TitleSmall>已成立群組</TitleSmall>
+        <TitleSmall>已成立隊伍</TitleSmall>
         <SubtitleSmall>・{teams.length}</SubtitleSmall>
       </SubtitlesSmall>
       <TeamBlockWrapper>
