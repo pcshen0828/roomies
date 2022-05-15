@@ -66,7 +66,7 @@ const Bottom = styled(FlexWrapper)`
 
 const JoinButton = styled(Button1)`
   width: 100px;
-  height: 35px;
+  height: 38px;
 `;
 
 const ShowStatus = styled(Button1)`
@@ -78,14 +78,14 @@ const ShowStatus = styled(Button1)`
   position: relative;
 
   &:hover {
-    background: #dadada;
+    background: ${(props) => (props.pointer ? "#dadada" : "#e8e8e8")};
     color: #424b5a;
   }
 `;
 
 const InviteButton = styled(Button1)`
-  width: 100px;
-  height: 35px;
+  width: 130px;
+  height: 38px;
   margin-left: 10px;
 `;
 
@@ -255,7 +255,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
                   setOpenInviteModal(true);
                 }}
               >
-                邀請
+                邀請社團成員
               </InviteButton>
             )}
           </Bottom>

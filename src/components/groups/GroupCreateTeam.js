@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { subColor } from "../../styles/GlobalStyle";
 import { FlexWrapper } from "../common/Components";
 import NewTeamModal from "../modals/CreateNewTeam";
+import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled(FlexWrapper)`
   width: 99.5%;
@@ -28,9 +29,13 @@ const Wrapper = styled(FlexWrapper)`
 
 function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
   const [openNewTeamModal, setOpenNewTeamModal] = React.useState(false);
+  const [saved, setSaved] = React.useState(false);
 
   return (
     <>
+      {saved && (
+        <SuccessfullySavedModal message="建立成功！" toggle={setSaved} />
+      )}
       {openNewTeamModal && (
         <NewTeamModal
           aid={aid}
@@ -38,9 +43,10 @@ function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
           members={members}
           groupId={groupId}
           groupMemberDetail={groupMemberDetail}
+          setSaved={setSaved}
         />
       )}
-      <Wrapper title="組隊看房" onClick={() => setOpenNewTeamModal(true)}>
+      <Wrapper title="組隊租屋" onClick={() => setOpenNewTeamModal(true)}>
         +
       </Wrapper>
     </>

@@ -197,13 +197,18 @@ export default function BookScheduleModal({
         <NewBody>
           <SmallTitle>此房源目前已被預約的看房時段</SmallTitle>
           {events.length
-            ? events.map((event) => (
-                <BookedTime key={event.id}>
-                  <Icon alt="" src={calendar} />
-                  {generateReadableDate(event.start)} -{" "}
-                  {generateReadableDate(event.end)}
-                </BookedTime>
-              ))
+            ? events
+                .filter(
+                  (event) =>
+                    new Date(event.end).getTime() >= new Date().getTime()
+                )
+                .map((event) => (
+                  <BookedTime key={event.id}>
+                    <Icon alt="" src={calendar} />
+                    {generateReadableDate(event.start)} -{" "}
+                    {generateReadableDate(event.end)}
+                  </BookedTime>
+                ))
             : ""}
           <SmallTitle>選擇日期</SmallTitle>
           <PickerWrapper>

@@ -77,7 +77,14 @@ const InviteButton = styled(Button1)`
   height: 35px;
 `;
 
-function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
+function NewTeamModal({
+  toggle,
+  aid,
+  members,
+  groupId,
+  groupMemberDetail,
+  setSaved,
+}) {
   const [teamName, setTeamName] = React.useState("");
   const [queriedUsers, setQueriedUsers] = React.useState([]);
   const [queryName, setQueryName] = React.useState("");
@@ -115,7 +122,7 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
     uids.forEach((uid) => {
       api.createNoticeByType(currentUser.uid, uid, 4);
     });
-
+    setSaved(true);
     toggle(false);
   }
 
@@ -123,14 +130,14 @@ function NewTeamModal({ toggle, aid, members, groupId, groupMemberDetail }) {
     <Overlay out={false}>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          message="確認建立看房隊伍？"
+          message="確認建立租屋隊伍？"
           action={createTeam}
           toggle={setOpenConfirm}
         />
       )}
       <Modal>
         <Header>
-          <Title>建立看房隊伍</Title>
+          <Title>建立租屋隊伍</Title>
           <CloseButton onClick={() => toggle(false)}>×</CloseButton>
         </Header>
         <NewBody>

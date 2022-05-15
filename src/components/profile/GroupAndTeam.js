@@ -342,7 +342,7 @@ function GroupAndTeam() {
             setPaging(1);
           }}
         >
-          組隊看房
+          組隊租屋
         </Tab>
       </TabsWrapper>
 

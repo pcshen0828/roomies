@@ -21,7 +21,7 @@ import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 import BookScheduleModal from "./BookSchedule";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const NewModal = styled(Modal)`
   width: 80%;
@@ -109,6 +109,13 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
     (user) => user.uid === currentUser.uid
   ).status;
 
+  const [bookingStatus, setBookingStatus] = React.useState();
+  // const [isPending, setIsPending] = React.useState();
+  // const [isAllowedToBook, setIsAllowedToBook] = React.useState();
+  // const [hasBooked, setHasBooked] = React.useState();
+
+  const navigate = useNavigate();
+
   React.useEffect(() => {
     let mounted = true;
     api
@@ -122,6 +129,37 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
         if (!mounted) return;
         setOtherMembers(res);
       });
+
+    function checkBookingQualification() {
+      api
+        .getDataWithSingleQuery("schedules", "team", "==", team.id)
+        .then((res) => {
+          const unExpiredEvents = res.filter(
+            (schedule) =>
+              schedule.status === 1 &&
+              new Date(schedule.end).getTime() >= new Date().getTime()
+          );
+          const pendingEvents = res.filter(
+            (schedule) =>
+              schedule.status === 0 &&
+              new Date(schedule.end).getTime() >= new Date().getTime()
+          );
+          setBookingStatus(
+            unExpiredEvents.length
+              ? "booked"
+              : pendingEvents.length
+              ? "pending"
+              : team.members.length === group?.roomiesCount &&
+                selfStatus === 0 &&
+                team.members
+                  .filter((member) => member.status !== 0)
+                  .every((member) => member.status === 1)
+              ? "available"
+              : ""
+          );
+        });
+    }
+    checkBookingQualification();
 
     return function cleanup() {
       mounted = false;
@@ -283,13 +321,28 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
               ))}
           </NewBody>
           <Buttons>
-            {team.members.length === group?.roomiesCount &&
-              selfStatus === 0 &&
-              team.members
-                .filter((member) => member.status !== 0)
-                .every((member) => member.status === 1) && (
-                <Button onClick={openBookScheduleModal}>預約看房</Button>
-              )}
+            {bookingStatus === "booked" ? (
+              <Button
+                onClick={() => {
+                  navigate("/profile/schedule/booked");
+                }}
+              >
+                查看行程
+              </Button>
+            ) : bookingStatus === "pending" ? (
+              <Button
+                onClick={() => {
+                  navigate("/profile/schedule/pending");
+                }}
+              >
+                查看行程
+              </Button>
+            ) : bookingStatus === "available" ? (
+              <Button onClick={openBookScheduleModal}>預約看房</Button>
+            ) : (
+              ""
+            )}
+
             {selfStatus === 0 ? (
               <Button
                 onClick={() => {

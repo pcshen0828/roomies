@@ -17,6 +17,8 @@ import drop from "../../images/delete.svg";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import { Firebase } from "../../utils/firebase";
 import EditPostModal from "../modals/EditPost";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -233,6 +235,8 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
   const [showImages, setShowImages] = React.useState(false);
   const defaultContentLength = 100;
 
+  const [loading, setLoading] = React.useState(true);
+
   const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
 
@@ -241,6 +245,7 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
       .getDataWithSingleQuery("users", "uid", "==", post.creator)
       .then((res) => {
         setCreatorInfo(res[0]);
+        setLoading(false);
       });
   }, []);
 
@@ -271,7 +276,11 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
     setDeleted(true);
   }
 
-  return (
+  return loading ? (
+    <div width="100%">
+      <Skeleton width="100%" height={450} borderRadius={10} />
+    </div>
+  ) : (
     <Wrapper
       onClick={() => {
         setShowMore(false);
@@ -295,6 +304,7 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
       {showImages && (
         <ImagesDisplayer images={post.images} toggle={setShowImages} />
       )}
+
       <TopInfo>
         {creatorInfo.role === 1 ? (
           <Link to={`/users/${creatorInfo.uid}`}>

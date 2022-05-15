@@ -658,7 +658,7 @@ function Groups() {
               }}
               active={tab === "teams"}
             >
-              組隊看房
+              組隊租屋
             </Tab>
             <Tab
               type="other"
@@ -702,6 +702,7 @@ function Groups() {
                     groupId={id}
                     groupMemberDetail={members}
                     isOwner={apartmentData.owner === currentUser?.uid}
+                    currentUser={currentUser}
                   />
                 )}
               </GroupBodyLeft>

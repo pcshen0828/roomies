@@ -45,8 +45,10 @@ function GroupTeam({
   roomies,
   groupMemberDetail,
   isOwner,
+  currentUser,
 }) {
   const [teams, setTeams] = React.useState([]);
+  const [hasCreated, setHasCreated] = React.useState();
   React.useEffect(() => {
     let mounted = true;
     async function getTeams() {
@@ -58,7 +60,15 @@ function GroupTeam({
 
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
-        setTeams(snapshot.docs.map((doc) => doc.data()));
+        const res = snapshot.docs.map((doc) => doc.data());
+        setHasCreated(
+          res.filter(
+            (team) =>
+              team.members.find((member) => member.status === 0).uid ===
+              currentUser.uid
+          ).length
+        );
+        setTeams(res);
       });
     }
     getTeams();
@@ -76,7 +86,7 @@ function GroupTeam({
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>
-          {isOwner ? (
+          {isOwner || hasCreated ? (
             ""
           ) : (
             <CreateTeam
