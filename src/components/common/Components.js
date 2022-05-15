@@ -360,8 +360,8 @@ const SearchButton = styled.img`
   width: 20px;
   height: 20px;
   position: absolute;
-  right: 5px;
-  top: 8px;
+  top: 5px;
+  right: 18px;
 `;
 
 const Button1 = styled.button`

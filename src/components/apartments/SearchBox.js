@@ -8,10 +8,7 @@ const StyldSearchWrapper = styled(SearchWrapper)`
   margin: 0 auto;
 `;
 
-const NewButton = styled(SearchButton)`
-  top: 5px;
-  right: 18px;
-`;
+const NewButton = styled(SearchButton)``;
 
 function SearchBox({
   apartments,

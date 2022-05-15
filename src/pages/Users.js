@@ -30,7 +30,6 @@ function User() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     api.getDataWithSingleQuery("users", "uid", "==", id).then((res) => {
-      console.log(res);
       if (!res.length) return;
       if (!mounted) return;
       setTargetUser(res[0]);
@@ -40,7 +39,7 @@ function User() {
     return function cleanup() {
       mounted = false;
     };
-  }, []);
+  }, [id]);
 
   function generateSkeleton() {
     return (

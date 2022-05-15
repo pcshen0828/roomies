@@ -28,10 +28,7 @@ const NewTitle = styled(Title)`
   margin: 0px 0 30px;
 `;
 
-const NewButton = styled(SearchButton)`
-  right: 18px;
-  top: 5px;
-`;
+const NewButton = styled(SearchButton)``;
 
 const HobbyTags = styled(FlexWrapper)`
   margin-top: 20px;
@@ -234,21 +231,20 @@ function Community() {
               ))}
             </HobbyTags>
             <ResultDisplayer>
-              {searching ? (
-                <Skeleton
-                  count={5}
-                  width={200}
-                  height={240}
-                  inline={true}
-                  style={{ margin: "0 20px 20px 0" }}
-                />
-              ) : users && users.length ? (
-                users
-                  .slice(0, itemsPerPage * paging)
-                  .map((user, index) => <UserCard key={index} user={user} />)
-              ) : (
-                "查無用戶"
-              )}
+              {searching
+                ? Array.from(Array(6).keys()).map((loader, index) => (
+                    <Skeleton
+                      key={index}
+                      height={250}
+                      borderRadius={20}
+                      style={{ marginBottom: "20px" }}
+                    />
+                  ))
+                : users && users.length
+                ? users
+                    .slice(0, itemsPerPage * paging)
+                    .map((user, index) => <UserCard key={index} user={user} />)
+                : "查無用戶"}
             </ResultDisplayer>
             <Anchor ref={anchor}></Anchor>
           </NewWrapper>

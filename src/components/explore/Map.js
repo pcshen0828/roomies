@@ -10,7 +10,7 @@ import {
 import { googleMapsAppKey } from "../../appkeys";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { BodyLeft, BodyRight } from "../common/Components";
+import { BodyLeft, BodyRight, Input } from "../common/Components";
 import api from "../../utils/api";
 import Card from "../apartments/ApartmentCard";
 import Skeleton from "react-loading-skeleton";
@@ -68,17 +68,14 @@ const StyledLink = styled(Link)`
   font-weight: 400;
 `;
 
-const SearchBox = styled.input`
+const SearchBox = styled(Input)`
+  width: 100%;
   height: 30px;
   border: 1px solid #dadada;
-  padding: 0;
+  border-radius: 5px;
   padding-left: 10px;
-  width: calc(100% - 10px);
-
-  &:focus {
-    outline: none;
-    border: 1px solid #c1b18a;
-  }
+  margin: 0;
+  background-color: #fff;
 `;
 
 const Cards = styled.div`
