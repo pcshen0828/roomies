@@ -137,7 +137,6 @@ const InfoInnerWrapper = styled(FlexWrapper)`
 `;
 
 const LightText = styled.div`
-  color: #a1aeb7;
   margin-right: 10px;
 `;
 

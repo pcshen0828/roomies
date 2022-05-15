@@ -88,7 +88,7 @@ function Apartments() {
   }
 
   function calcAllPages(data) {
-    return Math.ceil(data.length / itemsPerPage);
+    return Math.ceil(data / itemsPerPage);
   }
 
   React.useEffect(() => {

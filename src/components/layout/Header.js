@@ -12,6 +12,7 @@ import menu from "../../images/menu.svg";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { subColor } from "../../styles/GlobalStyle";
+import logo from "../../images/logo.svg";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,9 +36,11 @@ const InnerWrapper = styled.div`
 
 const IndexLink = styled(Link)`
   color: #424b5a;
-  font-size: 20px;
+  font-size: 18px;
   padding-bottom: 3px;
   font-family: "Noto Serif TC", serif;
+  display: flex;
+  align-items: center;
   &:hover {
     color: ${subColor};
   }
@@ -57,6 +60,12 @@ const Menu = styled.img`
     top: 25px;
     cursor: pointer;
   }
+`;
+
+const Logo = styled.img`
+  width: 30px;
+  height: 30px;
+  margin-right: 1px;
 `;
 
 function Header() {
@@ -90,7 +99,10 @@ function Header() {
       <InnerWrapper>
         <FlexWrapper>
           <Menu src={menu} onClick={() => setToggleMenu(true)} />
-          <IndexLink to="/">Roomies</IndexLink>
+          <IndexLink to="/">
+            <Logo src={logo} />
+            oomies
+          </IndexLink>
           <NavBar />
           {toggleMenu && <MobileNavBar toggle={setToggleMenu} />}
         </FlexWrapper>
@@ -100,4 +112,5 @@ function Header() {
   );
 }
 
+// 寓見
 export default Header;
