@@ -241,7 +241,7 @@ function ApartmentDetail({ details, loading }) {
           if (res.length) {
             setGroupId(res[0].id);
             setHasJoined(res[0].members?.includes(currentUser.uid));
-            setMembersCount(res[0].members.length);
+            setMembersCount(res[0].members?.length);
           }
         });
     }
@@ -253,7 +253,7 @@ function ApartmentDetail({ details, loading }) {
     return function cleanup() {
       mounted = false;
     };
-  }, [currentUser]);
+  }, [currentUser, id]);
 
   function openConfirmModal() {
     if (!currentUser) {
@@ -408,7 +408,9 @@ function ApartmentDetail({ details, loading }) {
                         加入租屋
                       </Button1>
                     )}
-                    <MembersCount>{membersCount}人已加入</MembersCount>
+                    <MembersCount>
+                      {membersCount ? `${membersCount}人已加入` : "尚無成員"}
+                    </MembersCount>
                   </ActionArea>
                 )}
               </DetailInfo>
