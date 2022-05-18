@@ -2,7 +2,7 @@ import React from "react";
 import { Firebase } from "../../utils/firebase";
 
 import styled from "styled-components";
-import { FlexColumn, FlexWrapper } from "../common/Components";
+import { FlexColumn, FlexWrapper, ProfileImage } from "../common/Components";
 import CreateNewPostModal from "../modals/CreateNewPost";
 import Post from "./Post";
 
@@ -38,14 +38,9 @@ const NewPostButton = styled(FlexWrapper)`
   padding: 0px 20px;
 `;
 
-const Profile = styled.div`
+const Profile = styled(ProfileImage)`
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 `;
 
 const FakeInput = styled(FlexWrapper)`

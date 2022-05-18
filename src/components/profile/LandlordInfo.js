@@ -12,14 +12,13 @@ import {
   Select,
   Textarea,
   Button1,
+  FlexColumn,
 } from "../common/Components";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexColumn)`
   width: 100%;
-  display: flex;
-  flex-direction: column;
   justify-content: flex-end;
   margin-top: 10px;
 `;

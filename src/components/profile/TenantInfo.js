@@ -15,6 +15,7 @@ import {
   Button1,
   ErrorMessage,
   Bold,
+  FlexColumn,
 } from "../common/Components";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import BasicInfoModal from "../modals/SetUpBasicInfo";
@@ -22,10 +23,8 @@ import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 import Creatable from "react-select/creatable";
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexColumn)`
   width: 100%;
-  display: flex;
-  flex-direction: column;
   justify-content: flex-end;
   margin-top: 10px;
   position: relative;

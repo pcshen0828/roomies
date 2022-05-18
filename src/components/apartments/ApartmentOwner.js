@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import api from "../../utils/api";
 
-import { MediumTitle, FlexWrapper, Bold, Button1 } from "../common/Components";
+import {
+  MediumTitle,
+  FlexWrapper,
+  Bold,
+  Button1,
+  ProfileImage,
+} from "../common/Components";
 import SendMessageLandlordModal from "../modals/SendMessageLandlord";
 import SignInFirstModal from "../modals/SignInFirst";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
@@ -34,15 +40,10 @@ const SubTitle = styled.div`
   margin-bottom: 20px;
 `;
 
-const ProfileImage = styled.div`
+const NewProfileImage = styled(ProfileImage)`
   width: ${(props) => (props.page === "apartment" ? "90px" : "60px")};
   height: ${(props) => (props.page === "apartment" ? "90px" : "60px")};
-  border-radius: 50%;
   margin-right: 10px;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   flex-shrink: 0;
 `;
 
@@ -92,7 +93,7 @@ export default function OwnerCard({ owner, currentUser, page }) {
         {ownerInfo && (
           <>
             <FlexWrapper>
-              <ProfileImage src={ownerInfo.profileImage} page={page} />
+              <NewProfileImage src={ownerInfo.profileImage} page={page} />
               <Info>
                 <MediumTitle>{ownerInfo.alias}</MediumTitle>
                 <FlexWrapper>

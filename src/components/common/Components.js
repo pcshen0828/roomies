@@ -582,7 +582,6 @@ const ProfileImage = styled.div`
   background-repeat: no-repeat;
 `;
 
-// apartment property
 const BodyInnerWrapper = styled(FlexWrapper)`
   position: relative;
   align-items: flex-start;

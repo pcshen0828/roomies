@@ -18,6 +18,7 @@ import {
   Error,
   FlexWrapper,
   LoadingButton,
+  ProfileImage,
   Textarea,
 } from "../common/Components";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
@@ -39,14 +40,9 @@ const NewBody = styled(Body)`
   height: auto;
 `;
 
-const Profile = styled.div`
+const Profile = styled(ProfileImage)`
   width: 45px;
   height: 45px;
-  border-radius: 50%;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   margin-right: 10px;
 `;
 

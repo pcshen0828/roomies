@@ -38,8 +38,6 @@ const Wrapper = styled.div`
   margin-bottom: 20px;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  @media screen and (max-width: 767.98px) {
-  }
 `;
 
 const BannerWrapper = styled(Swiper)`

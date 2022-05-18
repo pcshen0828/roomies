@@ -3,13 +3,16 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 import styled from "styled-components";
-import { Button1, FlexWrapper, SlicedBold } from "../common/Components";
+import {
+  Button1,
+  FlexColumn,
+  FlexWrapper,
+  SlicedBold,
+} from "../common/Components";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import SendMessageModal from "../modals/SendMessage";
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+const Wrapper = styled(FlexColumn)`
   width: 100%;
   margin-top: 20px;
 `;

@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { FlexColumn } from "../common/Components";
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexColumn)`
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
   height: 350px;
   margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
   border-radius: 20px;
   overflow: hidden;
   position: relative;

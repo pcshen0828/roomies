@@ -5,14 +5,12 @@ import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
 import styled from "styled-components";
-import { FlexWrapper, SmallTitle } from "../common/Components";
+import { FlexColumn, FlexWrapper, SmallTitle } from "../common/Components";
 import Schedule from "./Schedule";
 import Requests from "./Requests";
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexColumn)`
   width: 100%;
-  display: flex;
-  flex-direction: column;
   justify-content: flex-end;
   margin-top: 10px;
 `;
