@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
@@ -94,14 +94,6 @@ const Banner = styled.div`
 
 const HeaderBody = styled.div`
   width: 100%;
-`;
-
-const stickyStyle = `
-  box-shadow: 0px 2px 30px rgb(0 0 0 / 6%);
-  background: #fff;
-  position: sticky;
-  top: 80px;
-  z-index: 5;
 `;
 
 const HeaderWrapper = styled.div`
@@ -225,7 +217,6 @@ const GroupBodyLeft = styled(FlexWrapper)`
   width: 58%;
   flex-direction: column;
   align-items: flex-start;
-  ${"" /* z-index: 2; */}
 
   @media screen and (max-width: 995.98px) {
     width: 100%;
@@ -310,32 +301,32 @@ const Tab = styled.div`
 
 function Groups() {
   const { id } = useParams();
-  const [apartmentData, setApartmentData] = React.useState({});
-  const [owner, setOwner] = React.useState({});
-  const [members, setMembers] = React.useState([]);
-  const [groupMembers, setGroupMembers] = React.useState([]);
+  const [apartmentData, setApartmentData] = useState({});
+  const [owner, setOwner] = useState({});
+  const [members, setMembers] = useState([]);
+  const [groupMembers, setGroupMembers] = useState([]);
   const { currentUser } = useAuth();
-  const [isInvited, setIsInvited] = React.useState();
-  const [invitation, setInvitation] = React.useState([]);
+  const [isInvited, setIsInvited] = useState();
+  const [invitation, setInvitation] = useState([]);
 
-  const [openConfirmQuit, setOpenConfirmQuit] = React.useState(false);
-  const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
-  const [openJoin, setOpenJoin] = React.useState(false);
-  const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
-  const [dropdown, setDropdown] = React.useState(false);
+  const [openConfirmQuit, setOpenConfirmQuit] = useState(false);
+  const [openConfirmJoin, setOpenConfirmJoin] = useState(false);
+  const [openJoin, setOpenJoin] = useState(false);
+  const [openConfirmReject, setOpenConfirmReject] = useState(false);
+  const [dropdown, setDropdown] = useState(false);
 
-  const [openInviteModal, setOpenInviteModal] = React.useState(false);
-  const [saved, setSaved] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
+  const [openInviteModal, setOpenInviteModal] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const anchor = React.useRef(null);
-  const [sticky, setSticky] = React.useState(false);
-  const [tab, setTab] = React.useState("news");
-  const [posted, setPosted] = React.useState(false);
-  const [updated, setUpdated] = React.useState(false);
-  const [deleted, setDeleted] = React.useState(false);
+  const anchor = useRef(null);
+  const [sticky, setSticky] = useState(false);
+  const [tab, setTab] = useState("news");
+  const [posted, setPosted] = useState(false);
+  const [updated, setUpdated] = useState(false);
+  const [deleted, setDeleted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -386,7 +377,7 @@ function Groups() {
     };
   }, [currentUser, id]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (loading) return;
     const intersectionObserver = new IntersectionObserver((entries) => {

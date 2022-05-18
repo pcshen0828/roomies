@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { subColor } from "../../styles/GlobalStyle";
 import { FlexWrapper } from "../common/Components";
@@ -28,8 +28,8 @@ const Wrapper = styled(FlexWrapper)`
 `;
 
 function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
-  const [openNewTeamModal, setOpenNewTeamModal] = React.useState(false);
-  const [saved, setSaved] = React.useState(false);
+  const [openNewTeamModal, setOpenNewTeamModal] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   return (
     <>

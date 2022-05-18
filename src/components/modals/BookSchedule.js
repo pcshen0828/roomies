@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
@@ -71,16 +71,16 @@ export default function BookScheduleModal({
   )
     .toISOString()
     .slice(0, -5);
-  const [pickedDate, setPickedDate] = React.useState(isoDateTime);
-  const [startTime, setStartTime] = React.useState(isoDateTime);
-  const [endTime, setEndTime] = React.useState(isoDateTime);
-  const [message, setMessage] = React.useState("");
-  const [events, setEvents] = React.useState([]);
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [pickedDate, setPickedDate] = useState(isoDateTime);
+  const [startTime, setStartTime] = useState(isoDateTime);
+  const [endTime, setEndTime] = useState(isoDateTime);
+  const [message, setMessage] = useState("");
+  const [events, setEvents] = useState([]);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "schedules"),
       Firebase.where("apartmentID", "==", apartment.id),

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
 
@@ -40,17 +40,17 @@ const Anchor = styled.div`
 `;
 
 function Apartments() {
-  const [loading, setLoading] = React.useState(true);
-  const [apartments, setApartments] = React.useState([]);
-  const [allData, setAllData] = React.useState([]);
-  const [paging, setPaging] = React.useState(1);
+  const [loading, setLoading] = useState(true);
+  const [apartments, setApartments] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [paging, setPaging] = useState(1);
   const itemsPerPage = 6;
-  const anchor = React.useRef(null);
-  const firstRender = React.useRef();
-  const currentPage = React.useRef(1);
-  const allPages = React.useRef();
-  const queryList = React.useRef([]);
-  const filterAnchor = React.useRef(null);
+  const anchor = useRef(null);
+  const firstRender = useRef();
+  const currentPage = useRef(1);
+  const allPages = useRef();
+  const queryList = useRef([]);
+  const filterAnchor = useRef(null);
 
   const query = Firebase.query(
     Firebase.collection(Firebase.db, "apartments"),
@@ -91,7 +91,7 @@ function Apartments() {
     return Math.ceil(data / itemsPerPage);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     firstRender.current = true;
     fetchApartments(query, (data) => {
       if (firstRender.current) {
@@ -104,7 +104,7 @@ function Apartments() {
     });
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     const intersectionObserver = new IntersectionObserver((entries) => {

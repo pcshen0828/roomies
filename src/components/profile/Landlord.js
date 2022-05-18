@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import styled from "styled-components";
@@ -51,13 +51,13 @@ const profilelist = [
 ];
 
 function Landlord() {
-  const [listIndex, setListIndex] = React.useState(1);
+  const [listIndex, setListIndex] = useState(1);
   const navigate = useNavigate();
   const location = useLocation();
   const { id, status } = useParams();
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const current = profilelist.find(
       (item) => item.to === `/profile/${id}/${status}`
     );

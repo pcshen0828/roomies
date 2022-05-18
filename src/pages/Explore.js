@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import {
   Wrapper,
@@ -22,7 +22,7 @@ const NewWrapper = styled(Wrapper)`
 `;
 
 function Explore() {
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (

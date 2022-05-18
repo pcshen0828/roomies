@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Firebase } from "../../utils/firebase";
 
 import styled from "styled-components";
@@ -62,10 +62,10 @@ export default function GroupPosts({
   setUpdated,
   setDeleted,
 }) {
-  const [openPost, setOpenPost] = React.useState(false);
-  const [posts, setPosts] = React.useState([]);
+  const [openPost, setOpenPost] = useState(false);
+  const [posts, setPosts] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "posts"),

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 
 import {
@@ -31,7 +31,7 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
   return (
     <>
       {otherInfo.map((info, index) => (
-        <React.Fragment key={index}>
+        <Fragment key={index}>
           <SmallLabel htmlFor={info.id}>
             {info.name}
             <Required>*</Required>
@@ -62,7 +62,7 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
                 { name: "是", value: true },
                 { name: "否", value: false },
               ].map((choice, index) => (
-                <React.Fragment key={index}>
+                <Fragment key={index}>
                   <input
                     id={`${info.id}${index}`}
                     name={info.id}
@@ -85,7 +85,7 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
                   <CheckboxLabel htmlFor={`${info.id}${index}`}>
                     {choice.name}
                   </CheckboxLabel>
-                </React.Fragment>
+                </Fragment>
               ))}
             </CheckboxWrapper>
           ) : (
@@ -129,7 +129,7 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
               }}
             />
           )}
-        </React.Fragment>
+        </Fragment>
       ))}
     </>
   );

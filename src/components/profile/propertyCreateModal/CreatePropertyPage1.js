@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { Firebase } from "../../../utils/firebase";
 import api from "../../../utils/api";
 import {
@@ -74,10 +74,10 @@ const SearchBox = styled.input`
 const libraries = ["places"];
 
 function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
-  const coverFileRef = React.useRef(null);
-  const [error, setError] = React.useState("");
-  const [searchBox, setSearchBox] = React.useState(null);
-  const [map, setMap] = React.useState(null);
+  const coverFileRef = useRef(null);
+  const [error, setError] = useState("");
+  const [searchBox, setSearchBox] = useState(null);
+  const [map, setMap] = useState(null);
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
@@ -86,11 +86,11 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
     language: "zh-TW",
   });
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = useCallback(function callback(map) {
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = useCallback(function callback(map) {
     setMap(null);
   }, []);
 

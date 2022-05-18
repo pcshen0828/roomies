@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
@@ -56,23 +56,23 @@ const NewBody = styled(Body)`
   }
 `;
 
-function EditPropertyModal({ toggle, apartment, currentUser, setSaved }) {
-  const [paging, setPaging] = React.useState(1);
-  const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [warning, setWarning] = React.useState(false);
+function EditPropertyModal({ toggle, apartment, setSaved }) {
+  const [paging, setPaging] = useState(1);
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(false);
 
-  const [basicInfo, setBasicInfo] = React.useState({
+  const [basicInfo, setBasicInfo] = useState({
     ...apartment,
     coverFile: null,
     coverFileRef: null,
     query: apartment.address,
   });
-  const [conditions, setConditions] = React.useState([]);
-  const [facilities, setFacilities] = React.useState([]);
-  const [furnitures, setFurnitures] = React.useState([]);
-  const [otherInfo, setOtherInfo] = React.useState([]);
-  const [images, setImages] = React.useState([]);
+  const [conditions, setConditions] = useState([]);
+  const [facilities, setFacilities] = useState([]);
+  const [furnitures, setFurnitures] = useState([]);
+  const [otherInfo, setOtherInfo] = useState([]);
+  const [images, setImages] = useState([]);
 
   const pages = [
     {
@@ -130,7 +130,7 @@ function EditPropertyModal({ toggle, apartment, currentUser, setSaved }) {
     },
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (!mounted) return;
 

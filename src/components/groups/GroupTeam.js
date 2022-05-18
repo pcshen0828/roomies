@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import TeamCard from "./GroupTeamCard";
 import CreateTeam from "./GroupCreateTeam";
@@ -43,9 +43,9 @@ function GroupTeam({
   isOwner,
   currentUser,
 }) {
-  const [teams, setTeams] = React.useState([]);
-  const [hasCreated, setHasCreated] = React.useState();
-  React.useEffect(() => {
+  const [teams, setTeams] = useState([]);
+  const [hasCreated, setHasCreated] = useState();
+  useEffect(() => {
     let mounted = true;
     async function getTeams() {
       const query = Firebase.query(

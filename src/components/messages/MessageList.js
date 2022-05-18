@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { calcTimeGap } from "../../utils/calculate";
@@ -71,11 +71,11 @@ function List({ chats, setChatId, usage, toggle }) {
   const location = useLocation();
   const chatroomId = location.pathname.slice(10);
   const { currentUser } = useAuth();
-  const [chatUserData, setChatUserData] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [chatUserData, setChatUserData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     const chatMates = chats
       .map((chat) => chat.userIDs)

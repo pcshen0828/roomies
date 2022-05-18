@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import api from "../../utils/api";
 
@@ -64,12 +64,12 @@ const Icon = styled.img`
 `;
 
 export default function OwnerCard({ owner, currentUser, page }) {
-  const [ownerInfo, setOwnerInfo] = React.useState();
-  const [openModal, setOpenModal] = React.useState(false);
-  const [openSignin, setOpenSignin] = React.useState(false);
-  const [saved, setSaved] = React.useState(false);
+  const [ownerInfo, setOwnerInfo] = useState();
+  const [openModal, setOpenModal] = useState(false);
+  const [openSignin, setOpenSignin] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
       setOwnerInfo(res[0]);
     });

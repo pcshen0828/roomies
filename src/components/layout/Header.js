@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -58,16 +58,10 @@ const Menu = styled.img`
   }
 `;
 
-const Logo = styled.img`
-  width: 30px;
-  height: 30px;
-  margin-right: 1px;
-`;
-
 function Header() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
-  const [toggleMenu, setToggleMenu] = React.useState(false);
+  const [toggleMenu, setToggleMenu] = useState(false);
 
   function Render() {
     if (loading) {
@@ -95,7 +89,7 @@ function Header() {
       <InnerWrapper>
         <FlexWrapper>
           <Menu src={menu} onClick={() => setToggleMenu(true)} />
-          <IndexLink to="/">{/* <Logo src={logo} /> */}Roomies</IndexLink>
+          <IndexLink to="/">Roomies</IndexLink>
           <NavBar />
           {toggleMenu && <MobileNavBar toggle={setToggleMenu} />}
         </FlexWrapper>
@@ -105,5 +99,4 @@ function Header() {
   );
 }
 
-// 寓見
 export default Header;

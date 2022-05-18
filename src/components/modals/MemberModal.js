@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -40,7 +40,7 @@ const SignoutButton = styled(Button1)`
 
 function MemberModal({ setActiveIcon }) {
   const { signOut, currentUser } = useAuth();
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const navigate = useNavigate();
   return (
     <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>

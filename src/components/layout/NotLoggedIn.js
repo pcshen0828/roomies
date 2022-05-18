@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { FlexWrapper, Button1 } from "../common/Components";
 import SignInModal from "../modals/SignIn";
@@ -31,8 +31,8 @@ const SignIn = styled(Button1)`
 `;
 
 function NotLoggedIn() {
-  const [openSignIn, setOpenSignIn] = React.useState(false);
-  const [openSignUp, setOpenSignUp] = React.useState(false);
+  const [openSignIn, setOpenSignIn] = useState(false);
+  const [openSignUp, setOpenSignUp] = useState(false);
 
   return (
     <>

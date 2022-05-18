@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -167,11 +167,11 @@ const NewLabel = styled(SmallLabel)`
 
 function TenantInfo() {
   const { currentUser } = useAuth();
-  const [openModal, setOpenModal] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [allHobbies, setAllHobbies] = React.useState([]);
-  const [hobbyOptions, setHobbyOptions] = React.useState([]);
-  const [saved, setSaved] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [allHobbies, setAllHobbies] = useState([]);
+  const [hobbyOptions, setHobbyOptions] = useState([]);
+  const [saved, setSaved] = useState(false);
 
   const customStyles = {
     option: (provided, state) => ({
@@ -224,28 +224,26 @@ function TenantInfo() {
     }),
   };
 
-  const coverRef = React.useRef(null);
-  const [warning, setWarning] = React.useState(false);
+  const coverRef = useRef(null);
+  const [warning, setWarning] = useState(false);
 
-  const [file, setFile] = React.useState();
-  const [name, setName] = React.useState(currentUser.name);
-  const [alias, setAlias] = React.useState(currentUser.alias);
-  const [gender, setGender] = React.useState(currentUser.gender);
-  const [birthday, setBirthday] = React.useState(currentUser.birthday);
-  const [phone, setPhone] = React.useState(currentUser.phone);
+  const [file, setFile] = useState();
+  const [name, setName] = useState(currentUser.name);
+  const [alias, setAlias] = useState(currentUser.alias);
+  const [gender, setGender] = useState(currentUser.gender);
+  const [birthday, setBirthday] = useState(currentUser.birthday);
+  const [phone, setPhone] = useState(currentUser.phone);
 
-  const [employment, setEmployment] = React.useState(currentUser.employment);
-  const [selfIntro, setSelfIntro] = React.useState(currentUser.selfIntro);
+  const [employment, setEmployment] = useState(currentUser.employment);
+  const [selfIntro, setSelfIntro] = useState(currentUser.selfIntro);
 
-  const [allJobs, setAllJobs] = React.useState([]);
-  const [jobOptions, setJobOptions] = React.useState([]);
-  const [jobTitle, setJobTitle] = React.useState(currentUser.jobTitle);
-  const [hobbies, setHobbies] = React.useState(currentUser.hobbies);
-  const [profileImage, setProfileImage] = React.useState(
-    currentUser.profileImage
-  );
-  const [status, setStatus] = React.useState(currentUser.status);
-  const [error, setError] = React.useState("");
+  const [allJobs, setAllJobs] = useState([]);
+  const [jobOptions, setJobOptions] = useState([]);
+  const [jobTitle, setJobTitle] = useState(currentUser.jobTitle);
+  const [hobbies, setHobbies] = useState(currentUser.hobbies);
+  const [profileImage, setProfileImage] = useState(currentUser.profileImage);
+  const [status, setStatus] = useState(currentUser.status);
+  const [error, setError] = useState("");
 
   const employments = [
     { name: "待業中", value: 0 },
@@ -300,7 +298,7 @@ function TenantInfo() {
     setSaved(true);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     api.getAllDocsFromCollection("hobbies").then((res) => {
       const initData = res.map((item) => item.name);

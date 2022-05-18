@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { FlexWrapper } from "../common/Components";
 import Linkify from "react-linkify";
@@ -71,11 +71,11 @@ const ProfileImage = styled.div`
 `;
 
 function MessageBar({ detail, myRole, members, self }) {
-  const scrollRef = React.useRef();
-  const [myProfile, setMyProfile] = React.useState("");
-  const [objectProfile, setObjectProfile] = React.useState("");
+  const scrollRef = useRef();
+  const [myProfile, setMyProfile] = useState("");
+  const [objectProfile, setObjectProfile] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (!mounted) return;
     const myself = members.find((member) => member.uid === self.uid);
@@ -88,7 +88,7 @@ function MessageBar({ detail, myRole, members, self }) {
     };
   }, [self, members]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [detail]);
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {
   Overlay,
@@ -39,12 +39,8 @@ const NewButton = styled(Button)`
   margin: 0 0 30px 0;
 `;
 
-const Required = styled.span`
-  color: #ed3636;
-`;
-
 export default function BasicInfoModal({ role }) {
-  const [toggle, setToggle] = React.useState(true);
+  const [toggle, setToggle] = useState(true);
 
   return (
     toggle && (

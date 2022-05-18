@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -54,13 +54,13 @@ const Button = styled(Button1)`
 
 function SendMessageLandlordModal({ setOpenModal, objectId, setSaved }) {
   const { currentUser } = useAuth();
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const defaultmessages = [
     "您好，我想了解目前房源的出租情形",
     "您好，我想詢問房源詳細的設備",
   ];
-  const [message, setMessage] = React.useState("");
+  const [message, setMessage] = useState("");
 
   async function sendMyMessage() {
     if (!message.trim()) return;

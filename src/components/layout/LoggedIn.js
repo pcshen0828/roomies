@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -79,14 +79,14 @@ const Unread = styled(FlexWrapper)`
 
 function LoggedIn() {
   const location = useLocation();
-  const [activeicon, setActiveIcon] = React.useState("");
+  const [activeicon, setActiveIcon] = useState("");
   const { currentUser } = useAuth();
-  const [unreadChats, setUnreadChats] = React.useState();
-  const [unreadChatCount, setUnreadChatCount] = React.useState();
-  const [unreadNotice, setUnreadNotice] = React.useState();
-  const [unreadNoticeCount, setUnreadNoticeCount] = React.useState();
+  const [unreadChats, setUnreadChats] = useState();
+  const [unreadChatCount, setUnreadChatCount] = useState();
+  const [unreadNotice, setUnreadNotice] = useState();
+  const [unreadNoticeCount, setUnreadNoticeCount] = useState();
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (currentUser) {
       const query1 = Firebase.query(

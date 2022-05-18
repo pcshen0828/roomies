@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -97,27 +97,24 @@ const Buttons = styled(FlexWrapper)`
 
 function ManageTeamModal({ team, group, toggle, setSaved }) {
   const { currentUser } = useAuth();
-  const [openSchedule, setOpenSchedule] = React.useState(false);
+  const [openSchedule, setOpenSchedule] = useState(false);
 
-  const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
-  const [openConfirmApprove, setOpenConfirmApprove] = React.useState(false);
-  const [targetUser, setTargetUser] = React.useState("");
+  const [openConfirmJoin, setOpenConfirmJoin] = useState(false);
+  const [openConfirmApprove, setOpenConfirmApprove] = useState(false);
+  const [targetUser, setTargetUser] = useState("");
 
-  const [otherMembers, setOtherMembers] = React.useState([]);
-  const [name, setName] = React.useState(team.name);
+  const [otherMembers, setOtherMembers] = useState([]);
+  const [name, setName] = useState(team.name);
   const host = team.members.find((user) => user.status === 0).uid;
   const selfStatus = team.members.find(
     (user) => user.uid === currentUser.uid
   ).status;
 
-  const [bookingStatus, setBookingStatus] = React.useState();
-  // const [isPending, setIsPending] = React.useState();
-  // const [isAllowedToBook, setIsAllowedToBook] = React.useState();
-  // const [hasBooked, setHasBooked] = React.useState();
+  const [bookingStatus, setBookingStatus] = useState();
 
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     api
       .getDataWithSingleQuery(

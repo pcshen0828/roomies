@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -119,12 +119,12 @@ function ChangeProfileImageModal({
   setSaved,
 }) {
   const { currentUser } = useAuth();
-  const [url, setUrl] = React.useState("");
-  const [error, setError] = React.useState("");
-  const fileRef = React.useRef(null);
-  const editor = React.useRef(null);
-  const [showPreview, setShowPreview] = React.useState(false);
-  const [isUploading, setIsUploading] = React.useState(false);
+  const [url, setUrl] = useState("");
+  const [error, setError] = useState("");
+  const fileRef = useRef(null);
+  const editor = useRef(null);
+  const [showPreview, setShowPreview] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   function updateProfileImage() {
     setProfileImage(url ? url : currentUser.profileImage);

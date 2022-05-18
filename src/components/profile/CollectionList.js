@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 
@@ -33,10 +33,10 @@ const CollectionWrapper = styled.div`
 
 function CollectionList() {
   const { currentUser } = useAuth();
-  const [collectionList, setCollectionList] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [collectionList, setCollectionList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!currentUser.collectionList.length) {
       setCollectionList([]);
       setLoading(false);

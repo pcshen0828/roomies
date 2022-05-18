@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 
@@ -96,12 +96,12 @@ const Role = styled(FlexWrapper)`
 `;
 
 function SignUpModal({ setOpenSignUp }) {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPwd, setCofirmPwd] = React.useState("");
-  const [alias, setAlias] = React.useState("");
-  const [errMessage, setErrMessage] = React.useState("");
-  const [role, setRole] = React.useState(1);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPwd, setCofirmPwd] = useState("");
+  const [alias, setAlias] = useState("");
+  const [errMessage, setErrMessage] = useState("");
+  const [role, setRole] = useState(1);
   const userRoles = [
     { no: 1, name: "房客" },
     { no: 2, name: "屋主" },

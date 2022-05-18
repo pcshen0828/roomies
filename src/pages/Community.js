@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
@@ -77,26 +77,26 @@ const Anchor = styled.div`
 function Community() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
-  const [allUsers, setAllUsers] = React.useState([]);
-  const [users, setUsers] = React.useState();
-  const [hobbies, setHobbies] = React.useState([]);
-  const [selected, setSelected] = React.useState("");
-  const [query, setQuery] = React.useState("");
+  const [allUsers, setAllUsers] = useState([]);
+  const [users, setUsers] = useState();
+  const [hobbies, setHobbies] = useState([]);
+  const [selected, setSelected] = useState("");
+  const [query, setQuery] = useState("");
 
-  const [searching, setSearching] = React.useState(false);
+  const [searching, setSearching] = useState(false);
 
-  const [paging, setPaging] = React.useState(1);
+  const [paging, setPaging] = useState(1);
   const itemsPerPage = 6;
-  const anchor = React.useRef();
-  const firstRender = React.useRef();
-  const currentPage = React.useRef(1);
-  const allPages = React.useRef();
+  const anchor = useRef();
+  const firstRender = useRef();
+  const currentPage = useRef(1);
+  const allPages = useRef();
 
   function calcAllPages(data) {
     return Math.ceil(data.length / itemsPerPage);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     firstRender.current = true;
 
@@ -132,7 +132,7 @@ function Community() {
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.intersectionRatio <= 0) return;

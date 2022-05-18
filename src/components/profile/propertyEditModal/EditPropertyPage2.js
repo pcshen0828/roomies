@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 import { mainColor, subColor } from "../../../styles/GlobalStyle";
 import { SmallTitle, SmallLabel, FlexWrapper } from "../../common/Components";
@@ -37,7 +37,7 @@ function EditPropertyPage2({
       <SmallTitle htmlFor="title">設施條件</SmallTitle>
       <CheckboxWrapper>
         {conditions.map((condition, index) => (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             <HiddenInput
               id={condition.id}
               type="checkbox"
@@ -55,13 +55,13 @@ function EditPropertyPage2({
             <CheckboxLabel htmlFor={condition.id} checked={condition.value}>
               {condition.name}
             </CheckboxLabel>
-          </React.Fragment>
+          </Fragment>
         ))}
       </CheckboxWrapper>
       <SmallTitle htmlFor="title">室內設備</SmallTitle>
       <CheckboxWrapper>
         {facilities.map((facility, index) => (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             <HiddenInput
               id={facility.id}
               type="checkbox"
@@ -79,13 +79,13 @@ function EditPropertyPage2({
             <CheckboxLabel htmlFor={facility.id} checked={facility.value}>
               {facility.name}
             </CheckboxLabel>
-          </React.Fragment>
+          </Fragment>
         ))}
       </CheckboxWrapper>
       <SmallTitle htmlFor="title">家具</SmallTitle>
       <CheckboxWrapper>
         {furnitures.map((furniture, index) => (
-          <React.Fragment key={index}>
+          <Fragment key={index}>
             <HiddenInput
               id={furniture.id}
               type="checkbox"
@@ -103,7 +103,7 @@ function EditPropertyPage2({
             <CheckboxLabel htmlFor={furniture.id} checked={furniture.value}>
               {furniture.name}
             </CheckboxLabel>
-          </React.Fragment>
+          </Fragment>
         ))}
       </CheckboxWrapper>
     </>

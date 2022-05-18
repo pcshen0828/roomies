@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 
@@ -164,15 +164,15 @@ export default function EditPostModal({
   post,
   setUpdated,
 }) {
-  const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [postConfirm, setPostConfirm] = React.useState(false);
-  const [content, setContent] = React.useState(post.content);
-  const [images, setImages] = React.useState(post.images);
-  const newImage = React.useRef(null);
-  const [error, setError] = React.useState("");
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [postConfirm, setPostConfirm] = useState(false);
+  const [content, setContent] = useState(post.content);
+  const [images, setImages] = useState(post.images);
+  const newImage = useRef(null);
+  const [error, setError] = useState("");
 
-  const [newFiles, setNewFiles] = React.useState([]);
-  const [loading, setLoading] = React.useState(false);
+  const [newFiles, setNewFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   function displayFileImage(e) {
     const file = e.target.files[0];

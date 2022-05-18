@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../utils/api";
 
@@ -36,10 +36,10 @@ const Active = styled.div`
 
 function Apartment() {
   const { id } = useParams();
-  const [details, setDetails] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
+  const [details, setDetails] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {

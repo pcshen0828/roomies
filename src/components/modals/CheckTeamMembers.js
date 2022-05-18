@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -61,9 +61,9 @@ const ActionButton = styled(Button1)`
 
 function CheckTeamMembersModal({ toggle, members, teamId }) {
   const { currentUser } = useAuth();
-  const [teamMembers, setTeamMembers] = React.useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     async function getTeamsMembers() {
       if (!mounted) return;

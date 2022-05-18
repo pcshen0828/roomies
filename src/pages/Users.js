@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -21,10 +21,10 @@ function User() {
   const { id } = useParams();
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
-  const [targetUser, setTargetUser] = React.useState();
-  const [loaded, setLoaded] = React.useState(false);
+  const [targetUser, setTargetUser] = useState();
+  const [loaded, setLoaded] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Firebase } from "../../utils/firebase";
@@ -30,13 +30,13 @@ const NewTitle = styled(SmallTitle)`
 
 function LandlordSchedule() {
   const { currentUser } = useAuth();
-  const [events, setEvents] = React.useState([]);
-  const [unConfirmed, setUnconfirmed] = React.useState([]);
+  const [events, setEvents] = useState([]);
+  const [unConfirmed, setUnconfirmed] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const query = api.createQuery("schedules", "owner", "==", currentUser.uid);
     const unsubscribe = Firebase.onSnapshot(query, (snapshot) => {
       const res = snapshot.docs.map((doc) => doc.data());

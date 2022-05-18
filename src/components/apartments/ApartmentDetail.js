@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import api from "../../utils/api";
@@ -198,16 +198,16 @@ const OtherInfo = styled.div`
 function ApartmentDetail({ details, loading }) {
   const { currentUser } = useAuth();
   const { id } = useParams();
-  const [isActive, setIsActive] = React.useState(false);
-  const [hasJoined, setHasJoined] = React.useState(false);
-  const [groupId, setGroupId] = React.useState();
-  const [hasNotSignIn, setHasNotSignIn] = React.useState(false);
-  const [conditions, setConditions] = React.useState([]);
-  const [facilities, setFacilities] = React.useState([]);
-  const [furnitures, setFurnitures] = React.useState([]);
-  const [otherInfo, setOtherInfo] = React.useState([]);
-  const [membersCount, setMembersCount] = React.useState("");
-  const [openWarning, setOpenWarning] = React.useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [hasJoined, setHasJoined] = useState(false);
+  const [groupId, setGroupId] = useState();
+  const [hasNotSignIn, setHasNotSignIn] = useState(false);
+  const [conditions, setConditions] = useState([]);
+  const [facilities, setFacilities] = useState([]);
+  const [furnitures, setFurnitures] = useState([]);
+  const [otherInfo, setOtherInfo] = useState([]);
+  const [membersCount, setMembersCount] = useState("");
+  const [openWarning, setOpenWarning] = useState(false);
 
   const queryList = [
     { name: "conditions", method: (res) => setConditions(res) },
@@ -216,7 +216,7 @@ function ApartmentDetail({ details, loading }) {
     { name: "otherInfo", method: (res) => setOtherInfo(res) },
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     queryList.forEach((subcollection) => {
       api

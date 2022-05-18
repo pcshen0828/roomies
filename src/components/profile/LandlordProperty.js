@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import CreatePropertyModal from "./CreateProperty";
 import { Firebase } from "../../utils/firebase";
@@ -202,21 +202,21 @@ function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
 
 function LandlordProperty() {
   const { currentUser } = useAuth();
-  const [properties, setProperties] = React.useState([]);
-  const [openEdit, setOpenEdit] = React.useState(false);
-  const [openCreate, setOpenCreate] = React.useState(false);
-  const [apartment, setApartment] = React.useState("");
-  const [statusItem, setStatusItem] = React.useState("");
-  const [saved, setSaved] = React.useState(false);
-  const [confirmActive, setConfirmActive] = React.useState(false);
-  const [confirmInactive, setConfirmInactive] = React.useState(false);
-  const [paging, setPaging] = React.useState(1);
+  const [properties, setProperties] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
+  const [apartment, setApartment] = useState("");
+  const [statusItem, setStatusItem] = useState("");
+  const [saved, setSaved] = useState(false);
+  const [confirmActive, setConfirmActive] = useState(false);
+  const [confirmInactive, setConfirmInactive] = useState(false);
+  const [paging, setPaging] = useState(1);
   const itemsPerPage = 5;
   const navigate = useNavigate();
   const location = useLocation();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "apartments"),
       Firebase.where("owner", "==", currentUser.uid),
@@ -278,17 +278,6 @@ function LandlordProperty() {
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
               .map((item) => (
                 <Card key={item.id}>
-                  {/* {status === 0 && (
-                    <CloseButton
-                      onClick={() => {
-                        Firebase.deleteDoc(
-                          Firebase.doc(Firebase.db, "apartments", item.id)
-                        );
-                      }}
-                    >
-                      ×
-                    </CloseButton>
-                  )} */}
                   <TitleWrapper>
                     <StyledLink to={`/apartment/${item.id}`}>
                       <CardTitle title={item.title}>{item.title}</CardTitle>

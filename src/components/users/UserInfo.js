@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -199,11 +199,11 @@ const ResultText = styled.div`
 
 function UserInfo({ user, role }) {
   const { currentUser } = useAuth();
-  const [openMessage, setOpenMessage] = React.useState(false);
-  const [query, setQuery] = React.useState("");
-  const [users, setUsers] = React.useState([]);
-  const [jobs, setJobs] = React.useState([]);
-  const [saved, setSaved] = React.useState(false);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [query, setQuery] = useState("");
+  const [users, setUsers] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [saved, setSaved] = useState(false);
 
   function sendMyMessage() {
     setOpenMessage(true);

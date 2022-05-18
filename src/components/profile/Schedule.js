@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import EventInfoWindowModal from "./EventInfoWindow";
 
@@ -15,9 +15,9 @@ const CalendarWrapper = styled.div`
 `;
 
 function Schedule({ events }) {
-  const [eventInfo, setEventInfo] = React.useState({});
-  const [coordinates, setCoordinates] = React.useState({});
-  const [showModal, setShowModal] = React.useState(false);
+  const [eventInfo, setEventInfo] = useState({});
+  const [coordinates, setCoordinates] = useState({});
+  const [showModal, setShowModal] = useState(false);
 
   function showEventModal(info) {
     setEventInfo(info.event);

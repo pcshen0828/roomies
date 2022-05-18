@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
@@ -227,12 +227,27 @@ const CallToActionBlock = styled(FlexColumn)`
   }
 `;
 
+const slogans = [
+  {
+    title: "找房源，尋室友，快速媒合",
+    text1: "依照地理位置和設備需求，篩選符合條件的公寓物件",
+    text2: "透過興趣和職業簡單自我介紹，尋找適合共居的生活夥伴",
+    src: mates,
+  },
+  {
+    title: "上架房源，聯絡房客，簡單便利",
+    text1: "輕鬆上架和管理房源物件，看房行事曆掌握行程規劃",
+    text2: "串連線上聊天室服務，隨時與房客取得聯繫",
+    src: corner,
+  },
+];
+
 function Index() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
-  const [openSignup, setOpenSignUp] = React.useState(false);
-  const [show, setShow] = React.useState(false);
-  const scrollRef = React.useRef(null);
+  const [openSignup, setOpenSignUp] = useState(false);
+  const [show, setShow] = useState(false);
+  const scrollRef = useRef(null);
   const navigate = useNavigate();
 
   function RenderCTAButton(area) {
@@ -266,7 +281,7 @@ function Index() {
     );
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       setShow(true);
     }, 2000);
@@ -277,6 +292,15 @@ function Index() {
       clearTimeout(timeoutId);
     };
   }, []);
+
+  function scrollToSloganBlock() {
+    const scrollHeight = scrollRef.current.getBoundingClientRect().top;
+    const headerGap = 100;
+    window.scrollTo({
+      top: scrollHeight - headerGap,
+      behavior: "smooth",
+    });
+  }
 
   return (
     <>
@@ -289,16 +313,7 @@ function Index() {
             </Intro>
             ｜單層公寓合租平台
             <ActionButtons show={show}>{RenderCTAButton(1)}</ActionButtons>
-            <DownWrapper
-              onClick={() => {
-                const scrollHeight =
-                  scrollRef.current.getBoundingClientRect().top;
-                window.scrollTo({
-                  top: scrollHeight - 100,
-                  behavior: "smooth",
-                });
-              }}
-            >
+            <DownWrapper onClick={scrollToSloganBlock}>
               <Down src={down} />
             </DownWrapper>
           </IntroWrapper>
@@ -312,7 +327,7 @@ function Index() {
           rewind={true}
           autoplay={{ delay: 6000, disableOnInteraction: false }}
         >
-          {banners.map((image, index) => (
+          {banners.map((image) => (
             <SwiperSlide key={image}>
               <Banner src={image} />
             </SwiperSlide>
@@ -324,20 +339,7 @@ function Index() {
           <BannerTitle>為奔忙生活的你，打造全新的租屋體驗</BannerTitle>
         </IntroCenter>
 
-        {[
-          {
-            title: "找房源，尋室友，快速媒合",
-            text1: "依照地理位置和設備需求，篩選符合條件的公寓物件",
-            text2: "透過興趣和職業簡單自我介紹，尋找適合共居的生活夥伴",
-            src: mates,
-          },
-          {
-            title: "上架房源，聯絡房客，簡單便利",
-            text1: "輕鬆上架和管理房源物件，看房行事曆掌握行程規劃",
-            text2: "串連線上聊天室服務，隨時與房客取得聯繫",
-            src: corner,
-          },
-        ].map((item, index) => (
+        {slogans.map((item, index) => (
           <IntroBox key={index}>
             <IntroContent>
               <TitleSub>{item.title}</TitleSub>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -77,12 +77,12 @@ export default function InviteJoinTeamModal({
   team,
   groupMemberDetail,
 }) {
-  const [queryName, setQueryName] = React.useState("");
-  const [queriedUsers, setQueriedUsers] = React.useState([]);
-  const [defaultResponse, setDefaultResponse] = React.useState("");
-  const [inviteList, setInviteList] = React.useState([]);
+  const [queryName, setQueryName] = useState("");
+  const [queriedUsers, setQueriedUsers] = useState([]);
+  const [defaultResponse, setDefaultResponse] = useState("");
+  const [inviteList, setInviteList] = useState([]);
   const { currentUser } = useAuth();
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   async function inviteNewMember() {
     const time = Firebase.Timestamp.fromDate(new Date());

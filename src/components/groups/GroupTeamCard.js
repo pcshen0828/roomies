@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 
@@ -119,15 +119,15 @@ const DropDownWrapper = styled(FlexWrapper)`
 `;
 
 function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
-  const [openMemberListModal, setOpenMemberListModal] = React.useState(false);
-  const [openAppliedModal, setOpenAppliedModal] = React.useState(false);
-  const [openInviteModal, setOpenInviteModal] = React.useState(false);
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [openMemberListModal, setOpenMemberListModal] = useState(false);
+  const [openAppliedModal, setOpenAppliedModal] = useState(false);
+  const [openInviteModal, setOpenInviteModal] = useState(false);
+  const [openConfirm, setOpenConfirm] = useState(false);
   const { currentUser } = useAuth();
 
-  const [openQuit, setOpenQuit] = React.useState(false);
-  const [openQuitConfirm, setOpenQuitConfirm] = React.useState(false);
-  const [quitted, setQuitted] = React.useState(false);
+  const [openQuit, setOpenQuit] = useState(false);
+  const [openQuitConfirm, setOpenQuitConfirm] = useState(false);
+  const [quitted, setQuitted] = useState(false);
 
   async function joinTeam() {
     api.updateDocData("teams", team.id, {

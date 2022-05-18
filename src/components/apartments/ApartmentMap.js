@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback, useState } from "react";
 import styled from "styled-components";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../appkeys";
@@ -19,7 +19,7 @@ const Wrapper = styled.div`
 `;
 
 function ApartmentMap({ geoLocation }) {
-  const [map, setMap] = React.useState(null);
+  const [map, setMap] = useState(null);
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
@@ -28,11 +28,11 @@ function ApartmentMap({ geoLocation }) {
     language: "zh-TW",
   });
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = useCallback(function callback(map) {
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = useCallback(function callback(map) {
     setMap(null);
   }, []);
 
@@ -59,4 +59,4 @@ function ApartmentMap({ geoLocation }) {
   return isLoaded ? renderMap() : <></>;
 }
 
-export default React.memo(ApartmentMap);
+export default memo(ApartmentMap);

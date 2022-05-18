@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import api from "../../utils/api";
 import {
@@ -222,18 +222,18 @@ const Icon = styled.img`
 `;
 
 export default function Post({ post, currentUser, setUpdated, setDeleted }) {
-  const [creatorInfo, setCreatorInfo] = React.useState({});
-  const [showMore, setShowMore] = React.useState(false);
-  const [showContent, setShowContent] = React.useState(false);
-  const [showImages, setShowImages] = React.useState(false);
+  const [creatorInfo, setCreatorInfo] = useState({});
+  const [showMore, setShowMore] = useState(false);
+  const [showContent, setShowContent] = useState(false);
+  const [showImages, setShowImages] = useState(false);
   const defaultContentLength = 100;
 
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [openDeleteConfirm, setOpenDeleteConfirm] = React.useState(false);
-  const [openEdit, setOpenEdit] = React.useState(false);
+  const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     api
       .getDataWithSingleQuery("users", "uid", "==", post.creator)
       .then((res) => {

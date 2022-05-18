@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navigate, Link, useParams } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
@@ -82,16 +82,16 @@ const DefaultMessage = styled(FlexWrapper)`
 function Messages() {
   const { id } = useParams();
   const { currentUser, user, loading, error } = useAuth();
-  const [chats, setChats] = React.useState([]);
-  const [chatId, setChatId] = React.useState(id);
-  const [loaded, setLoaded] = React.useState(false);
+  const [chats, setChats] = useState([]);
+  const [chatId, setChatId] = useState(id);
+  const [loaded, setLoaded] = useState(false);
   const selectedChat = chats.find((chat) => chat.id === chatId);
   const myRole =
     selectedChat &&
     selectedChat.members.find((member) => member.uid === currentUser?.uid)
       ?.role;
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     window.scrollTo({ top: 0, behavior: "smooth" });
 

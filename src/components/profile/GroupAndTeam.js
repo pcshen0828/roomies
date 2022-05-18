@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -175,28 +175,28 @@ const UnreadNot = styled.div`
 
 function GroupAndTeam() {
   const { currentUser } = useAuth();
-  const [groups, setGroups] = React.useState([]);
-  const [apartments, setApartments] = React.useState([]);
-  const [teams, setTeams] = React.useState([]);
-  const [teamId, setTeamId] = React.useState("");
-  const [invitations, setInvitations] = React.useState([]);
+  const [groups, setGroups] = useState([]);
+  const [apartments, setApartments] = useState([]);
+  const [teams, setTeams] = useState([]);
+  const [teamId, setTeamId] = useState("");
+  const [invitations, setInvitations] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [saved, setSaved] = React.useState(false);
-  const [openConfirmJoin, setOpenConfirmJoin] = React.useState(false);
-  const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
-  const [actionObject, setActionObject] = React.useState({
+  const [saved, setSaved] = useState(false);
+  const [openConfirmJoin, setOpenConfirmJoin] = useState(false);
+  const [openConfirmReject, setOpenConfirmReject] = useState(false);
+  const [actionObject, setActionObject] = useState({
     groupId: "",
     groupMembers: [],
     invitation: {},
   });
 
-  const [paging, setPaging] = React.useState(1);
+  const [paging, setPaging] = useState(1);
   const itemsPerPage = 6;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const query1 = api.createQuery(
       "groups",
       "members",

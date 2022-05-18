@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Firebase } from "../../../utils/firebase";
 import api from "../../../utils/api";
 import styled from "styled-components";
@@ -57,8 +57,8 @@ const UploadNewImage = styled.label`
 `;
 
 function EditPropertyPage4({ apartment, images, setImages }) {
-  const fileRef = React.useRef(null);
-  const [error, setError] = React.useState("");
+  const fileRef = useRef(null);
+  const [error, setError] = useState("");
 
   function uploadImageFile(e) {
     const file = e.target.files[0];

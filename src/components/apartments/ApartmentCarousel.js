@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import api from "../../utils/api";
 
@@ -30,10 +30,10 @@ const Image = styled.div`
 `;
 
 function Carousel({ id }) {
-  const [images, setImages] = React.useState([]);
-  const [cover, setCover] = React.useState("");
+  const [images, setImages] = useState([]);
+  const [cover, setCover] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
       if (!mounted) return;

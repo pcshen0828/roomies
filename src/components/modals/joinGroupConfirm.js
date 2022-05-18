@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -36,7 +36,7 @@ const Checkbox = styled.input`
 
 function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
   const { currentUser } = useAuth();
-  const [isConfirmed, setIsConfirmed] = React.useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
 
   function joinGroup() {

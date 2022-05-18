@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -61,13 +61,13 @@ const TeamInfoLink = styled.div`
 
 export default function TenantSchedule() {
   const { currentUser } = useAuth();
-  const [unConfirmed, setUnconfirmed] = React.useState([]);
-  const [schedules, setSchedules] = React.useState([]);
-  const [finished, setFinished] = React.useState([]);
-  const [checkDetail, setCheckDetail] = React.useState(false);
+  const [unConfirmed, setUnconfirmed] = useState([]);
+  const [schedules, setSchedules] = useState([]);
+  const [finished, setFinished] = useState([]);
+  const [checkDetail, setCheckDetail] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
   function generateReadableDate(dateString) {
     const newString = new Date(dateString).toLocaleString().slice(0, -3);
@@ -75,7 +75,7 @@ export default function TenantSchedule() {
     return newString.slice(index - 1, newString.length);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "schedules"),
       Firebase.where("members", "array-contains", currentUser.uid),

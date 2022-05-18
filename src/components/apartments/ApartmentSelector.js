@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import {
   Bold,
@@ -172,7 +172,7 @@ function Selector({
   queryList,
   anchor,
 }) {
-  const [isClose, setIsClose] = React.useState(false);
+  const [isClose, setIsClose] = useState(false);
   const toFilterData = allData;
 
   function ShowMatchedApartments({ e, name }) {
@@ -196,7 +196,7 @@ function Selector({
     { list: furnitureList, name: "家具" },
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];

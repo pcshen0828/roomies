@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -55,8 +55,8 @@ const Button = styled(Button1)`
 function SendMessageModal({ setOpenModal, objectId, setSaved }) {
   const { currentUser } = useAuth();
   const defaultmessages = ["Hi，你好！", "我正在尋找室友"];
-  const [message, setMessage] = React.useState("");
-  const [openConfirm, setOpenConfirm] = React.useState(false);
+  const [message, setMessage] = useState("");
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   async function sendMyMessage() {
     if (!message.trim()) return;

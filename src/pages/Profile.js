@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useAuth } from "../context/AuthContext";
@@ -26,7 +26,7 @@ function Profile() {
   const { currentUser } = useAuth();
   const [user, loading, error] = useAuthState(auth);
 
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 

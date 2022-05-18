@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Modal, Overlay } from "./ModalElements";
 
@@ -22,7 +22,7 @@ const NewModal = styled(Modal)`
 `;
 
 export default function SuccessfullySavedModal({ toggle, message }) {
-  React.useEffect(() => {
+  useEffect(() => {
     const timeoutId = setTimeout(() => {
       toggle(false);
     }, 1500);

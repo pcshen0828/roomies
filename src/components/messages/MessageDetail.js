@@ -1,5 +1,4 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
@@ -94,15 +93,14 @@ const SendMessageButton = styled.img`
 `;
 
 function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
-  const { id } = useParams();
-  const [message, setMessage] = React.useState("");
-  const [messages, setMessages] = React.useState([]);
-  const [members, setMembers] = React.useState([]);
-  const messageTop = React.useRef(null);
-  const last = React.useRef();
-  const [loading, setLoading] = React.useState(true);
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [members, setMembers] = useState([]);
+  const messageTop = useRef(null);
+  const last = useRef();
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (chatId) {
       const snapRef2 = Firebase.collection(
@@ -202,9 +200,6 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
               />
             ))
           : "查無聊天紀錄！"}
-        {/* 
-            測試 scroll anchor
-           */}
       </Messages>
       <SendMessageBlock
         onSubmit={(e) => {

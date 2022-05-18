@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 
@@ -24,9 +24,9 @@ const MessagesLink = styled(StyledLink)`
 
 function MessageModal({ setActiveIcon }) {
   const { currentUser } = useAuth();
-  const [chats, setChats] = React.useState([]);
+  const [chats, setChats] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (currentUser) {
       const query = Firebase.query(

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -102,10 +102,10 @@ const SubtitleSmall = styled.div`
 `;
 
 function GroupMember({ members }) {
-  const [openModal, setOpenModal] = React.useState(false);
-  const [objectId, setObjectId] = React.useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [objectId, setObjectId] = useState("");
   const { currentUser } = useAuth();
-  const [saved, setSaved] = React.useState(false);
+  const [saved, setSaved] = useState(false);
 
   return (
     <Wrapper>

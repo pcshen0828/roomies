@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
@@ -199,18 +199,18 @@ const otherInfoList = [
 const newApartmentId = uuidv4();
 
 function CreatePropertyModal({ toggle, setSaved, currentUser }) {
-  const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [apartmentId, setApartmentId] = React.useState("");
-  const [paging, setPaging] = React.useState(1);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [warning, setWarning] = React.useState("");
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [apartmentId, setApartmentId] = useState("");
+  const [paging, setPaging] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [warning, setWarning] = useState("");
 
   const navigate = useNavigate();
 
   const defaultCover =
     "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/apartments%2Fdefault%2Fimgplaceholder.png?alt=media&token=603bce20-3d5b-489f-9ffa-98ee2a3f8aba";
 
-  const [basicInfo, setBasicInfo] = React.useState({
+  const [basicInfo, setBasicInfo] = useState({
     title: "",
     monthlyRent: 10000,
     rooms: 1,
@@ -223,11 +223,11 @@ function CreatePropertyModal({ toggle, setSaved, currentUser }) {
     address: "",
   });
 
-  const [conditions, setConditions] = React.useState([]);
-  const [facilities, setFacilities] = React.useState([]);
-  const [furnitures, setFurnitures] = React.useState([]);
-  const [otherInfo, setOtherInfo] = React.useState([]);
-  const [images, setImages] = React.useState([]);
+  const [conditions, setConditions] = useState([]);
+  const [facilities, setFacilities] = useState([]);
+  const [furnitures, setFurnitures] = useState([]);
+  const [otherInfo, setOtherInfo] = useState([]);
+  const [images, setImages] = useState([]);
 
   const pages = [
     {
@@ -289,7 +289,7 @@ function CreatePropertyModal({ toggle, setSaved, currentUser }) {
     },
   ];
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     if (!mounted) return;
     setApartmentId(newApartmentId);

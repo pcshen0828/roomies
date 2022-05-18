@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { Wrapper, Button1, Title } from "../components/common/Components";
@@ -30,7 +30,7 @@ const Image = styled.div`
 `;
 
 function PageNotFound() {
-  React.useEffect(() => {
+  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
   return (

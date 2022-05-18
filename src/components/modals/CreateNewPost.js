@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 
@@ -167,12 +167,12 @@ export default function CreateNewPostModal({
   groupID,
   setPosted,
 }) {
-  const [openConfirm, setOpenConfirm] = React.useState(false);
-  const [postConfirm, setPostConfirm] = React.useState(false);
-  const [content, setContent] = React.useState("");
-  const [images, setImages] = React.useState([]);
-  const newImage = React.useRef(null);
-  const [error, setError] = React.useState("");
+  const [openConfirm, setOpenConfirm] = useState(false);
+  const [postConfirm, setPostConfirm] = useState(false);
+  const [content, setContent] = useState("");
+  const [images, setImages] = useState([]);
+  const newImage = useRef(null);
+  const [error, setError] = useState("");
 
   function uploadImageFile(e) {
     const file = e.target.files[0];

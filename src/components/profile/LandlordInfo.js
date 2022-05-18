@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -103,20 +103,18 @@ const Loading = styled(Button1)`
 
 function LandlordInfo() {
   const { currentUser } = useAuth();
-  const [openModal, setOpenModal] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [saved, setSaved] = React.useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  const [file, setFile] = React.useState();
-  const [name, setName] = React.useState(currentUser.name);
-  const [alias, setAlias] = React.useState(currentUser.alias);
-  const [gender, setGender] = React.useState(currentUser.gender);
-  const [birthday, setBirthday] = React.useState(currentUser.birthday);
-  const [phone, setPhone] = React.useState(currentUser.phone);
-  const [selfIntro, setSelfIntro] = React.useState(currentUser.selfIntro);
-  const [profileImage, setProfileImage] = React.useState(
-    currentUser.profileImage
-  );
+  const [file, setFile] = useState();
+  const [name, setName] = useState(currentUser.name);
+  const [alias, setAlias] = useState(currentUser.alias);
+  const [gender, setGender] = useState(currentUser.gender);
+  const [birthday, setBirthday] = useState(currentUser.birthday);
+  const [phone, setPhone] = useState(currentUser.phone);
+  const [selfIntro, setSelfIntro] = useState(currentUser.selfIntro);
+  const [profileImage, setProfileImage] = useState(currentUser.profileImage);
 
   const genders = [
     { name: "女", value: 0 },

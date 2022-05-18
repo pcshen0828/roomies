@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -88,9 +88,9 @@ const Time = styled.div`
 
 function NoticeModal({ setActiveIcon }) {
   const { currentUser } = useAuth();
-  const [notices, setNotices] = React.useState([]);
+  const [notices, setNotices] = useState([]);
   const stringLimit = 10;
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
   function calcTimeGap(time) {
     const ObjectTime = Date.parse(new Date(time));
@@ -113,7 +113,7 @@ function NoticeModal({ setActiveIcon }) {
       : "現在";
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "notices"),

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   GoogleMap,
@@ -96,17 +96,17 @@ const Cards = styled.div`
 `;
 
 function MyMap() {
-  const [map, setMap] = React.useState(null);
-  const [center, setCenter] = React.useState(defaultCenter);
-  const [circleCenter, setCircleCenter] = React.useState(defaultCenter);
-  const [zoom, setZoom] = React.useState(11);
-  const [marker, setMarker] = React.useState(center);
-  const [apartments, setApartments] = React.useState([]);
-  const [allData, setAllData] = React.useState([]);
-  const [searchBox, setSearchBox] = React.useState(null);
-  const [query, setQuery] = React.useState("");
+  const [map, setMap] = useState(null);
+  const [center, setCenter] = useState(defaultCenter);
+  const [circleCenter, setCircleCenter] = useState(defaultCenter);
+  const [zoom, setZoom] = useState(11);
+  const [marker, setMarker] = useState(center);
+  const [apartments, setApartments] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [searchBox, setSearchBox] = useState(null);
+  const [query, setQuery] = useState("");
 
-  const [loading, setLoading] = React.useState(true);
+  const [loading, setLoading] = useState(true);
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
@@ -115,11 +115,11 @@ function MyMap() {
     language: "zh-TW",
   });
 
-  const onLoad = React.useCallback(function callback(map) {
+  const onLoad = useCallback(function callback(map) {
     setMap(map);
   }, []);
 
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = useCallback(function callback(map) {
     setMap(null);
   }, []);
 
@@ -145,7 +145,7 @@ function MyMap() {
     );
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "status", "==", 1).then((res) => {
       if (!mounted) return;
@@ -240,4 +240,4 @@ function MyMap() {
   return isLoaded ? renderMap() : null;
 }
 
-export default React.memo(MyMap);
+export default memo(MyMap);

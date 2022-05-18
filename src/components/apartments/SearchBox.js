@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { SearchWrapper, SearchInput, SearchButton } from "../common/Components";
 import search from "../../images/search.svg";
@@ -18,7 +18,7 @@ function SearchBox({
   allPages,
   calcAllPages,
 }) {
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   function searchKeyWords(keyword) {
     if (!keyword.trim()) {

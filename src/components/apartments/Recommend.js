@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 
@@ -27,9 +27,9 @@ const StyledCard = styled(Card)`
 `;
 
 function RecommendCarousel({ id }) {
-  const [apartments, setApartments] = React.useState([]);
+  const [apartments, setApartments] = useState([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let mounted = true;
 
     async function getRecommedItems() {

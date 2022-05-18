@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
@@ -38,11 +38,11 @@ const ActionBlock = styled(FlexWrapper)`
 `;
 
 export default function Requests({ unConfirmed, user, loading }) {
-  const [checkDetail, setCheckDetail] = React.useState(false);
-  const [openConfirmCheck, setOpenConfirmCheck] = React.useState(false);
-  const [openConfirmReject, setOpenConfirmReject] = React.useState(false);
-  const [schedule, setSchedule] = React.useState("");
-  const [checked, setChecked] = React.useState(false);
+  const [checkDetail, setCheckDetail] = useState(false);
+  const [openConfirmCheck, setOpenConfirmCheck] = useState(false);
+  const [openConfirmReject, setOpenConfirmReject] = useState(false);
+  const [schedule, setSchedule] = useState("");
+  const [checked, setChecked] = useState(false);
 
   const navigate = useNavigate();
 

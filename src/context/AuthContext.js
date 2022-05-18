@@ -1,16 +1,16 @@
-import React from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import api from "../utils/api";
 
-const AuthContext = React.createContext();
+const AuthContext = createContext();
 
 export function useAuth() {
-  return React.useContext(AuthContext);
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = React.useState();
+  const [currentUser, setCurrentUser] = useState();
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
 
@@ -24,7 +24,7 @@ export function AuthProvider({ children }) {
       });
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = Firebase.onAuthStateChanged(auth, async (user) => {
       if (user) {
         const id = user.uid;
