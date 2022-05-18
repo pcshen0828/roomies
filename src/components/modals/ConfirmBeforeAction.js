@@ -29,7 +29,7 @@ const NewModal = styled(Modal)`
 const NewHeader = styled(Header)`
   width: 100%;
   align-items: center;
-  height: 60px;
+  height: auto;
 `;
 
 const ButtonsWrapper = styled(FlexWrapper)`

@@ -16,8 +16,9 @@ import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
 import Skeleton from "react-loading-skeleton";
 
-const FullWrapper = styled(FlexWrapper)`
+const FullWrapper = styled.div`
   width: 100%;
+  display: flex;
   justify-content: center;
   height: calc(100vh - 80px);
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
@@ -35,9 +36,10 @@ const Reminder = styled.div`
   margin: 60px 0 20px;
 `;
 
-const InnerWrapper = styled(FlexWrapper)`
+const InnerWrapper = styled.div`
   width: calc(100% - 48px);
   max-width: 1200px;
+  display: flex;
   height: 100%;
   @media screen and (max-width: 1279.98px) {
     width: 100%;
@@ -58,8 +60,10 @@ const ListWrapper = styled(FlexColumn)`
   }
 `;
 
-const MessageList = styled(FlexColumn)`
+const MessageList = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   background: #fff;
   margin-top: 10px;

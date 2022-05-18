@@ -6,17 +6,14 @@ import api from "../utils/api";
 
 import styled from "styled-components";
 import { mainColor } from "../styles/GlobalStyle";
-import { Modal } from "../components/modals/ModalElements";
 import {
   Button1,
   FlexWrapper,
   Bold,
-  Title,
-  RejectButton,
-  ExitButton,
   FlexColumn,
 } from "../components/common/Components";
 
+import GroupHeader from "../components/groups/GroupHeader";
 import GroupMember from "../components/groups/GroupMember";
 import GroupTeam from "../components/groups/GroupTeam";
 import GroupPosts from "../components/groups/GroupPosts";
@@ -27,11 +24,7 @@ import InviteJoinGroupModal from "../components/modals/InviteJoinGroup";
 import SuccessfullySavedModal from "../components/modals/SuccessfullySaved";
 import Skeleton from "react-loading-skeleton";
 
-import member from "../images/members.svg";
-import room from "../images/room.svg";
 import lock from "../images/lock.svg";
-import check from "../images/check.svg";
-import exit from "../images/exit.svg";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
@@ -96,110 +89,10 @@ const HeaderBody = styled.div`
   width: 100%;
 `;
 
-const HeaderWrapper = styled.div`
-  width: 100%;
-`;
-
-const GroupHeader = styled(FlexWrapper)`
-  width: calc(100% - 48px);
-  max-width: 1200px;
-  justify-content: space-between;
-  margin: 0 auto;
-  padding: 15px 24px;
-
-  @media screen and (max-width: 995.98px) {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-`;
-
-const NewTitle = styled(Title)`
-  font-size: ${(props) => (props.sticky ? "16px" : "20px")};
-  margin-bottom: ${(props) => (props.sticky ? "0" : "10px")};
-  @media screen and (max-width: 1279.98px) {
-    font-size: ${(props) => (props.sticky ? "16px" : "18px")};
-  }
-`;
-
-const MainSubTitles = styled(FlexWrapper)`
-  align-items: center;
-  @media screen and (max-width: 995.98px) {
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
-`;
-
-const SubTitles = styled(FlexWrapper)`
-  align-items: center;
-`;
-
-const SubTitle = styled.div`
-  color: ${mainColor};
-  margin-right: 30px;
-  @media screen and (max-width: 1279.98px) {
-    font-size: 14px;
-  }
-`;
-
 const Icon = styled.img`
   width: 20px;
   height: 20px;
   margin-right: 10px;
-`;
-
-const Buttons = styled(FlexWrapper)`
-  @media screen and (max-width: 995.98px) {
-    margin-top: 10px;
-  }
-`;
-
-const InviteButton = styled(Button1)`
-  width: 90px;
-  @media screen and (max-width: 575.98px) {
-    width: 90px;
-  }
-`;
-
-const DropdownWrapper = styled.div`
-  position: relative;
-`;
-
-const HasJoined = styled(FlexWrapper)`
-  width: 128px;
-  height: 42px;
-  background: #fff;
-  border: 1px solid #dadada;
-  border-radius: 5px;
-  color: ${mainColor};
-  justify-content: center;
-  align-items: center;
-  margin-right: 10px;
-  cursor: pointer;
-`;
-
-const Dropdown = styled.span`
-  width: 20px;
-  height: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 3px;
-  font-size: 20px;
-  padding-bottom: 3px;
-`;
-
-const DropdownMenu = styled(Modal)`
-  width: 200px;
-  border-radius: 5px;
-  position: absolute;
-  z-index: 10;
-  top: 50px;
-  left: 0;
-  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e8e8e8;
-  align-items: flex-start;
-  padding: 10px;
 `;
 
 const GroupBody = styled(FlexWrapper)`
@@ -306,25 +199,17 @@ function Groups() {
   const [members, setMembers] = useState([]);
   const [groupMembers, setGroupMembers] = useState([]);
   const { currentUser } = useAuth();
-  const [isInvited, setIsInvited] = useState();
   const [invitation, setInvitation] = useState([]);
 
-  const [openConfirmQuit, setOpenConfirmQuit] = useState(false);
-  const [openConfirmJoin, setOpenConfirmJoin] = useState(false);
-  const [openJoin, setOpenJoin] = useState(false);
-  const [openConfirmReject, setOpenConfirmReject] = useState(false);
+  const [openModalType, setOpenModalType] = useState("");
   const [dropdown, setDropdown] = useState(false);
 
-  const [openInviteModal, setOpenInviteModal] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const anchor = useRef(null);
-  const [sticky, setSticky] = useState(false);
   const [tab, setTab] = useState("news");
-  const [posted, setPosted] = useState(false);
-  const [updated, setUpdated] = useState(false);
-  const [deleted, setDeleted] = useState(false);
+  const [postStatus, setPostStatus] = useState("");
 
   useEffect(() => {
     let mounted = true;
@@ -366,35 +251,12 @@ function Groups() {
       setInvitation(
         res.find((data) => data.receiver === (currentUser && currentUser.uid))
       );
-      setIsInvited(
-        res.filter((data) => data.receiver === (currentUser && currentUser.uid))
-          .length
-      );
     });
 
     return function cleanup() {
       mounted = false;
     };
   }, [currentUser, id]);
-
-  useEffect(() => {
-    let mounted = true;
-    if (loading) return;
-    const intersectionObserver = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      if (!mounted) return;
-      if (entry.intersectionRatio <= 0) {
-        setSticky(true);
-      } else {
-        setSticky(false);
-      }
-    });
-    intersectionObserver.observe(anchor.current);
-
-    return function cleanup() {
-      mounted = false;
-    };
-  }, [loading]);
 
   function quitTheGroup() {
     const userID = currentUser.uid;
@@ -441,57 +303,62 @@ function Groups() {
             message="邀請已送出！"
           />
         )}
-        {posted && (
+
+        {postStatus === "posted" && (
           <SuccessfullySavedModal
             out={false}
-            toggle={setPosted}
+            toggle={setPostStatus}
             message="貼文已發佈！"
           />
         )}
-        {updated && (
+        {postStatus === "updated" && (
           <SuccessfullySavedModal
             out={false}
-            toggle={setUpdated}
+            toggle={setPostStatus}
             message="貼文已更新！"
           />
         )}
-        {deleted && (
-          <SuccessfullySavedModal message="貼文已刪除！" toggle={setDeleted} />
+        {postStatus === "deleted" && (
+          <SuccessfullySavedModal
+            message="貼文已刪除！"
+            toggle={setPostStatus}
+          />
         )}
-        {openInviteModal && (
+
+        {openModalType === "invite" && (
           <InviteJoinGroupModal
             groupId={id}
-            toggle={setOpenInviteModal}
+            toggle={setOpenModalType}
             groupMembers={groupMembers}
             setSaved={setSaved}
           />
         )}
-        {openConfirmQuit && (
+        {openModalType === "quit" && (
           <ConfirmBeforeActionModal
             message="確認退出？"
             action={quitTheGroup}
-            toggle={setOpenConfirmQuit}
+            toggle={setOpenModalType}
           />
         )}
-        {openConfirmJoin && (
+        {openModalType === "confirmJoin" && (
           <ConfirmBeforeActionModal
             message="確認加入？"
             action={confirmJoinGroup}
-            toggle={setOpenConfirmJoin}
+            toggle={setOpenModalType}
           />
         )}
-        {openJoin && (
+        {openModalType === "join" && (
           <ConfirmBeforeActionModal
             message="確認加入？"
             action={joinGroup}
-            toggle={setOpenJoin}
+            toggle={setOpenModalType}
           />
         )}
-        {openConfirmReject && (
+        {openModalType === "reject" && (
           <ConfirmBeforeActionModal
             message="確認拒絕？"
             action={rejectJoinGroup}
-            toggle={setOpenConfirmReject}
+            toggle={setOpenModalType}
           />
         )}
 
@@ -543,88 +410,15 @@ function Groups() {
               />{" "}
             </div>
           ) : (
-            <HeaderWrapper sticky={sticky}>
-              <GroupHeader>
-                <MainSubTitles>
-                  <BreadCrumbLink to={`/apartment/${apartmentData.id}`}>
-                    <NewTitle sticky={sticky}>{apartmentData.title}</NewTitle>
-                  </BreadCrumbLink>
-                  <SubTitles>
-                    <Icon src={room} alt="" />
-                    <SubTitle>{`可住人數：${
-                      apartmentData.roomiesCount
-                        ? apartmentData.roomiesCount
-                        : ""
-                    }人 / 間`}</SubTitle>
-                  </SubTitles>
-                  <SubTitles>
-                    <Icon src={member} alt="" />
-                    <SubTitle>
-                      {members.length
-                        ? `${members.length}位成員已加入`
-                        : "尚無成員"}
-                    </SubTitle>
-                  </SubTitles>
-                </MainSubTitles>
-                {isInvited &&
-                !members.find((member) => member.uid === currentUser.uid) ? (
-                  <Buttons>
-                    <Button1
-                      onClick={() => {
-                        setOpenConfirmJoin(true);
-                      }}
-                    >
-                      確認加入
-                    </Button1>
-                    <RejectButton
-                      onClick={() => {
-                        setOpenConfirmReject(true);
-                      }}
-                    >
-                      拒絕
-                    </RejectButton>
-                  </Buttons>
-                ) : (
-                  ""
-                )}
-                {members.find((member) => member.uid === currentUser.uid) ? (
-                  <Buttons>
-                    <DropdownWrapper onClick={(e) => e.stopPropagation()}>
-                      <HasJoined
-                        onClick={() => {
-                          setDropdown((prev) => !prev);
-                        }}
-                      >
-                        <Icon src={check} alt="" />
-                        已加入
-                        <Dropdown>▾</Dropdown>
-                      </HasJoined>
-                      {dropdown && (
-                        <DropdownMenu>
-                          <ExitButton
-                            onClick={() => {
-                              setOpenConfirmQuit(true);
-                            }}
-                          >
-                            <Icon src={exit} alt="" />
-                            退出
-                          </ExitButton>
-                        </DropdownMenu>
-                      )}
-                    </DropdownWrapper>
-                    <InviteButton
-                      onClick={() => {
-                        setOpenInviteModal(true);
-                      }}
-                    >
-                      邀請
-                    </InviteButton>
-                  </Buttons>
-                ) : (
-                  ""
-                )}
-              </GroupHeader>
-            </HeaderWrapper>
+            <GroupHeader
+              currentUser={currentUser}
+              apartmentData={apartmentData}
+              members={members}
+              invitation={invitation}
+              dropdown={dropdown}
+              setDropdown={setDropdown}
+              setOpenModalType={setOpenModalType}
+            />
           )}
 
           <TabsWrapper>
@@ -673,9 +467,7 @@ function Groups() {
                   <GroupPosts
                     currentUser={currentUser}
                     groupID={id}
-                    setPosted={setPosted}
-                    setUpdated={setUpdated}
-                    setDeleted={setDeleted}
+                    setPostStatus={setPostStatus}
                   />
                 )}
                 {tab === "teams" && (
@@ -732,10 +524,10 @@ function Groups() {
                 <Icon src={lock} alt="" />
                 成為社團成員才能預覽內容喔
               </Reminder>
-              {!isInvited && (
+              {!invitation && (
                 <Button1
                   onClick={() => {
-                    setOpenJoin(true);
+                    setOpenModalType("join");
                   }}
                 >
                   加入

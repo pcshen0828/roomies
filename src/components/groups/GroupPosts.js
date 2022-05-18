@@ -55,13 +55,7 @@ const Posts = styled(FlexColumn)`
   width: 100%;
 `;
 
-export default function GroupPosts({
-  currentUser,
-  groupID,
-  setPosted,
-  setUpdated,
-  setDeleted,
-}) {
+export default function GroupPosts({ currentUser, groupID, setPostStatus }) {
   const [openPost, setOpenPost] = useState(false);
   const [posts, setPosts] = useState([]);
 
@@ -89,7 +83,7 @@ export default function GroupPosts({
           toggle={setOpenPost}
           currentUser={currentUser}
           groupID={groupID}
-          setPosted={setPosted}
+          setPosted={setPostStatus}
         />
       )}
 
@@ -113,7 +107,7 @@ export default function GroupPosts({
             key={posts.find((post) => post.isOnTop).id}
             post={posts.find((post) => post.isOnTop)}
             currentUser={currentUser}
-            setDeleted={setDeleted}
+            setDeleted={setPostStatus}
           />
         ) : (
           "尚無貼文"
@@ -131,8 +125,7 @@ export default function GroupPosts({
                   key={post.id}
                   post={post}
                   currentUser={currentUser}
-                  setUpdated={setUpdated}
-                  setDeleted={setDeleted}
+                  setPostStatus={setPostStatus}
                 />
               ))
           : "尚無貼文"}

@@ -39,6 +39,7 @@ const MemberBlockWrapper = styled.div`
 
 const MembersBlock = styled(FlexColumn)`
   width: 100%;
+  align-items: stretch;
 `;
 
 const MemberBlockCard = styled.div`

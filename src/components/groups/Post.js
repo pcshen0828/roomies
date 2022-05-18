@@ -26,8 +26,8 @@ const Wrapper = styled(FlexColumn)`
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
   position: relative;
-  overflow: hidden;
   padding-bottom: 20px;
+  align-items: center;
 `;
 
 const NewProfile = styled(ProfileImage)`
@@ -221,7 +221,7 @@ const Icon = styled.img`
   margin-right: 5px;
 `;
 
-export default function Post({ post, currentUser, setUpdated, setDeleted }) {
+export default function Post({ post, currentUser, setPostStatus }) {
   const [creatorInfo, setCreatorInfo] = useState({});
   const [showMore, setShowMore] = useState(false);
   const [showContent, setShowContent] = useState(false);
@@ -258,11 +258,11 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
         );
       });
       Promise.all(promises).then((res) => {
-        setDeleted(true);
+        setPostStatus("deleted");
         return;
       });
     }
-    setDeleted(true);
+    setPostStatus("deleted");
   }
 
   return loading ? (
@@ -280,7 +280,7 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
           post={post}
           toggle={setOpenEdit}
           currentUser={currentUser}
-          setUpdated={setUpdated}
+          setUpdated={setPostStatus}
         />
       )}
       {openDeleteConfirm && (

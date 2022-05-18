@@ -222,6 +222,7 @@ const CallToActionBlock = styled(FlexColumn)`
   height: 100px;
   justify-content: space-between;
   margin: 60px 0 80px;
+  align-items: center;
   @media screen and (max-width: 575.98px) {
     height: 90px;
   }

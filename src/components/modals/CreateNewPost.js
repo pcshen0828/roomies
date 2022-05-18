@@ -219,7 +219,7 @@ export default function CreateNewPostModal({
       isOnTop: false,
     });
     toggle(false);
-    setPosted(true);
+    setPosted("posted");
   }
 
   return (

@@ -229,7 +229,7 @@ export default function EditPostModal({
       updateTime: time,
     });
     setLoading(false);
-    setUpdated(true);
+    setUpdated("updated");
     toggle(false);
   }
 
