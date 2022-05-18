@@ -6,7 +6,12 @@ import api from "../../utils/api";
 import { noticeTypes } from "../../utils/noticeType";
 
 import styled from "styled-components";
-import { Bold, FlexWrapper, SmallTitle } from "../common/Components";
+import {
+  Bold,
+  FlexColumn,
+  FlexWrapper,
+  SmallTitle,
+} from "../common/Components";
 import { NavModalOverlay, NavModal } from "./ModalElements";
 
 import Skeleton from "react-loading-skeleton";
@@ -30,12 +35,10 @@ const StyledLink = styled(Link)`
   position: relative;
 `;
 
-const MessageItem = styled.div`
+const MessageItem = styled(FlexWrapper)`
   border-radius: 10px;
   height: 80px;
   margin-bottom: 10px;
-  display: flex;
-  align-items: center;
   cursor: pointer;
   background: ${(props) => (props.unread ? "#f2f5f7" : "fff")};
 
@@ -51,10 +54,7 @@ const MessageImg = styled.img`
   margin: 0 10px;
 `;
 
-const MessageOverview = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const MessageOverview = styled(FlexColumn)``;
 
 const MessageWrapper = styled(FlexWrapper)`
   align-items: flex-start;

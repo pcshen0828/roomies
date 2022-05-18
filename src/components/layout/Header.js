@@ -14,24 +14,20 @@ import menu from "../../images/menu.svg";
 
 import Skeleton from "react-loading-skeleton";
 
-const Wrapper = styled.div`
+const Wrapper = styled(FlexWrapper)`
   width: 100%;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   height: 80px;
-  display: flex;
   justify-content: center;
-  align-items: center;
   position: sticky;
   top: 0;
   background: #fff;
   z-index: 100;
 `;
-const InnerWrapper = styled.div`
+const InnerWrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
 `;
 
 const IndexLink = styled(Link)`

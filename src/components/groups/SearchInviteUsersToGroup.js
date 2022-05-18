@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Title } from "../common/Components";
+import { FlexWrap, Title } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import search from "../../images/search.svg";
 
@@ -29,10 +29,8 @@ const Input = styled.input`
   }
 `;
 
-const InviteList = styled.div`
-  display: flex;
+const InviteList = styled(FlexWrap)`
   margin-bottom: 20px;
-  flex-wrap: wrap;
 `;
 
 const InvitedUser = styled.div`

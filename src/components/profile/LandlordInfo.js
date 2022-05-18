@@ -21,6 +21,7 @@ const Wrapper = styled(FlexColumn)`
   width: 100%;
   justify-content: flex-end;
   margin-top: 10px;
+  align-items: stretch;
 `;
 
 const ImageWrapper = styled(FlexWrapper)`
@@ -70,10 +71,8 @@ const InnerWrapper = styled(FlexWrapper)`
   }
 `;
 
-const Block = styled.div`
+const Block = styled(FlexColumn)`
   width: 50%;
-  display: flex;
-  flex-direction: column;
   @media screen and (max-width: 1279.98px) {
     width: 100%;
   }

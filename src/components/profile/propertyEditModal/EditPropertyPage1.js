@@ -17,12 +17,10 @@ import {
   Error,
   Required,
   Select,
+  FlexColumn,
 } from "../../common/Components";
 
-const CoverImageDisplayer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
 `;
 

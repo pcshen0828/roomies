@@ -11,19 +11,11 @@ const Wrapper = styled(FlexColumn)`
   align-items: flex-start;
 `;
 
-const SubtitlesSmall = styled.div`
-  display: flex;
-  align-items: center;
+const SubtitlesSmall = styled(FlexWrapper)`
   margin-bottom: 10px;
 `;
 
 const TitleSmall = styled.div`
-  font-weight: 700;
-`;
-
-const SubtitleSmall = styled.div`
-  font-size: 14px;
-  color: #a1aeb7;
   font-weight: 700;
 `;
 

@@ -101,6 +101,7 @@ const FlexWrap = styled(FlexWrapper)`
 
 const FlexColumn = styled(FlexWrapper)`
   flex-direction: column;
+  align-items: flex-start;
 `;
 
 const Input = styled.input`
@@ -200,11 +201,8 @@ const fadeIn = keyframes`
   }
 `;
 
-const ProfileList = styled.div`
+const ProfileList = styled(FlexColumn)`
   width: calc(20%);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   background: #fff;
   border-radius: 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);

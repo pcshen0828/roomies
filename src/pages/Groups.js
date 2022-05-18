@@ -14,6 +14,7 @@ import {
   Title,
   RejectButton,
   ExitButton,
+  FlexColumn,
 } from "../components/common/Components";
 
 import GroupMember from "../components/groups/GroupMember";
@@ -105,15 +106,12 @@ const stickyStyle = `
 
 const HeaderWrapper = styled.div`
   width: 100%;
-  ${"" /* ${(props) => (props.sticky ? stickyStyle : "")}; */}
 `;
 
-const GroupHeader = styled.div`
+const GroupHeader = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
   margin: 0 auto;
   padding: 15px 24px;
 
@@ -158,9 +156,7 @@ const Icon = styled.img`
   margin-right: 10px;
 `;
 
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
+const Buttons = styled(FlexWrapper)`
   @media screen and (max-width: 995.98px) {
     margin-top: 10px;
   }
@@ -254,23 +250,18 @@ const GroupBodyRight = styled(FlexWrapper)`
   }
 `;
 
-const GroupNotice = styled(FlexWrapper)`
+const GroupNotice = styled(FlexColumn)`
   width: calc(100% - 40px);
   font-size: 14px;
   border-radius: 10px;
-  display: flex;
   margin-bottom: 20px;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 20px;
   background: #fff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
 `;
 
-const SubtitlesSmall = styled.div`
-  display: flex;
-  align-items: center;
+const SubtitlesSmall = styled(FlexWrapper)`
   margin-bottom: 10px;
 `;
 

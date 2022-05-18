@@ -13,7 +13,7 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { Button1 } from "../common/Components";
+import { Button1, FlexColumn, FlexWrapper } from "../common/Components";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 import SearchAndInviteToTeam from "../groups/SearchInviteUsersToTeam";
 
@@ -48,16 +48,13 @@ const Input = styled.input`
   }
 `;
 
-const QueriedUser = styled.div`
-  display: flex;
-  align-items: center;
+const QueriedUser = styled(FlexWrapper)`
   justify-content: space-between;
   width: 70%;
   margin-bottom: 10px;
 `;
 
-const FlexWrapper = styled.div`
-  display: flex;
+const NewFlexWrapper = styled(FlexWrapper)`
   margin-right: 10px;
 `;
 
@@ -68,10 +65,7 @@ const UserImage = styled.img`
   margin-right: 10px;
 `;
 
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const UserInfo = styled(FlexColumn)``;
 
 const InviteButton = styled(Button1)`
   width: 90px;
@@ -161,13 +155,13 @@ function NewTeamModal({
           {queriedUsers.length
             ? queriedUsers.map((user, index) => (
                 <QueriedUser key={index}>
-                  <FlexWrapper>
+                  <NewFlexWrapper>
                     <UserImage src={user.profileImage} />
                     <UserInfo>
                       <SmallTitle>{user.alias}</SmallTitle>
                       <SmallText>{user.jobTitle}</SmallText>
                     </UserInfo>
-                  </FlexWrapper>
+                  </NewFlexWrapper>
                   <InviteButton
                     onClick={() => {
                       setInviteList((prev) => [

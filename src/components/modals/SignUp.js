@@ -79,15 +79,13 @@ const ErrorMessage = styled.div`
   height: 20px;
 `;
 
-const Role = styled.div`
+const Role = styled(FlexWrapper)`
   width: 90px;
   height: 35px;
   border: 1px solid ${subColor};
   font-size: 14px;
   margin: 0 10px 10px 0;
-  display: flex;
   justify-content: center;
-  align-items: center;
   cursor: pointer;
   background: ${(props) => (props.active ? subColor : "")};
   color: ${(props) => (props.active ? "#fff" : mainColor)};

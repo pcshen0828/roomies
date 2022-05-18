@@ -5,7 +5,7 @@ import { calcTimeGap } from "../../utils/calculate";
 import api from "../../utils/api";
 
 import styled from "styled-components";
-import { FlexWrapper } from "../common/Components";
+import { FlexColumn, FlexWrapper } from "../common/Components";
 import defaulImage from "../../images/default.png";
 
 import Skeleton from "react-loading-skeleton";
@@ -16,13 +16,11 @@ const StyledLink = styled(Link)`
   width: 100%;
 `;
 
-const MessageItem = styled.div`
+const MessageItem = styled(FlexWrapper)`
   position: relative;
   border-radius: 10px;
   height: 80px;
   margin-bottom: 10px;
-  display: flex;
-  align-items: center;
   cursor: pointer;
   background: ${(props) => (props.active ? "#f2f5f7" : "fff")};
 
@@ -57,10 +55,7 @@ const MessageImg = styled.img`
   margin: 0 10px;
 `;
 
-const MessageOverview = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const MessageOverview = styled(FlexColumn)``;
 
 const MessageObjectName = styled.div`
   font-weight: 700;

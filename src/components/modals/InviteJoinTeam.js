@@ -13,7 +13,12 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { Button1, SmallTitle } from "../common/Components";
+import {
+  Button1,
+  FlexColumn,
+  FlexWrapper,
+  SmallTitle,
+} from "../common/Components";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 import SearchAndInviteToTeam from "../groups/SearchInviteUsersToTeam";
 
@@ -33,16 +38,13 @@ const SmallText = styled.div`
   font-size: 14px;
 `;
 
-const QueriedUser = styled.div`
-  display: flex;
-  align-items: center;
+const QueriedUser = styled(FlexWrapper)`
   justify-content: space-between;
   width: 90%;
   margin-bottom: 20px;
 `;
 
-const FlexWrapper = styled.div`
-  display: flex;
+const NewFlexWrapper = styled(FlexWrapper)`
   margin-right: 10px;
 `;
 
@@ -53,10 +55,7 @@ const UserImage = styled.img`
   margin-right: 10px;
 `;
 
-const UserInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const UserInfo = styled(FlexColumn)``;
 
 const InviteButton = styled(Button1)`
   width: 90px;
@@ -131,13 +130,13 @@ export default function InviteJoinTeamModal({
           {queriedUsers.length ? (
             queriedUsers.map((user, index) => (
               <QueriedUser key={index}>
-                <FlexWrapper>
+                <NewFlexWrapper>
                   <UserImage src={user.profileImage} />
                   <UserInfo>
                     <SmallTitle>{user.alias}</SmallTitle>
                     <SmallText>{user.jobTitle}</SmallText>
                   </UserInfo>
-                </FlexWrapper>
+                </NewFlexWrapper>
                 {!team.members
                   .map((member) => member.uid)
                   .includes(user.uid) ? (

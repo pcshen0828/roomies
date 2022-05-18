@@ -1,14 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { FlexColumn } from "../common/Components";
 import { Overlay, Modal, Header, CloseButton, Button } from "./ModalElements";
 
 const NewHeader = styled(Header)`
   justify-content: flex-end;
 `;
 
-const Body = styled.div`
-  display: flex;
-  flex-direction: column;
+const Body = styled(FlexColumn)`
   align-items: center;
   margin-top: 40px;
 `;

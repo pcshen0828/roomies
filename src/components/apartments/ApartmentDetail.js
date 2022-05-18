@@ -7,7 +7,7 @@ import { useAuth } from "../../context/AuthContext";
 import Skeleton from "react-loading-skeleton";
 import CompleteProfileBeforeJoinModal from "../modals/CompleteProfileBeforeJoin";
 
-import { Button1, FlexWrapper, Title } from "../common/Components";
+import { Button1, FlexColumn, FlexWrapper, Title } from "../common/Components";
 import Carousel from "./ApartmentCarousel";
 import OwnerCard from "./ApartmentOwner";
 import ApartmentMap from "./ApartmentMap";
@@ -86,11 +86,8 @@ const Head = styled(FlexWrapper)`
   }
 `;
 
-const DetailInfo = styled.div`
+const DetailInfo = styled(FlexColumn)`
   width: 40%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
 
   @media screen and (max-width: 1279.98px) {
     width: 100%;
@@ -164,11 +161,8 @@ const Body = styled(FlexWrapper)`
   }
 `;
 
-const BodyLeft = styled(FlexWrapper)`
+const BodyLeft = styled(FlexColumn)`
   width: calc(60% - 30px);
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   @media screen and (max-width: 1279.98px) {
     width: 100%;
   }

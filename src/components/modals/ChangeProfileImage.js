@@ -14,7 +14,13 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import { SmallLabel, Button1, FlexWrapper, Bold } from "../common/Components";
+import {
+  SmallLabel,
+  Button1,
+  FlexWrapper,
+  Bold,
+  FlexColumn,
+} from "../common/Components";
 
 import AvatarEditor from "react-avatar-editor";
 
@@ -57,9 +63,7 @@ const EditorWrapper = styled(FlexWrapper)`
   min-height: 320px;
 `;
 
-const FileWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+const FileWrapper = styled(FlexColumn)`
   align-items: center;
 `;
 

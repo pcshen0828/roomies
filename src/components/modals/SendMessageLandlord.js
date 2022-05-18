@@ -5,7 +5,7 @@ import api from "../../utils/api";
 
 import styled from "styled-components";
 import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
-import { Button1 } from "../common/Components";
+import { Button1, FlexWrapper } from "../common/Components";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 
 const NewModal = styled(Modal)`
@@ -27,8 +27,7 @@ const MessageInput = styled.textarea`
   }
 `;
 
-const DefaultMessages = styled.div`
-  display: flex;
+const DefaultMessages = styled(FlexWrapper)`
   width: calc(100% - 40px);
   margin: 0 auto 10px;
   overflow-x: auto;

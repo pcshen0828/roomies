@@ -3,11 +3,9 @@ import styled from "styled-components";
 import TeamCard from "./GroupTeamCard";
 import CreateTeam from "./GroupCreateTeam";
 import { Firebase } from "../../utils/firebase";
-import { FlexWrapper } from "../common/Components";
+import { FlexColumn, FlexWrapper } from "../common/Components";
 
-const TeamsBlock = styled.div`
-  display: flex;
-  flex-direction: column;
+const TeamsBlock = styled(FlexColumn)`
   width: 100%;
   height: auto;
 `;
@@ -22,9 +20,7 @@ const TeamBlockCards = styled(FlexWrapper)`
   width: 100%;
 `;
 
-const SubtitlesSmall = styled.div`
-  display: flex;
-  align-items: center;
+const SubtitlesSmall = styled(FlexWrapper)`
   margin-bottom: 10px;
 `;
 

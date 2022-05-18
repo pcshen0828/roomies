@@ -14,7 +14,7 @@ import api from "../../utils/api";
 import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
 
-import { BodyLeft, BodyRight, Input } from "../common/Components";
+import { BodyLeft, BodyRight, FlexColumn, Input } from "../common/Components";
 import Card from "../apartments/ApartmentCard";
 
 const libraries = ["places"];
@@ -44,15 +44,12 @@ const containerStyle = {
   border: "1px solid #dadada",
 };
 
-const InfoModal = styled.div`
+const InfoModal = styled(FlexColumn)`
   width: 200px;
   height: 100px;
   border-radius: 10px;
-  display: flex;
-  flex-direction: column;
   padding: 20px;
   font-size: 14px;
-  align-items: flex-start;
   font-family: "Noto Sans TC", sans-serif;
   font-weight: 700;
 `;

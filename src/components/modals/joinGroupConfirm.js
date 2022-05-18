@@ -13,6 +13,7 @@ import {
   Body,
   Button,
 } from "./ModalElements";
+import { FlexWrapper } from "../common/Components";
 
 const NewModal = styled(Modal)`
   max-width: 870px;
@@ -27,10 +28,7 @@ const ContentList = styled.ol`
   margin-top: 10px;
 `;
 
-const ConfirmBlock = styled.div`
-  display: flex;
-  align-items: center;
-`;
+const ConfirmBlock = styled(FlexWrapper)``;
 
 const Checkbox = styled.input`
   margin-left: 20px;

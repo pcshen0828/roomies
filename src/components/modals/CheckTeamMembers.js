@@ -12,7 +12,7 @@ import {
   Title,
   Body,
 } from "./ModalElements";
-import { Button1 } from "../common/Components";
+import { Button1, FlexColumn, FlexWrapper } from "../common/Components";
 
 const NewModal = styled(Modal)`
   max-width: 700px;
@@ -22,21 +22,11 @@ const NewBody = styled(Body)`
   height: 400px;
 `;
 
-const Members = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const Members = styled(FlexColumn)``;
 
-const Member = styled.div`
-  display: flex;
-  align-items: center;
+const Member = styled(FlexWrapper)`
   margin: 10px 10px 20px;
   justify-content: space-between;
-`;
-
-const FlexWrapper = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 const MemberLink = styled(Link)``;
@@ -48,23 +38,18 @@ const MemberImage = styled.img`
   margin-right: 20px;
 `;
 
-const MemberInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const MemberInfo = styled(FlexColumn)``;
 
 const MemberName = styled.div`
   font-weight: 700;
 `;
 
-const MemberStatus = styled.div`
+const MemberStatus = styled(FlexWrapper)`
   width: 100px;
   height: 35px;
   border: 1px solid #dadada;
   border-radius: 5px;
-  display: flex;
   justify-content: center;
-  align-items: center;
   margin-right: 30px;
 `;
 

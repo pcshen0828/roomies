@@ -37,20 +37,16 @@ const MemberBlockWrapper = styled.div`
   }
 `;
 
-const MembersBlock = styled.div`
+const MembersBlock = styled(FlexColumn)`
   width: 100%;
-  display: flex;
-  flex-direction: column;
 `;
 
 const MemberBlockCard = styled.div`
   flex-direction: column;
 `;
 
-const Member = styled.div`
-  display: flex;
+const Member = styled(FlexWrapper)`
   justify-content: space-between;
-  align-items: center;
   margin: 20px 10px 10px;
 `;
 
@@ -66,10 +62,7 @@ const MemberImage = styled.img`
   border-radius: 50%;
 `;
 
-const MemberInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+const MemberInfo = styled(FlexColumn)``;
 
 const MemberName = styled(SlicedBold)`
   max-width: 120px;
@@ -94,9 +87,7 @@ const MessageButton = styled(Button1)`
   font-size: 14px;
 `;
 
-const SubtitlesSmall = styled.div`
-  display: flex;
-  align-items: center;
+const SubtitlesSmall = styled(FlexWrapper)`
   margin-bottom: 10px;
 `;
 

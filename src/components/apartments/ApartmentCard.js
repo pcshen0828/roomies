@@ -13,6 +13,7 @@ const Wrapper = styled(FlexColumn)`
   position: relative;
   flex-shrink: 0;
   background: #fff;
+  align-items: stretch;
 `;
 
 const StyledLink = styled(Link)`
@@ -30,9 +31,7 @@ const CoverImage = styled.div`
   background-repeat: no-repeat;
 `;
 
-const CardContent = styled.div`
-  display: flex;
-  flex-direction: column;
+const CardContent = styled(FlexColumn)`
   padding: 16px 10px;
 `;
 

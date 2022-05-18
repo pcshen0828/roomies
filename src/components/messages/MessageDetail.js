@@ -4,7 +4,12 @@ import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
 import styled from "styled-components";
-import { FlexWrapper, ProfileImage, SlicedTitle } from "../common/Components";
+import {
+  FlexColumn,
+  FlexWrapper,
+  ProfileImage,
+  SlicedTitle,
+} from "../common/Components";
 import MessageBar from "./MessageBar";
 import send from "../../images/send.svg";
 
@@ -28,13 +33,11 @@ const NewProfileImage = styled(ProfileImage)`
   margin: 0 10px 10px 0;
 `;
 
-const MessageContent = styled.div`
+const MessageContent = styled(FlexColumn)`
   width: 70%;
   height: calc(100% - 40px);
   padding: 20px;
   position: relative;
-  display: flex;
-  flex-direction: column;
   @media screen and (max-width: 995.98px) {
     width: calc(100% - 40px);
     padding: 10px 20px 20px;

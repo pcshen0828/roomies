@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { Button1, FlexWrapper } from "../common/Components";
+import { Button1, FlexColumn, FlexWrapper } from "../common/Components";
 
 const fadeIn = keyframes`
   from {
@@ -21,7 +21,7 @@ const fadeOut = keyframes`
   }
 `;
 
-const Overlay = styled.div`
+const Overlay = styled(FlexWrapper)`
   position: fixed;
   left: 0;
   top: 0;
@@ -29,31 +29,26 @@ const Overlay = styled.div`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
   z-index: 999;
-  display: flex;
   justify-content: center;
-  align-items: center;
 
   visibility: ${(props) => (props.out ? "hidden" : "visible")};
   animation: ${(props) => (props.out ? fadeOut : fadeIn)} 0.3s ease-out;
   transition: visibility 0.3s ease-out;
 `;
 
-const Modal = styled.div`
+const Modal = styled(FlexColumn)`
   width: 70%;
   max-height: 90%;
   overflow-y: auto;
   background: #fff;
   border-radius: 10px;
   position: relative;
-  display: flex;
-  flex-direction: column;
 `;
 
-const Header = styled.div`
+const Header = styled(FlexWrapper)`
   padding: 15px 20px 10px;
   border-bottom: 1px solid #e8e8e8;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
-  display: flex;
   justify-content: space-between;
 `;
 
@@ -101,7 +96,7 @@ const NavModalOverlay = styled.div`
   transition: visibility 0.3s ease-out;
 `;
 
-const NavModal = styled.div`
+const NavModal = styled(FlexColumn)`
   width: 350px;
   max-height: 300px;
   position: absolute;
@@ -110,9 +105,6 @@ const NavModal = styled.div`
   background: #ffffff;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border-radius: 0 0 10px 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   padding: 20px;
 
   @media screen and (min-width: 1440px) {

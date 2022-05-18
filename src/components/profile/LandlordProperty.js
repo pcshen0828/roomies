@@ -59,7 +59,6 @@ const Card = styled(FlexWrapper)`
   padding: 0 20px;
   height: 90px;
   border: 1px solid #e8e8e8;
-  display: flex;
   border-radius: 10px;
   overflow: hidden;
   position: relative;
