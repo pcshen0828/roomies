@@ -179,6 +179,7 @@ export default function InviteJoinGroupModal({
         </NewBody>
         <Button
           onClick={() => {
+            if (!inviteList.length) return;
             setOpenConfirm(true);
           }}
         >

@@ -289,6 +289,59 @@ function Groups() {
     api.createNoticeByType(currentUser.uid, invitation.sender, 10);
   }
 
+  const postStatusSwitchCase = [
+    {
+      type: "posted",
+      message: "貼文已發佈！",
+    },
+    {
+      type: "updated",
+      message: "貼文已更新！",
+    },
+    {
+      type: "deleted",
+      message: "貼文已刪除！",
+    },
+  ];
+
+  const openModalSwitchCase = [
+    {
+      type: "quit",
+      message: "確認退出？",
+      action: quitTheGroup,
+    },
+    {
+      type: "confirmJoin",
+      message: "確認加入？",
+      action: confirmJoinGroup,
+    },
+    {
+      type: "join",
+      message: "確認加入？",
+      action: joinGroup,
+    },
+    {
+      type: "reject",
+      message: "確認拒絕？",
+      action: rejectJoinGroup,
+    },
+  ];
+
+  const tabs = [
+    {
+      id: "news",
+      name: "最新動態",
+    },
+    {
+      id: "teams",
+      name: "組隊租屋",
+    },
+    {
+      id: "other",
+      name: "關於",
+    },
+  ];
+
   return (
     <>
       <Wrapper
@@ -297,32 +350,18 @@ function Groups() {
         }}
       >
         {saved && (
-          <SuccessfullySavedModal
-            out={false}
-            toggle={setSaved}
-            message="邀請已送出！"
-          />
+          <SuccessfullySavedModal toggle={setSaved} message="邀請已送出！" />
         )}
 
-        {postStatus === "posted" && (
-          <SuccessfullySavedModal
-            out={false}
-            toggle={setPostStatus}
-            message="貼文已發佈！"
-          />
-        )}
-        {postStatus === "updated" && (
-          <SuccessfullySavedModal
-            out={false}
-            toggle={setPostStatus}
-            message="貼文已更新！"
-          />
-        )}
-        {postStatus === "deleted" && (
-          <SuccessfullySavedModal
-            message="貼文已刪除！"
-            toggle={setPostStatus}
-          />
+        {postStatusSwitchCase.map(
+          (status) =>
+            postStatus === status.type && (
+              <SuccessfullySavedModal
+                key={status.type}
+                toggle={setPostStatus}
+                message={status.message}
+              />
+            )
         )}
 
         {openModalType === "invite" && (
@@ -333,33 +372,16 @@ function Groups() {
             setSaved={setSaved}
           />
         )}
-        {openModalType === "quit" && (
-          <ConfirmBeforeActionModal
-            message="確認退出？"
-            action={quitTheGroup}
-            toggle={setOpenModalType}
-          />
-        )}
-        {openModalType === "confirmJoin" && (
-          <ConfirmBeforeActionModal
-            message="確認加入？"
-            action={confirmJoinGroup}
-            toggle={setOpenModalType}
-          />
-        )}
-        {openModalType === "join" && (
-          <ConfirmBeforeActionModal
-            message="確認加入？"
-            action={joinGroup}
-            toggle={setOpenModalType}
-          />
-        )}
-        {openModalType === "reject" && (
-          <ConfirmBeforeActionModal
-            message="確認拒絕？"
-            action={rejectJoinGroup}
-            toggle={setOpenModalType}
-          />
+
+        {openModalSwitchCase.map(
+          (status) =>
+            openModalType === status.type && (
+              <ConfirmBeforeActionModal
+                message={status.message}
+                action={status.action}
+                toggle={setOpenModalType}
+              />
+            )
         )}
 
         <BreadCrumb>
@@ -422,31 +444,18 @@ function Groups() {
           )}
 
           <TabsWrapper>
-            <Tab
-              onClick={() => {
-                setTab("news");
-              }}
-              active={tab === "news"}
-            >
-              最新動態
-            </Tab>
-            <Tab
-              onClick={() => {
-                setTab("teams");
-              }}
-              active={tab === "teams"}
-            >
-              組隊租屋
-            </Tab>
-            <Tab
-              type="other"
-              onClick={() => {
-                setTab("other");
-              }}
-              active={tab === "other"}
-            >
-              關於
-            </Tab>
+            {tabs.map((option) => (
+              <Tab
+                key={option.id}
+                onClick={() => {
+                  setTab(option.id);
+                }}
+                active={tab === option.id}
+                type={option.id === "other" ? "other" : ""}
+              >
+                {option.name}
+              </Tab>
+            ))}
           </TabsWrapper>
 
           {loading ? (
