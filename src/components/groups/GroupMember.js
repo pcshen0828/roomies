@@ -1,10 +1,11 @@
 import React from "react";
-import styled from "styled-components";
 import { Link } from "react-router-dom";
-import SendMessageModal from "../modals/SendMessage";
 import { useAuth } from "../../context/AuthContext";
+
+import styled from "styled-components";
 import { Button1, FlexWrapper, SlicedBold } from "../common/Components";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import SendMessageModal from "../modals/SendMessage";
 
 const Wrapper = styled.div`
   display: flex;

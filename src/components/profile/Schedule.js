@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import EventInfoWindowModal from "./EventInfoWindow";
+
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import interactionPlugin from "@fullcalendar/interaction";
 import zhTwLocale from "@fullcalendar/core/locales/zh-tw";
-import "./customCalendar.css";
-import EventInfoWindowModal from "./EventInfoWindow";
 
 const CalendarWrapper = styled.div`
   width: 100%;
@@ -19,16 +19,12 @@ function Schedule({ events }) {
   const [coordinates, setCoordinates] = React.useState({});
   const [showModal, setShowModal] = React.useState(false);
 
-  console.log(events);
-
   function showEventModal(info) {
     setEventInfo(info.event);
     setCoordinates({
       x: info.jsEvent.pageX,
       y: info.jsEvent.pageY,
     });
-    console.log(info.event.extendedProps);
-    console.log("Event: " + info.event.title);
     setShowModal(true);
   }
 

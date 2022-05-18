@@ -1,12 +1,12 @@
 import React from "react";
-import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
-import ApartmentDetail from "../components/apartments/ApartmentDetail";
-import { FlexWrapper } from "../components/common/Components";
 import api from "../utils/api";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+
+import styled from "styled-components";
+import { FlexWrapper } from "../components/common/Components";
+import ApartmentDetail from "../components/apartments/ApartmentDetail";
 import Footer from "../components/layout/Footer";
+import Skeleton from "react-loading-skeleton";
 
 const BreadCrumb = styled(FlexWrapper)`
   width: calc(100% - 48px);

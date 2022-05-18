@@ -1,13 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { CloseButton, Overlay } from "../modals/ModalElements";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "../apartments/carousel.css";
-import { CloseButton, Overlay } from "../modals/ModalElements";
 
 const NewOverlay = styled(Overlay)`
   z-index: 1000;
@@ -32,7 +28,6 @@ const Image = styled.img`
 `;
 
 export default function ImagesDisplayer({ images, index, toggle }) {
-  console.log("yes");
   return (
     <NewOverlay
       onClick={() => {

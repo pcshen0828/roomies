@@ -1,13 +1,14 @@
 import React from "react";
-import styled from "styled-components";
-import { Firebase } from "../../utils/firebase";
-import send from "../../images/send.svg";
-import api from "../../utils/api";
 import { useParams } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+
+import styled from "styled-components";
 import { FlexWrapper, ProfileImage, SlicedTitle } from "../common/Components";
 import MessageBar from "./MessageBar";
+import send from "../../images/send.svg";
+
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const ChatroomHeader = styled(FlexWrapper)`
   position: absolute;

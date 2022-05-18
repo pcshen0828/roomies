@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  Overlay,
-  Modal,
-  Header,
-  Title,
-  CloseButton,
-  Button,
-} from "./ModalElements";
+import { Overlay, Modal, Header, Title, Button } from "./ModalElements";
 
 const NewHeader = styled(Header)`
   justify-content: center;

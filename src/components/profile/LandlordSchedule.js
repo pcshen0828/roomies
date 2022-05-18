@@ -1,12 +1,13 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import { FlexWrapper, SmallTitle } from "../common/Components";
 import Schedule from "./Schedule";
 import Requests from "./Requests";
-import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
-import { useAuth } from "../../context/AuthContext";
-import { useNavigate, useLocation } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;

@@ -1,8 +1,8 @@
 import React from "react";
-import styled from "styled-components";
-import { NavModal, CloseButton } from "../modals/ModalElements";
-import { FlexWrapper, Bold, SmallTitle } from "../common/Components";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { FlexWrapper, Bold, SmallTitle } from "../common/Components";
+import { NavModal, CloseButton } from "../modals/ModalElements";
 
 const EventInfoWindow = styled(NavModal)`
   border-radius: 10px;

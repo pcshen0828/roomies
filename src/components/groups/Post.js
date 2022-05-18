@@ -8,7 +8,6 @@ import {
   ProfileImage,
 } from "../common/Components";
 import { calcTimeGap } from "../../utils/calculate";
-import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import ImagesDisplayer from "./ImagesDisplayer";
 import more from "../../images/dots.svg";
 import { Link } from "react-router-dom";
@@ -18,7 +17,6 @@ import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import { Firebase } from "../../utils/firebase";
 import EditPostModal from "../modals/EditPost";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -223,11 +221,6 @@ const Icon = styled.img`
   margin-right: 5px;
 `;
 
-const tester =
-  "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/posts%2Fea101c0e-c283-4d43-9927-28fe27912e46%2Fgood.png?alt=media&token=8a6792c0-ded4-4f1f-abda-6a932a108b04";
-const defaultImageUrl =
-  "https://firebasestorage.googleapis.com/v0/b/roomies-f03cd.appspot.com/o/apartments%2Fdefault%2Fimgplaceholder.png?alt=media&token=603bce20-3d5b-489f-9ffa-98ee2a3f8aba";
-
 export default function Post({ post, currentUser, setUpdated, setDeleted }) {
   const [creatorInfo, setCreatorInfo] = React.useState({});
   const [showMore, setShowMore] = React.useState(false);
@@ -259,13 +252,9 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
           `posts/${post.id}/${image.name}`
         );
         promises.push(
-          Firebase.deleteObject(desertRef)
-            .then(() => {
-              console.log("deleted");
-            })
-            .catch((error) => {
-              console.log(error);
-            })
+          Firebase.deleteObject(desertRef).catch((error) => {
+            console.log(error);
+          })
         );
       });
       Promise.all(promises).then((res) => {
@@ -373,14 +362,6 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
         )}
       </Content>
 
-      {/* <LinkPreview
-        url="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-        width="100%"
-        borderColor="#e8e8e8"
-        borderRadius="0px 0px 10px 10px"
-        fallbackImageSrc={defaultImageUrl}
-      /> */}
-
       {post.images.length === 1 ? (
         post.images.map((image) => (
           <SinglemageDisplayer
@@ -433,7 +414,6 @@ export default function Post({ post, currentUser, setUpdated, setDeleted }) {
             <FirstImage
               src={post.images[0].url}
               onClick={() => {
-                console.log(123);
                 setShowImages(true);
               }}
             />

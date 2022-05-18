@@ -1,17 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  MediumTitle,
-  FlexWrapper,
-  Bold,
-  Button1,
-  StyledLink,
-} from "../common/Components";
 import api from "../../utils/api";
+
+import { MediumTitle, FlexWrapper, Bold, Button1 } from "../common/Components";
 import SendMessageLandlordModal from "../modals/SendMessageLandlord";
-import phone from "../../images/phone.svg";
 import SignInFirstModal from "../modals/SignInFirst";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import phone from "../../images/phone.svg";
 
 const Wrapper = styled(FlexWrapper)`
   width: ${(props) =>

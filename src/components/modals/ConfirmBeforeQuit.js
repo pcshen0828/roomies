@@ -1,7 +1,7 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
 import styled from "styled-components";
 import { Overlay, Modal } from "./ModalElements";
-import { Firebase } from "../../utils/firebase";
 import { Bold, Button1 } from "../common/Components";
 
 const HigherOverlay = styled(Overlay)`
@@ -32,7 +32,6 @@ function ConfirmBeforeQuitModal({ toggle, apartmentId, file }) {
       );
       Firebase.deleteObject(desertRef)
         .then(() => {
-          console.log("deleted");
           toggle(false);
         })
         .catch((error) => {

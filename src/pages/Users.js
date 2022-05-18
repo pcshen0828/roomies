@@ -1,16 +1,15 @@
 import React from "react";
-import styled from "styled-components";
-import { Wrapper } from "../components/common/Components";
-import { useParams } from "react-router-dom";
-import api from "../utils/api";
-import UserInfo from "../components/users/UserInfo";
+import { useParams, Navigate } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Navigate } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import api from "../utils/api";
+
+import styled from "styled-components";
+import { Wrapper } from "../components/common/Components";
+import UserInfo from "../components/users/UserInfo";
 import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
+import Skeleton from "react-loading-skeleton";
 
 const NewWrapper = styled(Wrapper)`
   min-height: calc(100vh - 271px);

@@ -1,9 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { SmallTitle, SmallLabel, FlexWrapper } from "../../common/Components";
-import api from "../../../utils/api";
-import { Firebase } from "../../../utils/firebase";
 import { mainColor, subColor } from "../../../styles/GlobalStyle";
+import { SmallTitle, SmallLabel, FlexWrapper } from "../../common/Components";
 
 const CheckboxWrapper = styled(FlexWrapper)`
   align-items: center;

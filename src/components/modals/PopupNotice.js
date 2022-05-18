@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { Overlay, Modal, Body, Button } from "./ModalElements";
+import { Overlay, Modal, Button } from "./ModalElements";
 import { FlexWrapper, Title } from "../common/Components";
 import check from "../../images/check.svg";
 

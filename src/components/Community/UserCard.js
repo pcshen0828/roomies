@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper, Bold, Button1, TitleSub } from "../common/Components";
+import { FlexWrapper, TitleSub } from "../common/Components";
 import { Link } from "react-router-dom";
 
 const StyledLink = styled(Link)`
@@ -57,12 +57,6 @@ const ProfileImage = styled.img`
 const UserInfo = styled(FlexWrapper)`
   flex-direction: column;
   margin: -5px 0 10px;
-`;
-
-const NewButton = styled(FlexWrapper)`
-  width: 120px;
-  height: 38px;
-  border: 1px solid #;
 `;
 
 function UserCard({ user }) {

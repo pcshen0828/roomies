@@ -1,20 +1,20 @@
 import React from "react";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
-import Carousel from "./ApartmentCarousel";
-import JoinConfirmModal from "../modals/JoinGroupConfirm";
 import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
-import SignInFirstModal from "../modals/SignInFirst";
-import OwnerCard from "./ApartmentOwner";
-import { Button1, FlexWrapper, Title } from "../common/Components";
-import ApartmentMap from "./ApartmentMap";
-import RecommendCarousel from "./Recommend";
+
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import CompleteProfileBeforeJoinModal from "../modals/CompleteProfileBeforeJoin";
 
-// icons
+import { Button1, FlexWrapper, Title } from "../common/Components";
+import Carousel from "./ApartmentCarousel";
+import OwnerCard from "./ApartmentOwner";
+import ApartmentMap from "./ApartmentMap";
+import RecommendCarousel from "./Recommend";
+import JoinConfirmModal from "../modals/JoinGroupConfirm";
+import SignInFirstModal from "../modals/SignInFirst";
+
 import loc from "../../images/loc.svg";
 import calendar from "../../images/calendar.svg";
 import members from "../../images/members.svg";

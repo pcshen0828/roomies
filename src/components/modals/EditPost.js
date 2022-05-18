@@ -1,5 +1,9 @@
 import React from "react";
+import api from "../../utils/api";
+import { Firebase } from "../../utils/firebase";
+
 import styled from "styled-components";
+import { subColor } from "../../styles/GlobalStyle";
 import {
   Overlay,
   Modal,
@@ -9,7 +13,6 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 import {
   Bold,
   Error,
@@ -17,9 +20,7 @@ import {
   LoadingButton,
   Textarea,
 } from "../common/Components";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
-import { subColor } from "../../styles/GlobalStyle";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 
 const NewModal = styled(Modal)`
   max-width: 700px;
@@ -208,13 +209,9 @@ export default function EditPostModal({
           Firebase.storage,
           `posts/${post.id}/${image.name}`
         );
-        Firebase.deleteObject(desertRef)
-          .then(() => {
-            console.log("deleted");
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        Firebase.deleteObject(desertRef).catch((error) => {
+          console.log(error);
+        });
       });
 
     newFiles.forEach((file) => {

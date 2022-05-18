@@ -1,13 +1,14 @@
 import React from "react";
-import styled from "styled-components";
-import defaulImage from "../../images/default.png";
-import api from "../../utils/api";
-import { useAuth } from "../../context/AuthContext";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { FlexWrapper } from "../common/Components";
+import { useAuth } from "../../context/AuthContext";
 import { calcTimeGap } from "../../utils/calculate";
+import api from "../../utils/api";
+
+import styled from "styled-components";
+import { FlexWrapper } from "../common/Components";
+import defaulImage from "../../images/default.png";
+
+import Skeleton from "react-loading-skeleton";
 
 const StyledLink = styled(Link)`
   color: #424b5a;

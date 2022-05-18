@@ -71,7 +71,6 @@ const api = {
     this.SetDoc(docRef, data);
   },
   handleError(err) {
-    console.log(err);
     return err.code === "auth/invalid-email"
       ? "信箱格式錯誤"
       : err.code === "auth/wrong-password"
@@ -87,13 +86,11 @@ const api = {
       : "";
   },
   async signIn(email, password, setError) {
-    Firebase.signInWithEmailAndPassword(this.auth, email, password)
-      .then((userCredential) => {
-        // console.log(userCredential.user);
-      })
-      .catch((error) => {
+    Firebase.signInWithEmailAndPassword(this.auth, email, password).catch(
+      (error) => {
         setError(this.handleError(error));
-      });
+      }
+    );
   },
   async signUp(email, password) {
     return Firebase.createUserWithEmailAndPassword(this.auth, email, password);

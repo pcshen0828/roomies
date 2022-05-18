@@ -1,16 +1,9 @@
 import React from "react";
-import styled from "styled-components";
-import {
-  SmallTitle,
-  FlexWrapper,
-  Error,
-  LoadingButton,
-  PagingList,
-  Button1,
-} from "../../common/Components";
-import api from "../../../utils/api";
 import { Firebase } from "../../../utils/firebase";
+import api from "../../../utils/api";
+import styled from "styled-components";
 import { subColor } from "../../../styles/GlobalStyle";
+import { SmallTitle, FlexWrapper, Error } from "../../common/Components";
 
 const Image = styled.div`
   background: ${(props) => (props.src ? `url(${props.src})` : "")};
@@ -96,13 +89,9 @@ function EditPropertyPage4({ apartment, images, setImages }) {
       Firebase.storage,
       `apartments/${apartment.id}/${images[indexToDelete].name}`
     );
-    Firebase.deleteObject(desertRef)
-      .then(() => {
-        console.log("deleted");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    Firebase.deleteObject(desertRef).catch((error) => {
+      console.log(error);
+    });
   }
   return (
     <>

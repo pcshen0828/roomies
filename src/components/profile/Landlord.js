@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+
 import styled from "styled-components";
 import {
   BodyWrapper,
@@ -11,7 +13,6 @@ import {
 import LandlordInfo from "./LandlordInfo";
 import LandlordProperty from "./LandlordProperty";
 import LandlordSchedule from "./LandlordSchedule";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
 import more from "../../images/more.svg";
 import less from "../../images/less.svg";
 

@@ -1,5 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
+
 import styled from "styled-components";
+import { mainColor, subColor } from "../../styles/GlobalStyle";
 import { Overlay, Modal, CloseButton, Button } from "./ModalElements";
 import {
   Input,
@@ -9,9 +13,6 @@ import {
   FlexColumn,
   TitleSub,
 } from "../common/Components";
-import api from "../../utils/api";
-import { useNavigate } from "react-router-dom";
-import { mainColor, subColor } from "../../styles/GlobalStyle";
 import signup from "../../images/tree.png";
 
 const NewModal = styled(Modal)`

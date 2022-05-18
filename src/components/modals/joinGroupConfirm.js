@@ -1,6 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
+import styled from "styled-components";
 import {
   Overlay,
   Modal,
@@ -10,8 +13,6 @@ import {
   Body,
   Button,
 } from "./ModalElements";
-import api from "../../utils/api";
-import { useAuth } from "../../context/AuthContext";
 
 const NewModal = styled(Modal)`
   max-width: 870px;
@@ -36,7 +37,6 @@ const Checkbox = styled.input`
 `;
 
 function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
-  console.log(groupId);
   const { currentUser } = useAuth();
   const [isConfirmed, setIsConfirmed] = React.useState(false);
   const navigate = useNavigate();
@@ -46,7 +46,6 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
     api
       .getDataWithSingleQuery("groups", "apartmentId", "==", apartmentId)
       .then((res) => {
-        console.log(res);
         if (res.length) {
           const currentMembers = res[0].members.length
             ? [...res[0].members, currentUser.uid]

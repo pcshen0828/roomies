@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { FlexWrapper } from "../common/Components";
-import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;

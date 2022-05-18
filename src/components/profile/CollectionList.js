@@ -1,11 +1,11 @@
 import React from "react";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import { FlexWrapper, Bold } from "../common/Components";
 import Card from "../apartments/ApartmentCard";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;

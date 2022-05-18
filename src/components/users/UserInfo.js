@@ -1,25 +1,23 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+
 import styled from "styled-components";
 import {
   FlexWrapper,
-  Bold,
   Title,
   MediumTitle,
   FlexColumn,
-} from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
-import SendMessageModal from "../modals/SendMessage";
-import {
   SearchWrapper,
   SearchInput,
   SearchButton,
   Button1,
 } from "../common/Components";
-import search from "../../images/search.svg";
-import { Firebase } from "../../utils/firebase";
 import UserCard from "../Community/UserCard";
-import { Link } from "react-router-dom";
+import SendMessageModal from "../modals/SendMessage";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import search from "../../images/search.svg";
 
 const NewWrapper = styled(FlexColumn)`
   align-items: flex-start;

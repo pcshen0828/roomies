@@ -1,7 +1,7 @@
 import React from "react";
 import { Firebase } from "../utils/firebase";
-import api from "../utils/api";
 import { useAuthState } from "react-firebase-hooks/auth";
+import api from "../utils/api";
 
 const AuthContext = React.createContext();
 
@@ -30,7 +30,6 @@ export function AuthProvider({ children }) {
         const id = user.uid;
         const query = api.createQuery("users", "uid", "==", id);
         Firebase.onSnapshot(query, (snapshot) => {
-          console.log(snapshot.docs.map((doc) => doc.data())[0]);
           setCurrentUser(snapshot.docs.map((doc) => doc.data())[0]);
         });
       }

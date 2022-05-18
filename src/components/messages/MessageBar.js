@@ -89,7 +89,6 @@ function MessageBar({ detail, myRole, members, self }) {
   }, [self, members]);
 
   React.useEffect(() => {
-    console.log(scrollRef.current);
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [detail]);
 

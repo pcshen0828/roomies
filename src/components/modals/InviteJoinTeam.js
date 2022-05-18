@@ -1,4 +1,8 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   Overlay,
@@ -10,9 +14,6 @@ import {
   Button,
 } from "./ModalElements";
 import { Button1, SmallTitle } from "../common/Components";
-import { Firebase } from "../../utils/firebase";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 import SearchAndInviteToTeam from "../groups/SearchInviteUsersToTeam";
 

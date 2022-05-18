@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
-import { NavModalOverlay, NavModal } from "./ModalElements";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { StyledLink, Button1, Bold, FlexColumn } from "../common/Components";
-import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
+
+import styled from "styled-components";
 import { mainColor } from "../../styles/GlobalStyle";
+import { Button1, Bold, FlexColumn } from "../common/Components";
+import { NavModalOverlay, NavModal } from "./ModalElements";
+import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 
 const NewLink = styled(Link)`
   display: flex;

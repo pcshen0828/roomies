@@ -1,4 +1,9 @@
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   Overlay,
@@ -16,12 +21,8 @@ import {
   Status,
   SlicedBold,
 } from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
 import BookScheduleModal from "./BookSchedule";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import { Link, useNavigate } from "react-router-dom";
 
 const NewModal = styled(Modal)`
   width: 80%;

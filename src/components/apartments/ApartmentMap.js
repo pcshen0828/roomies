@@ -1,7 +1,7 @@
 import React from "react";
+import styled from "styled-components";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../appkeys";
-import styled from "styled-components";
 
 const libraries = ["places"];
 

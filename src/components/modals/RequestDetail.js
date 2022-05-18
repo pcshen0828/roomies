@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
   Overlay,
@@ -10,7 +11,6 @@ import {
   Button,
 } from "./ModalElements";
 import { Bold, FlexWrapper, SmallTitle } from "../common/Components";
-import { Link } from "react-router-dom";
 
 const NewModal = styled(Modal)`
   width: 70%;

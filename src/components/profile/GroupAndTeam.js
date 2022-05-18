@@ -1,4 +1,9 @@
 import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   FlexWrapper,
@@ -14,16 +19,12 @@ import {
   PagingList,
   PagingItem,
 } from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
 import ManageTeamModal from "../modals/ManageTeam";
-import { useNavigate, useLocation } from "react-router-dom";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import members from "../../images/members.svg";
+
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;

@@ -1,5 +1,10 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
+import { mainColor } from "../../styles/GlobalStyle";
 import {
   Overlay,
   Modal,
@@ -10,11 +15,8 @@ import {
   Button,
 } from "./ModalElements";
 import { SmallLabel, Button1, FlexWrapper, Bold } from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
+
 import AvatarEditor from "react-avatar-editor";
-import { mainColor } from "../../styles/GlobalStyle";
-import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
 
 const NewOverlay = styled(Overlay)`
   overflow-y: auto;

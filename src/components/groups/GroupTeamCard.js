@@ -1,15 +1,17 @@
 import React from "react";
-import styled from "styled-components";
-import CheckTeamMembersModal from "../modals/CheckTeamMembers";
-import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
+
+import styled from "styled-components";
 import { Button1, ExitButton, FlexWrapper, Title } from "../common/Components";
-import member from "../../images/members.svg";
-import exit from "../../images/exit.svg";
+import CheckTeamMembersModal from "../modals/CheckTeamMembers";
+import ApplyJoinModal from "../modals/ApplyToJoinTeam";
 import InviteJoinTeamModal from "../modals/InviteJoinTeam";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+
+import member from "../../images/members.svg";
+import exit from "../../images/exit.svg";
 
 const defaultCardStyle = `
   border-radius: 10px;

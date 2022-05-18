@@ -9,7 +9,6 @@ import {
   Button,
 } from "./ModalElements";
 import { TitleSub } from "../common/Components";
-import { useNavigate } from "react-router-dom";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;

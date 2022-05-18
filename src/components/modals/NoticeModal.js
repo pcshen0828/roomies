@@ -1,14 +1,15 @@
 import React from "react";
-import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
-import { NavModalOverlay, NavModal } from "./ModalElements";
-import { Bold, FlexWrapper, SmallTitle } from "../common/Components";
-import { Link } from "react-router-dom";
 import { noticeTypes } from "../../utils/noticeType";
+
+import styled from "styled-components";
+import { Bold, FlexWrapper, SmallTitle } from "../common/Components";
+import { NavModalOverlay, NavModal } from "./ModalElements";
+
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const NewModal = styled(NavModal)`
   min-height: 160px;

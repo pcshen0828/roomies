@@ -1,4 +1,7 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   Overlay,
@@ -8,13 +11,6 @@ import {
   CloseButton,
   Body,
 } from "../modals/ModalElements";
-import EditPropertyPage1 from "./propertyEditModal/EditPropertyPage1";
-import EditPropertyPage2 from "./propertyEditModal/EditPropertyPage2";
-import EditPropertyPage3 from "./propertyEditModal/EditPropertyPage3";
-import EditPropertyPage4 from "./propertyEditModal/EditPropertyPage4";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
-import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import {
   BodyInnerWrapper,
   BottomWrapper,
@@ -28,6 +24,12 @@ import {
   StepsWrapper,
   StepWrapper,
 } from "../common/Components";
+
+import EditPropertyPage1 from "./propertyEditModal/EditPropertyPage1";
+import EditPropertyPage2 from "./propertyEditModal/EditPropertyPage2";
+import EditPropertyPage3 from "./propertyEditModal/EditPropertyPage3";
+import EditPropertyPage4 from "./propertyEditModal/EditPropertyPage4";
+import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 
 const NewModal = styled(Modal)`
   width: 80%;

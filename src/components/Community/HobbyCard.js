@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { mainColor, subColor } from "../../styles/GlobalStyle";
 
 const Card = styled.div`
   border: 1px solid transparent;
@@ -10,10 +11,10 @@ const Card = styled.div`
   cursor: pointer;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
 
-  background: ${(props) => (props.active ? "#c1b18a" : "#fff")};
-  color: ${(props) => (props.active ? "#fff" : "#424b5a")};
+  background: ${(props) => (props.active ? subColor : "#fff")};
+  color: ${(props) => (props.active ? "#fff" : mainColor)};
   &:hover {
-    background: #c1b18a;
+    background: ${subColor};
     color: #fff;
     border: 1px solid #fff;
   }

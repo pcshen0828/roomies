@@ -1,10 +1,11 @@
 import React from "react";
-import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
+import styled from "styled-components";
 import { Overlay, Modal, Header, CloseButton, Title } from "./ModalElements";
 import { Button1 } from "../common/Components";
-import api from "../../utils/api";
-import { useAuth } from "../../context/AuthContext";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
 
 const NewModal = styled(Modal)`

@@ -13,6 +13,16 @@ import Messages from "./pages/Messages";
 import PageNotFound from "./pages/NotFound";
 import Community from "./pages/Community";
 
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
+import "swiper/css/autoplay";
+import "react-loading-skeleton/dist/skeleton.css";
+
+import "./styles/carousel.css";
+import "./styles/customCalendar.css";
+
 function App() {
   return (
     <BrowserRouter>

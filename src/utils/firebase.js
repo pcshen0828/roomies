@@ -1,5 +1,4 @@
 import * as firebase from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { firebaseConfig } from "../appkeys";
 
 import {
@@ -43,7 +42,6 @@ import {
 } from "firebase/storage";
 
 const app = firebase.initializeApp(firebaseConfig);
-const amnalytices = getAnalytics(app);
 const storage = getStorage();
 
 const Firebase = {

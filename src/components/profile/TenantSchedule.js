@@ -1,10 +1,10 @@
 import React from "react";
-import styled from "styled-components";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
 import { useAuth } from "../../context/AuthContext";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import api from "../../utils/api";
+
+import styled from "styled-components";
 import {
   FlexWrapper,
   Bold,
@@ -21,7 +21,7 @@ import {
   ScheduleTitle,
 } from "../common/Components";
 import RequestDetailModal from "../modals/RequestDetail";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;

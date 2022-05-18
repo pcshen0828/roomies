@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   GoogleMap,
   useLoadScript,
@@ -8,13 +9,13 @@ import {
   Circle,
 } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../appkeys";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import { BodyLeft, BodyRight, Input } from "../common/Components";
 import api from "../../utils/api";
-import Card from "../apartments/ApartmentCard";
+
+import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+
+import { BodyLeft, BodyRight, Input } from "../common/Components";
+import Card from "../apartments/ApartmentCard";
 
 const libraries = ["places"];
 
@@ -129,7 +130,6 @@ function MyMap() {
     setSearchBox(ref);
   };
   const onPlacesChanged = () => {
-    console.log(searchBox.getPlaces());
     const place = searchBox.getPlaces()[0];
     const newCenter = {
       lat: place.geometry.location.lat(),

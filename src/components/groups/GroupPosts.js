@@ -1,8 +1,9 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
+
 import styled from "styled-components";
 import { FlexColumn, FlexWrapper } from "../common/Components";
 import CreateNewPostModal from "../modals/CreateNewPost";
-import { Firebase } from "../../utils/firebase";
 import Post from "./Post";
 
 const Wrapper = styled(FlexColumn)`
@@ -86,7 +87,6 @@ export default function GroupPosts({
     );
     Firebase.onSnapshot(query, (snapshot) => {
       if (!mounted) return;
-      console.log(snapshot.docs.map((doc) => doc.data()));
       setPosts(snapshot.docs.map((doc) => doc.data()));
     });
 

@@ -1,14 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import Card from "./ApartmentCard";
 import { Firebase } from "../../utils/firebase";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Scrollbar, A11y } from "swiper";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/scrollbar";
-import "./carousel.css";
+
+import Card from "./ApartmentCard";
 
 const Wrapper = styled(Swiper)`
   width: 100%;

@@ -1,4 +1,8 @@
 import React from "react";
+import { Firebase } from "../utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useNavigate } from "react-router-dom";
+
 import styled, { keyframes } from "styled-components";
 import {
   BannerTitle,
@@ -8,28 +12,22 @@ import {
   StyledLink,
   TitleSub,
 } from "../components/common/Components";
+import SignUpModal from "../components/modals/SignUp";
+import Footer from "../components/layout/Footer";
+import Loader from "../components/common/Loader";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Scrollbar, A11y, Autoplay } from "swiper";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/autoplay";
+
 import banner1 from "../images/banner1.png";
 import banner2 from "../images/banner2.png";
 import banner3 from "../images/banner3.png";
 import banner4 from "../images/banner4.png";
 import banner5 from "../images/banner5.png";
-import SignUpModal from "../components/modals/SignUp";
-import Footer from "../components/layout/Footer";
-import down from "../images/down.svg";
-import corner from "../images/corner.png";
 import mates from "../images/mates.png";
+import corner from "../images/corner.png";
+import down from "../images/down.svg";
 import checked from "../images/checked.svg";
-import { useAuth } from "../context/AuthContext";
-import { Firebase } from "../utils/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useNavigate } from "react-router-dom";
-import Loader from "../components/common/Loader";
 
 const banners = [banner5, banner1, banner3, banner2, banner4];
 

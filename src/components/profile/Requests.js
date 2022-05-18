@@ -1,4 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   CardWrapper,
@@ -15,14 +19,11 @@ import {
   RejectButton,
   ScheduleTitle,
 } from "../common/Components";
-import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
 import RequestDetailModal from "../modals/RequestDetail";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
-import { useNavigate } from "react-router-dom";
+
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const TeamInfoLink = styled.div`
   cursor: pointer;

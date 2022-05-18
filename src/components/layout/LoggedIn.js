@@ -1,17 +1,19 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+
 import styled from "styled-components";
+import { FlexWrapper, SlicedBold } from "../common/Components";
+import MemberModal from "../modals/MemberModal";
+import MessageModal from "../modals/MessageModal";
+import NoticeModal from "../modals/NoticeModal";
+
 import more from "../../images/more.svg";
 import notice from "../../images/notice.svg";
 import noticeActive from "../../images/notice-active.svg";
 import message from "../../images/message.svg";
 import messageActive from "../../images/message-active.svg";
-import { FlexWrapper, SlicedBold } from "../common/Components";
-import MemberModal from "../modals/MemberModal";
-import MessageModal from "../modals/MessageModal";
-import NoticeModal from "../modals/NoticeModal";
-import { useLocation } from "react-router-dom";
-import { Firebase } from "../../utils/firebase";
-import { useAuth } from "../../context/AuthContext";
 
 const icons = [
   {

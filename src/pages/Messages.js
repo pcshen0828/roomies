@@ -1,10 +1,10 @@
 import React from "react";
-import styled from "styled-components";
-import { Firebase } from "../utils/firebase";
-import List from "../components/messages/MessageList";
-import MessageDetail from "../components/messages/MessageDetail";
-import { useAuth } from "../context/AuthContext";
 import { Navigate, Link, useParams } from "react-router-dom";
+import { Firebase } from "../utils/firebase";
+import { useAuth } from "../context/AuthContext";
+import api from "../utils/api";
+
+import styled from "styled-components";
 import {
   Wrapper,
   Button1,
@@ -12,9 +12,9 @@ import {
   Title,
   FlexColumn,
 } from "../components/common/Components";
+import List from "../components/messages/MessageList";
+import MessageDetail from "../components/messages/MessageDetail";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import api from "../utils/api";
 
 const FullWrapper = styled.div`
   width: 100%;

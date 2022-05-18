@@ -1,8 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+import styled from "styled-components";
 import { FlexWrapper, Title } from "../common/Components";
 import { Overlay } from "../modals/ModalElements";
 

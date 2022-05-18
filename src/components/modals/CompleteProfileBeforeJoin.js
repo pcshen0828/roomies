@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mainColor, subColor } from "../../styles/GlobalStyle";
-import { StyledLink } from "../common/Components";
 import {
   Body,
   Button,

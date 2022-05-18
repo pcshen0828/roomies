@@ -1,4 +1,9 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { Firebase } from "../utils/firebase";
+import api from "../utils/api";
+
 import styled from "styled-components";
 import {
   Wrapper,
@@ -8,16 +13,11 @@ import {
   SearchButton,
   FlexWrapper,
 } from "../components/common/Components";
-import api from "../utils/api";
-import { Firebase } from "../utils/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { Navigate } from "react-router-dom";
-import search from "../images/search.svg";
 import HobbyCard from "../components/Community/HobbyCard";
 import UserCard from "../components/Community/UserCard";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import Footer from "../components/layout/Footer";
+import Skeleton from "react-loading-skeleton";
+import search from "../images/search.svg";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;

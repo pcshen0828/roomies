@@ -1,13 +1,13 @@
 import React from "react";
-import styled from "styled-components";
-import Selector from "../components/apartments/ApartmentSelector";
-import Card from "../components/apartments/ApartmentCard";
-import { Wrapper, Title } from "../components/common/Components";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+
+import styled from "styled-components";
+import { Wrapper, Title } from "../components/common/Components";
+import Selector from "../components/apartments/ApartmentSelector";
+import Card from "../components/apartments/ApartmentCard";
 import Footer from "../components/layout/Footer";
+import Skeleton from "react-loading-skeleton";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;

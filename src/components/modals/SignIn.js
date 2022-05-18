@@ -1,5 +1,5 @@
 import React from "react";
-import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
 import styled from "styled-components";
 import {
   Overlay,
@@ -11,7 +11,6 @@ import {
   Button,
 } from "./ModalElements";
 import { Input, SmallLabel } from "../common/Components";
-import api from "../../utils/api";
 
 const NewModal = styled(Modal)`
   max-width: 700px;

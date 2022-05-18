@@ -1,18 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 import styled from "styled-components";
+import { subColor } from "../../styles/GlobalStyle";
+import { FlexWrapper } from "../common/Components";
 import NavBar from "./Nav";
 import MobileNavBar from "./MobileNav";
 import LoggedIn from "./LoggedIn";
 import NotLoggedIn from "./NotLoggedIn";
-import { FlexWrapper } from "../common/Components";
-import { Firebase } from "../../utils/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import menu from "../../images/menu.svg";
+
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { subColor } from "../../styles/GlobalStyle";
-import logo from "../../images/logo.svg";
 
 const Wrapper = styled.div`
   width: 100%;

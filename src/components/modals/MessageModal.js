@@ -1,14 +1,11 @@
 import React from "react";
-import styled from "styled-components";
-import { NavModalOverlay, NavModal, Title } from "./ModalElements";
-import { FlexWrapper, StyledLink } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
-import List from "../messages/MessageList";
 
-// const NewNavModal = styled(NavModal)`
-//   max-height: 300px;
-// `;
+import styled from "styled-components";
+import { FlexWrapper, StyledLink } from "../common/Components";
+import { NavModalOverlay, NavModal, Title } from "./ModalElements";
+import List from "../messages/MessageList";
 
 const ChatsWrapper = styled(FlexWrapper)`
   flex-direction: column;

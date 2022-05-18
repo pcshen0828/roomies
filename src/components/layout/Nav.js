@@ -1,10 +1,10 @@
 import React from "react";
-import styled from "styled-components";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+import styled from "styled-components";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const Wrapper = styled.div`
   display: flex;

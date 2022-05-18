@@ -1,4 +1,8 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   FlexWrapper,
@@ -9,11 +13,7 @@ import {
   Textarea,
   Button1,
 } from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
-import BasicInfoModal from "../modals/SetUpBasicInfo";
-import { Firebase } from "../../utils/firebase";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 const Wrapper = styled.div`

@@ -1,5 +1,10 @@
 import React from "react";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
+import { mainColor } from "../../styles/GlobalStyle";
 import {
   FlexWrapper,
   Input,
@@ -11,14 +16,11 @@ import {
   ErrorMessage,
   Bold,
 } from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import BasicInfoModal from "../modals/SetUpBasicInfo";
-import { Firebase } from "../../utils/firebase";
-import Creatable from "react-select/creatable";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
-import { mainColor, subColor } from "../../styles/GlobalStyle";
+
+import Creatable from "react-select/creatable";
 
 const Wrapper = styled.div`
   width: 100%;

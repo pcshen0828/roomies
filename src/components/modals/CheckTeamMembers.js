@@ -1,5 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   Overlay,
@@ -10,8 +13,6 @@ import {
   Body,
 } from "./ModalElements";
 import { Button1 } from "../common/Components";
-import api from "../../utils/api";
-import { useAuth } from "../../context/AuthContext";
 
 const NewModal = styled(Modal)`
   max-width: 700px;

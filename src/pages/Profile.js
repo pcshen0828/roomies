@@ -1,12 +1,13 @@
 import React from "react";
-import styled from "styled-components";
 import { Navigate } from "react-router-dom";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "../context/AuthContext";
+import { Firebase } from "../utils/firebase";
+
+import styled from "styled-components";
+import { FlexColumn, Title, Wrapper } from "../components/common/Components";
 import Tenant from "../components/profile/Tenant";
 import Landlord from "../components/profile/Landlord";
-import { useAuth } from "../context/AuthContext";
-import { FlexColumn, Title, Wrapper } from "../components/common/Components";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { Firebase } from "../utils/firebase";
 import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
 

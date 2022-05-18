@@ -1,4 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   Overlay,
@@ -9,21 +13,20 @@ import {
   Body,
 } from "../modals/ModalElements";
 import {
+  FlexWrapper,
   LoadingButton,
   Button1,
   PrevStepButton,
   SmallTitle,
   ErrorMessage,
 } from "../common/Components";
-import api from "../../utils/api";
-import { Firebase } from "../../utils/firebase";
+
 import CreatePropertyPage1 from "./propertyCreateModal/CreatePropertyPage1";
 import CreatePropertyPage2 from "./propertyCreateModal/CreatePropertyPage2";
 import CreatePropertyPage3 from "./propertyCreateModal/CreatePropertyPage3";
 import CreatePropertyPage4 from "./propertyCreateModal/CreatePropertyPage4";
 import ConfirmBeforeQuitModal from "../modals/ConfirmBeforeQuit";
-import { FlexWrapper } from "../common/Components";
-import { useNavigate } from "react-router-dom";
+
 import { v4 as uuidv4 } from "uuid";
 
 const NewModal = styled(Modal)`

@@ -1,12 +1,13 @@
 import React from "react";
+import { subColor } from "../../styles/GlobalStyle";
+
 import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers";
 import { TimePicker } from "@mui/x-date-pickers";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-const subColor = "#c1b18a";
-const mainColor = "#424b5a";
+
 const theme = createTheme({
   components: {
     MuiIconButton: {
@@ -51,7 +52,6 @@ function MUIDatePicker({ value, setValue }) {
             )
               .toISOString()
               .slice(0, -14);
-            console.log(`date: ${isoDate}`);
             setValue(isoDate);
           }}
         />
@@ -65,7 +65,6 @@ function MUITimePicker({ value, setValue }) {
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <ThemeProvider theme={theme}>
         <TimePicker
-          // minTime={new Date()}
           renderInput={(props) => <TextField {...props} variant="outlined" />}
           label=""
           value={value}
@@ -75,7 +74,6 @@ function MUITimePicker({ value, setValue }) {
             )
               .toISOString()
               .slice(0, -5);
-            console.log(isoTime.substring(11));
             setValue(isoTime);
           }}
         />

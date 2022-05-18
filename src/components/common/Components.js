@@ -109,14 +109,14 @@ const Input = styled.input`
   border: 1px solid #dadada;
   margin-bottom: 20px;
   padding-left: 10px;
-  color: #424b5a;
+  color: ${mainColor};
   flex-shrink: 0;
   background: #fff;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border: 1px solid #c1b18a;
+    border: 1px solid ${subColor};
   }
 `;
 
@@ -126,13 +126,13 @@ const Select = styled.select`
   border: 1px solid #dadada;
   margin-bottom: 20px;
   padding-left: 10px;
-  color: #424b5a;
+  color: ${mainColor};
   flex-shrink: 0;
   box-sizing: border-box;
 
   &:focus {
     outline: none;
-    border: 1px solid #c1b18a;
+    border: 1px solid ${subColor};
   }
 `;
 
@@ -142,14 +142,14 @@ const Textarea = styled.textarea`
   border: 1px solid #dadada;
   margin-bottom: 20px;
   padding: 10px;
-  color: #424b5a;
+  color: ${mainColor};
   background: #fff;
   flex-shrink: 0;
   font-family: "Noto Sans TC", sans-serif;
   resize: none;
   &:focus {
     outline: none;
-    border: 1px solid #c1b18a;
+    border: 1px solid ${subColor};
   }
 `;
 
@@ -170,22 +170,22 @@ const SmallText = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  color: #424b5a;
+  color: ${mainColor};
   display: block;
   border-bottom: 1px solid transparent;
 
   &:hover {
-    border-bottom: 1px solid #424b5a;
+    border-bottom: 1px solid ${mainColor};
   }
 `;
 
 const StyledNavLink = styled(NavLink)`
-  color: #424b5a;
+  color: ${mainColor};
   display: block;
   border-bottom: 1px solid transparent;
 
   &:hover {
-    border-bottom: 1px solid #424b5a;
+    border-bottom: 1px solid ${mainColor};
   }
 `;
 
@@ -246,7 +246,7 @@ const ProfileItem = styled.div`
   cursor: pointer;
   width: calc(100% - 45px);
   border-left: ${(props) =>
-    props.active ? "5px solid #c1b18a" : "5px solid transparent"};
+    props.active ? `5px solid ${subColor}` : "5px solid transparent"};
   background: ${(props) => (props.active ? "#f2f5f7" : "none")};
   font-weight: ${(props) => (props.active ? "700" : "400")};
 
@@ -259,14 +259,14 @@ const ProfileItem = styled.div`
     align-items: center;
     border-left: none;
     border-bottom: ${(props) =>
-      props.active ? "5px solid #c1b18a" : "5px solid transparent"};
+      props.active ? `5px solid ${subColor}` : "5px solid transparent"};
   }
   @media screen and (max-width: 767.98px) {
     padding: 10px;
     width: calc(100% - 20px);
     justify-content: flex-start;
     border-bottom: ${(props) =>
-      props.active ? "2px solid #c1b18a" : "2px solid transparent"};
+      props.active ? `2px solid ${subColor}` : "2px solid transparent"};
     background: none;
   }
 `;
@@ -302,7 +302,7 @@ const LoadingButton = styled.button`
   margin: 0 20px 0;
   cursor: not-allowed;
   background: #dadada;
-  color: #424b5a;
+  color: ${mainColor};
 `;
 
 const PrevStepButton = styled.button`
@@ -315,7 +315,7 @@ const PrevStepButton = styled.button`
   margin: 0 20px 0 0;
   cursor: pointer;
   background: #e8e8e8;
-  color: #424b5a;
+  color: ${mainColor};
   &:hover {
     background: #dadada;
   }
@@ -368,14 +368,14 @@ const Button1 = styled.button`
   cursor: pointer;
   font-size: 16px;
   border: none;
-  background: #424b5a;
+  background: ${mainColor};
   width: 120px;
   height: 40px;
   color: #fff;
   border-radius: 5px;
 
   &:hover {
-    background: #c1b18a;
+    background: ${subColor};
   }
 `;
 
@@ -393,7 +393,7 @@ const SlicedBold = styled(Bold)`
 
 const SlicedLink = styled(Link)`
   font-weight: 700;
-  color: #424b5a;
+  color: ${mainColor};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -518,7 +518,7 @@ const ErrorMessage = styled.div`
 
 const ExitButton = styled(FlexWrapper)`
   background: none;
-  color: #424b5a;
+  color: ${mainColor};
   width: calc(100% - 20px);
   padding: 10px;
   border-radius: 5px;
@@ -535,7 +535,7 @@ const ExitButton = styled(FlexWrapper)`
 
 const RejectButton = styled(FlexWrapper)`
   background: none;
-  color: #424b5a;
+  color: ${mainColor};
   width: 70px;
   height: 40px;
   border-radius: 5px;
@@ -622,8 +622,8 @@ const StepIndicator = styled(FlexWrapper)`
   margin-right: 20px;
   border: 1px solid #e8e8e8;
   box-shadow: 0px 2px 30px rgba(193, 177, 138, 0.1);
-  background: ${(props) => (props.active ? "#424b5a" : "none")};
-  color: ${(props) => (props.active ? "#fff" : "#424b5a")};
+  background: ${(props) => (props.active ? mainColor : "none")};
+  color: ${(props) => (props.active ? "#fff" : mainColor)};
   cursor: pointer;
 
   @media screen and (max-width: 767.98px) {

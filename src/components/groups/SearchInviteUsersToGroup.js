@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Title } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
 import search from "../../images/search.svg";
-import api from "../../utils/api";
 
 const SmallTitle = styled(Title)`
   font-size: 14px;

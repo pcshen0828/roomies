@@ -1,4 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Firebase } from "../../utils/firebase";
+import api from "../../utils/api";
+
 import styled from "styled-components";
 import {
   Overlay,
@@ -10,12 +14,9 @@ import {
   Button,
 } from "./ModalElements";
 import { FlexWrapper, SmallTitle, Textarea } from "../common/Components";
-import { MUIDatePicker, MUITimePicker } from "./DateTimePicker";
-import { Firebase } from "../../utils/firebase";
-import api from "../../utils/api";
-import calendar from "../../images/calendar.svg";
 import ConfirmBeforeActionModal from "./ConfirmBeforeAction";
-import { useNavigate } from "react-router-dom";
+import calendar from "../../images/calendar.svg";
+import { MUIDatePicker, MUITimePicker } from "./DateTimePicker";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1000;

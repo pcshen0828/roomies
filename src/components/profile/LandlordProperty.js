@@ -1,6 +1,11 @@
 import React from "react";
-import styled from "styled-components";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import CreatePropertyModal from "./CreateProperty";
+import { Firebase } from "../../utils/firebase";
+import { useAuth } from "../../context/AuthContext";
+import api from "../../utils/api";
+
+import styled from "styled-components";
 import {
   Wrapper,
   FlexWrapper,
@@ -13,10 +18,7 @@ import {
   RejectButton,
   FlexColumn,
 } from "../common/Components";
-import { useAuth } from "../../context/AuthContext";
 import EditPropertyModal from "./EditProperty";
-import CreatePropertyModal from "./CreateProperty";
-import { Firebase } from "../../utils/firebase";
 import {
   Overlay,
   Modal,
@@ -25,9 +27,7 @@ import {
   CloseButton,
 } from "../modals/ModalElements";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
-import api from "../../utils/api";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;

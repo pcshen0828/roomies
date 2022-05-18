@@ -1,10 +1,12 @@
 import React from "react";
-import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
-import GroupMember from "../components/groups/GroupMember";
-import GroupTeam from "../components/groups/GroupTeam";
-import GroupPosts from "../components/groups/GroupPosts";
+import { Firebase } from "../utils/firebase";
+import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
+
+import styled from "styled-components";
+import { mainColor } from "../styles/GlobalStyle";
+import { Modal } from "../components/modals/ModalElements";
 import {
   Button1,
   FlexWrapper,
@@ -13,22 +15,22 @@ import {
   RejectButton,
   ExitButton,
 } from "../components/common/Components";
-import { Firebase } from "../utils/firebase";
-import { useAuth } from "../context/AuthContext";
-import member from "../images/members.svg";
-import room from "../images/room.svg";
+
+import GroupMember from "../components/groups/GroupMember";
+import GroupTeam from "../components/groups/GroupTeam";
+import GroupPosts from "../components/groups/GroupPosts";
+import Footer from "../components/layout/Footer";
+import OwnerCard from "../components/apartments/ApartmentOwner";
 import ConfirmBeforeActionModal from "../components/modals/ConfirmBeforeAction";
-import { Modal } from "../components/modals/ModalElements";
-import check from "../images/check.svg";
-import exit from "../images/exit.svg";
 import InviteJoinGroupModal from "../components/modals/InviteJoinGroup";
 import SuccessfullySavedModal from "../components/modals/SuccessfullySaved";
-import lock from "../images/lock.svg";
 import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import Footer from "../components/layout/Footer";
-import { mainColor } from "../styles/GlobalStyle";
-import OwnerCard from "../components/apartments/ApartmentOwner";
+
+import member from "../images/members.svg";
+import room from "../images/room.svg";
+import lock from "../images/lock.svg";
+import check from "../images/check.svg";
+import exit from "../images/exit.svg";
 
 const Wrapper = styled(FlexWrapper)`
   width: 100%;
