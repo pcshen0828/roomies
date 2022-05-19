@@ -44,7 +44,6 @@ const initialState = {
   allData: [],
   filtered: [],
   queryList: [],
-  queryString: "",
   currentPage: 1,
   allPages: 1,
   itemsPerPage: 6,
@@ -71,27 +70,23 @@ const reducer = (state, { type, payload }) => {
         queryList: [],
       };
 
-    case "cancelCheck":
+    case "cancelInputCheck":
       return {
         ...state,
-        queryList: state.queryList.filter((item) => item !== payload),
+        queryList: payload,
         filtered: state.allData.filter((item) =>
-          state.queryList
-            .filter((item) => item !== payload)
-            .every((value) => item.conditions.includes(value))
+          payload.every((value) => item.conditions.includes(value))
         ),
         allPages: Math.ceil(state.filtered / state.itemsPerPage),
         currentPage: 1,
       };
 
-    case "check":
+    case "addInputCheck":
       return {
         ...state,
-        queryList: [...state.queryList, payload],
+        queryList: payload,
         filtered: state.allData.filter((item) =>
-          [...state.queryList, payload].every((value) =>
-            item.conditions.includes(value)
-          )
+          payload.every((value) => item.conditions.includes(value))
         ),
         allPages: Math.ceil(state.filtered / state.itemsPerPage),
         currentPage: 1,
@@ -204,7 +199,7 @@ function Apartments() {
           </Cards>
         ) : (
           <Cards>
-            {filterData.allData.length
+            {filterData.filtered.length
               ? filterData.filtered
                   .slice(0, filterData.itemsPerPage * filterData.currentPage)
                   .map((apartment) => (

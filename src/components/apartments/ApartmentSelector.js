@@ -186,9 +186,11 @@ function Selector({ filterData, dispatch, anchor }) {
 
   function showMatchedApartments({ value, name }) {
     if (!value) {
-      dispatch({ type: "cancelCheck", payload: name });
+      const newQueryList = filterData.queryList.filter((item) => item !== name);
+      dispatch({ type: "cancelInputCheck", payload: newQueryList });
     } else {
-      dispatch({ type: "check", payload: name });
+      const newQueryList = [...filterData.queryList, name];
+      dispatch({ type: "addInputCheck", payload: newQueryList });
     }
   }
 
