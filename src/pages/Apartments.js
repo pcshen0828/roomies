@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
 import defaultScroll from "../utils/defaultScroll";
@@ -40,18 +40,86 @@ const Anchor = styled.div`
   height: ${(props) => (props.role === "filter" ? "20px" : "40px")};
 `;
 
+const initialState = {
+  allData: [],
+  filtered: [],
+  queryList: [],
+  queryString: "",
+  currentPage: 1,
+  allPages: 1,
+  itemsPerPage: 6,
+};
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case "update":
+      return {
+        ...state,
+        allData: payload,
+        filtered: payload,
+        allPages: Math.ceil(payload.length / state.itemsPerPage),
+      };
+
+    case "search":
+      return {
+        ...state,
+        filtered: state.allData.filter((item) =>
+          item.basic.title.includes(payload)
+        ),
+        allPages: Math.ceil(state.filtered / state.itemsPerPage),
+        currentPage: 1,
+        queryList: [],
+      };
+
+    case "cancelCheck":
+      return {
+        ...state,
+        queryList: state.queryList.filter((item) => item !== payload),
+        filtered: state.allData.filter((item) =>
+          state.queryList
+            .filter((item) => item !== payload)
+            .every((value) => item.conditions.includes(value))
+        ),
+        allPages: Math.ceil(state.filtered / state.itemsPerPage),
+        currentPage: 1,
+      };
+
+    case "check":
+      return {
+        ...state,
+        queryList: [...state.queryList, payload],
+        filtered: state.allData.filter((item) =>
+          [...state.queryList, payload].every((value) =>
+            item.conditions.includes(value)
+          )
+        ),
+        allPages: Math.ceil(state.filtered / state.itemsPerPage),
+        currentPage: 1,
+      };
+
+    case "reset":
+      return {
+        ...state,
+        filtered: state.allData,
+        queryList: [],
+        currentPage: 1,
+        allPages: Math.ceil(state.allData.length / state.itemsPerPage),
+      };
+
+    case "updateCurrentPage":
+      return { ...state, currentPage: state.currentPage + payload };
+    default:
+      throw new Error(`Unknown action type: ${type}`);
+  }
+};
+
 function Apartments() {
   const [loading, setLoading] = useState(true);
-  const [apartments, setApartments] = useState([]);
-  const [allData, setAllData] = useState([]);
-  const [paging, setPaging] = useState(1);
-  const itemsPerPage = 6;
+  const [filterData, dispatch] = useReducer(reducer, initialState);
+
   const anchor = useRef(null);
-  const firstRender = useRef();
-  const currentPage = useRef(1);
-  const allPages = useRef();
-  const queryList = useRef([]);
   const filterAnchor = useRef(null);
+  const firstRender = useRef();
 
   const query = Firebase.query(
     Firebase.collection(Firebase.db, "apartments"),
@@ -88,35 +156,28 @@ function Apartments() {
     });
   }
 
-  function calcAllPages(data) {
-    return Math.ceil(data / itemsPerPage);
-  }
-
   useEffect(() => {
     firstRender.current = true;
     fetchApartments(query, (data) => {
       if (firstRender.current) {
-        setAllData(data);
-        setApartments(data);
+        dispatch({ type: "update", payload: data });
         setLoading(false);
         firstRender.current = false;
-        allPages.current = calcAllPages(data);
       }
     });
   }, []);
 
   useEffect(() => {
     defaultScroll();
-
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.intersectionRatio <= 0) return;
       if (firstRender.current) return;
 
-      currentPage.current++;
-      if (currentPage.current > allPages.current) return;
-      setPaging(currentPage.current);
+      dispatch({ type: "updateCurrentPage", payload: 1 });
+      if (filterData.currentPage > filterData.allPages) return;
     });
+
     intersectionObserver.observe(anchor.current);
   }, []);
 
@@ -125,14 +186,9 @@ function Apartments() {
       <NewWrapper>
         <NewTitle>立即開始，搜尋理想房源</NewTitle>
         <Selector
-          allData={allData}
-          setApartments={setApartments}
-          page={currentPage}
-          setPaging={setPaging}
-          allPages={allPages}
-          calcAllPages={calcAllPages}
-          queryList={queryList}
           anchor={filterAnchor}
+          filterData={filterData}
+          dispatch={dispatch}
         />
         <Anchor role="filter" ref={filterAnchor}></Anchor>
         {loading ? (
@@ -148,10 +204,10 @@ function Apartments() {
           </Cards>
         ) : (
           <Cards>
-            {apartments.length
-              ? apartments
-                  .slice(0, itemsPerPage * paging)
-                  .map((apartment, index) => (
+            {filterData.allData.length
+              ? filterData.filtered
+                  .slice(0, filterData.itemsPerPage * filterData.currentPage)
+                  .map((apartment) => (
                     <Card key={apartment.basic.id} detail={apartment.basic} />
                   ))
               : "無符合物件"}

@@ -10,26 +10,14 @@ const StyldSearchWrapper = styled(SearchWrapper)`
 
 const NewButton = styled(SearchButton)``;
 
-function SearchBox({
-  apartments,
-  setApartments,
-  page,
-  setPaging,
-  allPages,
-  calcAllPages,
-}) {
+function SearchBox({ dispatch }) {
   const [searchQuery, setSearchQuery] = useState("");
 
   function searchKeyWords(keyword) {
     if (!keyword.trim()) {
-      setApartments(apartments);
+      dispatch({ type: "reset" });
     }
-    const filteredData = apartments.filter((item) =>
-      item.basic.title.includes(keyword)
-    );
-    setPaging(1);
-    allPages.current = calcAllPages(filteredData);
-    setApartments(filteredData);
+    dispatch({ type: "search", payload: keyword });
   }
   return (
     <StyldSearchWrapper>
@@ -37,7 +25,6 @@ function SearchBox({
         placeholder="請輸入房源關鍵字"
         value={searchQuery}
         onChange={(e) => {
-          page.current = 1;
           setSearchQuery(e.target.value);
           searchKeyWords(e.target.value);
         }}

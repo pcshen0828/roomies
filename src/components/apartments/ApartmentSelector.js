@@ -34,6 +34,7 @@ const Toggler = styled.div`
   border-radius: 0 0 10px 10px;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
+  display: ${(props) => (props.show ? "block" : "none")};
 `;
 
 const CloseButton = styled(Button1)`
@@ -55,6 +56,7 @@ const Container = styled(FlexWrapper)`
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
   border-radius: 0 0 10px 10px;
   animation: ${fadeIn} 0.8s ease;
+  display: ${(props) => (props.close ? "none" : "flex")};
 `;
 
 const Wrapper = styled(FlexWrapper)`
@@ -161,39 +163,8 @@ const furnitureList = {
   ],
 };
 
-function Selector({
-  allData,
-  setApartments,
-  page,
-  setPaging,
-  allPages,
-  calcAllPages,
-  queryList,
-  anchor,
-}) {
+function Selector({ filterData, dispatch, anchor }) {
   const [isClose, setIsClose] = useState(false);
-  const toFilterData = allData;
-
-  function ShowMatchedApartments({ e, name }) {
-    const value = e.target.checked;
-    if (!value) {
-      queryList.current = queryList.current.filter((item) => item !== name);
-    } else {
-      queryList.current.push(name);
-    }
-    const filteredData = toFilterData.filter((item) =>
-      queryList.current.every((value) => item.conditions.includes(value))
-    );
-    setPaging(1);
-    allPages.current = calcAllPages(filteredData);
-    setApartments(filteredData);
-  }
-
-  const renderList = [
-    { list: conditionList, name: "設施條件" },
-    { list: facilityList, name: "室內設備" },
-    { list: furnitureList, name: "家具" },
-  ];
 
   useEffect(() => {
     let mounted = true;
@@ -213,24 +184,28 @@ function Selector({
     };
   }, []);
 
+  function showMatchedApartments({ value, name }) {
+    if (!value) {
+      dispatch({ type: "cancelCheck", payload: name });
+    } else {
+      dispatch({ type: "check", payload: name });
+    }
+  }
+
+  const renderList = [
+    { list: conditionList, name: "設施條件" },
+    { list: facilityList, name: "室內設備" },
+    { list: furnitureList, name: "家具" },
+  ];
+
   function displayAllApartments() {
-    queryList.current = [];
-    setApartments(allData);
-    setPaging(1);
-    page.current = 1;
+    dispatch({ type: "reset" });
   }
 
   function RenderSelector() {
     return (
       <>
-        <SearchBox
-          apartments={toFilterData}
-          setApartments={setApartments}
-          page={page}
-          setPaging={setPaging}
-          allPages={allPages}
-          calcAllPages={calcAllPages}
-        />
+        <SearchBox dispatch={dispatch} />
         <Wrapper>
           <ClearAll onClick={displayAllApartments}>×清空條件</ClearAll>
           <ShowAll onClick={displayAllApartments}>顯示所有房源</ShowAll>
@@ -244,11 +219,10 @@ function Selector({
                       <input
                         type="checkbox"
                         id={condition.en}
-                        checked={queryList.current.includes(condition.en)}
-                        onChange={(event) => {
-                          page.current = 1;
-                          ShowMatchedApartments({
-                            e: event,
+                        checked={filterData.queryList.includes(condition.en)}
+                        onChange={(e) => {
+                          showMatchedApartments({
+                            value: e.target.checked,
                             name: condition.en,
                           });
                         }}
@@ -266,26 +240,24 @@ function Selector({
   }
   return (
     <>
-      {isClose ? (
-        <Toggler
+      <Toggler
+        show={isClose}
+        onClick={() => {
+          setIsClose(false);
+        }}
+      >
+        展開篩選條件
+      </Toggler>
+      <Container close={isClose}>
+        {RenderSelector()}
+        <CloseButton
           onClick={() => {
-            setIsClose(false);
+            setIsClose(true);
           }}
         >
-          展開篩選條件
-        </Toggler>
-      ) : (
-        <Container>
-          {RenderSelector()}
-          <CloseButton
-            onClick={() => {
-              setIsClose(true);
-            }}
-          >
-            收起
-          </CloseButton>
-        </Container>
-      )}
+          收起
+        </CloseButton>
+      </Container>
     </>
   );
 }
