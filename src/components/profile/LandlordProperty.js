@@ -4,6 +4,7 @@ import CreatePropertyModal from "./CreateProperty";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
+import defaultScroll from "../../utils/defaultScroll";
 
 import styled from "styled-components";
 import {
@@ -325,7 +326,7 @@ function LandlordProperty() {
                       key={index}
                       onClick={() => {
                         setPaging(number + 1);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        defaultScroll();
                       }}
                       active={paging === number + 1}
                     >

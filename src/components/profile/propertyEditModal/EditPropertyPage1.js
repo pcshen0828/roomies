@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import checkIsNaNOrNot from "../../../utils/calculate";
+import { checkIsNaNOrNot } from "../../../utils/calculate";
 import api from "../../../utils/api";
 import {
   GoogleMap,

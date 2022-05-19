@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import defaultScroll from "../utils/defaultScroll";
 import styled from "styled-components";
 import { Wrapper, Button1, Title } from "../components/common/Components";
 import Footer from "../components/layout/Footer";
@@ -31,7 +32,7 @@ const Image = styled.div`
 
 function PageNotFound() {
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    defaultScroll();
   }, []);
   return (
     <>

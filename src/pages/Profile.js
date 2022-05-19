@@ -3,6 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useAuth } from "../context/AuthContext";
 import { Firebase } from "../utils/firebase";
+import defaultScroll from "../utils/defaultScroll";
 
 import styled from "styled-components";
 import { FlexColumn, Title, Wrapper } from "../components/common/Components";
@@ -27,7 +28,7 @@ function Profile() {
   const [user, loading, error] = useAuthState(auth);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    defaultScroll();
   }, []);
 
   function Render() {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
+import defaultScroll from "../utils/defaultScroll";
 
 import styled from "styled-components";
 import { Wrapper, Title } from "../components/common/Components";
@@ -105,7 +106,7 @@ function Apartments() {
   }, []);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    defaultScroll();
 
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];

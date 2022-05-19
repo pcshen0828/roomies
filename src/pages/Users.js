@@ -3,6 +3,7 @@ import { useParams, Navigate } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import api from "../utils/api";
+import defaultScroll from "../utils/defaultScroll";
 
 import styled from "styled-components";
 import { Wrapper } from "../components/common/Components";
@@ -26,7 +27,7 @@ function User() {
 
   useEffect(() => {
     let mounted = true;
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    defaultScroll();
 
     api.getDataWithSingleQuery("users", "uid", "==", id).then((res) => {
       if (!res.length) return;

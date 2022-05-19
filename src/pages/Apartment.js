@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import api from "../utils/api";
+import defaultScroll from "../utils/defaultScroll";
 
 import styled from "styled-components";
 import { FlexWrapper } from "../components/common/Components";
@@ -40,7 +41,7 @@ function Apartment() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    defaultScroll();
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
       if (!mounted) return;
