@@ -65,7 +65,7 @@ const reducer = (state, { type, payload }) => {
         filtered: state.allData.filter((item) =>
           item.basic.title.includes(payload)
         ),
-        allPages: Math.ceil(state.filtered / state.itemsPerPage),
+        allPages: Math.ceil(state.filtered.length / state.itemsPerPage),
         currentPage: 1,
         queryList: [],
       };
@@ -77,7 +77,7 @@ const reducer = (state, { type, payload }) => {
         filtered: state.allData.filter((item) =>
           payload.every((value) => item.conditions.includes(value))
         ),
-        allPages: Math.ceil(state.filtered / state.itemsPerPage),
+        allPages: Math.ceil(state.filtered.length / state.itemsPerPage),
         currentPage: 1,
       };
 
@@ -88,7 +88,7 @@ const reducer = (state, { type, payload }) => {
         filtered: state.allData.filter((item) =>
           payload.every((value) => item.conditions.includes(value))
         ),
-        allPages: Math.ceil(state.filtered / state.itemsPerPage),
+        allPages: Math.ceil(state.filtered.length / state.itemsPerPage),
         currentPage: 1,
       };
 

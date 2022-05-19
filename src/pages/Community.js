@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
@@ -75,41 +75,81 @@ const Anchor = styled.div`
   height: 40px;
 `;
 
+const initialState = {
+  allUsers: [],
+  filtered: [],
+  currentPage: 1,
+  allPages: 1,
+  usersPerPage: 6,
+};
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case "update":
+      return {
+        ...state,
+        allUsers: payload,
+        filtered: payload,
+        allPages: Math.ceil(payload.length / state.usersPerPage),
+      };
+    case "filterByHobby":
+      return {
+        ...state,
+        filtered: state.allUsers.filter((user) =>
+          user.hobbies.includes(payload)
+        ),
+        currentPage: 1,
+        allPages: Math.ceil(state.filtered.length / state.usersPerPage),
+      };
+    case "filterByKeyword":
+      return {
+        ...state,
+        filtered: state.allUsers.filter((user) => user.alias.includes(payload)),
+        allPages: Math.ceil(state.filtered.length / state.usersPerPage),
+        currentPage: 1,
+      };
+    case "reset":
+      return {
+        ...state,
+        filtered: state.allUsers,
+        currentPage: 1,
+        allPages: Math.ceil(state.allUsers.length / state.usersPerPage),
+      };
+    case "updateCurrentPage":
+      return { ...state, currentPage: state.currentPage + payload };
+    default:
+      throw new Error(`Unknown action type: ${type}`);
+  }
+};
+
 function Community() {
   const auth = Firebase.getAuth();
   const [user, loading, error] = useAuthState(auth);
-  const [allUsers, setAllUsers] = useState([]);
-  const [users, setUsers] = useState();
+
+  const [filterData, dispatch] = useReducer(reducer, initialState);
+
   const [hobbies, setHobbies] = useState([]);
   const [selected, setSelected] = useState("");
   const [query, setQuery] = useState("");
-
   const [searching, setSearching] = useState(false);
 
-  const [paging, setPaging] = useState(1);
-  const itemsPerPage = 6;
   const anchor = useRef();
   const firstRender = useRef();
-  const currentPage = useRef(1);
-  const allPages = useRef();
-
-  function calcAllPages(data) {
-    return Math.ceil(data.length / itemsPerPage);
-  }
 
   useEffect(() => {
-    defaultScroll();
     firstRender.current = true;
-
     let mounted = true;
 
     async function getAllUsers() {
       if (!mounted) return;
+
       api.getAllDocsFromCollection("hobbies").then((res) => {
         if (!mounted) return;
         setHobbies(res);
       });
+
       setSearching(true);
+
       const query = Firebase.query(
         Firebase.collection(Firebase.db, "users"),
         Firebase.where("role", "==", 1),
@@ -117,11 +157,10 @@ function Community() {
       );
       const querySnapShot = await Firebase.getDocs(query);
       const result = querySnapShot.docs.map((doc) => doc.data());
-      setAllUsers(result);
-      setUsers(result);
+
+      dispatch({ type: "update", payload: result });
       setSearching(false);
       firstRender.current = false;
-      allPages.current = calcAllPages(result);
     }
 
     if (firstRender.current) {
@@ -134,27 +173,27 @@ function Community() {
   }, []);
 
   useEffect(() => {
+    defaultScroll();
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.intersectionRatio <= 0) return;
       if (firstRender.current) return;
 
-      currentPage.current++;
-      if (currentPage.current > allPages.current) return;
-      setPaging(currentPage.current);
+      dispatch({ type: "updateCurrentPage", payload: 1 });
+      if (filterData.currentPage > filterData.allPages) return;
     });
-    intersectionObserver.observe(anchor.current);
-  }, []);
+    if (user) {
+      intersectionObserver.observe(anchor.current);
+    }
+  }, [user]);
 
   function searchUser(queryName) {
-    setSearching(true);
-
     if (!queryName.trim()) {
-      setUsers(allUsers);
-      setSearching(false);
+      dispatch({ type: "reset" });
       return;
     }
-    setUsers(allUsers.filter((user) => user.alias.includes(queryName)));
+    setSearching(true);
+    dispatch({ type: "filterByKeyword", payload: queryName });
     setSearching(false);
   }
 
@@ -189,13 +228,8 @@ function Community() {
               <SearchInput
                 placeholder="搜尋用戶名稱"
                 value={query}
+                onFocus={() => setSelected("")}
                 onChange={(e) => {
-                  if (!e.target.value.trim()) {
-                    setPaging(1);
-                    setUsers(allUsers);
-                    allPages.current = calcAllPages(allUsers);
-                  }
-                  currentPage.current = 1;
                   setQuery(e.target.value);
                   searchUser(e.target.value);
                 }}
@@ -206,28 +240,22 @@ function Community() {
               <Card
                 active={selected === "all"}
                 onClick={() => {
+                  setQuery("");
                   setSelected("all");
-                  setUsers(allUsers);
-                  setPaging(1);
-                  allPages.current = calcAllPages(allUsers);
-                  currentPage.current = 1;
+                  dispatch({ type: "reset" });
                 }}
               >
                 全部
               </Card>
-              {hobbies.map((hobby, index) => (
+              {hobbies.map((hobby) => (
                 <HobbyCard
-                  key={index}
+                  key={hobby.name}
                   name={hobby.name}
-                  setUsers={setUsers}
                   selected={selected}
                   setSelected={setSelected}
                   setLoading={setSearching}
-                  allUsers={allUsers}
-                  page={currentPage}
-                  setPaging={setPaging}
-                  allPages={allPages}
-                  calcAllPages={calcAllPages}
+                  dispatch={dispatch}
+                  filterData={filterData}
                 />
               ))}
             </HobbyTags>
@@ -241,10 +269,10 @@ function Community() {
                       style={{ marginBottom: "20px" }}
                     />
                   ))
-                : users && users.length
-                ? users
-                    .slice(0, itemsPerPage * paging)
-                    .map((user, index) => <UserCard key={index} user={user} />)
+                : filterData.filtered.length
+                ? filterData.filtered
+                    .slice(0, filterData.usersPerPage * filterData.currentPage)
+                    .map((user) => <UserCard key={user.uid} user={user} />)
                 : "查無用戶"}
             </ResultDisplayer>
             <Anchor ref={anchor}></Anchor>
@@ -254,7 +282,7 @@ function Community() {
       );
     }
     if (error) {
-      return <>error</>;
+      return <>Oops! 看來出了一點問題，請稍後再試</>;
     }
     return <Navigate replace to="/" />;
   }

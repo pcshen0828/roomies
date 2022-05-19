@@ -20,26 +20,10 @@ const Card = styled.div`
   }
 `;
 
-function HobbyCard({
-  name,
-  setUsers,
-  selected,
-  setSelected,
-  setLoading,
-  allUsers,
-  page,
-  setPaging,
-  allPages,
-  calcAllPages,
-}) {
+function HobbyCard({ name, selected, setSelected, setLoading, dispatch }) {
   function searchByHobby(hobby) {
     setLoading(true);
-    setPaging(1);
-    const filteredData = allUsers.filter((user) =>
-      user.hobbies.includes(hobby)
-    );
-    allPages.current = calcAllPages(filteredData);
-    setUsers(filteredData);
+    dispatch({ type: "filterByHobby", payload: hobby });
     setLoading(false);
   }
 
@@ -47,7 +31,6 @@ function HobbyCard({
     <Card
       active={selected === name}
       onClick={() => {
-        page.current = 1;
         searchByHobby(name);
         setSelected(name);
       }}
