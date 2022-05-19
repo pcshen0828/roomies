@@ -73,10 +73,8 @@ function CreatePropertyPage4({ id, images, setImages, handleError }) {
     }
     api
       .uploadFileAndGetDownloadUrl(`apartments/${id}/${file.name}`, file)
-      .then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          setImages((prev) => [...prev, { name: file.name, url: downloadURL }]);
-        });
+      .then((res) => {
+        setImages((prev) => [...prev, { name: file.name, url: res }]);
       })
       .then(() => {
         setError("");

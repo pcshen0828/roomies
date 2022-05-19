@@ -1,7 +1,12 @@
 import React, { Fragment } from "react";
 import styled from "styled-components";
 import { mainColor, subColor } from "../../../styles/GlobalStyle";
-import { SmallTitle, SmallLabel, FlexWrapper } from "../../common/Components";
+import {
+  SmallTitle,
+  SmallLabel,
+  FlexWrapper,
+  HiddenInput,
+} from "../../common/Components";
 
 const CheckboxWrapper = styled(FlexWrapper)`
   align-items: center;
@@ -17,10 +22,6 @@ const CheckboxLabel = styled(SmallLabel)`
   cursor: pointer;
   background: ${(props) => (props.checked ? subColor : "#e8e8e8")};
   color: ${(props) => (props.checked ? "#fff" : mainColor)};
-`;
-
-const HiddenInput = styled.input`
-  display: none;
 `;
 
 function EditPropertyPage2({

@@ -6,6 +6,7 @@ import {
   SmallLabel,
   FlexWrapper,
   Required,
+  HiddenInput,
 } from "../../common/Components";
 
 const CheckboxWrapper = styled(FlexWrapper)`
@@ -22,10 +23,6 @@ const CheckboxLabel = styled(SmallLabel)`
   cursor: pointer;
   background: ${(props) => (props.checked ? subColor : "#e8e8e8")};
   color: ${(props) => (props.checked ? "#fff" : mainColor)};
-`;
-
-const HiddenInput = styled.input`
-  display: none;
 `;
 
 function CreatePropertyPage2({

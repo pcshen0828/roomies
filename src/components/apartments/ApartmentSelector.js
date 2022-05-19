@@ -103,7 +103,6 @@ const InputWrapper = styled(FlexWrapper)`
   margin-right: 10px;
   margin-bottom: 15px;
 `;
-const HiddenInput = styled.input``;
 
 const ClearAll = styled(Bold)`
   position: absolute;
@@ -242,7 +241,7 @@ function Selector({
                 <SelectorWrapper>
                   {selector.list.content.map((condition, index) => (
                     <InputWrapper key={index}>
-                      <HiddenInput
+                      <input
                         type="checkbox"
                         id={condition.en}
                         checked={queryList.current.includes(condition.en)}

@@ -17,6 +17,7 @@ import {
   Bold,
   Error,
   FlexWrapper,
+  HiddenInput,
   ProfileImage,
   Textarea,
 } from "../common/Components";
@@ -106,10 +107,6 @@ const AddImageButton = styled.div`
   align-self: end;
 `;
 
-const HiddenInput = styled.input`
-  display: none;
-`;
-
 const ImageDisplayer = styled(FlexWrapper)`
   width: 100%;
   height: 120px;
@@ -183,10 +180,8 @@ export default function CreateNewPostModal({
     }
     api
       .uploadFileAndGetDownloadUrl(`posts/${newPostID}/${file.name}`, file)
-      .then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          setImages((prev) => [...prev, { name: file.name, url: downloadURL }]);
-        });
+      .then((res) => {
+        setImages((prev) => [...prev, { name: file.name, url: res }]);
       })
       .then(() => {
         setError("");

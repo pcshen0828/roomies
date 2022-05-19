@@ -671,6 +671,10 @@ const ButtonWrapper = styled(FlexWrapper)`
   align-items: center;
 `;
 
+const HiddenInput = styled.input`
+  display: none;
+`;
+
 export {
   Wrapper,
   BannerTitle,
@@ -734,4 +738,5 @@ export {
   StepName,
   BottomWrapper,
   ButtonWrapper,
+  HiddenInput,
 };

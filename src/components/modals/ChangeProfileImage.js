@@ -20,6 +20,7 @@ import {
   FlexWrapper,
   Bold,
   FlexColumn,
+  HiddenInput,
 } from "../common/Components";
 
 import AvatarEditor from "react-avatar-editor";
@@ -52,10 +53,6 @@ const UploadButton = styled(SmallLabel)`
   border-radius: 5px;
   background: #e8e8e8;
   cursor: pointer;
-`;
-
-const HiddenInput = styled.input`
-  display: none;
 `;
 
 const EditorWrapper = styled(FlexWrapper)`
@@ -113,7 +110,7 @@ const Loading = styled(Button1)`
 
 function ChangeProfileImageModal({
   toggle,
-  setProfileImage,
+  setBasicInfo,
   file,
   setFile,
   setSaved,
@@ -127,23 +124,25 @@ function ChangeProfileImageModal({
   const [isUploading, setIsUploading] = useState(false);
 
   function updateProfileImage() {
-    setProfileImage(url ? url : currentUser.profileImage);
     if (file) {
       setIsUploading(true);
-      const storageRef = Firebase.ref(
-        Firebase.storage,
-        `users/${currentUser.uid}/profile`
-      );
-      Firebase.uploadBytes(storageRef, file).then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
+      api
+        .uploadFileAndGetDownloadUrl(`users/${currentUser.uid}/profile`, file)
+        .then((res) => {
+          setBasicInfo((prev) => ({
+            ...prev,
+            profileImage: res,
+          }));
           api.updateDocData("users", currentUser.uid, {
-            profileImage: downloadURL,
+            profileImage: res,
           });
           setIsUploading(false);
-          toggle(false);
+          fileRef.current.value = null;
+          setFile(null);
+          setShowPreview(false);
           setSaved(true);
+          toggle(false);
         });
-      });
     }
   }
 

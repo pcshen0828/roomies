@@ -56,7 +56,9 @@ const api = {
   },
   async uploadFileAndGetDownloadUrl(storagePath, file) {
     const storageRef = Firebase.ref(Firebase.storage, storagePath);
-    return Firebase.uploadBytes(storageRef, file);
+    return Firebase.uploadBytes(storageRef, file).then((snapshot) => {
+      return Firebase.getDownloadURL(snapshot.ref);
+    });
   },
   addNewDoc(docRef, data) {
     this.AddDoc(this.Collection(this.DB, docRef), data);

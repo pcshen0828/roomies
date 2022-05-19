@@ -128,15 +128,13 @@ function EditPropertyPage1({
         `apartments/${basicInfo.id}/cover/cover`,
         file
       )
-      .then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          setBasicInfo({
-            ...basicInfo,
-            coverImage: downloadURL,
-            coverFile: file,
-          });
-          coverFileRef.current.value = null;
+      .then((res) => {
+        setBasicInfo({
+          ...basicInfo,
+          coverImage: res,
+          coverFile: file,
         });
+        coverFileRef.current.value = null;
       });
   }
 

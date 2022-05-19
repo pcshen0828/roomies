@@ -72,10 +72,8 @@ function EditPropertyPage4({ apartment, images, setImages }) {
         `apartments/${apartment.id}/${file.name}`,
         file
       )
-      .then((snapshot) => {
-        Firebase.getDownloadURL(snapshot.ref).then((downloadURL) => {
-          setImages((prev) => [...prev, { name: file.name, url: downloadURL }]);
-        });
+      .then((res) => {
+        setImages((prev) => [...prev, { name: file.name, url: res }]);
       })
       .then(() => {
         setError("");
