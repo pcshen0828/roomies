@@ -171,8 +171,7 @@ export default function CreateNewPostModal({
   const newImage = useRef(null);
   const [error, setError] = useState("");
 
-  function uploadImageFile(e) {
-    const file = e.target.files[0];
+  function uploadImageFile(file) {
     if (!file) return;
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案過大，請重新上傳");
@@ -289,8 +288,9 @@ export default function CreateNewPostModal({
           type="file"
           accept="image/*"
           ref={newImage}
-          onChange={(event) => {
-            uploadImageFile(event);
+          onChange={(e) => {
+            const file = e.target.files[0];
+            uploadImageFile(file);
           }}
         />
         {error && <NewError>{error}</NewError>}

@@ -18,6 +18,7 @@ import {
   Select,
   FlexColumn,
 } from "../../common/Components";
+import { checkIsNaNOrNot } from "../../../utils/calculate";
 
 const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
@@ -129,14 +130,6 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
       });
   }
 
-  function checkIsNaN(e) {
-    handleError("");
-    if (!/[0-9]/.test(e.key)) {
-      e.preventDefault();
-      handleError("只能輸入數字！");
-    }
-  }
-
   return (
     <>
       <SmallTitle htmlFor="title">
@@ -222,7 +215,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
           handleError("");
         }}
         onKeyPress={(event) => {
-          checkIsNaN(event);
+          checkIsNaNOrNot(event, handleError);
         }}
         onChange={(e) => {
           if (!e.target.value.trim()) {

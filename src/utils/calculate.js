@@ -19,4 +19,12 @@ function calcTimeGap(time) {
     : "現在";
 }
 
-export { calcTimeGap };
+function checkIsNaNOrNot(event, callback) {
+  callback("");
+  if (!/[0-9]/.test(event.key)) {
+    event.preventDefault();
+    callback("只能輸入數字！");
+  }
+}
+
+export { calcTimeGap, checkIsNaNOrNot };

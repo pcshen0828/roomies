@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import styled from "styled-components";
+import { checkIsNaNOrNot } from "../../../utils/calculate";
 
 import {
   SmallLabel,
@@ -20,14 +21,6 @@ const CheckboxLabel = styled(SmallLabel)`
 
 function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
   const stringToBoolean = (string) => (string === "false" ? false : !!string);
-
-  function checkIsNaN(e) {
-    handleError("");
-    if (!/[0-9]/.test(e.key)) {
-      e.preventDefault();
-      handleError("只能輸入數字！");
-    }
-  }
 
   return (
     <>
@@ -98,7 +91,7 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
               value={info.value}
               onKeyPress={(event) => {
                 if (info.name === "所在樓層" || info.name === "坪數") {
-                  checkIsNaN(event);
+                  checkIsNaNOrNot(event, handleError);
                 }
               }}
               onFocus={() => {

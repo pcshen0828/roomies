@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Firebase } from "../../../utils/firebase";
+import checkIsNaNOrNot from "../../../utils/calculate";
 import api from "../../../utils/api";
 import {
   GoogleMap,
@@ -138,14 +138,6 @@ function EditPropertyPage1({
       });
   }
 
-  function checkIsNaN(e) {
-    handleError("");
-    if (!/[0-9]/.test(e.key)) {
-      e.preventDefault();
-      handleError("只能輸入數字！");
-    }
-  }
-
   return (
     <>
       <SmallTitle htmlFor="title">
@@ -233,7 +225,7 @@ function EditPropertyPage1({
           handleError("");
         }}
         onKeyPress={(event) => {
-          checkIsNaN(event);
+          checkIsNaNOrNot(event, handleError);
         }}
         onChange={(e) => {
           if (!e.target.value.trim()) {

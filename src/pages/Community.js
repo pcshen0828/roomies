@@ -13,8 +13,8 @@ import {
   SearchButton,
   FlexWrapper,
 } from "../components/common/Components";
-import HobbyCard from "../components/Community/HobbyCard";
-import UserCard from "../components/Community/UserCard";
+import HobbyCard from "../components/community/HobbyCard";
+import UserCard from "../components/community/UserCard";
 import Footer from "../components/layout/Footer";
 import Skeleton from "react-loading-skeleton";
 import search from "../images/search.svg";

@@ -171,8 +171,7 @@ export default function EditPostModal({
   const [newFiles, setNewFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  function displayFileImage(e) {
-    const file = e.target.files[0];
+  function displayFileImage(file) {
     if (!file) return;
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案過大，請重新上傳");
@@ -297,8 +296,9 @@ export default function EditPostModal({
           type="file"
           accept="image/*"
           ref={newImage}
-          onChange={(event) => {
-            displayFileImage(event);
+          onChange={(e) => {
+            const file = e.target.files[0];
+            displayFileImage(file);
           }}
         />
         {error && <NewError>{error}</NewError>}

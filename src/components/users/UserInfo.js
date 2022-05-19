@@ -14,7 +14,7 @@ import {
   SearchButton,
   Button1,
 } from "../common/Components";
-import UserCard from "../Community/UserCard";
+import UserCard from "../community/UserCard";
 import SendMessageModal from "../modals/SendMessage";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import search from "../../images/search.svg";
