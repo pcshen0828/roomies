@@ -70,6 +70,6 @@ export default function ConfirmBeforeActionModal({ message, action, toggle }) {
 
 ConfirmBeforeActionModal.propTypes = {
   message: PropTypes.string.isRequired,
-  action: PropTypes.string.isRequired,
+  action: PropTypes.func.isRequired,
   toggle: PropTypes.func.isRequired,
 };

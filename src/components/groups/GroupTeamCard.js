@@ -120,14 +120,9 @@ const DropDownWrapper = styled(FlexWrapper)`
 `;
 
 function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
-  const [openMemberListModal, setOpenMemberListModal] = useState(false);
-  const [openAppliedModal, setOpenAppliedModal] = useState(false);
-  const [openInviteModal, setOpenInviteModal] = useState(false);
-  const [openConfirm, setOpenConfirm] = useState(false);
   const { currentUser } = useAuth();
-
+  const [openModalType, setOpenModalType] = useState("");
   const [openQuit, setOpenQuit] = useState(false);
-  const [openQuitConfirm, setOpenQuitConfirm] = useState(false);
   const [quitted, setQuitted] = useState(false);
 
   async function joinTeam() {
@@ -137,7 +132,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
     });
     const host = team.members.find((member) => member.status === 0).uid;
     api.createNoticeByType(currentUser.uid, host, 0);
-    setOpenAppliedModal(true);
+    setOpenModalType("applied");
   }
   const ifUserincludes = team.members.find(
     (member) => member.uid === currentUser.uid
@@ -156,41 +151,45 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
     setQuitted(true);
   }
 
+  function closeModal() {
+    setOpenModalType("");
+  }
+
   return (
     <>
       {quitted && (
         <SuccessfullySavedModal message="成功退出" toggle={setQuitted} />
       )}
-      {openAppliedModal && (
-        <ApplyJoinModal toggle={() => setOpenAppliedModal(false)} />
-      )}
-      {openMemberListModal && (
+      {openModalType === "applied" && <ApplyJoinModal toggle={closeModal} />}
+      {openModalType === "memberList" && (
         <CheckTeamMembersModal
-          toggle={setOpenMemberListModal}
+          toggle={() => {
+            setOpenModalType("");
+          }}
           members={team.members}
           teamId={team.id}
           team={team}
         />
       )}
-      {openInviteModal && (
+      {openModalType === "invite" && (
         <InviteJoinTeamModal
-          toggle={() => setOpenInviteModal(false)}
+          toggle={closeModal}
           team={team}
           groupMemberDetail={groupMemberDetail}
         />
       )}
-      {openConfirm && (
+      {openModalType === "confirmJoin" && (
         <ConfirmBeforeActionModal
           message="確認申請加入？"
           action={joinTeam}
-          toggle={setOpenConfirm}
+          toggle={closeModal}
         />
       )}
-      {openQuitConfirm && (
+      {openModalType === "confirmQuit" && (
         <ConfirmBeforeActionModal
           message="確認退出此隊伍？"
           action={quitTeam}
-          toggle={setOpenQuitConfirm}
+          toggle={closeModal}
         />
       )}
       <Wrapper
@@ -201,7 +200,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
       >
         <Top>
           <Title>{team.name}</Title>
-          <TeamName onClick={() => setOpenMemberListModal(true)}>
+          <TeamName onClick={() => setOpenModalType("memberList")}>
             查看成員
           </TeamName>
           <FlexWrapper>
@@ -230,7 +229,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
                   <QuitTeamModal>
                     <ExitButton
                       onClick={() => {
-                        setOpenQuitConfirm(true);
+                        setOpenModalType("confirmQuit");
                       }}
                     >
                       <Icon src={exit} />
@@ -246,7 +245,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
             ) : team.members.length < roomies ? (
               <JoinButton
                 onClick={() => {
-                  setOpenConfirm(true);
+                  setOpenModalType("confirmJoin");
                 }}
               >
                 申請加入
@@ -257,7 +256,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
             {userStatus === 0 && team.members.length < roomies && (
               <InviteButton
                 onClick={() => {
-                  setOpenInviteModal(true);
+                  setOpenModalType("invite");
                 }}
               >
                 邀請社團成員

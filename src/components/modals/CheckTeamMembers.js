@@ -22,7 +22,9 @@ const NewBody = styled(Body)`
   height: 400px;
 `;
 
-const Members = styled(FlexColumn)``;
+const Members = styled(FlexColumn)`
+  align-items: stretch;
+`;
 
 const Member = styled(FlexWrapper)`
   margin: 10px 10px 20px;
@@ -100,7 +102,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
       <NewModal>
         <Header>
           <Title>隊伍成員</Title>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <Members>
