@@ -323,6 +323,10 @@ function GroupAndTeam() {
     return location.pathname === "/profile/groupteam/groups" ? groups : teams;
   }
 
+  function closeConfirmModal() {
+    setOpenConfirmType("");
+  }
+
   return (
     <Wrapper>
       <Bold>管理我的租屋活動</Bold>
@@ -408,7 +412,7 @@ function GroupAndTeam() {
         <ConfirmBeforeActionModal
           message="確認加入？"
           action={confirmJoinGroup}
-          toggle={() => setOpenConfirmType("")}
+          toggle={closeConfirmModal}
         />
       )}
 
@@ -416,7 +420,7 @@ function GroupAndTeam() {
         <ConfirmBeforeActionModal
           message="確認拒絕？"
           action={rejectJoinGroup}
-          toggle={() => setOpenConfirmType("")}
+          toggle={closeConfirmModal}
         />
       )}
 

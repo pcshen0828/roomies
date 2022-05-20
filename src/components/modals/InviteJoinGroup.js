@@ -123,18 +123,6 @@ export default function InviteJoinGroupModal({
     setInviteList((prev) => prev.filter((item) => item.uid !== uid));
   }
 
-  function updateQueriedUsers(users) {
-    setQueriedUsers(users);
-  }
-
-  function updateDefaultResponse(response) {
-    setDefaultResponse(response);
-  }
-
-  function updateQueryName(name) {
-    setQueryName(name);
-  }
-
   return (
     <Overlay out={false}>
       {openConfirm && (
@@ -155,10 +143,10 @@ export default function InviteJoinGroupModal({
             currentUser={currentUser}
             inviteList={inviteList}
             cancelInvite={cancelInvite}
-            setQueriedUsers={updateQueriedUsers}
+            setQueriedUsers={setQueriedUsers}
             queryName={queryName}
-            setQueryName={updateQueryName}
-            setDefaultResponse={updateDefaultResponse}
+            setQueryName={setQueryName}
+            setDefaultResponse={setDefaultResponse}
           />
           {queriedUsers.length ? (
             queriedUsers.map((user, index) => (

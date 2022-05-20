@@ -117,7 +117,7 @@ function SendMessageModal({ setOpenModal, objectId, setSaved }) {
         <ConfirmBeforeActionModal
           message="確認送出？"
           action={sendMyMessage}
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
         />
       )}
       <NewModal>

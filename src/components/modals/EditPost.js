@@ -241,7 +241,7 @@ export default function EditPostModal({
       )}
       {postConfirm && (
         <ConfirmBeforeActionModal
-          toggle={setPostConfirm}
+          toggle={() => setPostConfirm(false)}
           message="確認更新？"
           action={() => {
             updatePost();

@@ -103,22 +103,6 @@ export default function InviteJoinTeamModal({
     toggle();
   }
 
-  function updateInviteList(list) {
-    setInviteList(list);
-  }
-
-  function updateQueriedUsers(users) {
-    setQueriedUsers(users);
-  }
-
-  function updateQueryName(name) {
-    setQueryName(name);
-  }
-
-  function updateDefaultResponse(response) {
-    setDefaultResponse(response);
-  }
-
   return (
     <Overlay out={false}>
       {openConfirm && (
@@ -138,11 +122,11 @@ export default function InviteJoinTeamModal({
             groupMemberDetail={groupMemberDetail}
             currentUser={currentUser}
             inviteList={inviteList}
-            setInviteList={updateInviteList}
-            setQueriedUsers={updateQueriedUsers}
+            setInviteList={setInviteList}
+            setQueriedUsers={setQueriedUsers}
             queryName={queryName}
-            setQueryName={updateQueryName}
-            setDefaultResponse={updateDefaultResponse}
+            setQueryName={setQueryName}
+            setDefaultResponse={setDefaultResponse}
           />
           {queriedUsers.length ? (
             queriedUsers.map((user, index) => (

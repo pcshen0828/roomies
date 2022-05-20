@@ -51,7 +51,7 @@ function MemberModal({ closeNavModal }) {
           action={() => {
             signOut().then(navigate("/"));
           }}
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
         />
       )}
       <NavModal onClick={(e) => e.stopPropagation()}>

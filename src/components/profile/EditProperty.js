@@ -284,7 +284,7 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
     <Overlay out={false}>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
           message="尚未儲存，確認離開？"
           action={() => {
             toggle(false);

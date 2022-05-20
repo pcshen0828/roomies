@@ -83,14 +83,14 @@ export default function Requests({ unConfirmed, user, loading }) {
         <ConfirmBeforeActionModal
           message="確認核准行程？"
           action={confirmSchedule}
-          toggle={setOpenConfirmCheck}
+          toggle={() => setOpenConfirmCheck(false)}
         />
       )}
       {openConfirmReject && (
         <ConfirmBeforeActionModal
           message="確認拒絕行程？"
           action={rejectSchedule}
-          toggle={setOpenConfirmReject}
+          toggle={() => setOpenConfirmReject(false)}
         />
       )}
 

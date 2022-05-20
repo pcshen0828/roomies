@@ -139,7 +139,7 @@ export default function GroupHeader({
   invitation,
   dropdown,
   toggle,
-  switchModal,
+  setOpenModalType,
 }) {
   return (
     <HeaderWrapper>
@@ -166,14 +166,14 @@ export default function GroupHeader({
           <Buttons>
             <Button1
               onClick={() => {
-                switchModal("confirmJoin");
+                setOpenModalType("confirmJoin");
               }}
             >
               確認加入
             </Button1>
             <RejectButton
               onClick={() => {
-                switchModal("reject");
+                setOpenModalType("reject");
               }}
             >
               拒絕
@@ -198,7 +198,7 @@ export default function GroupHeader({
                 <DropdownMenu>
                   <ExitButton
                     onClick={() => {
-                      switchModal("quit");
+                      setOpenModalType("quit");
                     }}
                   >
                     <Icon src={exit} alt="" />
@@ -209,7 +209,7 @@ export default function GroupHeader({
             </DropdownWrapper>
             <InviteButton
               onClick={() => {
-                switchModal("invite");
+                setOpenModalType("invite");
               }}
             >
               邀請
@@ -230,5 +230,5 @@ GroupHeader.propTypes = {
   invitation: PropTypes.array,
   dropdown: PropTypes.bool,
   toggle: PropTypes.func,
-  switchModal: PropTypes.func,
+  setOpenModalType: PropTypes.func,
 };

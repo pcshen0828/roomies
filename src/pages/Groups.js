@@ -343,16 +343,8 @@ function Groups() {
     },
   ];
 
-  function switchModal(type) {
-    setOpenModalType(type);
-  }
-
   function toggleDropDown() {
     setDropdown((prev) => !prev);
-  }
-
-  function switchPostStatus(type) {
-    setPostStatus(type);
   }
 
   return (
@@ -393,7 +385,7 @@ function Groups() {
                 key={status.type}
                 message={status.message}
                 action={status.action}
-                toggle={setOpenModalType}
+                toggle={() => setOpenModalType("")}
               />
             )
         )}
@@ -453,7 +445,7 @@ function Groups() {
               invitation={invitation}
               dropdown={dropdown}
               toggle={toggleDropDown}
-              switchModal={switchModal}
+              setOpenModalType={setOpenModalType}
             />
           )}
 
@@ -490,7 +482,7 @@ function Groups() {
                   <GroupPosts
                     currentUser={currentUser}
                     groupID={id}
-                    setPostStatus={switchPostStatus}
+                    setPostStatus={setPostStatus}
                   />
                 )}
                 {tab === "teams" && (
