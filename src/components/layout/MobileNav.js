@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -115,12 +116,12 @@ function MobileNavBar({ toggle }) {
   }
 
   return (
-    <MobileWrapper out={false} onClick={() => toggle(false)}>
+    <MobileWrapper out={false} onClick={() => toggle()}>
       <MobileModal onClick={(e) => e.stopPropagation()}>
         <Logo>
           寓見<Span>｜Roomies</Span>
         </Logo>
-        <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+        <CloseButton onClick={() => toggle()}>×</CloseButton>
         <StyledNavLink
           to="/"
           style={location.pathname === "/" ? activeStyle : {}}
@@ -150,5 +151,9 @@ function MobileNavBar({ toggle }) {
     </MobileWrapper>
   );
 }
+
+MobileNavBar.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};
 
 export default MobileNavBar;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Firebase } from "../../utils/firebase";
 
@@ -84,5 +85,9 @@ function RecommendCarousel({ id }) {
     </Wrapper>
   );
 }
+
+RecommendCarousel.propTypes = {
+  id: PropTypes.string,
+};
 
 export default RecommendCarousel;

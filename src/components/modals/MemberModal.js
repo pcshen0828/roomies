@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -38,24 +39,24 @@ const SignoutButton = styled(Button1)`
   height: 35px;
 `;
 
-function MemberModal({ setActiveIcon }) {
+function MemberModal({ closeNavModal }) {
   const { signOut, currentUser } = useAuth();
   const [openConfirm, setOpenConfirm] = useState(false);
   const navigate = useNavigate();
   return (
-    <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
+    <NavModalOverlay out={false} onClick={closeNavModal}>
       {openConfirm && (
         <ConfirmBeforeActionModal
           message="確認登出？"
           action={() => {
             signOut().then(navigate("/"));
           }}
-          toggle={setActiveIcon}
+          toggle={setOpenConfirm}
         />
       )}
       <NavModal onClick={(e) => e.stopPropagation()}>
         <Bold>{currentUser?.role === 1 ? "房客" : "屋主"}</Bold>
-        <NewLink to="/profile/info/edit" onClick={() => setActiveIcon("")}>
+        <NewLink to="/profile/info/edit" onClick={closeNavModal}>
           <ProfileImg src={currentUser?.profileImage} />
           <NewFlexColumn>
             <Bold>{currentUser?.email}</Bold>
@@ -73,5 +74,9 @@ function MemberModal({ setActiveIcon }) {
     </NavModalOverlay>
   );
 }
+
+MemberModal.propTypes = {
+  closeNavModal: PropTypes.func.isRequired,
+};
 
 export default MemberModal;

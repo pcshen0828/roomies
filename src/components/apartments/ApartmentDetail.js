@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import api from "../../utils/api";
@@ -490,5 +491,10 @@ function ApartmentDetail({ details, loading }) {
     </>
   );
 }
+
+ApartmentDetail.propTypes = {
+  details: PropTypes.array,
+  loading: PropTypes.bool,
+};
 
 export default ApartmentDetail;

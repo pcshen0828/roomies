@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
-import { FlexWrapper } from "../common/Components";
+import { FlexWrapper, ProfileImage } from "../common/Components";
 import Linkify from "react-linkify";
 
 const SendDate = styled.div`
@@ -60,14 +61,9 @@ const MessageInnerWrapperOthers = styled.div`
   -ms-hyphens: auto;
   hyphens: auto;
 `;
-const ProfileImage = styled.div`
+const Profile = styled(ProfileImage)`
   width: 30px;
   height: 30px;
-  border-radius: 50%;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 `;
 
 function MessageBar({ detail, myRole, members, self }) {
@@ -105,7 +101,7 @@ function MessageBar({ detail, myRole, members, self }) {
           <MessageInnerWrapperMe ref={scrollRef}>
             {detail.content}
           </MessageInnerWrapperMe>
-          <ProfileImage src={myProfile && myProfile} />
+          <Profile src={myProfile && myProfile} />
         </MessageSentByMe>
       </FlexWrapper>
     </Wrapper>
@@ -113,7 +109,7 @@ function MessageBar({ detail, myRole, members, self }) {
     <Wrapper>
       <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
       <MessageSentByOthers>
-        <ProfileImage src={objectProfile && objectProfile} />
+        <Profile src={objectProfile && objectProfile} />
         <MessageInnerWrapperOthers ref={scrollRef}>
           {detail.content}
         </MessageInnerWrapperOthers>
@@ -121,5 +117,12 @@ function MessageBar({ detail, myRole, members, self }) {
     </Wrapper>
   );
 }
+
+MessageBar.propTypes = {
+  detail: PropTypes.object.isRequired,
+  myRole: PropTypes.number.isRequired,
+  members: PropTypes.array.isRequired,
+  self: PropTypes.object.isRequired,
+};
 
 export default MessageBar;

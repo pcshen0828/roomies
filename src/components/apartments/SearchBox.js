@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { SearchWrapper, SearchInput, SearchButton } from "../common/Components";
 import search from "../../images/search.svg";
@@ -33,5 +34,9 @@ function SearchBox({ dispatch }) {
     </StyldSearchWrapper>
   );
 }
+
+SearchBox.propTypes = {
+  dispatch: PropTypes.func,
+};
 
 export default SearchBox;

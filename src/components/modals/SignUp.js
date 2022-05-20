@@ -26,6 +26,7 @@ const NewModal = styled(Modal)`
 
 const BodyWrapper = styled(FlexWrapper)`
   align-items: flex-start;
+  width: 100%;
   height: 100%;
   justify-content: space-between;
 `;

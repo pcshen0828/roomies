@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { FlexColumn } from "../common/Components";
@@ -62,5 +63,9 @@ function Card({ detail }) {
     </Wrapper>
   );
 }
+
+Card.propTypes = {
+  detail: PropTypes.object,
+};
 
 export default Card;

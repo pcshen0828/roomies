@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FlexWrap, Title } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
@@ -61,7 +62,7 @@ const SearchButton = styled.img`
 export default function SearchAndInviteToGroup({
   currentUser,
   inviteList,
-  setInviteList,
+  cancelInvite,
   setQueriedUsers,
   setDefaultResponse,
   queryName,
@@ -116,13 +117,7 @@ export default function SearchAndInviteToGroup({
           ? inviteList.map((user) => (
               <InvitedUser key={user.uid}>
                 {user.name}
-                <CancelButton
-                  onClick={() =>
-                    setInviteList((prev) =>
-                      prev.filter((item) => item.uid !== user.uid)
-                    )
-                  }
-                >
+                <CancelButton onClick={() => cancelInvite(user.uid)}>
                   ×
                 </CancelButton>
               </InvitedUser>
@@ -132,3 +127,13 @@ export default function SearchAndInviteToGroup({
     </>
   );
 }
+
+SearchAndInviteToGroup.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  inviteList: PropTypes.array.isRequired,
+  cancelInvite: PropTypes.func.isRequired,
+  setQueriedUsers: PropTypes.func.isRequired,
+  setDefaultResponse: PropTypes.func.isRequired,
+  queryName: PropTypes.string.isRequired,
+  setQueryName: PropTypes.func.isRequired,
+};

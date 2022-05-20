@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -114,8 +115,24 @@ export default function InviteJoinGroupModal({
       });
       api.createNoticeByType(currentUser.uid, user, 8);
     });
-    toggle(false);
-    setSaved(true);
+    toggle();
+    setSaved();
+  }
+
+  function cancelInvite(uid) {
+    setInviteList((prev) => prev.filter((item) => item.uid !== uid));
+  }
+
+  function updateQueriedUsers(users) {
+    setQueriedUsers(users);
+  }
+
+  function updateDefaultResponse(response) {
+    setDefaultResponse(response);
+  }
+
+  function updateQueryName(name) {
+    setQueryName(name);
   }
 
   return (
@@ -130,18 +147,18 @@ export default function InviteJoinGroupModal({
       <NewModal>
         <Header>
           <Title>邀請新用戶加入此租屋社團</Title>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <SearchAndInviteToGroup
             groupMembers={groupMembers}
             currentUser={currentUser}
             inviteList={inviteList}
-            setInviteList={setInviteList}
-            setQueriedUsers={setQueriedUsers}
+            cancelInvite={cancelInvite}
+            setQueriedUsers={updateQueriedUsers}
             queryName={queryName}
-            setQueryName={setQueryName}
-            setDefaultResponse={setDefaultResponse}
+            setQueryName={updateQueryName}
+            setDefaultResponse={updateDefaultResponse}
           />
           {queriedUsers.length ? (
             queriedUsers.map((user, index) => (
@@ -189,3 +206,10 @@ export default function InviteJoinGroupModal({
     </Overlay>
   );
 }
+
+InviteJoinGroupModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  groupMembers: PropTypes.array.isRequired,
+  setSaved: PropTypes.func.isRequired,
+  groupId: PropTypes.string.isRequired,
+};

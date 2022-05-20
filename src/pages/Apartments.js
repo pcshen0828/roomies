@@ -174,6 +174,7 @@ function Apartments() {
     });
 
     intersectionObserver.observe(anchor.current);
+    return () => intersectionObserver.disconnect();
   }, []);
 
   return (

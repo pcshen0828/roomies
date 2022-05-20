@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import api from "../../utils/api";
 import {
@@ -265,6 +266,10 @@ export default function Post({ post, currentUser, setPostStatus }) {
     setPostStatus("deleted");
   }
 
+  function closeImageDisplayer() {
+    setShowImages(false);
+  }
+
   return loading ? (
     <div width="100%">
       <Skeleton width="100%" height={450} borderRadius={10} />
@@ -291,7 +296,7 @@ export default function Post({ post, currentUser, setPostStatus }) {
         />
       )}
       {showImages && (
-        <ImagesDisplayer images={post.images} toggle={setShowImages} />
+        <ImagesDisplayer images={post.images} toggle={closeImageDisplayer} />
       )}
 
       <TopInfo>
@@ -449,3 +454,9 @@ export default function Post({ post, currentUser, setPostStatus }) {
     </Wrapper>
   );
 }
+
+Post.propTypes = {
+  post: PropTypes.object,
+  currentUser: PropTypes.object,
+  setPostStatus: PropTypes.func,
+};

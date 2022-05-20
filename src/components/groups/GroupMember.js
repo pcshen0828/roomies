@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -187,5 +188,9 @@ function GroupMember({ members }) {
     </Wrapper>
   );
 }
+
+GroupMember.propTypes = {
+  members: PropTypes.array,
+};
 
 export default GroupMember;

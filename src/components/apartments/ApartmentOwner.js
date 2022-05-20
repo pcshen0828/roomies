@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import api from "../../utils/api";
 
@@ -124,3 +125,9 @@ export default function OwnerCard({ owner, currentUser, page }) {
     </>
   );
 }
+
+OwnerCard.propTypes = {
+  owner: PropTypes.string,
+  currentUser: PropTypes.object,
+  page: PropTypes.string,
+};

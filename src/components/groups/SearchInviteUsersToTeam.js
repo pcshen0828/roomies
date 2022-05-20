@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FlexWrap, Title } from "../common/Components";
 import { Firebase } from "../../utils/firebase";
@@ -137,3 +138,14 @@ export default function SearchAndInviteToTeam({
     </>
   );
 }
+
+SearchAndInviteToTeam.propTypes = {
+  groupMemberDetail: PropTypes.array.isRequired,
+  currentUser: PropTypes.object.isRequired,
+  inviteList: PropTypes.array.isRequired,
+  setInviteList: PropTypes.func.isRequired,
+  setQueriedUsers: PropTypes.func.isRequired,
+  setDefaultResponse: PropTypes.func.isRequired,
+  queryName: PropTypes.string.isRequired,
+  setQueryName: PropTypes.func.isRequired,
+};

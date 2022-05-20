@@ -84,6 +84,11 @@ function Header() {
     }
     return <NotLoggedIn />;
   }
+
+  function closeSideBar() {
+    setToggleMenu(false);
+  }
+
   return (
     <Wrapper>
       <InnerWrapper>
@@ -91,7 +96,7 @@ function Header() {
           <Menu src={menu} onClick={() => setToggleMenu(true)} />
           <IndexLink to="/">Roomies</IndexLink>
           <NavBar />
-          {toggleMenu && <MobileNavBar toggle={setToggleMenu} />}
+          {toggleMenu && <MobileNavBar toggle={closeSideBar} />}
         </FlexWrapper>
         {Render()}
       </InnerWrapper>

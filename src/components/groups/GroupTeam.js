@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import TeamCard from "./GroupTeamCard";
 import CreateTeam from "./GroupCreateTeam";
@@ -108,5 +109,15 @@ function GroupTeam({
     </TeamsBlock>
   );
 }
+
+GroupTeam.propTypes = {
+  aid: PropTypes.string,
+  members: PropTypes.array,
+  groupId: PropTypes.string,
+  roomies: PropTypes.number,
+  groupMemberDetail: PropTypes.array,
+  isOwner: PropTypes.bool,
+  currentUser: PropTypes.object,
+};
 
 export default GroupTeam;

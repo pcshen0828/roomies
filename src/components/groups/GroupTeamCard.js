@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 
@@ -160,7 +161,9 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
       {quitted && (
         <SuccessfullySavedModal message="成功退出" toggle={setQuitted} />
       )}
-      {openAppliedModal && <ApplyJoinModal toggle={setOpenAppliedModal} />}
+      {openAppliedModal && (
+        <ApplyJoinModal toggle={() => setOpenAppliedModal(false)} />
+      )}
       {openMemberListModal && (
         <CheckTeamMembersModal
           toggle={setOpenMemberListModal}
@@ -171,7 +174,7 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
       )}
       {openInviteModal && (
         <InviteJoinTeamModal
-          toggle={setOpenInviteModal}
+          toggle={() => setOpenInviteModal(false)}
           team={team}
           groupMemberDetail={groupMemberDetail}
         />
@@ -266,5 +269,12 @@ function TeamCard({ team, roomies, groupMemberDetail, isOwner }) {
     </>
   );
 }
+
+TeamCard.propTypes = {
+  team: PropTypes.object.isRequired,
+  roomies: PropTypes.number.isRequired,
+  groupMemberDetail: PropTypes.array.isRequired,
+  isOwner: PropTypes.bool.isRequired,
+};
 
 export default TeamCard;

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 
@@ -22,7 +23,7 @@ const MessagesLink = styled(StyledLink)`
   }
 `;
 
-function MessageModal({ setActiveIcon }) {
+function MessageModal({ closeNavModal }) {
   const { currentUser } = useAuth();
   const [chats, setChats] = useState([]);
 
@@ -50,7 +51,7 @@ function MessageModal({ setActiveIcon }) {
   }, []);
 
   return (
-    <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
+    <NavModalOverlay out={false} onClick={closeNavModal}>
       <NavModal onClick={(e) => e.stopPropagation()}>
         <Title>聊天室</Title>
         <ChatsWrapper>
@@ -59,18 +60,22 @@ function MessageModal({ setActiveIcon }) {
               chats={chats}
               nav={true}
               usage="modal"
-              toggle={setActiveIcon}
+              toggle={closeNavModal}
             />
           ) : (
             "尚無訊息"
           )}
         </ChatsWrapper>
-        <MessagesLink to="/messages/all" onClick={() => setActiveIcon("")}>
+        <MessagesLink to="/messages/all" onClick={closeNavModal}>
           查看收件匣
         </MessagesLink>
       </NavModal>
     </NavModalOverlay>
   );
 }
+
+MessageModal.propTypes = {
+  closeNavModal: PropTypes.func.isRequired,
+};
 
 export default MessageModal;

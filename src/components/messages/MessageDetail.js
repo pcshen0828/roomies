@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
@@ -91,7 +91,6 @@ const SendMessageButton = styled.img`
 `;
 
 function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
-  const { id } = useParams();
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
@@ -199,9 +198,6 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
               />
             ))
           : "查無聊天紀錄！"}
-        {/* 
-            測試 scroll anchor
-           */}
       </Messages>
       <SendMessageBlock
         onSubmit={(e) => {
@@ -220,5 +216,13 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
     </MessageContent>
   );
 }
+
+MessageDetail.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  chats: PropTypes.array.isRequired,
+  chatId: PropTypes.string.isRequired,
+  chat: PropTypes.object.isRequired,
+  myRole: PropTypes.number.isRequired,
+};
 
 export default MessageDetail;

@@ -1,4 +1,5 @@
 import React, { memo, useCallback, useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../appkeys";
@@ -58,5 +59,9 @@ function ApartmentMap({ geoLocation }) {
 
   return isLoaded ? renderMap() : <></>;
 }
+
+ApartmentMap.propTypes = {
+  geoLocation: PropTypes.object,
+};
 
 export default memo(ApartmentMap);

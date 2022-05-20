@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FlexColumn } from "../common/Components";
 import { Overlay, Modal, Header, CloseButton, Button } from "./ModalElements";
@@ -27,16 +28,20 @@ function ApplyJoinModal({ toggle }) {
     <Overlay out={false}>
       <Modal>
         <NewHeader>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={() => toggle()}>×</CloseButton>
         </NewHeader>
         <Body>
           <Maintext>已送出申請！</Maintext>
           <>待成員核准後，即可加入該租房隊伍</>
         </Body>
-        <NewButton onClick={() => toggle(false)}>關閉</NewButton>
+        <NewButton onClick={() => toggle()}>關閉</NewButton>
       </Modal>
     </Overlay>
   );
 }
+
+ApplyJoinModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};
 
 export default ApplyJoinModal;

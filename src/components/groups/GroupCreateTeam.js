@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { subColor } from "../../styles/GlobalStyle";
 import { FlexWrapper } from "../common/Components";
@@ -52,5 +53,12 @@ function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
     </>
   );
 }
+
+CreateTeam.propTypes = {
+  aid: PropTypes.string,
+  members: PropTypes.array,
+  groupId: PropTypes.string,
+  groupMemberDetail: PropTypes.array,
+};
 
 export default CreateTeam;

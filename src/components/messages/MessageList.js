@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { calcTimeGap } from "../../utils/calculate";
@@ -118,7 +119,7 @@ function List({ chats, setChatId, usage, toggle }) {
       setChatId(id);
     }
     if (usage === "modal") {
-      toggle("");
+      toggle();
     }
     navigate(`/messages/${id}`);
   }
@@ -192,5 +193,12 @@ function List({ chats, setChatId, usage, toggle }) {
     </>
   );
 }
+
+List.propTypes = {
+  chats: PropTypes.array.isRequired,
+  setChatId: PropTypes.func.isRequired,
+  usage: PropTypes.string,
+  toggle: PropTypes.func,
+};
 
 export default List;

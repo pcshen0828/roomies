@@ -176,18 +176,19 @@ const UnreadNot = styled.div`
 
 function GroupAndTeam() {
   const { currentUser } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [groups, setGroups] = useState([]);
   const [apartments, setApartments] = useState([]);
   const [teams, setTeams] = useState([]);
   const [teamId, setTeamId] = useState("");
   const [invitations, setInvitations] = useState([]);
-  const navigate = useNavigate();
-  const location = useLocation();
   const [loading, setLoading] = useState(true);
 
   const [saved, setSaved] = useState(false);
-  const [openConfirmJoin, setOpenConfirmJoin] = useState(false);
-  const [openConfirmReject, setOpenConfirmReject] = useState(false);
+  const [openConfirmType, setOpenConfirmType] = useState("");
+
   const [actionObject, setActionObject] = useState({
     groupId: "",
     groupMembers: [],
@@ -378,7 +379,7 @@ function GroupAndTeam() {
                         sender: invitation.sender.uid,
                       },
                     });
-                    setOpenConfirmJoin(true);
+                    setOpenConfirmType("join");
                   }}
                 >
                   確認
@@ -393,7 +394,7 @@ function GroupAndTeam() {
                         sender: invitation.sender.uid,
                       },
                     });
-                    setOpenConfirmReject(true);
+                    setOpenConfirmType("reject");
                   }}
                 >
                   拒絕
@@ -403,19 +404,19 @@ function GroupAndTeam() {
           ))
         : ""}
 
-      {openConfirmJoin && (
+      {openConfirmType === "join" && (
         <ConfirmBeforeActionModal
           message="確認加入？"
           action={confirmJoinGroup}
-          toggle={setOpenConfirmJoin}
+          toggle={() => setOpenConfirmType("")}
         />
       )}
 
-      {openConfirmReject && (
+      {openConfirmType === "reject" && (
         <ConfirmBeforeActionModal
           message="確認拒絕？"
           action={rejectJoinGroup}
-          toggle={setOpenConfirmReject}
+          toggle={() => setOpenConfirmType("")}
         />
       )}
 
@@ -512,12 +513,12 @@ function GroupAndTeam() {
                     </ActionButtons>
                     {teamId === team.id && (
                       <ManageTeamModal
-                        setSaved={setSaved}
+                        successfullySaved={() => setSaved(true)}
                         team={team}
                         group={apartments.find(
                           (item) => item.id === team.apartmentID
                         )}
-                        toggle={setTeamId}
+                        toggle={() => setTeamId("")}
                       />
                     )}
                   </TeamCard>

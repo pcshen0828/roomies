@@ -343,6 +343,18 @@ function Groups() {
     },
   ];
 
+  function switchModal(type) {
+    setOpenModalType(type);
+  }
+
+  function toggleDropDown() {
+    setDropdown((prev) => !prev);
+  }
+
+  function switchPostStatus(type) {
+    setPostStatus(type);
+  }
+
   return (
     <>
       <Wrapper
@@ -368,9 +380,9 @@ function Groups() {
         {openModalType === "invite" && (
           <InviteJoinGroupModal
             groupId={id}
-            toggle={setOpenModalType}
+            toggle={() => setOpenModalType(false)}
             groupMembers={groupMembers}
-            setSaved={setSaved}
+            setSaved={() => setSaved(true)}
           />
         )}
 
@@ -378,6 +390,7 @@ function Groups() {
           (status) =>
             openModalType === status.type && (
               <ConfirmBeforeActionModal
+                key={status.type}
                 message={status.message}
                 action={status.action}
                 toggle={setOpenModalType}
@@ -439,8 +452,8 @@ function Groups() {
               members={members}
               invitation={invitation}
               dropdown={dropdown}
-              setDropdown={setDropdown}
-              setOpenModalType={setOpenModalType}
+              toggle={toggleDropDown}
+              switchModal={switchModal}
             />
           )}
 
@@ -477,7 +490,7 @@ function Groups() {
                   <GroupPosts
                     currentUser={currentUser}
                     groupID={id}
-                    setPostStatus={setPostStatus}
+                    setPostStatus={switchPostStatus}
                   />
                 )}
                 {tab === "teams" && (

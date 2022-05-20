@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { CloseButton, Overlay } from "../modals/ModalElements";
 
@@ -27,11 +28,11 @@ const Image = styled.img`
   height: 80vh;
 `;
 
-export default function ImagesDisplayer({ images, index, toggle }) {
+export default function ImagesDisplayer({ images, toggle }) {
   return (
     <NewOverlay
       onClick={() => {
-        toggle(false);
+        toggle();
       }}
     >
       <Container onClick={(e) => e.stopPropagation()}>
@@ -55,3 +56,8 @@ export default function ImagesDisplayer({ images, index, toggle }) {
     </NewOverlay>
   );
 }
+
+ImagesDisplayer.propTypes = {
+  images: PropTypes.array,
+  toggle: PropTypes.func,
+};

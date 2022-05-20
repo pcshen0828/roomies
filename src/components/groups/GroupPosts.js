@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 
 import styled from "styled-components";
@@ -133,3 +134,9 @@ export default function GroupPosts({ currentUser, groupID, setPostStatus }) {
     </Wrapper>
   );
 }
+
+GroupPosts.propTypes = {
+  currentUser: PropTypes.object,
+  groupID: PropTypes.string,
+  setPostStatus: PropTypes.func,
+};

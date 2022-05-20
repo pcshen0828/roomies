@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Link, useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -95,7 +96,7 @@ const Buttons = styled(FlexWrapper)`
   margin-top: -20px;
 `;
 
-function ManageTeamModal({ team, group, toggle, setSaved }) {
+function ManageTeamModal({ team, group, toggle, successfullySaved }) {
   const { currentUser } = useAuth();
   const [openSchedule, setOpenSchedule] = useState(false);
 
@@ -177,8 +178,8 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
     if (status === 3) {
       api.createNoticeByType(currentUser.uid, user.uid, 3);
     }
-    toggle("");
-    setSaved(true);
+    toggle();
+    successfullySaved();
   }
 
   function updateTeamName() {
@@ -189,8 +190,8 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
         updateTime: time,
       })
       .then(() => {
-        toggle("");
-        setSaved(true);
+        toggle();
+        successfullySaved();
       });
   }
 
@@ -210,9 +211,9 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
           host={currentUser}
           team={team}
           apartment={group}
-          toggle={setOpenSchedule}
+          toggle={() => setOpenSchedule(false)}
           toggleParent={toggle}
-          setSaved={setSaved}
+          successfullySaved={successfullySaved}
         />
       )}
 
@@ -244,7 +245,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
               位成員
               <Status>{group?.roomiesCount}人成團</Status>
             </FlexWrapper>
-            <CloseButton onClick={() => toggle("")}>×</CloseButton>
+            <CloseButton onClick={toggle}>×</CloseButton>
           </Header>
           <NewBody>
             <SmallLabel>隊伍名稱</SmallLabel>
@@ -350,13 +351,7 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
                 儲存
               </Button>
             ) : (
-              <Button
-                onClick={() => {
-                  toggle("");
-                }}
-              >
-                關閉
-              </Button>
+              <Button onClick={toggle}>關閉</Button>
             )}
           </Buttons>
         </NewModal>
@@ -364,5 +359,12 @@ function ManageTeamModal({ team, group, toggle, setSaved }) {
     </>
   );
 }
+
+ManageTeamModal.propTypes = {
+  team: PropTypes.object.isRequired,
+  group: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+  successfullySaved: PropTypes.func.isRequired,
+};
 
 export default ManageTeamModal;

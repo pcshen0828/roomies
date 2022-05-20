@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FlexWrapper, RejectButton } from "../common/Components";
 import {
@@ -49,14 +50,14 @@ export default function ConfirmBeforeActionModal({ message, action, toggle }) {
       <NewModal>
         <NewHeader>
           <Title>{message}</Title>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </NewHeader>
         <ButtonsWrapper>
-          <RejectButton onClick={() => toggle(false)}>取消</RejectButton>
+          <RejectButton onClick={toggle}>取消</RejectButton>
           <ConfirmButton
             onClick={() => {
               action();
-              toggle(false);
+              toggle();
             }}
           >
             確認
@@ -66,3 +67,9 @@ export default function ConfirmBeforeActionModal({ message, action, toggle }) {
     </HigherOverlay>
   );
 }
+
+ConfirmBeforeActionModal.propTypes = {
+  message: PropTypes.string.isRequired,
+  action: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
+};

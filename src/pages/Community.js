@@ -185,6 +185,7 @@ function Community() {
     if (user) {
       intersectionObserver.observe(anchor.current);
     }
+    return () => intersectionObserver.disconnect();
   }, [user]);
 
   function searchUser(queryName) {

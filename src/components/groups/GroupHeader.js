@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { mainColor } from "../../styles/GlobalStyle";
 import {
@@ -137,8 +138,8 @@ export default function GroupHeader({
   members,
   invitation,
   dropdown,
-  setDropdown,
-  setOpenModalType,
+  toggle,
+  switchModal,
 }) {
   return (
     <HeaderWrapper>
@@ -165,14 +166,14 @@ export default function GroupHeader({
           <Buttons>
             <Button1
               onClick={() => {
-                setOpenModalType("confirmJoin");
+                switchModal("confirmJoin");
               }}
             >
               確認加入
             </Button1>
             <RejectButton
               onClick={() => {
-                setOpenModalType("reject");
+                switchModal("reject");
               }}
             >
               拒絕
@@ -186,7 +187,7 @@ export default function GroupHeader({
             <DropdownWrapper onClick={(e) => e.stopPropagation()}>
               <HasJoined
                 onClick={() => {
-                  setDropdown((prev) => !prev);
+                  toggle();
                 }}
               >
                 <Icon src={check} alt="" />
@@ -197,7 +198,7 @@ export default function GroupHeader({
                 <DropdownMenu>
                   <ExitButton
                     onClick={() => {
-                      setOpenModalType("quit");
+                      switchModal("quit");
                     }}
                   >
                     <Icon src={exit} alt="" />
@@ -208,7 +209,7 @@ export default function GroupHeader({
             </DropdownWrapper>
             <InviteButton
               onClick={() => {
-                setOpenModalType("invite");
+                switchModal("invite");
               }}
             >
               邀請
@@ -221,3 +222,13 @@ export default function GroupHeader({
     </HeaderWrapper>
   );
 }
+
+GroupHeader.propTypes = {
+  currentUser: PropTypes.object,
+  apartmentData: PropTypes.object,
+  members: PropTypes.array,
+  invitation: PropTypes.array,
+  dropdown: PropTypes.bool,
+  toggle: PropTypes.func,
+  switchModal: PropTypes.func,
+};

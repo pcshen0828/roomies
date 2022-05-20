@@ -136,13 +136,17 @@ function LoggedIn() {
     };
   }, [currentUser, location.pathname]);
 
+  function closeNavModal() {
+    setActiveIcon("");
+  }
+
   return (
     <>
-      {activeicon === "member" && <MemberModal setActiveIcon={setActiveIcon} />}
+      {activeicon === "member" && <MemberModal closeNavModal={closeNavModal} />}
       {activeicon === "message" && (
-        <MessageModal setActiveIcon={setActiveIcon} />
+        <MessageModal closeNavModal={closeNavModal} />
       )}
-      {activeicon === "notice" && <NoticeModal setActiveIcon={setActiveIcon} />}
+      {activeicon === "notice" && <NoticeModal closeNavModal={closeNavModal} />}
       <Wrapper>
         <WelcomeText
           onClick={() => {

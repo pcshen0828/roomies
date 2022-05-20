@@ -24,6 +24,7 @@ import BasicInfoModal from "../modals/SetUpBasicInfo";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 import Creatable from "react-select/creatable";
+import defaultScroll from "../../utils/defaultScroll";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -282,7 +283,7 @@ function TenantInfo() {
     {
       id: "phone",
       name: "聯絡電話",
-      placeholder: "1991/01/01",
+      placeholder: "0912345678",
       required: false,
     },
   ];
@@ -354,6 +355,7 @@ function TenantInfo() {
     });
     setIsLoading(false);
     setSaved(true);
+    defaultScroll();
   }
 
   function generateHobbyOptions() {
@@ -555,7 +557,11 @@ function TenantInfo() {
               type="checkbox"
               checked={basicInfo.status === 1 ? true : false}
               onChange={(e) => {
-                if (!jobTitle || !hobbies.length || !selfIntro) {
+                if (
+                  !basicInfo.jobTitle ||
+                  !basicInfo.hobbies.length ||
+                  !basicInfo.selfIntro
+                ) {
                   setError(
                     "公開個人資訊之前，請確認填寫興趣標籤、職稱和社群簡介喔！"
                   );

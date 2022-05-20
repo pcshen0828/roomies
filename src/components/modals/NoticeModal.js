@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -86,7 +87,7 @@ const Time = styled.div`
   margin-top: 5px;
 `;
 
-function NoticeModal({ setActiveIcon }) {
+function NoticeModal({ closeNavModal }) {
   const { currentUser } = useAuth();
   const [notices, setNotices] = useState([]);
   const stringLimit = 10;
@@ -160,7 +161,7 @@ function NoticeModal({ setActiveIcon }) {
   }
 
   return (
-    <NavModalOverlay out={false} onClick={() => setActiveIcon("")}>
+    <NavModalOverlay out={false} onClick={closeNavModal}>
       <NewModal onClick={(e) => e.stopPropagation()}>
         <Bold>通知</Bold>
         <SmallTitle>先前的通知</SmallTitle>
@@ -182,7 +183,7 @@ function NoticeModal({ setActiveIcon }) {
                   key={notice.id}
                   onClick={() => {
                     setNoticeStatusRead(notice.status, notice.id);
-                    setActiveIcon("");
+                    closeNavModal();
                   }}
                 >
                   <UnreadDot show={notice.status === 0} />
@@ -211,5 +212,9 @@ function NoticeModal({ setActiveIcon }) {
     </NavModalOverlay>
   );
 }
+
+NoticeModal.propTypes = {
+  closeNavModal: PropTypes.func.isRequired,
+};
 
 export default NoticeModal;

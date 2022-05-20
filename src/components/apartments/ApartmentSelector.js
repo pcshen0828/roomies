@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
 import {
   Bold,
@@ -263,5 +264,14 @@ function Selector({ filterData, dispatch, anchor }) {
     </>
   );
 }
+
+Selector.propTypes = {
+  filterData: PropTypes.object,
+  dispatch: PropTypes.func,
+  anchor: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(HTMLDivElement) }),
+  ]),
+};
 
 export default Selector;

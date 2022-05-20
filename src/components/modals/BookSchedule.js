@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
@@ -63,7 +64,7 @@ export default function BookScheduleModal({
   apartment,
   toggle,
   toggleParent,
-  setSaved,
+  successfullySaved,
 }) {
   const date = new Date();
   const isoDateTime = new Date(
@@ -169,7 +170,7 @@ export default function BookScheduleModal({
     }
     toggle(false);
     toggleParent("");
-    setSaved(true);
+    successfullySaved();
     setTimeout(() => {
       navigate("/profile/schedule/pending");
     }, 1000);
@@ -240,3 +241,12 @@ export default function BookScheduleModal({
     </HigherOverlay>
   );
 }
+
+BookScheduleModal.propTypes = {
+  host: PropTypes.object.isRequired,
+  team: PropTypes.object.isRequired,
+  apartment: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+  toggleParent: PropTypes.func.isRequired,
+  successfullySaved: PropTypes.func.isRequired,
+};

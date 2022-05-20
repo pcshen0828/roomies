@@ -150,7 +150,7 @@ function LandlordInfo() {
     {
       id: "phone",
       name: "聯絡電話",
-      placeholder: "1991/01/01",
+      placeholder: "0912345678",
       required: false,
     },
   ];

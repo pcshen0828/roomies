@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -99,7 +100,23 @@ export default function InviteJoinTeamModal({
     uids.forEach((uid) => {
       api.createNoticeByType(currentUser.uid, uid, 4);
     });
-    toggle(false);
+    toggle();
+  }
+
+  function updateInviteList(list) {
+    setInviteList(list);
+  }
+
+  function updateQueriedUsers(users) {
+    setQueriedUsers(users);
+  }
+
+  function updateQueryName(name) {
+    setQueryName(name);
+  }
+
+  function updateDefaultResponse(response) {
+    setDefaultResponse(response);
   }
 
   return (
@@ -114,18 +131,18 @@ export default function InviteJoinTeamModal({
       <NewModal>
         <Header>
           <Title>邀請新成員加入隊伍</Title>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={() => toggle()}>×</CloseButton>
         </Header>
         <NewBody>
           <SearchAndInviteToTeam
             groupMemberDetail={groupMemberDetail}
             currentUser={currentUser}
             inviteList={inviteList}
-            setInviteList={setInviteList}
-            setQueriedUsers={setQueriedUsers}
+            setInviteList={updateInviteList}
+            setQueriedUsers={updateQueriedUsers}
             queryName={queryName}
-            setQueryName={setQueryName}
-            setDefaultResponse={setDefaultResponse}
+            setQueryName={updateQueryName}
+            setDefaultResponse={updateDefaultResponse}
           />
           {queriedUsers.length ? (
             queriedUsers.map((user, index) => (
@@ -181,3 +198,9 @@ export default function InviteJoinTeamModal({
     </Overlay>
   );
 }
+
+InviteJoinTeamModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  team: PropTypes.object.isRequired,
+  groupMemberDetail: PropTypes.array.isRequired,
+};
