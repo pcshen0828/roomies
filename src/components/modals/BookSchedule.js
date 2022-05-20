@@ -188,7 +188,7 @@ export default function BookScheduleModal({
             endTime.slice(11, -3)
           }？`}
           action={bookSchedule}
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
         />
       )}
       <NewModal>

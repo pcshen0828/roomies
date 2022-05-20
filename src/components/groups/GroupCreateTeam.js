@@ -40,11 +40,11 @@ function CreateTeam({ aid, members, groupId, groupMemberDetail }) {
       {openNewTeamModal && (
         <NewTeamModal
           aid={aid}
-          toggle={setOpenNewTeamModal}
+          toggle={() => setOpenNewTeamModal(false)}
           members={members}
           groupId={groupId}
           groupMemberDetail={groupMemberDetail}
-          setSaved={setSaved}
+          successfullySaved={() => setSaved(true)}
         />
       )}
       <Wrapper title="組隊租屋" onClick={() => setOpenNewTeamModal(true)}>

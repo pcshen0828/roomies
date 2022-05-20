@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -78,7 +79,7 @@ function NewTeamModal({
   members,
   groupId,
   groupMemberDetail,
-  setSaved,
+  successfullySaved,
 }) {
   const [teamName, setTeamName] = useState("");
   const [queriedUsers, setQueriedUsers] = useState([]);
@@ -117,8 +118,8 @@ function NewTeamModal({
     uids.forEach((uid) => {
       api.createNoticeByType(currentUser.uid, uid, 4);
     });
-    setSaved(true);
-    toggle(false);
+    successfullySaved();
+    toggle();
   }
 
   return (
@@ -127,7 +128,7 @@ function NewTeamModal({
         <ConfirmBeforeActionModal
           message="確認建立租屋隊伍？"
           action={createTeam}
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
         />
       )}
       <Modal>
@@ -180,6 +181,8 @@ function NewTeamModal({
         </NewBody>
         <Button
           onClick={() => {
+            if (!queriedUsers.length) return;
+            if (!teamName) return;
             setOpenConfirm(true);
           }}
         >
@@ -189,5 +192,14 @@ function NewTeamModal({
     </Overlay>
   );
 }
+
+NewTeamModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  aid: PropTypes.string.isRequired,
+  members: PropTypes.array.isRequired,
+  groupId: PropTypes.string.isRequired,
+  groupMemberDetail: PropTypes.array.isRequired,
+  successfullySaved: PropTypes.func.isRequired,
+};
 
 export default NewTeamModal;

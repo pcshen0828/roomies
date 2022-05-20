@@ -125,7 +125,7 @@ export default function InviteJoinTeamModal({
         <ConfirmBeforeActionModal
           message="確認邀請？"
           action={inviteNewMember}
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
         />
       )}
       <NewModal>

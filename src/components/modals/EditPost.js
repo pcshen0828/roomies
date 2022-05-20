@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 
@@ -224,17 +225,17 @@ export default function EditPostModal({
     });
     setLoading(false);
     setUpdated("updated");
-    toggle(false);
+    toggle();
   }
 
   return (
     <Overlay>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
           message="尚未儲存，確認離開？"
           action={() => {
-            toggle(false);
+            toggle();
           }}
         />
       )}
@@ -321,3 +322,10 @@ export default function EditPostModal({
     </Overlay>
   );
 }
+
+EditPostModal.propTypes = {
+  currentUser: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+  post: PropTypes.object.isRequired,
+  setUpdated: PropTypes.func.isRequired,
+};

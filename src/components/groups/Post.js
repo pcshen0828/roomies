@@ -283,7 +283,7 @@ export default function Post({ post, currentUser, setPostStatus }) {
       {openEdit && (
         <EditPostModal
           post={post}
-          toggle={setOpenEdit}
+          toggle={() => setOpenEdit(false)}
           currentUser={currentUser}
           setUpdated={setPostStatus}
         />
@@ -291,7 +291,7 @@ export default function Post({ post, currentUser, setPostStatus }) {
       {openDeleteConfirm && (
         <ConfirmBeforeActionModal
           message="確認刪除？"
-          toggle={setOpenDeleteConfirm}
+          toggle={() => setOpenDeleteConfirm(false)}
           action={deletePost}
         />
       )}

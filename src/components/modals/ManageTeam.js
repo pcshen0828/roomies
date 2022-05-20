@@ -98,20 +98,15 @@ const Buttons = styled(FlexWrapper)`
 
 function ManageTeamModal({ team, group, toggle, successfullySaved }) {
   const { currentUser } = useAuth();
-  const [openSchedule, setOpenSchedule] = useState(false);
-
-  const [openConfirmJoin, setOpenConfirmJoin] = useState(false);
-  const [openConfirmApprove, setOpenConfirmApprove] = useState(false);
+  const [openModalType, setOpenModalType] = useState("");
   const [targetUser, setTargetUser] = useState("");
-
   const [otherMembers, setOtherMembers] = useState([]);
   const [name, setName] = useState(team.name);
   const host = team.members.find((user) => user.status === 0).uid;
   const selfStatus = team.members.find(
     (user) => user.uid === currentUser.uid
   ).status;
-
-  const [bookingStatus, setBookingStatus] = useState();
+  const [bookingStatus, setBookingStatus] = useState("");
 
   const navigate = useNavigate();
 
@@ -196,7 +191,7 @@ function ManageTeamModal({ team, group, toggle, successfullySaved }) {
   }
 
   function openBookScheduleModal() {
-    setOpenSchedule(true);
+    setOpenModalType("schedule");
   }
 
   function getUserStatus(userbase, userID) {
@@ -204,36 +199,40 @@ function ManageTeamModal({ team, group, toggle, successfullySaved }) {
     return status;
   }
 
+  function closeModal() {
+    setOpenModalType("");
+  }
+
   return (
     <>
-      {openSchedule && (
+      {openModalType === "schedule" && (
         <BookScheduleModal
           host={currentUser}
           team={team}
           apartment={group}
-          toggle={() => setOpenSchedule(false)}
+          toggle={closeModal}
           toggleParent={toggle}
           successfullySaved={successfullySaved}
         />
       )}
 
-      {openConfirmJoin && (
+      {openModalType === "confirmJoin" && (
         <ConfirmBeforeActionModal
           message="確認加入？"
           action={() => {
             approveJoinTeam(targetUser, 2);
           }}
-          toggle={setOpenConfirmJoin}
+          toggle={closeModal}
         />
       )}
 
-      {openConfirmApprove && (
+      {openModalType === "approveJoin" && (
         <ConfirmBeforeActionModal
           message="確認核准加入？"
           action={() => {
             approveJoinTeam(targetUser, 3);
           }}
-          toggle={setOpenConfirmApprove}
+          toggle={closeModal}
         />
       )}
 
@@ -295,7 +294,7 @@ function ManageTeamModal({ team, group, toggle, successfullySaved }) {
                     <ApproveButton
                       onClick={() => {
                         setTargetUser(user);
-                        setOpenConfirmJoin(true);
+                        setOpenModalType("confirmJoin");
                       }}
                     >
                       加入
@@ -308,7 +307,7 @@ function ManageTeamModal({ team, group, toggle, successfullySaved }) {
                     <ApproveButton
                       onClick={() => {
                         setTargetUser(user);
-                        setOpenConfirmApprove(true);
+                        setOpenModalType("approveJoin");
                       }}
                     >
                       核准

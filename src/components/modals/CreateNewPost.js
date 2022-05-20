@@ -220,7 +220,7 @@ export default function CreateNewPostModal({
     <Overlay>
       {openConfirm && (
         <ConfirmBeforeActionModal
-          toggle={setOpenConfirm}
+          toggle={() => setOpenConfirm(false)}
           message="尚未發佈，確認離開？"
           action={() => {
             images.forEach((image, index) => {
@@ -232,7 +232,7 @@ export default function CreateNewPostModal({
       )}
       {postConfirm && (
         <ConfirmBeforeActionModal
-          toggle={setPostConfirm}
+          toggle={() => setPostConfirm(false)}
           message="確認發佈？"
           action={() => {
             createNewPost();
