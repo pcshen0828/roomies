@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -13,6 +14,7 @@ import {
   Body,
 } from "./ModalElements";
 import { Button1, FlexColumn, FlexWrapper } from "../common/Components";
+import Loader from "../common/Loader";
 
 const NewModal = styled(Modal)`
   max-width: 700px;
@@ -106,52 +108,60 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
         </Header>
         <NewBody>
           <Members>
-            {teamMembers.length
-              ? teamMembers.map((teamMember, index) => (
-                  <Member key={index}>
-                    <FlexWrapper>
-                      <MemberLink to={`/users/${teamMember.uid}`}>
-                        <MemberImage src={teamMember.profileImage} />
-                      </MemberLink>
-                      <MemberInfo>
-                        <MemberName>{teamMember.alias}</MemberName>
-                        <>{teamMember.jobTitle}</>
-                      </MemberInfo>
-                    </FlexWrapper>
-                    <FlexWrapper>
-                      {checkUserInTeamStatus === 0 &&
-                      checkMemberStatus(teamMember.uid, 3) ? (
-                        <ActionButton onClick={() => addToTeam(teamMember.uid)}>
-                          核准
-                        </ActionButton>
-                      ) : checkUserInTeamStatus === 2 &&
-                        checkMemberStatus(teamMember.uid, 2) ? (
-                        <ActionButton onClick={() => addToTeam(teamMember.uid)}>
-                          加入
-                        </ActionButton>
-                      ) : (
-                        ""
-                      )}
-                      <MemberStatus>
-                        {checkMemberStatus(teamMember.uid, 0)
-                          ? "團主"
-                          : checkMemberStatus(teamMember.uid, 1)
-                          ? "成員"
-                          : checkMemberStatus(teamMember.uid, 2)
-                          ? "邀請中"
-                          : checkMemberStatus(teamMember.uid, 3)
-                          ? "待核准"
-                          : ""}
-                      </MemberStatus>
-                    </FlexWrapper>
-                  </Member>
-                ))
-              : "loading..."}
+            {teamMembers.length ? (
+              teamMembers.map((teamMember, index) => (
+                <Member key={index}>
+                  <FlexWrapper>
+                    <MemberLink to={`/users/${teamMember.uid}`}>
+                      <MemberImage src={teamMember.profileImage} />
+                    </MemberLink>
+                    <MemberInfo>
+                      <MemberName>{teamMember.alias}</MemberName>
+                      <>{teamMember.jobTitle}</>
+                    </MemberInfo>
+                  </FlexWrapper>
+                  <FlexWrapper>
+                    {checkUserInTeamStatus === 0 &&
+                    checkMemberStatus(teamMember.uid, 3) ? (
+                      <ActionButton onClick={() => addToTeam(teamMember.uid)}>
+                        核准
+                      </ActionButton>
+                    ) : checkUserInTeamStatus === 2 &&
+                      checkMemberStatus(teamMember.uid, 2) ? (
+                      <ActionButton onClick={() => addToTeam(teamMember.uid)}>
+                        加入
+                      </ActionButton>
+                    ) : (
+                      ""
+                    )}
+                    <MemberStatus>
+                      {checkMemberStatus(teamMember.uid, 0)
+                        ? "團主"
+                        : checkMemberStatus(teamMember.uid, 1)
+                        ? "成員"
+                        : checkMemberStatus(teamMember.uid, 2)
+                        ? "邀請中"
+                        : checkMemberStatus(teamMember.uid, 3)
+                        ? "待核准"
+                        : ""}
+                    </MemberStatus>
+                  </FlexWrapper>
+                </Member>
+              ))
+            ) : (
+              <Loader />
+            )}
           </Members>
         </NewBody>
       </NewModal>
     </Overlay>
   );
 }
+
+CheckTeamMembersModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  members: PropTypes.array.isRequired,
+  teamId: PropTypes.string.isRequired,
+};
 
 export default CheckTeamMembersModal;

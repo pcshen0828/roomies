@@ -280,16 +280,13 @@ function ApartmentDetail({ details, loading }) {
       {hasNotSignIn && <SignInFirstModal setToggle={setHasNotSignIn} />}
       {isActive && (
         <JoinConfirmModal
-          setIsActive={setIsActive}
+          toggle={() => setIsActive(false)}
           apartmentId={details[0].id}
           groupId={groupId}
         />
       )}
       {openWarning && (
-        <CompleteProfileBeforeJoinModal
-          toggle={setOpenWarning}
-          currentUser={currentUser}
-        />
+        <CompleteProfileBeforeJoinModal toggle={() => setOpenWarning(false)} />
       )}
       {loading ? (
         <Wrapper>

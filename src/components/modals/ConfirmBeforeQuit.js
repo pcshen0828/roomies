@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import styled from "styled-components";
 import { Overlay, Modal } from "./ModalElements";
@@ -51,5 +52,11 @@ function ConfirmBeforeQuitModal({ toggle, apartmentId, file }) {
     </HigherOverlay>
   );
 }
+
+ConfirmBeforeQuitModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  apartmentId: PropTypes.string.isRequired,
+  file: PropTypes.instanceOf(File),
+};
 
 export default ConfirmBeforeQuitModal;

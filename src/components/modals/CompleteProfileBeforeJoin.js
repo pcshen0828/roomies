@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { mainColor, subColor } from "../../styles/GlobalStyle";
@@ -45,22 +46,13 @@ const Alert = styled.img`
   align-self: center;
 `;
 
-export default function CompleteProfileBeforeJoinModal({
-  toggle,
-  currentUser,
-}) {
+export default function CompleteProfileBeforeJoinModal({ toggle }) {
   return (
     <Overlay>
       <Modal>
         <Header>
           <Title>貼心提醒</Title>
-          <CloseButton
-            onClick={() => {
-              toggle(false);
-            }}
-          >
-            ×
-          </CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <Alert src={alert} />
@@ -72,14 +64,12 @@ export default function CompleteProfileBeforeJoinModal({
           </div>
           <EditLink to="/profile/info/edit">前往會員專區進行編輯</EditLink>
         </NewBody>
-        <Button
-          onClick={() => {
-            toggle(false);
-          }}
-        >
-          關閉
-        </Button>
+        <Button onClick={toggle}>關閉</Button>
       </Modal>
     </Overlay>
   );
 }
+
+CompleteProfileBeforeJoinModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};

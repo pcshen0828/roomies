@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -34,7 +35,7 @@ const Checkbox = styled.input`
   margin-left: 20px;
 `;
 
-function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
+function JoinConfirmModal({ toggle, apartmentId, groupId }) {
   const { currentUser } = useAuth();
   const [isConfirmed, setIsConfirmed] = useState(false);
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
       <NewModal>
         <Header>
           <Title>租屋說明</Title>
-          <CloseButton onClick={() => setIsActive(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <Title>租屋流程</Title>
@@ -102,5 +103,11 @@ function JoinConfirmModal({ setIsActive, apartmentId, groupId }) {
     </Overlay>
   );
 }
+
+JoinConfirmModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  apartmentId: PropTypes.string.isRequired,
+  groupId: PropTypes.string.isRequired,
+};
 
 export default JoinConfirmModal;

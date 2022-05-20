@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
 import api from "../../utils/api";
 import { Firebase } from "../../utils/firebase";
 
@@ -212,7 +213,7 @@ export default function CreateNewPostModal({
       updateTime: time,
       isOnTop: false,
     });
-    toggle(false);
+    toggle();
     setPosted("posted");
   }
 
@@ -226,7 +227,7 @@ export default function CreateNewPostModal({
             images.forEach((image, index) => {
               deleteImage(index);
             });
-            toggle(false);
+            toggle();
           }}
         />
       )}
@@ -309,3 +310,10 @@ export default function CreateNewPostModal({
     </Overlay>
   );
 }
+
+CreateNewPostModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  currentUser: PropTypes.object.isRequired,
+  groupID: PropTypes.string.isRequired,
+  setPosted: PropTypes.func.isRequired,
+};

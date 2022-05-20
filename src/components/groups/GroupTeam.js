@@ -46,6 +46,8 @@ function GroupTeam({
 }) {
   const [teams, setTeams] = useState([]);
   const [hasCreated, setHasCreated] = useState();
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     let mounted = true;
     async function getTeams() {
@@ -57,6 +59,7 @@ function GroupTeam({
 
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
+        setLoading(true);
         const res = snapshot.docs.map((doc) => doc.data());
         setHasCreated(
           res.filter(
@@ -65,6 +68,7 @@ function GroupTeam({
               currentUser.uid
           ).length
         );
+        setLoading(false);
         setTeams(res);
       });
     }
@@ -83,9 +87,7 @@ function GroupTeam({
       </SubtitlesSmall>
       <TeamBlockWrapper>
         <TeamBlockCards>
-          {isOwner || hasCreated ? (
-            ""
-          ) : (
+          {!isOwner && !hasCreated && !loading && (
             <CreateTeam
               aid={aid}
               members={members}

@@ -81,7 +81,7 @@ export default function GroupPosts({ currentUser, groupID, setPostStatus }) {
     <Wrapper>
       {openPost && (
         <CreateNewPostModal
-          toggle={setOpenPost}
+          toggle={() => setOpenPost(false)}
           currentUser={currentUser}
           groupID={groupID}
           setPosted={setPostStatus}

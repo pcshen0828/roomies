@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { subColor } from "../../styles/GlobalStyle";
 
 import TextField from "@mui/material/TextField";
@@ -81,5 +82,15 @@ function MUITimePicker({ value, setValue }) {
     </LocalizationProvider>
   );
 }
+
+MUIDatePicker.propTypes = {
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
+};
+
+MUITimePicker.propTypes = {
+  value: PropTypes.string.isRequired,
+  setValue: PropTypes.func.isRequired,
+};
 
 export { MUIDatePicker, MUITimePicker };
