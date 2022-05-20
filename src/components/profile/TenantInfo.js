@@ -218,7 +218,6 @@ function TenantInfo() {
   const [allHobbies, setAllHobbies] = useState([]);
   const [allJobs, setAllJobs] = useState([]);
   const coverRef = useRef(null);
-  const [file, setFile] = useState();
 
   const {
     name,
@@ -395,8 +394,6 @@ function TenantInfo() {
           <ChangeProfileImageModal
             toggle={setOpenModal}
             setBasicInfo={setBasicInfo}
-            file={file}
-            setFile={setFile}
             setSaved={setSaved}
           />
         )}

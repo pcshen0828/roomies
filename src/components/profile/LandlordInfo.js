@@ -100,7 +100,6 @@ function LandlordInfo() {
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const [file, setFile] = useState();
   const { name, alias, gender, birthday, phone, selfIntro, profileImage } =
     currentUser;
 
@@ -165,8 +164,6 @@ function LandlordInfo() {
           <ChangeProfileImageModal
             toggle={setOpenModal}
             setBasicInfo={setBasicInfo}
-            file={file}
-            setFile={setFile}
             setSaved={setSaved}
           />
         )}

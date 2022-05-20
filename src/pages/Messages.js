@@ -180,10 +180,6 @@ function Messages() {
     );
   }
 
-  function pickChatRoom(id) {
-    setChatId(id);
-  }
-
   function Render() {
     if (loading) {
       return RenderLoader();
@@ -201,7 +197,7 @@ function Messages() {
 
             <MessageList>
               {loaded ? (
-                <List chats={chats} setChatId={pickChatRoom} usage="page" />
+                <List chats={chats} setChatId={setChatId} usage="page" />
               ) : (
                 Array.from(Array(3).keys()).map((loader, index) => (
                   <Skeleton

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Firebase } from "../../utils/firebase";
+import PropTypes from "prop-types";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 
@@ -108,14 +108,10 @@ const Loading = styled(Button1)`
   }
 `;
 
-function ChangeProfileImageModal({
-  toggle,
-  setBasicInfo,
-  file,
-  setFile,
-  setSaved,
-}) {
+function ChangeProfileImageModal({ toggle, setBasicInfo, setSaved }) {
   const { currentUser } = useAuth();
+  const [file, setFile] = useState();
+  const [croppedFile, setCroppedFile] = useState();
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const fileRef = useRef(null);
@@ -124,10 +120,13 @@ function ChangeProfileImageModal({
   const [isUploading, setIsUploading] = useState(false);
 
   function updateProfileImage() {
-    if (file) {
+    if (croppedFile) {
       setIsUploading(true);
       api
-        .uploadFileAndGetDownloadUrl(`users/${currentUser.uid}/profile`, file)
+        .uploadFileAndGetDownloadUrl(
+          `users/${currentUser.uid}/profile`,
+          croppedFile
+        )
         .then((res) => {
           setBasicInfo((prev) => ({
             ...prev,
@@ -137,13 +136,41 @@ function ChangeProfileImageModal({
             profileImage: res,
           });
           setIsUploading(false);
-          fileRef.current.value = null;
-          setFile(null);
-          setShowPreview(false);
+          resetFile();
           setSaved(true);
           toggle(false);
         });
     }
+  }
+
+  function getCroppedImage() {
+    if (editor.current) {
+      const img = editor.current.getImageScaledToCanvas();
+      img.toBlob((blob) => {
+        if (blob) {
+          const newUrl = URL.createObjectURL(blob);
+          fetch(newUrl)
+            .then((res) => res.blob())
+            .then((blobFile) => {
+              setCroppedFile(
+                new File([blobFile], "profile", {
+                  type: "image/png",
+                })
+              );
+              setUrl(newUrl);
+              setShowPreview(true);
+            });
+        }
+      });
+    }
+  }
+
+  function resetFile() {
+    setFile(null);
+    setCroppedFile(null);
+    setShowPreview(false);
+    setUrl("");
+    fileRef.current.value = null;
   }
 
   return (
@@ -171,7 +198,7 @@ function ChangeProfileImageModal({
           />
           {error && <Error>{error}</Error>}
           <EditorWrapper>
-            {file && !showPreview ? (
+            {file && !showPreview && (
               <FileWrapper>
                 <AvatarEditor
                   ref={editor}
@@ -184,46 +211,10 @@ function ChangeProfileImageModal({
                   rotate={0}
                 />
                 <ButtonWrapper>
-                  <ResetButton
-                    onClick={() => {
-                      setFile(null);
-                      setUrl("");
-                      fileRef.current.value = null;
-                    }}
-                  >
-                    重新選擇
-                  </ResetButton>
-                  <CheckButton
-                    onClick={() => {
-                      if (editor.current) {
-                        const img = editor.current.getImageScaledToCanvas();
-                        img.toBlob((blob) => {
-                          if (blob) {
-                            const newUrl = URL.createObjectURL(blob);
-                            fetch(newUrl)
-                              .then((res) => res.blob())
-                              .then((blobFile) => {
-                                setFile(
-                                  new File([blobFile], "profile", {
-                                    type: "image/png",
-                                  })
-                                );
-                              })
-                              .then(() => {
-                                setUrl(newUrl);
-                                setShowPreview(true);
-                              });
-                          }
-                        });
-                      }
-                    }}
-                  >
-                    確認裁切
-                  </CheckButton>
+                  <ResetButton onClick={resetFile}>重新選擇</ResetButton>
+                  <CheckButton onClick={getCroppedImage}>確認裁切</CheckButton>
                 </ButtonWrapper>
               </FileWrapper>
-            ) : (
-              ""
             )}
             {showPreview && (
               <FileWrapper>
@@ -231,10 +222,7 @@ function ChangeProfileImageModal({
                 <FileImage src={url} alt="" />
                 <ResetButton
                   onClick={() => {
-                    setFile(null);
-                    setUrl("");
-                    fileRef.current.value = null;
-                    setShowPreview(false);
+                    resetFile();
                   }}
                 >
                   重新選擇
@@ -258,5 +246,11 @@ function ChangeProfileImageModal({
     </NewOverlay>
   );
 }
+
+ChangeProfileImageModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  setBasicInfo: PropTypes.func.isRequired,
+  setSaved: PropTypes.func.isRequired,
+};
 
 export default ChangeProfileImageModal;
