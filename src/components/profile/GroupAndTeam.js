@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
-import defaultScroll from "../../utils/defaultScroll";
+import scrollToTop from "../../utils/scroll";
 
 import styled from "styled-components";
 import {
@@ -534,7 +534,7 @@ function GroupAndTeam() {
                   key={index}
                   onClick={() => {
                     setPaging(number + 1);
-                    defaultScroll();
+                    scrollToTop();
                   }}
                   active={paging === number + 1}
                 >

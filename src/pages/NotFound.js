@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 import styled from "styled-components";
 import {
   Wrapper,
@@ -33,7 +33,7 @@ const Image = styled(BackgroundImage)`
 
 function PageNotFound() {
   useEffect(() => {
-    defaultScroll();
+    scrollToTop();
   }, []);
   return (
     <>

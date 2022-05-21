@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import { Wrapper, Title } from "../components/common/Components";
@@ -163,7 +163,7 @@ function Apartments() {
   }, []);
 
   useEffect(() => {
-    defaultScroll();
+    scrollToTop();
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.intersectionRatio <= 0) return;

@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import { mainColor } from "../styles/GlobalStyle";
@@ -214,7 +214,7 @@ function Groups() {
 
   useEffect(() => {
     let mounted = true;
-    defaultScroll();
+    scrollToTop();
 
     const query1 = api.createQuery("groups", "id", "==", id);
     Firebase.onSnapshot(query1, (snapshot) => {

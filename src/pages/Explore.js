@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 import styled from "styled-components";
 import {
   Wrapper,
@@ -24,7 +24,7 @@ const NewWrapper = styled(Wrapper)`
 
 function Explore() {
   useEffect(() => {
-    defaultScroll();
+    scrollToTop();
   }, []);
   return (
     <>

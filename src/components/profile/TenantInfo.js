@@ -24,7 +24,7 @@ import BasicInfoModal from "../modals/SetUpBasicInfo";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 import Creatable from "react-select/creatable";
-import defaultScroll from "../../utils/defaultScroll";
+import scrollToTop from "../../utils/scroll";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -354,7 +354,7 @@ function TenantInfo() {
     });
     setIsLoading(false);
     setSaved(true);
-    defaultScroll();
+    scrollToTop();
   }
 
   function generateHobbyOptions() {

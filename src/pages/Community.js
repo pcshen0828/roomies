@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import {
@@ -173,7 +173,7 @@ function Community() {
   }, []);
 
   useEffect(() => {
-    defaultScroll();
+    scrollToTop();
     const intersectionObserver = new IntersectionObserver((entries) => {
       const entry = entries[0];
       if (entry.intersectionRatio <= 0) return;

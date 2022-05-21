@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useNavigate } from "react-router-dom";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 
 import styled, { keyframes } from "styled-components";
 import {
@@ -288,7 +288,7 @@ function Index() {
       setShow(true);
     }, 2000);
 
-    defaultScroll();
+    scrollToTop();
 
     return function cleanup() {
       clearTimeout(timeoutId);

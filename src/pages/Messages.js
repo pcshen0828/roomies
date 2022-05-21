@@ -3,7 +3,7 @@ import { Navigate, Link, useParams } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
-import defaultScroll from "../utils/defaultScroll";
+import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import {
@@ -98,7 +98,7 @@ function Messages() {
 
   useEffect(() => {
     let mounted = true;
-    defaultScroll();
+    scrollToTop();
 
     if (user) {
       const query = Firebase.query(
