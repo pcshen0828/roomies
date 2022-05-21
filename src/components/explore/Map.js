@@ -1,5 +1,5 @@
-import React, { memo, useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { memo, useCallback, useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import {
   GoogleMap,
   useLoadScript,
@@ -7,22 +7,21 @@ import {
   InfoWindow,
   StandaloneSearchBox,
   Circle,
-} from "@react-google-maps/api";
-import { googleMapsAppKey } from "../../appkeys";
-import api from "../../utils/api";
+} from "@react-google-maps/api"
+import api from "../../utils/api"
 
-import styled from "styled-components";
-import Skeleton from "react-loading-skeleton";
+import styled from "styled-components"
+import Skeleton from "react-loading-skeleton"
 
-import { BodyLeft, BodyRight, FlexColumn, Input } from "../common/Components";
-import Card from "../apartments/ApartmentCard";
+import { BodyLeft, BodyRight, FlexColumn, Input } from "../common/Components"
+import Card from "../apartments/ApartmentCard"
 
-const libraries = ["places"];
+const libraries = ["places"]
 
 const defaultCenter = {
   lat: 25.0384803,
   lng: 121.5323711,
-};
+}
 
 const options = {
   strokeColor: "#fff",
@@ -36,13 +35,13 @@ const options = {
   visible: true,
   radius: 450,
   zIndex: 1,
-};
+}
 
 const containerStyle = {
   width: "100%",
   height: "700px",
   border: "1px solid #dadada",
-};
+}
 
 const InfoModal = styled(FlexColumn)`
   width: 200px;
@@ -52,7 +51,7 @@ const InfoModal = styled(FlexColumn)`
   font-size: 14px;
   font-family: "Noto Sans TC", sans-serif;
   font-weight: 700;
-`;
+`
 
 const StyledLink = styled(Link)`
   color: #424b5a;
@@ -64,7 +63,7 @@ const StyledLink = styled(Link)`
   border: 1px solid #dadada;
   margin-top: 20px;
   font-weight: 400;
-`;
+`
 
 const SearchBox = styled(Input)`
   width: 100%;
@@ -74,7 +73,7 @@ const SearchBox = styled(Input)`
   padding-left: 10px;
   margin: 0;
   background-color: #fff;
-`;
+`
 
 const Cards = styled.div`
   display: grid;
@@ -93,72 +92,72 @@ const Cards = styled.div`
   }
   height: 648px;
   overflow-y: auto;
-`;
+`
 
 function MyMap() {
-  const [map, setMap] = useState(null);
-  const [center, setCenter] = useState(defaultCenter);
-  const [circleCenter, setCircleCenter] = useState(defaultCenter);
-  const [zoom, setZoom] = useState(11);
-  const [marker, setMarker] = useState(center);
-  const [apartments, setApartments] = useState([]);
-  const [allData, setAllData] = useState([]);
-  const [searchBox, setSearchBox] = useState(null);
-  const [query, setQuery] = useState("");
+  const [map, setMap] = useState(null)
+  const [center, setCenter] = useState(defaultCenter)
+  const [circleCenter, setCircleCenter] = useState(defaultCenter)
+  const [zoom, setZoom] = useState(11)
+  const [marker, setMarker] = useState(center)
+  const [apartments, setApartments] = useState([])
+  const [allData, setAllData] = useState([])
+  const [searchBox, setSearchBox] = useState(null)
+  const [query, setQuery] = useState("")
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true)
 
   const { isLoaded, loadError } = useLoadScript({
     id: "google-map-script",
-    googleMapsApiKey: googleMapsAppKey,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
     language: "zh-TW",
-  });
+  })
 
   const onLoad = useCallback(function callback(map) {
-    setMap(map);
-  }, []);
+    setMap(map)
+  }, [])
 
   const onUnmount = useCallback(function callback(map) {
-    setMap(null);
-  }, []);
+    setMap(null)
+  }, [])
 
   const searchBoxOnLoad = (ref) => {
-    setSearchBox(ref);
-  };
+    setSearchBox(ref)
+  }
   const onPlacesChanged = () => {
-    const place = searchBox.getPlaces()[0];
+    const place = searchBox.getPlaces()[0]
     const newCenter = {
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng(),
-    };
-    setCenter(newCenter);
-    setCircleCenter(newCenter);
-    setZoom(16);
-    setQuery("");
+    }
+    setCenter(newCenter)
+    setCircleCenter(newCenter)
+    setZoom(16)
+    setQuery("")
     setApartments(
       allData.filter(
         (item) =>
           item.geoLocation.lat === newCenter.lat &&
           item.geoLocation.lng === newCenter.lng
       )
-    );
-  };
+    )
+  }
 
   useEffect(() => {
-    let mounted = true;
+    let mounted = true
     api
       .getDataWithSingleQuery("apartments", "status", "==", 1)
       .then((apartments) => {
-        if (!mounted) return;
-        setAllData(apartments);
-        setApartments(apartments);
-        setLoading(false);
-      });
+        if (!mounted) return
+        setAllData(apartments)
+        setApartments(apartments)
+        setLoading(false)
+      })
     return function cleanup() {
-      mounted = false;
-    };
-  }, []);
+      mounted = false
+    }
+  }, [])
 
   const renderMap = () => {
     return (
@@ -203,19 +202,19 @@ function MyMap() {
                 key={apartment.id}
                 position={apartment.geoLocation}
                 onClick={(cluster) => {
-                  setMarker(apartment.geoLocation);
+                  setMarker(apartment.geoLocation)
                   setApartments(
                     allData.filter(
                       (item) => item.geoLocation === apartment.geoLocation
                     )
-                  );
+                  )
                 }}
               >
                 {marker === apartment.geoLocation ? (
                   <InfoWindow
                     onCloseClick={() => {
-                      setMarker(null);
-                      setApartments(allData);
+                      setMarker(null)
+                      setApartments(allData)
                     }}
                   >
                     <InfoModal>
@@ -232,14 +231,14 @@ function MyMap() {
           </GoogleMap>
         </BodyRight>
       </>
-    );
-  };
-
-  if (loadError) {
-    return <div>Map cannot be loaded right now, sorry.</div>;
+    )
   }
 
-  return isLoaded ? renderMap() : null;
+  if (loadError) {
+    return <div>Map cannot be loaded right now, sorry.</div>
+  }
+
+  return isLoaded ? renderMap() : null
 }
 
-export default memo(MyMap);
+export default memo(MyMap)

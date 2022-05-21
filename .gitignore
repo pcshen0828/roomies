@@ -4,8 +4,10 @@
 .firebase
 
 # Google maps app key
-/src/appkeys.js
+.env
 
+# Firebase config
+/src/firebaseConfig.js
 
 # dependencies
 /node_modules

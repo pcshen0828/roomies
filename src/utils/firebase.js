@@ -1,13 +1,12 @@
-import * as firebase from "firebase/app";
-import { firebaseConfig } from "../appkeys";
-
+import * as firebase from "firebase/app"
+import { firebaseConfig } from "./firebaseConfig"
 import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-} from "firebase/auth";
+} from "firebase/auth"
 
 import {
   getFirestore,
@@ -29,7 +28,7 @@ import {
   startAt,
   startAfter,
   endAt,
-} from "firebase/firestore";
+} from "firebase/firestore"
 
 import {
   getStorage,
@@ -39,10 +38,10 @@ import {
   getDownloadURL,
   listAll,
   deleteObject,
-} from "firebase/storage";
+} from "firebase/storage"
 
-const app = firebase.initializeApp(firebaseConfig);
-const storage = getStorage();
+const app = firebase.initializeApp(firebaseConfig)
+const storage = getStorage()
 
 const Firebase = {
   firebase,
@@ -77,6 +76,6 @@ const Firebase = {
   getDownloadURL,
   listAll,
   deleteObject,
-};
+}
 
-export { Firebase };
+export { Firebase }
