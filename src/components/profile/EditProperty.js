@@ -94,7 +94,6 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
           setFacilities={setFacilities}
           furnitures={furnitures}
           setFurnitures={setFurnitures}
-          handleError={setWarning}
         />
       ),
     },
@@ -119,7 +118,6 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
           apartment={apartment}
           images={images}
           setImages={setImages}
-          handleError={setWarning}
         />
       ),
     },

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FlexWrapper, Bold, SmallTitle } from "../common/Components";
@@ -57,7 +58,7 @@ export default function EventInfoWindowModal({
         left: `${coordinates.x - 280}px`,
       }}
     >
-      <Close onClick={() => toggle(false)}>×</Close>
+      <Close onClick={toggle}>×</Close>
       <div>{eventInfo.title}</div>
       <SmallTitle>成員</SmallTitle>
       <MemberBar key={host.uid}>
@@ -87,3 +88,9 @@ export default function EventInfoWindowModal({
     </EventInfoWindow>
   );
 }
+
+EventInfoWindowModal.propTypes = {
+  coordinates: PropTypes.object.isRequired,
+  eventInfo: PropTypes.object.isRequired,
+  toggle: PropTypes.func.isRequired,
+};

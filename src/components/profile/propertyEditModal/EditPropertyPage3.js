@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { checkEventKeyIsNaN } from "../../../utils/calculate";
 
@@ -130,5 +131,11 @@ function EditPropertyPage3({ otherInfo, setOtherInfo, handleError }) {
     </>
   );
 }
+
+EditPropertyPage3.propTypes = {
+  otherInfo: PropTypes.array.isRequired,
+  setOtherInfo: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
+};
 
 export default EditPropertyPage3;

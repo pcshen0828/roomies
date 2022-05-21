@@ -34,7 +34,7 @@ function Schedule({ events }) {
         <EventInfoWindowModal
           coordinates={coordinates}
           eventInfo={eventInfo}
-          toggle={setShowModal}
+          toggle={() => setShowModal(false)}
         />
       )}
       <FullCalendar

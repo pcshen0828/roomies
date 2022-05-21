@@ -17,6 +17,7 @@ import {
   Required,
   Select,
   FlexColumn,
+  BackgroundImage,
 } from "../../common/Components";
 import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
 import { checkEventKeyIsNaN } from "../../../utils/calculate";
@@ -25,11 +26,7 @@ const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
 `;
 
-const Image = styled.div`
-  background: ${(props) => (props.src ? `url(${props.src})` : "#f2f5f7")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+const Image = styled(BackgroundImage)`
   width: 320px;
   height: 180px;
   margin: 0 10px 10px 0;

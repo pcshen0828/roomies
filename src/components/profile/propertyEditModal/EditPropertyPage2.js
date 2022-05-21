@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { mainColor, subColor } from "../../../styles/GlobalStyle";
 import {
@@ -31,7 +32,6 @@ function EditPropertyPage2({
   setFacilities,
   furnitures,
   setFurnitures,
-  handleError,
 }) {
   return (
     <>
@@ -110,5 +110,14 @@ function EditPropertyPage2({
     </>
   );
 }
+
+EditPropertyPage2.propTypes = {
+  conditions: PropTypes.array.isRequired,
+  setConditions: PropTypes.func.isRequired,
+  facilities: PropTypes.array.isRequired,
+  setFacilities: PropTypes.func.isRequired,
+  furnitures: PropTypes.array.isRequired,
+  setFurnitures: PropTypes.func.isRequired,
+};
 
 export default EditPropertyPage2;

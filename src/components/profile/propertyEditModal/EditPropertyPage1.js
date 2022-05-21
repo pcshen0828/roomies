@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-
+import PropTypes from "prop-types";
 import api from "../../../utils/api";
 import {
   GoogleMap,
@@ -20,17 +20,15 @@ import {
   Required,
   Select,
   FlexColumn,
+  HiddenInput,
+  BackgroundImage,
 } from "../../common/Components";
 
 const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
 `;
 
-const Image = styled.div`
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+const Image = styled(BackgroundImage)`
   width: 320px;
   height: 200px;
   margin: 0 10px 10px 0;
@@ -49,10 +47,6 @@ const ChooseImageButton = styled.label`
   &:hover {
     background: #dadada;
   }
-`;
-
-const HiddenInputFilePicker = styled.input`
-  display: none;
 `;
 
 const SearchBox = styled.input`
@@ -125,10 +119,10 @@ function EditPropertyPage1({ basicInfo, setBasicInfo, handleError }) {
         `apartments/${basicInfo.id}/cover/cover`,
         file
       )
-      .then((res) => {
+      .then((downloadUrl) => {
         setBasicInfo({
           ...basicInfo,
-          coverImage: res,
+          coverImage: downloadUrl,
           coverFile: file,
         });
         coverFileRef.current.value = null;
@@ -143,7 +137,7 @@ function EditPropertyPage1({ basicInfo, setBasicInfo, handleError }) {
       <CoverImageDisplayer>
         <Image src={basicInfo.coverImage} />
         <ChooseImageButton htmlFor="coverImage">重新選擇</ChooseImageButton>
-        <HiddenInputFilePicker
+        <HiddenInput
           id="coverImage"
           ref={coverFileRef}
           type="file"
@@ -272,5 +266,11 @@ function EditPropertyPage1({ basicInfo, setBasicInfo, handleError }) {
     </>
   );
 }
+
+EditPropertyPage1.propTypes = {
+  basicInfo: PropTypes.object.isRequired,
+  setBasicInfo: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
+};
 
 export default EditPropertyPage1;

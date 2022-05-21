@@ -5,6 +5,7 @@ import api from "../../utils/api";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Scrollbar, A11y } from "swiper";
+import { BackgroundImage } from "../common/Components";
 
 const Wrapper = styled(Swiper)`
   width: calc(60% - 30px);
@@ -18,16 +19,12 @@ const Wrapper = styled(Swiper)`
   }
 `;
 
-const Image = styled.div`
+const Image = styled(BackgroundImage)`
   width: 100%;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 `;
 
 function Carousel({ id }) {

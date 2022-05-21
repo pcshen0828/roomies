@@ -15,6 +15,7 @@ import {
   Button,
 } from "./ModalElements";
 import {
+  BackgroundImage,
   Bold,
   Error,
   FlexWrapper,
@@ -140,13 +141,9 @@ const ImageContainer = styled.div`
   }
 `;
 
-const Image = styled.div`
+const Image = styled(BackgroundImage)`
   width: 100%;
   height: 100%;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 `;
 
 const NewError = styled(Error)`

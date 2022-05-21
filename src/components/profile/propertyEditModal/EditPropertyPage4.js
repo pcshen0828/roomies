@@ -1,15 +1,18 @@
 import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../../utils/firebase";
 import api from "../../../utils/api";
 import styled from "styled-components";
 import { subColor } from "../../../styles/GlobalStyle";
-import { SmallTitle, FlexWrapper, Error } from "../../common/Components";
+import {
+  SmallTitle,
+  FlexWrapper,
+  Error,
+  HiddenInput,
+  BackgroundImage,
+} from "../../common/Components";
 
-const Image = styled.div`
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+const Image = styled(BackgroundImage)`
   width: 320px;
   height: 200px;
   margin: 0 10px 10px 0;
@@ -41,10 +44,6 @@ const ImageContainer = styled.div`
 const ImagesDisplayer = styled(FlexWrapper)`
   width: 95%;
   overflow-x: auto;
-`;
-
-const HiddenInputFilePicker = styled.input`
-  display: none;
 `;
 
 const UploadNewImage = styled.label`
@@ -88,7 +87,7 @@ function EditPropertyPage4({ apartment, images, setImages }) {
       `apartments/${apartment.id}/${images[indexToDelete].name}`
     );
     Firebase.deleteObject(desertRef).catch((error) => {
-      console.log(error);
+      setError(error);
     });
   }
   return (
@@ -104,7 +103,7 @@ function EditPropertyPage4({ apartment, images, setImages }) {
             </ImageContainer>
           ))}
           <UploadNewImage htmlFor="images">+</UploadNewImage>
-          <HiddenInputFilePicker
+          <HiddenInput
             id="images"
             type="file"
             accept="image/*"
@@ -118,5 +117,11 @@ function EditPropertyPage4({ apartment, images, setImages }) {
     </>
   );
 }
+
+EditPropertyPage4.propTypes = {
+  apartment: PropTypes.object.isRequired,
+  images: PropTypes.array.isRequired,
+  setImages: PropTypes.func.isRequired,
+};
 
 export default EditPropertyPage4;

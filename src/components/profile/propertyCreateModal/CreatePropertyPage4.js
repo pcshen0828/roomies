@@ -1,15 +1,17 @@
 import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../../utils/firebase";
 import api from "../../../utils/api";
 import styled from "styled-components";
 import { subColor } from "../../../styles/GlobalStyle";
-import { SmallTitle, FlexWrapper, Error } from "../../common/Components";
+import {
+  SmallTitle,
+  FlexWrapper,
+  Error,
+  BackgroundImage,
+} from "../../common/Components";
 
-const Image = styled.div`
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+const Image = styled(BackgroundImage)`
   width: 320px;
   height: 200px;
   margin: 0 10px 10px 0;
@@ -89,7 +91,7 @@ function CreatePropertyPage4({ id, images, setImages }) {
       `apartments/${id}/${images[indexToDelete].name}`
     );
     Firebase.deleteObject(desertRef).catch((error) => {
-      console.log(error);
+      setError(error);
     });
   }
 
@@ -120,5 +122,11 @@ function CreatePropertyPage4({ id, images, setImages }) {
     </>
   );
 }
+
+CreatePropertyPage4.propTypes = {
+  id: PropTypes.string.isRequired,
+  images: PropTypes.array.isRequired,
+  setImages: PropTypes.func.isRequired,
+};
 
 export default CreatePropertyPage4;

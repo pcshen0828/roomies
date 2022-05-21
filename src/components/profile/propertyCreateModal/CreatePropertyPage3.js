@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { checkEventKeyIsNaN } from "../../../utils/calculate";
 
@@ -132,5 +133,11 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
     </>
   );
 }
+
+CreatePropertyPage3.apply.propTypes = {
+  otherInfo: PropTypes.array.isRequired,
+  setOtherInfo: PropTypes.func.isRequired,
+  handleError: PropTypes.func.isRequired,
+};
 
 export default CreatePropertyPage3;

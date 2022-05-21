@@ -19,6 +19,8 @@ import {
   FlexWrap,
   PagingList,
   PagingItem,
+  BackgroundImage,
+  ProfileImage,
 } from "../common/Components";
 import ManageTeamModal from "../modals/ManageTeam";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
@@ -67,16 +69,12 @@ const GroupCard = styled(FlexWrapper)`
   }
 `;
 
-const GroupImg = styled.div`
+const GroupImg = styled(BackgroundImage)`
   width: 80px;
   height: 80px;
   margin-right: 10px;
   border-radius: 10px;
   flex-shrink: 0;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   @media screen and (max-width: 767.98px) {
     width: 50px;
     height: 50px;
@@ -113,16 +111,11 @@ const InnerWrapper = styled(FlexWrapper)`
   }
 `;
 
-const SenderProfile = styled.div`
+const SenderProfile = styled(ProfileImage)`
   width: 60px;
   height: 60px;
-  border-radius: 50%;
   margin-right: 10px;
   flex-shrink: 0;
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   @media screen and (max-width: 767.98px) {
     display: none;
   }

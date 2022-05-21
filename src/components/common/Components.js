@@ -580,6 +580,13 @@ const ProfileImage = styled.div`
   background-repeat: no-repeat;
 `;
 
+const BackgroundImage = styled.div`
+  background: ${(props) => (props.src ? `url(${props.src})` : "")};
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
+
 const BodyInnerWrapper = styled(FlexWrapper)`
   position: relative;
   align-items: flex-start;
@@ -731,6 +738,7 @@ export {
   ConfirmButton,
   Status,
   ProfileImage,
+  BackgroundImage,
   BodyInnerWrapper,
   StepsWrapper,
   StepIndicator,
