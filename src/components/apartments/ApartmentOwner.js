@@ -10,8 +10,8 @@ import {
   Button1,
   ProfileImage,
 } from "../common/Components";
-import SendMessageLandlordModal from "../modals/SendMessageLandlord";
 import SignInFirstModal from "../modals/SignInFirst";
+import SendMessageModal from "../modals/SendMessage";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import phone from "../../images/phone.svg";
 
@@ -83,10 +83,11 @@ export default function OwnerCard({ owner, currentUser, page }) {
         <SuccessfullySavedModal toggle={setSaved} message="訊息已發送！" />
       )}
       {openModal && (
-        <SendMessageLandlordModal
+        <SendMessageModal
           toggle={() => setOpenModal(false)}
           objectId={ownerInfo?.uid}
           successfullySaved={() => setSaved(true)}
+          receiver="owner"
         />
       )}
       {openSignin && <SignInFirstModal toggle={() => setOpenSignin(false)} />}

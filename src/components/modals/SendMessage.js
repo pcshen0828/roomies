@@ -53,9 +53,14 @@ const Button = styled(Button1)`
   margin: 20px 20px 40px 0;
 `;
 
-function SendMessageModal({ toggle, objectId, successfullySaved }) {
+const defaultMessagesToOwner = [
+  "您好，我想了解目前房源的出租情形",
+  "您好，我想詢問房源詳細的設備",
+];
+const defaultMessagesToOtherUser = ["Hi，你好！", "我正在尋找室友"];
+
+function SendMessageModal({ toggle, objectId, successfullySaved, receiver }) {
   const { currentUser } = useAuth();
-  const defaultmessages = ["Hi，你好！", "我正在尋找室友"];
   const [message, setMessage] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -69,23 +74,26 @@ function SendMessageModal({ toggle, objectId, successfullySaved }) {
     }
     api
       .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
-      .then((res) => {
-        return res.filter((data) => data.userIDs.includes(currentUser.uid))[0];
+      .then((chats) => {
+        return chats.filter((chat) =>
+          chat.userIDs.includes(currentUser.uid)
+        )[0];
       })
-      .then((res) => {
-        if (res) {
+      .then((chat) => {
+        if (chat) {
           const newMessage = {
             content: message,
-            sender: res.members.find((member) => member.uid === currentUser.uid)
-              .role,
+            sender: chat.members.find(
+              (member) => member.uid === currentUser.uid
+            ).role,
             timestamp: time,
           };
-          api.updateDocData("chats", res.id, {
+          api.updateDocData("chats", chat.id, {
             latestMessage: newMessage,
             updateTime: time,
             status: 0,
           });
-          api.addNewDoc("chats/" + res.id + "/messages", newMessage);
+          api.addNewDoc("chats/" + chat.id + "/messages", newMessage);
           clearMessageAndCloseModal();
         } else {
           const newMessage = {
@@ -132,7 +140,10 @@ function SendMessageModal({ toggle, objectId, successfullySaved }) {
           onChange={(e) => setMessage(e.target.value)}
         />
         <DefaultMessages>
-          {defaultmessages.map((message, index) => (
+          {(receiver === "otherUser"
+            ? defaultMessagesToOtherUser
+            : defaultMessagesToOwner
+          ).map((message, index) => (
             <DefaultMessage
               key={index}
               value={message}
@@ -158,6 +169,7 @@ SendMessageModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   objectId: PropTypes.string.isRequired,
   successfullySaved: PropTypes.func.isRequired,
+  receiver: PropTypes.string.isRequired,
 };
 
 export default SendMessageModal;

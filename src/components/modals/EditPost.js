@@ -165,70 +165,48 @@ export default function EditPostModal({
   const [images, setImages] = useState(post.images);
   const newImage = useRef(null);
   const [error, setError] = useState("");
-
-  const [newFiles, setNewFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  function displayFileImage(file) {
+  function uploadImageFile(file) {
     if (!file) return;
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案過大，請重新上傳");
       return;
     }
-    setNewFiles((prev) => [...prev, file]);
-    const newUrl = URL.createObjectURL(file);
-    setImages((prev) => [...prev, { name: file.name, url: newUrl }]);
-    setError("");
-    newImage.current.value = null;
+    api
+      .uploadFileAndGetDownloadUrl(`posts/${post.id}/${file.name}`, file)
+      .then((downloadUrl) => {
+        setImages((prev) => [...prev, { name: file.name, url: downloadUrl }]);
+      })
+      .then(() => {
+        setError("");
+        newImage.current.value = null;
+      });
   }
 
-  function hideImage(indexToHide, fileName) {
-    setImages((prev) => prev.filter((image, index) => index !== indexToHide));
-    setNewFiles((prev) => [...prev.filter((file) => file.name !== fileName)]);
+  function deleteImage(indexToDelete) {
+    setImages((prev) => prev.filter((image, index) => index !== indexToDelete));
+    const desertRef = Firebase.ref(
+      Firebase.storage,
+      `posts/${post.id}/${images[indexToDelete].name}`
+    );
+    Firebase.deleteObject(desertRef).catch((error) => {
+      console.log(error);
+    });
   }
 
   function updatePost() {
     setLoading(true);
     const time = Firebase.Timestamp.fromDate(new Date());
 
-    const names = images.map((image) => image.name);
-    post.images
-      .filter((image) => !names.includes(image.name))
-      .forEach((image) => {
-        const desertRef = Firebase.ref(
-          Firebase.storage,
-          `posts/${post.id}/${image.name}`
-        );
-        Firebase.deleteObject(desertRef).catch((error) => {
-          console.log(error);
-        });
-      });
-
-    let promises = [];
-
-    newFiles.forEach((file) => {
-      promises.push(
-        api
-          .uploadFileAndGetDownloadUrl(`posts/${post.id}/${file.name}`, file)
-          .then((downloadUrl) => {
-            setImages((prev) => [
-              ...prev.filter((image) => image.name !== file.name),
-              { name: file.name, url: downloadUrl },
-            ]);
-          })
-      );
+    api.updateDocData("posts", post.id, {
+      content,
+      images,
+      updateTime: time,
     });
-
-    Promise.all(promises).then(() => {
-      api.updateDocData("posts", post.id, {
-        content,
-        images,
-        updateTime: time,
-      });
-      setLoading(false);
-      setUpdated("updated");
-      toggle();
-    });
+    setLoading(false);
+    setUpdated("updated");
+    toggle();
   }
 
   return (
@@ -280,7 +258,7 @@ export default function EditPostModal({
                 {images.map((image, index) => (
                   <ImageContainer key={index}>
                     <Image src={image.url} />
-                    <DeleteButton onClick={() => hideImage(index, image.name)}>
+                    <DeleteButton onClick={() => deleteImage(index)}>
                       ×
                     </DeleteButton>
                   </ImageContainer>
@@ -302,7 +280,7 @@ export default function EditPostModal({
           ref={newImage}
           onChange={(e) => {
             const file = e.target.files[0];
-            displayFileImage(file);
+            uploadImageFile(file);
           }}
         />
         {error && <NewError>{error}</NewError>}

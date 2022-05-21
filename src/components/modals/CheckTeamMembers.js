@@ -78,7 +78,7 @@ function CheckTeamMembersModal({ toggle, members, teamId }) {
           "in",
           members.map((member) => member.uid)
         )
-        .then((res) => setTeamMembers(res));
+        .then((users) => setTeamMembers(users));
     }
     getTeamsMembers();
     return function cleanup() {

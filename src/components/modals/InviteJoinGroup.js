@@ -91,8 +91,8 @@ export default function InviteJoinGroupModal({
   useEffect(() => {
     api
       .getDataWithSingleQuery("groupInvitations", "groupId", "==", groupId)
-      .then((res) => {
-        setPendingList(res.map((list) => list.receiver));
+      .then((list) => {
+        setPendingList(list.map((invitation) => invitation.receiver));
       });
   }, []);
 

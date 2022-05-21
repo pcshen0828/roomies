@@ -119,21 +119,21 @@ function ManageTeamModal({ team, group, toggle, successfullySaved }) {
         "in",
         team.members.map((user) => user.uid)
       )
-      .then((res) => {
+      .then((queriedUsers) => {
         if (!mounted) return;
-        setOtherMembers(res);
+        setOtherMembers(queriedUsers);
       });
 
     function checkBookingQualification() {
       api
         .getDataWithSingleQuery("schedules", "team", "==", team.id)
-        .then((res) => {
-          const unExpiredEvents = res.filter(
+        .then((schedules) => {
+          const unExpiredEvents = schedules.filter(
             (schedule) =>
               schedule.status === 1 &&
               new Date(schedule.end).getTime() >= new Date().getTime()
           );
-          const pendingEvents = res.filter(
+          const pendingEvents = schedules.filter(
             (schedule) =>
               schedule.status === 0 &&
               new Date(schedule.end).getTime() >= new Date().getTime()

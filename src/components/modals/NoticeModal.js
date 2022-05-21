@@ -122,9 +122,9 @@ function NoticeModal({ closeNavModal }) {
       Firebase.orderBy("createTime", "desc")
     );
     Firebase.onSnapshot(query, (snapShot) => {
-      const res = snapShot.docs.map((doc) => doc.data());
+      const notifications = snapShot.docs.map((doc) => doc.data());
       let promises = [];
-      res.forEach((notice) => {
+      notifications.forEach((notice) => {
         let content = {
           sender: {},
           time: calcTimeGap(notice.createTime.toDate()),
@@ -135,16 +135,17 @@ function NoticeModal({ closeNavModal }) {
         promises.push(
           api
             .getDataWithSingleQuery("users", "uid", "==", notice.sender)
-            .then((res) => {
-              content.sender.alias = res[0].alias;
-              content.sender.profileImage = res[0].profileImage;
+            .then((queriedUsers) => {
+              const user = queriedUsers[0];
+              content.sender.alias = user.alias;
+              content.sender.profileImage = user.profileImage;
               return content;
             })
         );
       });
-      Promise.all(promises).then((res) => {
+      Promise.all(promises).then((newNotices) => {
         if (!mounted) return;
-        setNotices(res);
+        setNotices(newNotices);
         setLoading(false);
       });
     });

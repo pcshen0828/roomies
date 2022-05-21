@@ -44,12 +44,13 @@ function JoinConfirmModal({ toggle, apartmentId, groupId }) {
     if (!isConfirmed) return;
     api
       .getDataWithSingleQuery("groups", "apartmentId", "==", apartmentId)
-      .then((res) => {
-        if (res.length) {
-          const currentMembers = res[0].members.length
-            ? [...res[0].members, currentUser.uid]
+      .then((groups) => {
+        if (groups.length) {
+          const group = groups[0];
+          const currentMembers = group.members.length
+            ? [...group.members, currentUser.uid]
             : [currentUser.uid];
-          api.updateDocData("groups", res[0].id, {
+          api.updateDocData("groups", group.id, {
             members: currentMembers,
           });
           navigate(`/groups/${groupId}`);

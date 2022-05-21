@@ -119,6 +119,7 @@ function GroupMember({ members }) {
           toggle={() => setOpenModal(false)}
           objectId={objectId}
           successfullySaved={() => setSaved(true)}
+          receiver="otherUser"
         />
       )}
       {members.length ? (

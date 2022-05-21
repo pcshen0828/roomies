@@ -234,6 +234,7 @@ function UserInfo({ user, role }) {
           objectId={user.uid}
           toggle={() => setOpenMessage(false)}
           successfullySaved={() => setSaved(true)}
+          receiver="otherUser"
         />
       )}
       {saved && (
