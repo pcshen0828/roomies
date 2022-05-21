@@ -35,8 +35,9 @@ function Carousel({ id }) {
     let mounted = true;
     api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
       if (!mounted) return;
-      setImages(res[0].images);
-      setCover(res[0].coverImage);
+      const apartment = res[0];
+      setImages(apartment.images);
+      setCover(apartment.coverImage);
     });
 
     return function cleanup() {

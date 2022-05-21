@@ -71,9 +71,8 @@ function SignInModal({ toggle }) {
         <NewButton
           onClick={() => {
             if (!email.trim() || !password.trim()) return;
-            api.signIn(email, password).then((error) => {
-              if (!error) return;
-              setErrMessage(error);
+            api.signIn(email, password).catch((error) => {
+              setErrMessage(api.handleError(error));
             });
           }}
         >

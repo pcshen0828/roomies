@@ -207,7 +207,7 @@ function ApartmentDetail({ details, loading }) {
   const [facilities, setFacilities] = useState([]);
   const [furnitures, setFurnitures] = useState([]);
   const [otherInfo, setOtherInfo] = useState([]);
-  const [membersCount, setMembersCount] = useState("");
+  const [membersCount, setMembersCount] = useState();
   const [openWarning, setOpenWarning] = useState(false);
 
   const queryList = [
@@ -222,9 +222,9 @@ function ApartmentDetail({ details, loading }) {
     queryList.forEach((subcollection) => {
       api
         .getAllDocsFromCollection("apartments/" + id + `/${subcollection.name}`)
-        .then((res) => {
+        .then((docs) => {
           if (!mounted) return;
-          subcollection.method(res);
+          subcollection.method(docs);
         });
     });
 
@@ -232,11 +232,12 @@ function ApartmentDetail({ details, loading }) {
       if (!mounted) return;
       api
         .getDataWithSingleQuery("groups", "apartmentId", "==", id)
-        .then((res) => {
-          if (res.length) {
-            setGroupId(res[0].id);
-            setHasJoined(res[0].members?.includes(currentUser?.uid));
-            setMembersCount(res[0].members?.length);
+        .then((groups) => {
+          if (groups.length) {
+            const group = groups[0];
+            setGroupId(group.id);
+            setHasJoined(group.members?.includes(currentUser?.uid));
+            setMembersCount(group.members?.length);
           }
         });
     }
@@ -383,7 +384,9 @@ function ApartmentDetail({ details, loading }) {
                   details[0].owner === currentUser.uid ? (
                   <ActionArea>
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
-                    <MembersCount>{membersCount}人已加入</MembersCount>
+                    <MembersCount>
+                      {membersCount ? `${membersCount}人已加入` : "尚無成員"}
+                    </MembersCount>
                   </ActionArea>
                 ) : currentUser &&
                   currentUser.role === 2 &&

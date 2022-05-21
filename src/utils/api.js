@@ -100,13 +100,7 @@ const api = {
   },
 
   async signIn(email, password) {
-    return Firebase.signInWithEmailAndPassword(
-      this.auth,
-      email,
-      password
-    ).catch((error) => {
-      return this.handleError(error);
-    });
+    return Firebase.signInWithEmailAndPassword(this.auth, email, password);
   },
 
   async signUp(email, password) {
