@@ -282,7 +282,7 @@ function ApartmentDetail({ details, loading }) {
       {isActive && (
         <JoinConfirmModal
           toggle={() => setIsActive(false)}
-          apartmentId={details[0].id}
+          apartmentId={details.id}
           groupId={groupId}
         />
       )}
@@ -332,84 +332,77 @@ function ApartmentDetail({ details, loading }) {
             )}
           </Head>
         </Wrapper>
-      ) : details.length ? (
+      ) : details ? (
         <Wrapper>
           <Head>
             <Carousel id={id} />
-            {details.length && (
-              <DetailInfo>
-                <Title>{details[0].title}</Title>
-                <Details>
-                  <Detail>
-                    <DetailIcon src={calendar} alt="" />
-                    發佈於{" "}
-                    {new Date(details[0].createTime.toDate())
-                      .toLocaleString()
-                      .slice(0, -3)}
-                  </Detail>
-                  <Detail>
-                    <DetailIcon src={loc} alt="" />
-                    {details[0].address}
-                    {otherInfo.find((item) => item.id === "floor")?.value}樓
-                  </Detail>
-                  <Detail>
-                    <DetailIcon src={square} alt="" />
-                    坪數{" "}
-                    {
-                      otherInfo.find((item) => item.id === "squareFeet")?.value
-                    }{" "}
-                    坪
-                  </Detail>
-                  <Detail>
-                    <DetailIcon src={members} alt="" />
-                    房客 {details[0].roomiesCount} 人
-                  </Detail>
-                  <Detail>
-                    <DetailIcon src={room} alt="" />
-                    房數 {details[0].rooms} 間
-                  </Detail>
-                  <Detail>
-                    <DetailIcon src={rent} alt="" />
-                    每月房租 NTD.
-                    <RentPrice>
-                      {details[0].monthlyRent.toLocaleString(2)}
-                    </RentPrice>{" "}
-                    / 間
-                  </Detail>
-                </Details>
-                {details[0].status === 0 ? (
-                  ""
-                ) : currentUser &&
-                  currentUser.role === 2 &&
-                  details[0].owner === currentUser.uid ? (
-                  <ActionArea>
+            <DetailInfo>
+              <Title>{details.title}</Title>
+              <Details>
+                <Detail>
+                  <DetailIcon src={calendar} alt="" />
+                  發佈於{" "}
+                  {new Date(details.createTime.toDate())
+                    .toLocaleString()
+                    .slice(0, -3)}
+                </Detail>
+                <Detail>
+                  <DetailIcon src={loc} alt="" />
+                  {details.address}
+                  {otherInfo.find((item) => item.id === "floor")?.value}樓
+                </Detail>
+                <Detail>
+                  <DetailIcon src={square} alt="" />
+                  坪數{" "}
+                  {otherInfo.find((item) => item.id === "squareFeet")?.value} 坪
+                </Detail>
+                <Detail>
+                  <DetailIcon src={members} alt="" />
+                  房客 {details.roomiesCount} 人
+                </Detail>
+                <Detail>
+                  <DetailIcon src={room} alt="" />
+                  房數 {details.rooms} 間
+                </Detail>
+                <Detail>
+                  <DetailIcon src={rent} alt="" />
+                  每月房租 NTD.
+                  <RentPrice>
+                    {details.monthlyRent.toLocaleString(2)}
+                  </RentPrice>{" "}
+                  / 間
+                </Detail>
+              </Details>
+              {details.status === 0 ? (
+                ""
+              ) : currentUser &&
+                currentUser.role === 2 &&
+                details.owner === currentUser.uid ? (
+                <ActionArea>
+                  <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
+                  <MembersCount>
+                    {membersCount ? `${membersCount}人已加入` : "尚無成員"}
+                  </MembersCount>
+                </ActionArea>
+              ) : currentUser &&
+                currentUser.role === 2 &&
+                details.owner !== currentUser.uid ? (
+                ""
+              ) : (
+                <ActionArea>
+                  {hasJoined ? (
                     <StyledLink to={`/groups/${groupId}`}>查看社團</StyledLink>
-                    <MembersCount>
-                      {membersCount ? `${membersCount}人已加入` : "尚無成員"}
-                    </MembersCount>
-                  </ActionArea>
-                ) : currentUser &&
-                  currentUser.role === 2 &&
-                  details[0].owner !== currentUser.uid ? (
-                  ""
-                ) : (
-                  <ActionArea>
-                    {hasJoined ? (
-                      <StyledLink to={`/groups/${groupId}`}>
-                        查看社團
-                      </StyledLink>
-                    ) : (
-                      <Button1 onClick={checkUserProfileBeforeJoinGroup}>
-                        加入租屋
-                      </Button1>
-                    )}
-                    <MembersCount>
-                      {membersCount ? `${membersCount}人已加入` : "尚無成員"}
-                    </MembersCount>
-                  </ActionArea>
-                )}
-              </DetailInfo>
-            )}
+                  ) : (
+                    <Button1 onClick={checkUserProfileBeforeJoinGroup}>
+                      加入租屋
+                    </Button1>
+                  )}
+                  <MembersCount>
+                    {membersCount ? `${membersCount}人已加入` : "尚無成員"}
+                  </MembersCount>
+                </ActionArea>
+              )}
+            </DetailInfo>
           </Head>
 
           <Body>
@@ -475,15 +468,15 @@ function ApartmentDetail({ details, loading }) {
               </DescriptionWrapper>
             </BodyLeft>
             <OwnerCard
-              owner={details[0].owner}
+              owner={details.owner}
               currentUser={currentUser}
               page="apartment"
             />
           </Body>
           <SubTitle>地圖位置</SubTitle>
-          <ApartmentMap geoLocation={details[0].geoLocation} />
+          <ApartmentMap geoLocation={details.geoLocation} />
           <SubTitle>你可能也會喜歡：</SubTitle>
-          <RecommendCarousel id={details[0].id} />
+          <RecommendCarousel id={details.id} />
         </Wrapper>
       ) : (
         <>無此房源</>
@@ -493,7 +486,7 @@ function ApartmentDetail({ details, loading }) {
 }
 
 ApartmentDetail.propTypes = {
-  details: PropTypes.array.isRequired,
+  details: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
 };
 

@@ -39,24 +39,24 @@ function LandlordSchedule() {
   useEffect(() => {
     const query = api.createQuery("schedules", "owner", "==", currentUser.uid);
     const unsubscribe = Firebase.onSnapshot(query, (snapshot) => {
-      const res = snapshot.docs.map((doc) => doc.data());
+      const schedules = snapshot.docs.map((doc) => doc.data());
       let newEvents = [];
-      if (res.length) {
-        res.forEach((event) => {
+      if (schedules.length) {
+        schedules.forEach((event) => {
           const apartment = event.apartmentID;
           const members = event.members;
           let newEvent = {};
           newEvent.extendedProps = {};
           api
             .getDataWithSingleQuery("apartments", "id", "==", apartment)
-            .then((res) => {
-              newEvent.title = res[0].title;
+            .then((queriedApartments) => {
+              newEvent.title = queriedApartments[0].title;
             })
             .then(() => {
               api
                 .getDataWithSingleQuery("users", "uid", "in", members)
-                .then((res) => {
-                  newEvent.extendedProps.members = res;
+                .then((queriedUsers) => {
+                  newEvent.extendedProps.members = queriedUsers;
                 })
                 .then(() => {
                   newEvent.extendedProps.id = event.id;

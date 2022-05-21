@@ -84,9 +84,9 @@ export default function TenantSchedule() {
 
     const unsubscribe = Firebase.onSnapshot(query, (querySnapShot) => {
       let newSchedules = [];
-      const res = querySnapShot.docs.map((doc) => doc.data());
-      if (res.length) {
-        res.forEach((schedule) => {
+      const schedules = querySnapShot.docs.map((doc) => doc.data());
+      if (schedules.length) {
+        schedules.forEach((schedule) => {
           let newSchedule = {
             start: schedule.start,
             end: schedule.end,
@@ -102,14 +102,14 @@ export default function TenantSchedule() {
               "==",
               schedule.apartmentID
             )
-            .then((res) => {
-              newSchedule.apartment = { ...res[0] };
+            .then((queriedApartments) => {
+              newSchedule.apartment = queriedApartments[0];
             })
             .then(() => {
               api
                 .getDataWithSingleQuery("users", "uid", "in", schedule.members)
-                .then((res) => {
-                  newSchedule.members = [...res];
+                .then((queriedUsers) => {
+                  newSchedule.members = queriedUsers;
                   newSchedules.push(newSchedule);
                   setSchedules(
                     newSchedules.filter(

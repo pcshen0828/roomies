@@ -54,6 +54,7 @@ const FakeInput = styled(FlexWrapper)`
 
 const Posts = styled(FlexColumn)`
   width: 100%;
+  margin-bottom: 20px;
 `;
 
 export default function GroupPosts({ currentUser, groupID, setPostStatus }) {

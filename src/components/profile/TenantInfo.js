@@ -312,13 +312,13 @@ function TenantInfo() {
   useEffect(() => {
     let mounted = true;
 
-    api.getAllDocsFromCollection("hobbies").then((res) => {
-      const initData = res.map((item) => item.name);
+    api.getAllDocsFromCollection("hobbies").then((hobbies) => {
+      const initData = hobbies.map((item) => item.name);
       if (!mounted) return;
       setAllHobbies(initData);
     });
-    api.getAllDocsFromCollection("jobTitles").then((res) => {
-      const initData = res.map((item) => item.name);
+    api.getAllDocsFromCollection("jobTitles").then((jobs) => {
+      const initData = jobs.map((item) => item.name);
       if (!mounted) return;
       setAllJobs(initData);
     });

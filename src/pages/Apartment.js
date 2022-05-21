@@ -37,17 +37,19 @@ const Active = styled.div`
 
 function Apartment() {
   const { id } = useParams();
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     scrollToTop();
     let mounted = true;
-    api.getDataWithSingleQuery("apartments", "id", "==", id).then((res) => {
-      if (!mounted) return;
-      setDetails(res);
-      setLoading(false);
-    });
+    api
+      .getDataWithSingleQuery("apartments", "id", "==", id)
+      .then((queriedApartments) => {
+        if (!mounted) return;
+        setDetails(queriedApartments[0]);
+        setLoading(false);
+      });
 
     return function cleanup() {
       mounted = false;
@@ -72,7 +74,7 @@ function Apartment() {
         {loading ? (
           <Skeleton width={200} count={1} />
         ) : (
-          <Active>{details.length ? details[0].title : "..."}</Active>
+          <Active>{details ? details.title : "..."}</Active>
         )}
       </BreadCrumb>
       <ApartmentDetail details={details} loading={loading}></ApartmentDetail>

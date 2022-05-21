@@ -137,8 +137,8 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
         .getAllDocsFromCollection(
           `apartments/${apartment.id}/${subCollection.name}`
         )
-        .then((res) => {
-          subCollection.setData(res);
+        .then((docs) => {
+          subCollection.setData(docs);
         });
     });
 
@@ -260,7 +260,7 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
       );
     });
 
-    Promise.all(promises).then((res) => {
+    Promise.all(promises).then(() => {
       setLoading(false);
       toggle();
       setSaved(true);

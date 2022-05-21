@@ -199,14 +199,14 @@ function GroupAndTeam() {
       currentUser.uid
     );
     const unsubscribe1 = Firebase.onSnapshot(query1, (snapshot) => {
-      const res = snapshot.docs.map((doc) => doc.data());
-      setGroups(res);
-      const apartmentIds = res.map((item) => item.apartmentId);
+      const queriedGroups = snapshot.docs.map((doc) => doc.data());
+      setGroups(queriedGroups);
+      const apartmentIds = queriedGroups.map((item) => item.apartmentId);
       if (!apartmentIds.length) return;
       api
         .getDataWithSingleQuery("apartments", "id", "in", apartmentIds)
-        .then((res) => {
-          setApartments(res);
+        .then((queriedApartments) => {
+          setApartments(queriedApartments);
         });
     });
 
@@ -218,8 +218,8 @@ function GroupAndTeam() {
     );
 
     const unsubscribe2 = Firebase.onSnapshot(query2, (snapshot) => {
-      const res = snapshot.docs.map((doc) => doc.data());
-      setTeams(res);
+      const queriedTeams = snapshot.docs.map((doc) => doc.data());
+      setTeams(queriedTeams);
     });
 
     const query3 = api.createQuery(
@@ -230,14 +230,14 @@ function GroupAndTeam() {
     );
 
     const unsubscribe3 = Firebase.onSnapshot(query3, (snapshot) => {
-      const res = snapshot.docs.map((doc) => doc.data());
-      if (res.length === 0) {
+      const queriedList = snapshot.docs.map((doc) => doc.data());
+      if (queriedList.length === 0) {
         setInvitations([]);
         setLoading(false);
         return;
       }
       let newList = [];
-      res.forEach((item) => {
+      queriedList.forEach((item) => {
         let newObject = {
           id: item.id,
           status: item.status,
@@ -245,21 +245,22 @@ function GroupAndTeam() {
         };
         api
           .getDataWithSingleQuery("groups", "id", "==", item.groupId)
-          .then((res) => {
-            newObject.groupMembers = res[0].members;
-            return res[0].apartmentId;
+          .then((queriedGroups) => {
+            const queriedGroup = queriedGroups[0];
+            newObject.groupMembers = queriedGroup.members;
+            return queriedGroup.apartmentId;
           })
-          .then((res) => {
+          .then((apartmentId) => {
             api
-              .getDataWithSingleQuery("apartments", "id", "==", res)
-              .then((res) => {
-                newObject.apartment = res[0];
+              .getDataWithSingleQuery("apartments", "id", "==", apartmentId)
+              .then((queriedApartments) => {
+                newObject.apartment = queriedApartments[0];
               })
               .then(() => {
                 api
                   .getDataWithSingleQuery("users", "uid", "==", item.sender)
-                  .then((res) => {
-                    newObject.sender = res[0];
+                  .then((queriedUsers) => {
+                    newObject.sender = queriedUsers[0];
                     newList.push(newObject);
                     setInvitations(newList);
                     setLoading(false);
