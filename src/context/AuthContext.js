@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import api from "../utils/api";
@@ -16,7 +17,7 @@ export function AuthProvider({ children }) {
 
   async function signOut() {
     return Firebase.signOut(auth)
-      .then((res) => {
+      .then(() => {
         setCurrentUser(null);
       })
       .catch((error) => {
@@ -48,3 +49,7 @@ export function AuthProvider({ children }) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+AuthProvider.propTypes = {
+  children: PropTypes.node,
+};

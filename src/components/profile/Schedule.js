@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import EventInfoWindowModal from "./EventInfoWindow";
 
@@ -52,5 +53,9 @@ function Schedule({ events }) {
     </CalendarWrapper>
   );
 }
+
+Schedule.propTypes = {
+  events: PropTypes.array.isRequired,
+};
 
 export default Schedule;

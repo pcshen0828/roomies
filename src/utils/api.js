@@ -99,12 +99,14 @@ const api = {
       : "";
   },
 
-  async signIn(email, password, callback) {
-    Firebase.signInWithEmailAndPassword(this.auth, email, password).catch(
-      (error) => {
-        callback(this.handleError(error));
-      }
-    );
+  async signIn(email, password) {
+    return Firebase.signInWithEmailAndPassword(
+      this.auth,
+      email,
+      password
+    ).catch((error) => {
+      return this.handleError(error);
+    });
   },
 
   async signUp(email, password) {

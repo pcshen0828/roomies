@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
@@ -13,6 +14,7 @@ import {
   SearchInput,
   SearchButton,
   Button1,
+  ProfileImage,
 } from "../common/Components";
 import UserCard from "../community/UserCard";
 import SendMessageModal from "../modals/SendMessage";
@@ -99,14 +101,9 @@ const TopFlexWrapper = styled(FlexWrapper)`
   }
 `;
 
-const ProfileImage = styled.div`
+const Profile = styled(ProfileImage)`
   width: 120px;
   height: 120px;
-  border-radius: 50%;
-  background: ${(props) => (props.url ? `url(${props.url})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
   margin-right: 20px;
   flex-shrink: 0;
   @media screen and (max-width: 995.98px) {
@@ -157,7 +154,6 @@ const IntroText = styled.div`
 
 const ExploreWrapper = styled(FlexWrapper)`
   width: 100%;
-  ${"" /* min-height: 630px; */}
   flex-direction: column;
   align-items: flex-start;
   @media screen and (max-width: 995.98px) {
@@ -254,7 +250,7 @@ function UserInfo({ user, role }) {
         <CoverImage src={user.coverImage} />
         <UserWrapper>
           <TopFlexWrapper>
-            <ProfileImage url={user.profileImage} />
+            <Profile src={user.profileImage} />
             <InfoWrapper>
               <MediumTitle>{user.alias}</MediumTitle>
               <InfoInnerWrapper>
@@ -325,5 +321,10 @@ function UserInfo({ user, role }) {
     </>
   );
 }
+
+UserInfo.propTypes = {
+  user: PropTypes.object.isRequired,
+  role: PropTypes.number.isRequired,
+};
 
 export default UserInfo;

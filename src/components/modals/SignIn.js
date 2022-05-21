@@ -36,10 +36,6 @@ function SignInModal({ toggle }) {
   const [password, setPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
 
-  function showErrorMessage(error) {
-    setErrMessage(error);
-  }
-
   return (
     <Overlay out={false}>
       <NewModal>
@@ -75,7 +71,10 @@ function SignInModal({ toggle }) {
         <NewButton
           onClick={() => {
             if (!email.trim() || !password.trim()) return;
-            api.signIn(email, password, showErrorMessage);
+            api.signIn(email, password).then((error) => {
+              if (!error) return;
+              setErrMessage(error);
+            });
           }}
         >
           登入

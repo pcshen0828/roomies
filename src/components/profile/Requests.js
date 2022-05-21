@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
@@ -168,3 +169,9 @@ export default function Requests({ unConfirmed, user, loading }) {
     </CardWrapper>
   );
 }
+
+Requests.propTypes = {
+  unConfirmed: PropTypes.array.isRequired,
+  user: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+};
