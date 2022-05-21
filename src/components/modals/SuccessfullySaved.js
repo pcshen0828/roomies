@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Modal, Overlay } from "./ModalElements";
 
@@ -36,3 +37,8 @@ export default function SuccessfullySavedModal({ toggle, message }) {
     </NewOverlay>
   );
 }
+
+SuccessfullySavedModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  message: PropTypes.string.isRequired,
+};

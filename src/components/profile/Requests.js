@@ -115,7 +115,7 @@ export default function Requests({ unConfirmed, user, loading }) {
                 <RequestDetailModal
                   members={request.extendedProps.members}
                   hostId={request.extendedProps.host}
-                  toggle={setCheckDetail}
+                  toggle={() => setCheckDetail(false)}
                 />
               )}
               <ScheduleInnerWrapper landlord={true}>

@@ -236,8 +236,8 @@ function UserInfo({ user, role }) {
       {openMessage && (
         <SendMessageModal
           objectId={user.uid}
-          setOpenModal={setOpenMessage}
-          setSaved={setSaved}
+          toggle={() => setOpenMessage(false)}
+          successfullySaved={() => setSaved(true)}
         />
       )}
       {saved && (

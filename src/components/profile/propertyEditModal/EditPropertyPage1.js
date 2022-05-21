@@ -7,6 +7,7 @@ import {
   StandaloneSearchBox,
 } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../../appkeys";
+import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
 
 import styled from "styled-components";
 import { mainColor } from "../../../styles/GlobalStyle";
@@ -252,11 +253,7 @@ function EditPropertyPage1({
           setBasicInfo({ ...basicInfo, roomiesCount: e.target.value });
         }}
       >
-        {Array.from(Array(10).keys()).map((num) => (
-          <option key={num} value={num + 1}>
-            {num + 1}
-          </option>
-        ))}
+        {generateSelectOptionsByAmountNumber(10)}
       </Select>
 
       <SmallLabel htmlFor="rooms">
@@ -272,11 +269,7 @@ function EditPropertyPage1({
           setBasicInfo({ ...basicInfo, rooms: e.target.value });
         }}
       >
-        {Array.from(Array(10).keys()).map((num) => (
-          <option key={num} value={num + 1}>
-            {num + 1}
-          </option>
-        ))}
+        {generateSelectOptionsByAmountNumber(10)}
       </Select>
     </>
   );

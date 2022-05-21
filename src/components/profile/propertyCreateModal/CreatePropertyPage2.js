@@ -32,7 +32,6 @@ function CreatePropertyPage2({
   setFacilities,
   furnitures,
   setFurnitures,
-  handleError,
 }) {
   return (
     <>

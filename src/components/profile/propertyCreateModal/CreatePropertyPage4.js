@@ -60,7 +60,7 @@ const UploadNewImage = styled.label`
   font-size: 60px;
 `;
 
-function CreatePropertyPage4({ id, images, setImages, handleError }) {
+function CreatePropertyPage4({ id, images, setImages }) {
   const fileRef = useRef(null);
   const [error, setError] = useState("");
 

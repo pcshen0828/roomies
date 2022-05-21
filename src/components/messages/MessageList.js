@@ -196,7 +196,7 @@ function List({ chats, setChatId, usage, toggle }) {
 
 List.propTypes = {
   chats: PropTypes.array.isRequired,
-  setChatId: PropTypes.func.isRequired,
+  setChatId: PropTypes.func,
   usage: PropTypes.string,
   toggle: PropTypes.func,
 };

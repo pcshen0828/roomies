@@ -307,7 +307,7 @@ function Index() {
   return (
     <>
       <Wrapper>
-        {openSignup && <SignUpModal setOpenSignUp={setOpenSignUp} />}
+        {openSignup && <SignUpModal toggle={() => setOpenSignUp(false)} />}
         <InnerWrapper>
           <IntroWrapper>
             <Intro>

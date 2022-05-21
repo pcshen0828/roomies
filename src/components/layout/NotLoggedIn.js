@@ -36,8 +36,8 @@ function NotLoggedIn() {
 
   return (
     <>
-      {openSignIn && <SignInModal setOpenSignIn={setOpenSignIn} />}
-      {openSignUp && <SignUpModal setOpenSignUp={setOpenSignUp} />}
+      {openSignIn && <SignInModal toggle={() => setOpenSignIn(false)} />}
+      {openSignUp && <SignUpModal toggle={() => setOpenSignUp(false)} />}
       <FlexWrapper>
         <SignIn onClick={() => setOpenSignIn(true)}>登入</SignIn>
         <Signup onClick={() => setOpenSignUp(true)}>註冊</Signup>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 
@@ -96,7 +97,7 @@ const Role = styled(FlexWrapper)`
   }
 `;
 
-function SignUpModal({ setOpenSignUp }) {
+function SignUpModal({ toggle }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPwd, setCofirmPwd] = useState("");
@@ -175,7 +176,7 @@ function SignUpModal({ setOpenSignUp }) {
           <NewBody>
             <BodyHeader>
               <NewTitle>註冊會員</NewTitle>
-              <CloseButton onClick={() => setOpenSignUp(false)}>×</CloseButton>
+              <CloseButton onClick={toggle}>×</CloseButton>
             </BodyHeader>
             <SmallTitle>請選擇註冊身份</SmallTitle>
             <FlexWrapper>
@@ -238,5 +239,9 @@ function SignUpModal({ setOpenSignUp }) {
     </Overlay>
   );
 }
+
+SignUpModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};
 
 export default SignUpModal;

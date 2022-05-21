@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -55,7 +56,7 @@ export default function RequestDetailModal({ members, hostId, toggle }) {
       <NewModal>
         <Header>
           <Title>隊伍資訊</Title>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <SmallTitle>團主</SmallTitle>
@@ -83,8 +84,14 @@ export default function RequestDetailModal({ members, hostId, toggle }) {
             </MemberBar>
           ))}
         </NewBody>
-        <Button onClick={() => toggle(false)}>關閉</Button>
+        <Button onClick={toggle}>關閉</Button>
       </NewModal>
     </Overlay>
   );
 }
+
+RequestDetailModal.propTypes = {
+  members: PropTypes.array.isRequired,
+  hostId: PropTypes.string.isRequired,
+  toggle: PropTypes.func.isRequired,
+};

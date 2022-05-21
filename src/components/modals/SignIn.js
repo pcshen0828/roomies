@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import api from "../../utils/api";
 import styled from "styled-components";
 import {
@@ -30,7 +31,7 @@ const ErrorMessage = styled.div`
   font-size: 14px;
 `;
 
-function SignInModal({ setOpenSignIn }) {
+function SignInModal({ toggle }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
@@ -44,7 +45,7 @@ function SignInModal({ setOpenSignIn }) {
       <NewModal>
         <Header>
           <Title>登入</Title>
-          <CloseButton onClick={() => setOpenSignIn(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <form>
@@ -83,5 +84,9 @@ function SignInModal({ setOpenSignIn }) {
     </Overlay>
   );
 }
+
+SignInModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};
 
 export default SignInModal;

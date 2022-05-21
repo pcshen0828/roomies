@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import api from "../../utils/api";
 
@@ -14,17 +15,11 @@ import {
 import {
   BodyInnerWrapper,
   BottomWrapper,
-  Button1,
-  ButtonWrapper,
   ErrorMessage,
-  LoadingButton,
-  PrevStepButton,
-  StepIndicator,
-  StepName,
-  StepsWrapper,
-  StepWrapper,
 } from "../common/Components";
 
+import EditStepsIndicator from "./EditStepsIndicator";
+import PropertyPagePrevNext from "./propertyPagePrevNext";
 import EditPropertyPage1 from "./propertyEditModal/EditPropertyPage1";
 import EditPropertyPage2 from "./propertyEditModal/EditPropertyPage2";
 import EditPropertyPage3 from "./propertyEditModal/EditPropertyPage3";
@@ -134,26 +129,20 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
     let mounted = true;
     if (!mounted) return;
 
-    api
-      .getAllDocsFromCollection("apartments/" + apartment.id + "/conditions")
-      .then((res) => {
-        setConditions(res);
-      });
-    api
-      .getAllDocsFromCollection("apartments/" + apartment.id + "/facilities")
-      .then((res) => {
-        setFacilities(res);
-      });
-    api
-      .getAllDocsFromCollection("apartments/" + apartment.id + "/furnitures")
-      .then((res) => {
-        setFurnitures(res);
-      });
-    api
-      .getAllDocsFromCollection("apartments/" + apartment.id + "/otherInfo")
-      .then((res) => {
-        setOtherInfo(res);
-      });
+    [
+      { name: "conditions", setData: setConditions },
+      { name: "facilities", setData: setFacilities },
+      { name: "furnitures", setData: setFurnitures },
+      { name: "otherInfo", setData: setOtherInfo },
+    ].forEach((subCollection) => {
+      api
+        .getAllDocsFromCollection(
+          `apartments/${apartment.id}/${subCollection.name}`
+        )
+        .then((res) => {
+          subCollection.setData(res);
+        });
+    });
 
     setImages(apartment.images);
 
@@ -304,61 +293,36 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
         </Header>
 
         <BodyInnerWrapper>
-          <StepsWrapper>
-            {pages.map((page) => (
-              <StepWrapper key={page.number}>
-                <StepIndicator
-                  active={page.number === paging}
-                  onClick={() => {
-                    setPaging(page.number);
-                  }}
-                >
-                  {page.number}
-                </StepIndicator>
-                <StepName>{page.name}</StepName>
-              </StepWrapper>
-            ))}
-          </StepsWrapper>
+          <EditStepsIndicator
+            pages={pages}
+            paging={paging}
+            setPaging={setPaging}
+          />
           <NewBody>
             {pages.map((page) => page.number === paging && page.component)}
           </NewBody>
           <BottomWrapper>
             <ErrorMessage>{warning}</ErrorMessage>
-            <ButtonWrapper>
-              {paging > 1 && paging <= 4 && (
-                <PrevStepButton
-                  onClick={() => {
-                    if (paging === 1) return;
-                    setWarning("");
-                    setPaging(paging - 1);
-                  }}
-                >
-                  上一步
-                </PrevStepButton>
-              )}
-              {paging < 4 &&
-                (loading ? (
-                  <LoadingButton>...</LoadingButton>
-                ) : (
-                  <Button1
-                    onClick={() => {
-                      if (paging === 4) return;
-                      setWarning("");
-                      setPaging(paging + 1);
-                    }}
-                  >
-                    下一步
-                  </Button1>
-                ))}
-              {paging === 4 && (
-                <Button1 onClick={updateApartmentData}>儲存</Button1>
-              )}
-            </ButtonWrapper>
+            <PropertyPagePrevNext
+              resetError={() => {
+                setWarning("");
+              }}
+              paging={paging}
+              setPaging={setPaging}
+              loading={loading}
+              action={updateApartmentData}
+            />
           </BottomWrapper>
         </BodyInnerWrapper>
       </NewModal>
     </Overlay>
   );
 }
+
+EditPropertyModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  apartment: PropTypes.object.isRequired,
+  setSaved: PropTypes.func.isRequired,
+};
 
 export default EditPropertyModal;

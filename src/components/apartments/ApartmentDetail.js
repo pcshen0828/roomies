@@ -235,15 +235,13 @@ function ApartmentDetail({ details, loading }) {
         .then((res) => {
           if (res.length) {
             setGroupId(res[0].id);
-            setHasJoined(res[0].members?.includes(currentUser.uid));
+            setHasJoined(res[0].members?.includes(currentUser?.uid));
             setMembersCount(res[0].members?.length);
           }
         });
     }
 
-    if (currentUser) {
-      checkHasJoinedGroupOrNot();
-    }
+    checkHasJoinedGroupOrNot();
 
     return function cleanup() {
       mounted = false;
@@ -277,7 +275,9 @@ function ApartmentDetail({ details, loading }) {
 
   return (
     <>
-      {hasNotSignIn && <SignInFirstModal setToggle={setHasNotSignIn} />}
+      {hasNotSignIn && (
+        <SignInFirstModal toggle={() => setHasNotSignIn(false)} />
+      )}
       {isActive && (
         <JoinConfirmModal
           toggle={() => setIsActive(false)}
@@ -490,8 +490,8 @@ function ApartmentDetail({ details, loading }) {
 }
 
 ApartmentDetail.propTypes = {
-  details: PropTypes.array,
-  loading: PropTypes.bool,
+  details: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
 };
 
 export default ApartmentDetail;

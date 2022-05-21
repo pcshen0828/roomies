@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { Firebase } from "../../../utils/firebase";
+import PropTypes from "prop-types";
 import api from "../../../utils/api";
 import {
   GoogleMap,
@@ -19,6 +19,7 @@ import {
   FlexColumn,
 } from "../../common/Components";
 import { checkIsNaNOrNot } from "../../../utils/calculate";
+import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
 
 const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
@@ -80,7 +81,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
   const [searchBox, setSearchBox] = useState(null);
   const [map, setMap] = useState(null);
 
-  const { isLoaded, loadError } = useLoadScript({
+  const { isLoaded } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: googleMapsAppKey,
     libraries,
@@ -242,11 +243,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
           setBasicInfo({ ...basicInfo, roomiesCount: e.target.value });
         }}
       >
-        {Array.from(Array(10).keys()).map((num) => (
-          <option key={num} value={num + 1}>
-            {num + 1}
-          </option>
-        ))}
+        {generateSelectOptionsByAmountNumber(10)}
       </Select>
 
       <SmallLabel htmlFor="rooms">
@@ -262,14 +259,17 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
           setBasicInfo({ ...basicInfo, rooms: e.target.value });
         }}
       >
-        {Array.from(Array(10).keys()).map((num) => (
-          <option key={num} value={num + 1}>
-            {num + 1}
-          </option>
-        ))}
+        {generateSelectOptionsByAmountNumber(10)}
       </Select>
     </>
   );
 }
+
+CreatePropertyPage1.propTypes = {
+  basicInfo: PropTypes.object.isRequired,
+  setBasicInfo: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  handleError: PropTypes.func.isRequired,
+};
 
 export default CreatePropertyPage1;

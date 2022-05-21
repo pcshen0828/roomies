@@ -65,7 +65,7 @@ const Icon = styled.img`
 `;
 
 export default function OwnerCard({ owner, currentUser, page }) {
-  const [ownerInfo, setOwnerInfo] = useState();
+  const [ownerInfo, setOwnerInfo] = useState({});
   const [openModal, setOpenModal] = useState(false);
   const [openSignin, setOpenSignin] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -74,7 +74,7 @@ export default function OwnerCard({ owner, currentUser, page }) {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
       setOwnerInfo(res[0]);
     });
-  }, []);
+  }, [owner]);
 
   return (
     <>
@@ -83,12 +83,12 @@ export default function OwnerCard({ owner, currentUser, page }) {
       )}
       {openModal && (
         <SendMessageLandlordModal
-          setOpenModal={setOpenModal}
-          objectId={ownerInfo.uid}
-          setSaved={setSaved}
+          toggle={() => setOpenModal(false)}
+          objectId={ownerInfo?.uid}
+          successfullySaved={() => setSaved(true)}
         />
       )}
-      {openSignin && <SignInFirstModal setToggle={setOpenSignin} />}
+      {openSignin && <SignInFirstModal toggle={() => setOpenSignin(false)} />}
       <Wrapper page={page}>
         {page === "apartment" && <SubTitle>屋主資訊</SubTitle>}
         {ownerInfo && (
@@ -106,7 +106,7 @@ export default function OwnerCard({ owner, currentUser, page }) {
             <Intro>{ownerInfo.selfIntro}</Intro>
           </>
         )}
-        {ownerInfo && ownerInfo.uid === currentUser.uid ? (
+        {ownerInfo?.uid === currentUser?.uid ? (
           ""
         ) : (
           <Button1
@@ -127,7 +127,7 @@ export default function OwnerCard({ owner, currentUser, page }) {
 }
 
 OwnerCard.propTypes = {
-  owner: PropTypes.string,
+  owner: PropTypes.string.isRequired,
   currentUser: PropTypes.object,
   page: PropTypes.string,
 };

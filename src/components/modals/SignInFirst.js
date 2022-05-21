@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import { Overlay, Modal, Header, Title, Button } from "./ModalElements";
 
@@ -11,16 +12,21 @@ const CenterButton = styled(Button)`
   margin: 20px 0;
 `;
 
-function SignInFirstModal({ setToggle }) {
+function SignInFirstModal({ toggle }) {
   return (
     <Overlay out={false}>
       <Modal>
         <NewHeader>
           <Title>請先登入</Title>
         </NewHeader>
-        <CenterButton onClick={() => setToggle(false)}>確認</CenterButton>
+        <CenterButton onClick={toggle}>確認</CenterButton>
       </Modal>
     </Overlay>
   );
 }
+
+SignInFirstModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+};
+
 export default SignInFirstModal;

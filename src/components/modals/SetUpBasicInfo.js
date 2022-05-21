@@ -39,7 +39,7 @@ const NewButton = styled(Button)`
   margin: 0 0 30px 0;
 `;
 
-export default function BasicInfoModal({ role }) {
+export default function BasicInfoModal() {
   const [toggle, setToggle] = useState(true);
 
   return (

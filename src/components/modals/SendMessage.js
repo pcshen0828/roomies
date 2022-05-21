@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
@@ -52,7 +53,7 @@ const Button = styled(Button1)`
   margin: 20px 20px 40px 0;
 `;
 
-function SendMessageModal({ setOpenModal, objectId, setSaved }) {
+function SendMessageModal({ toggle, objectId, successfullySaved }) {
   const { currentUser } = useAuth();
   const defaultmessages = ["Hi，你好！", "我正在尋找室友"];
   const [message, setMessage] = useState("");
@@ -63,8 +64,8 @@ function SendMessageModal({ setOpenModal, objectId, setSaved }) {
     const time = Firebase.Timestamp.fromDate(new Date());
     function clearMessageAndCloseModal() {
       setMessage("");
-      setOpenModal(false);
-      setSaved(true);
+      toggle();
+      successfullySaved();
     }
     api
       .getDataWithSingleQuery("chats", "userIDs", "array-contains", objectId)
@@ -123,7 +124,7 @@ function SendMessageModal({ setOpenModal, objectId, setSaved }) {
       <NewModal>
         <Header>
           <Title>發送訊息</Title>
-          <CloseButton onClick={() => setOpenModal(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <MessageInput
           placeholder="打聲招呼吧！"
@@ -152,5 +153,11 @@ function SendMessageModal({ setOpenModal, objectId, setSaved }) {
     </Overlay>
   );
 }
+
+SendMessageModal.propTypes = {
+  toggle: PropTypes.func.isRequired,
+  objectId: PropTypes.string.isRequired,
+  successfullySaved: PropTypes.func.isRequired,
+};
 
 export default SendMessageModal;

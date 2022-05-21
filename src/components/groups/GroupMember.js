@@ -116,9 +116,9 @@ function GroupMember({ members }) {
       )}
       {openModal && (
         <SendMessageModal
-          setOpenModal={setOpenModal}
+          toggle={() => setOpenModal(false)}
           objectId={objectId}
-          setSaved={setSaved}
+          successfullySaved={() => setSaved(true)}
         />
       )}
       {members.length ? (
