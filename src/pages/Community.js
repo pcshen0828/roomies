@@ -77,11 +77,22 @@ const Anchor = styled.div`
 
 const initialState = {
   allUsers: [],
-  filtered: [],
+  hobby: "",
+  search: "",
   currentPage: 1,
   allPages: 1,
   usersPerPage: 6,
 };
+
+function calculateAllPages(allUsers, condition, payload, usersPerPage) {
+  return Math.ceil(
+    allUsers.filter((user) =>
+      condition === "hobby"
+        ? user.hobbies.includes(payload)
+        : user.alias.includes(payload)
+    ).length / usersPerPage
+  );
+}
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -89,29 +100,39 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         allUsers: payload,
-        filtered: payload,
         allPages: Math.ceil(payload.length / state.usersPerPage),
       };
     case "filterByHobby":
       return {
         ...state,
-        filtered: state.allUsers.filter((user) =>
-          user.hobbies.includes(payload)
-        ),
+        hobby: payload,
+        search: "",
         currentPage: 1,
-        allPages: Math.ceil(state.filtered.length / state.usersPerPage),
+        allPages: calculateAllPages(
+          state.allUsers,
+          "hobby",
+          payload,
+          state.usersPerPage
+        ),
       };
     case "filterByKeyword":
       return {
         ...state,
-        filtered: state.allUsers.filter((user) => user.alias.includes(payload)),
-        allPages: Math.ceil(state.filtered.length / state.usersPerPage),
+        hobby: "",
+        search: payload,
+        allPages: calculateAllPages(
+          state.allUsers,
+          "search",
+          payload,
+          state.usersPerPage
+        ),
         currentPage: 1,
       };
     case "reset":
       return {
         ...state,
-        filtered: state.allUsers,
+        hobby: "",
+        search: "",
         currentPage: 1,
         allPages: Math.ceil(state.allUsers.length / state.usersPerPage),
       };
@@ -198,6 +219,16 @@ function Community() {
     setSearching(false);
   }
 
+  const filterFunction = (user) => {
+    if (filterData.search) {
+      return user.alias.includes(filterData.search);
+    }
+    if (filterData.hobby) {
+      return user.hobbies.includes(filterData.hobby);
+    }
+    return true;
+  };
+
   function Render() {
     if (loading) {
       return (
@@ -262,16 +293,17 @@ function Community() {
             </HobbyTags>
             <ResultDisplayer>
               {searching
-                ? Array.from(Array(6).keys()).map((loader, index) => (
+                ? Array.from(Array(6).keys()).map((number) => (
                     <Skeleton
-                      key={index}
+                      key={number}
                       height={250}
                       borderRadius={20}
                       style={{ marginBottom: "20px" }}
                     />
                   ))
-                : filterData.filtered.length
-                ? filterData.filtered
+                : filterData.allUsers.filter(filterFunction).length
+                ? filterData.allUsers
+                    .filter(filterFunction)
                     .slice(0, filterData.usersPerPage * filterData.currentPage)
                     .map((user) => <UserCard key={user.uid} user={user} />)
                 : "查無用戶"}

@@ -204,6 +204,7 @@ function Apartments() {
         item.conditions.includes(value)
       );
     }
+    return true;
   };
 
   return (
@@ -218,9 +219,9 @@ function Apartments() {
         <Anchor role="filter" ref={filterAnchor}></Anchor>
         {loading ? (
           <Cards>
-            {Array.from(Array(6).keys()).map((loader, index) => (
+            {Array.from(Array(6).keys()).map((number) => (
               <Skeleton
-                key={index}
+                key={number}
                 height={350}
                 borderRadius={20}
                 style={{ marginBottom: "20px" }}
