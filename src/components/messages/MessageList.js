@@ -85,9 +85,9 @@ function List({ chats, setChatId, usage, toggle }) {
     async function getUserData() {
       api
         .getDataWithSingleQuery("users", "uid", "in", chatMates)
-        .then((res) => {
+        .then((users) => {
           if (!mounted) return;
-          setChatUserData(res);
+          setChatUserData(users);
           setLoading(false);
         });
     }

@@ -75,8 +75,8 @@ function CreatePropertyPage4({ id, images, setImages }) {
     }
     api
       .uploadFileAndGetDownloadUrl(`apartments/${id}/${file.name}`, file)
-      .then((res) => {
-        setImages((prev) => [...prev, { name: file.name, url: res }]);
+      .then((downloadUrl) => {
+        setImages((prev) => [...prev, { name: file.name, url: downloadUrl }]);
       })
       .then(() => {
         setError("");

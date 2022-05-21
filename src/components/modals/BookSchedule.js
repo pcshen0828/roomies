@@ -128,23 +128,23 @@ export default function BookScheduleModal({
           "array-contains",
           apartment.owner
         )
-        .then((res) => {
-          return res.filter((data) => data.userIDs.includes(host.uid));
+        .then((chats) => {
+          return chats.find((chat) => chat.userIDs.includes(host.uid));
         })
-        .then((res) => {
-          if (res.length) {
+        .then((chat) => {
+          if (chat) {
             const newMessage = {
               content: message,
-              sender: res.members.find((member) => member.uid === host.uid)
+              sender: chat.members.find((member) => member.uid === host.uid)
                 .role,
               timestamp: time,
             };
-            api.updateDocData("chats", res.id, {
+            api.updateDocData("chats", chat.id, {
               latestMessage: newMessage,
               updateTime: time,
               status: 0,
             });
-            api.addNewDoc("chats/" + res.id + "/messages", newMessage);
+            api.addNewDoc("chats/" + chat.id + "/messages", newMessage);
           } else {
             const newMessage = {
               content: message,
@@ -168,7 +168,7 @@ export default function BookScheduleModal({
           }
         });
     }
-    toggle(false);
+    toggle();
     toggleParent("");
     successfullySaved();
     setTimeout(() => {
@@ -194,7 +194,7 @@ export default function BookScheduleModal({
       <NewModal>
         <Header>
           <Title>預約看房｜{apartment.title}</Title>
-          <CloseButton onClick={() => toggle(false)}>×</CloseButton>
+          <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
         <NewBody>
           <SmallTitle>此房源目前已被預約的看房時段</SmallTitle>

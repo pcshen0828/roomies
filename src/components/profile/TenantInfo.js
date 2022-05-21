@@ -371,9 +371,9 @@ function TenantInfo() {
     coverRef.current = null;
     api
       .uploadFileAndGetDownloadUrl(`users/${currentUser.uid}/cover`, file)
-      .then((res) => {
+      .then((downloadUrl) => {
         api.updateDocData("users", currentUser.uid, {
-          coverImage: res,
+          coverImage: downloadUrl,
         });
         setSaved(true);
       });

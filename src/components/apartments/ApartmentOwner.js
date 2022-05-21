@@ -72,7 +72,8 @@ export default function OwnerCard({ owner, currentUser, page }) {
 
   useEffect(() => {
     api.getDataWithSingleQuery("users", "uid", "==", owner).then((res) => {
-      setOwnerInfo(res[0]);
+      const owner = res[0];
+      setOwnerInfo(owner);
     });
   }, [owner]);
 

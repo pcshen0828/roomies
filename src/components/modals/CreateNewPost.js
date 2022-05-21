@@ -177,8 +177,8 @@ export default function CreateNewPostModal({
     }
     api
       .uploadFileAndGetDownloadUrl(`posts/${newPostID}/${file.name}`, file)
-      .then((res) => {
-        setImages((prev) => [...prev, { name: file.name, url: res }]);
+      .then((downloadUrl) => {
+        setImages((prev) => [...prev, { name: file.name, url: downloadUrl }]);
       })
       .then(() => {
         setError("");

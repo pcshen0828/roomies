@@ -60,16 +60,16 @@ function GroupTeam({
       Firebase.onSnapshot(query, (snapshot) => {
         if (!mounted) return;
         setLoading(true);
-        const res = snapshot.docs.map((doc) => doc.data());
+        const allTeams = snapshot.docs.map((doc) => doc.data());
         setHasCreated(
-          res.filter(
+          allTeams.filter(
             (team) =>
               team.members.find((member) => member.status === 0).uid ===
               currentUser.uid
           ).length
         );
         setLoading(false);
-        setTeams(res);
+        setTeams(allTeams);
       });
     }
     getTeams();

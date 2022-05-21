@@ -123,8 +123,8 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
           "in",
           chats.find((chat) => chat.id === chatId).userIDs
         )
-        .then((res) => {
-          setMembers(res);
+        .then((users) => {
+          setMembers(users);
           setLoading(false);
         });
     }

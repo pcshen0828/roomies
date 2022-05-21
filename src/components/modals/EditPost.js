@@ -204,25 +204,31 @@ export default function EditPostModal({
         });
       });
 
+    let promises = [];
+
     newFiles.forEach((file) => {
-      api
-        .uploadFileAndGetDownloadUrl(`posts/${post.id}/${file.name}`, file)
-        .then((res) => {
-          setImages((prev) => [
-            ...prev.filter((image) => image.name !== file.name),
-            { name: file.name, url: res },
-          ]);
-        });
+      promises.push(
+        api
+          .uploadFileAndGetDownloadUrl(`posts/${post.id}/${file.name}`, file)
+          .then((downloadUrl) => {
+            setImages((prev) => [
+              ...prev.filter((image) => image.name !== file.name),
+              { name: file.name, url: downloadUrl },
+            ]);
+          })
+      );
     });
 
-    api.updateDocData("posts", post.id, {
-      content,
-      images,
-      updateTime: time,
+    Promise.all(promises).then(() => {
+      api.updateDocData("posts", post.id, {
+        content,
+        images,
+        updateTime: time,
+      });
+      setLoading(false);
+      setUpdated("updated");
+      toggle();
     });
-    setLoading(false);
-    setUpdated("updated");
-    toggle();
   }
 
   return (

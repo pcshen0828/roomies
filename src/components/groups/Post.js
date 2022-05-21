@@ -237,8 +237,8 @@ export default function Post({ post, currentUser, setPostStatus }) {
   useEffect(() => {
     api
       .getDataWithSingleQuery("users", "uid", "==", post.creator)
-      .then((res) => {
-        setCreatorInfo(res[0]);
+      .then((users) => {
+        setCreatorInfo(users[0]);
         setLoading(false);
       });
   }, []);
@@ -258,7 +258,7 @@ export default function Post({ post, currentUser, setPostStatus }) {
           })
         );
       });
-      Promise.all(promises).then((res) => {
+      Promise.all(promises).then(() => {
         setPostStatus("deleted");
         return;
       });

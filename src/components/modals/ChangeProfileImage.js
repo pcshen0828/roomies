@@ -127,13 +127,13 @@ function ChangeProfileImageModal({ toggle, setBasicInfo, setSaved }) {
           `users/${currentUser.uid}/profile`,
           croppedFile
         )
-        .then((res) => {
+        .then((url) => {
           setBasicInfo((prev) => ({
             ...prev,
-            profileImage: res,
+            profileImage: url,
           }));
           api.updateDocData("users", currentUser.uid, {
-            profileImage: res,
+            profileImage: url,
           });
           setIsUploading(false);
           resetFile();
@@ -150,7 +150,7 @@ function ChangeProfileImageModal({ toggle, setBasicInfo, setSaved }) {
         if (blob) {
           const newUrl = URL.createObjectURL(blob);
           fetch(newUrl)
-            .then((res) => res.blob())
+            .then((file) => file.blob())
             .then((blobFile) => {
               setCroppedFile(
                 new File([blobFile], "profile", {
@@ -170,6 +170,7 @@ function ChangeProfileImageModal({ toggle, setBasicInfo, setSaved }) {
     setCroppedFile(null);
     setShowPreview(false);
     setUrl("");
+    URL.revokeObjectURL(url);
     fileRef.current.value = null;
   }
 

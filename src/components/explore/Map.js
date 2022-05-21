@@ -147,12 +147,14 @@ function MyMap() {
 
   useEffect(() => {
     let mounted = true;
-    api.getDataWithSingleQuery("apartments", "status", "==", 1).then((res) => {
-      if (!mounted) return;
-      setAllData(res);
-      setApartments(res);
-      setLoading(false);
-    });
+    api
+      .getDataWithSingleQuery("apartments", "status", "==", 1)
+      .then((apartments) => {
+        if (!mounted) return;
+        setAllData(apartments);
+        setApartments(apartments);
+        setLoading(false);
+      });
     return function cleanup() {
       mounted = false;
     };

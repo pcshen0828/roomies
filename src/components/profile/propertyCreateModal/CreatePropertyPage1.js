@@ -118,10 +118,10 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
     setError("");
     api
       .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, file)
-      .then((res) => {
+      .then((downloadUrl) => {
         setBasicInfo({
           ...basicInfo,
-          coverImage: res,
+          coverImage: downloadUrl,
           coverFile: file,
         });
         coverFileRef.current.value = null;
