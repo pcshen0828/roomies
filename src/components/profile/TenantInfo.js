@@ -349,9 +349,7 @@ function TenantInfo() {
       });
     }
 
-    api.updateDocData("users", currentUser.uid, {
-      ...basicInfo,
-    });
+    api.updateDocData("users", currentUser.uid, basicInfo);
     setIsLoading(false);
     setSaved(true);
     scrollToTop();
@@ -493,12 +491,13 @@ function TenantInfo() {
                       setError("");
                     }}
                     onChange={(value) => {
+                      const newBasicInfo = { ...basicInfo };
                       const newValue =
                         select.id === "hobbies"
                           ? value.map((item) => item.label)
                           : value?.label || "";
-                      basicInfo[select.id] = newValue;
-                      setBasicInfo({ ...basicInfo });
+                      newBasicInfo[select.id] = newValue;
+                      setBasicInfo({ ...newBasicInfo });
                     }}
                     options={select.options}
                     value={select.value}

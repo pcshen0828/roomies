@@ -120,9 +120,7 @@ function LandlordInfo() {
 
   function updateUserData() {
     setIsLoading(true);
-    api.updateDocData("users", currentUser.uid, {
-      ...basicInfo,
-    });
+    api.updateDocData("users", currentUser.uid, basicInfo);
     setIsLoading(false);
     setSaved(true);
   }
@@ -189,8 +187,9 @@ function LandlordInfo() {
                     placeholder={info.placeholder}
                     value={basicInfo[info.id]}
                     onChange={(e) => {
-                      basicInfo[info.id] = e.target.value;
-                      setBasicInfo({ ...basicInfo });
+                      const newBasicInfo = { ...basicInfo };
+                      newBasicInfo[info.id] = e.target.value;
+                      setBasicInfo({ ...newBasicInfo });
                     }}
                   />
                 </Fragment>
