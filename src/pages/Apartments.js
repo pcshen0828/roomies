@@ -86,7 +86,7 @@ const reducer = (state, { type, payload }) => {
         queryList: [],
       };
 
-    case "cancelInputCheck":
+    case "cancelCheck":
       return {
         ...state,
         queryList: payload,
@@ -98,7 +98,7 @@ const reducer = (state, { type, payload }) => {
         currentPage: 1,
       };
 
-    case "addInputCheck":
+    case "check":
       return {
         ...state,
         queryList: payload,

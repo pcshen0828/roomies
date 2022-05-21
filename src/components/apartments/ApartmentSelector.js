@@ -186,13 +186,12 @@ function Selector({ filterData, dispatch, anchor }) {
   }, []);
 
   function showMatchedApartments({ value, name }) {
-    if (!value) {
-      const newQueryList = filterData.queryList.filter((item) => item !== name);
-      dispatch({ type: "cancelInputCheck", payload: newQueryList });
-    } else {
-      const newQueryList = [...filterData.queryList, name];
-      dispatch({ type: "addInputCheck", payload: newQueryList });
-    }
+    dispatch({
+      type: value ? "check" : "cancelCheck",
+      payload: value
+        ? [...filterData.queryList, name]
+        : filterData.queryList.filter((item) => item !== name),
+    });
   }
 
   const renderList = [
@@ -268,10 +267,7 @@ function Selector({ filterData, dispatch, anchor }) {
 Selector.propTypes = {
   filterData: PropTypes.object,
   dispatch: PropTypes.func,
-  anchor: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(HTMLDivElement) }),
-  ]),
+  anchor: PropTypes.shape({ current: PropTypes.instanceOf(HTMLDivElement) }),
 };
 
 export default Selector;
