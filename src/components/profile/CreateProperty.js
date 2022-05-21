@@ -313,7 +313,7 @@ function CreatePropertyModal({ toggle, setSaved, currentUser }) {
 
     Promise.all(promises).then(() => {
       setIsLoading(false);
-      toggle(false);
+      toggle();
       navigate("/profile/apartments/inactive");
       setSaved(true);
     });
@@ -323,7 +323,10 @@ function CreatePropertyModal({ toggle, setSaved, currentUser }) {
     <>
       {openConfirm && (
         <ConfirmBeforeQuitModal
-          toggle={toggle}
+          toggle={() => {
+            setOpenConfirm(false);
+          }}
+          quit={toggle}
           apartmentId={apartmentId}
           file={basicInfo.coverFile}
         />

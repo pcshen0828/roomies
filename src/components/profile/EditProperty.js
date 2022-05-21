@@ -262,7 +262,7 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
 
     Promise.all(promises).then((res) => {
       setLoading(false);
-      toggle(false);
+      toggle();
       setSaved(true);
     });
   }
@@ -273,9 +273,7 @@ function EditPropertyModal({ toggle, apartment, setSaved }) {
         <ConfirmBeforeActionModal
           toggle={() => setOpenConfirm(false)}
           message="尚未儲存，確認離開？"
-          action={() => {
-            toggle(false);
-          }}
+          action={toggle}
         />
       )}
       <NewModal>

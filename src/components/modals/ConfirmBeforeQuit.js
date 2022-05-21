@@ -2,8 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import styled from "styled-components";
-import { Overlay, Modal } from "./ModalElements";
-import { Bold, Button1 } from "../common/Components";
+import { Overlay, Modal, Header, Title, CloseButton } from "./ModalElements";
+import { Button1, FlexWrapper, RejectButton } from "../common/Components";
 
 const HigherOverlay = styled(Overlay)`
   z-index: 1200;
@@ -12,16 +12,27 @@ const HigherOverlay = styled(Overlay)`
 const NewModal = styled(Modal)`
   justify-content: center;
   align-items: center;
-  height: 100px;
-  padding: 30px 20px 20px;
-  max-width: 600px;
+  height: 160px;
+  padding: 0px 20px 0px;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: visible;
 `;
 
-const AlertMessage = styled(Bold)`
+const NewHeader = styled(Header)`
+  width: 100%;
+  align-items: center;
+  height: auto;
+`;
+
+const ButtonsWrapper = styled(FlexWrapper)`
+  align-self: end;
   margin-bottom: 20px;
 `;
 
-function ConfirmBeforeQuitModal({ toggle, apartmentId, file }) {
+function ConfirmBeforeQuitModal({ toggle, quit, apartmentId, file }) {
   async function closeAndDeleteDoc() {
     if (file) {
       await Firebase.deleteDoc(
@@ -31,23 +42,23 @@ function ConfirmBeforeQuitModal({ toggle, apartmentId, file }) {
         Firebase.storage,
         `apartments/${apartmentId}/cover/cover`
       );
-      Firebase.deleteObject(desertRef)
-        .then(() => {
-          toggle(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          toggle(false);
-        });
-    } else {
-      toggle(false);
+      Firebase.deleteObject(desertRef).catch((error) => {
+        console.log(error);
+      });
     }
+    quit();
   }
   return (
     <HigherOverlay out={false}>
       <NewModal>
-        <AlertMessage>尚未儲存，確認離開？</AlertMessage>
-        <Button1 onClick={closeAndDeleteDoc}>確認</Button1>
+        <NewHeader>
+          <Title>尚未儲存，確認離開？</Title>
+          <CloseButton onClick={toggle}>×</CloseButton>
+        </NewHeader>
+        <ButtonsWrapper>
+          <Button1 onClick={closeAndDeleteDoc}>確認</Button1>
+          <RejectButton onClick={toggle}>取消</RejectButton>
+        </ButtonsWrapper>
       </NewModal>
     </HigherOverlay>
   );
@@ -55,6 +66,7 @@ function ConfirmBeforeQuitModal({ toggle, apartmentId, file }) {
 
 ConfirmBeforeQuitModal.propTypes = {
   toggle: PropTypes.func.isRequired,
+  quit: PropTypes.func.isRequired,
   apartmentId: PropTypes.string.isRequired,
   file: PropTypes.instanceOf(File),
 };

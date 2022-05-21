@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import CreatePropertyModal from "./CreateProperty";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
-import api from "../../utils/api";
 import scrollToTop from "../../utils/scroll";
 
 import styled from "styled-components";
@@ -16,19 +15,12 @@ import {
   PagingList,
   PagingItem,
   SmallText,
-  RejectButton,
   FlexColumn,
 } from "../common/Components";
 import EditPropertyModal from "./EditProperty";
-import {
-  Overlay,
-  Modal,
-  Header,
-  Title,
-  CloseButton,
-} from "../modals/ModalElements";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import Skeleton from "react-loading-skeleton";
+import ConfirmChangeStatus from "../modals/ConfirmChangeStatus";
 
 const NewWrapper = styled(Wrapper)`
   margin: 10px 0 20px;
@@ -138,81 +130,19 @@ const EditWrapper = styled(FlexWrapper)`
   justify-content: flex-start;
 `;
 
-const NewModal = styled(Modal)`
-  max-width: 600px;
-`;
-
-const Buttons = styled(FlexWrapper)`
-  align-self: end;
-  margin-right: 20px;
-  height: 90px;
-`;
-
-function ConfirmChangeStatus({ currentStatus, item, setSaved, toggle }) {
-  function updateStatus() {
-    const time = Firebase.Timestamp.fromDate(new Date());
-    if (currentStatus === 0) {
-      api
-        .updateDocData("apartments", item.id, {
-          updateTime: time,
-          status: 1,
-        })
-        .then(() => {
-          toggle(false);
-          setSaved(true);
-        });
-    } else {
-      api
-        .updateDocData("apartments", item.id, {
-          updateTime: time,
-          status: 0,
-        })
-        .then(() => {
-          toggle(false);
-          setSaved(true);
-        });
-    }
-  }
-  return (
-    <Overlay>
-      <NewModal>
-        <Header>
-          <Title>確認更新？</Title>
-          <CloseButton
-            onClick={() => {
-              toggle(false);
-            }}
-          >
-            ×
-          </CloseButton>
-        </Header>
-        <Buttons>
-          <Button1 onClick={updateStatus}>確認</Button1>
-          <RejectButton
-            onClick={() => {
-              toggle(false);
-            }}
-          >
-            取消
-          </RejectButton>
-        </Buttons>
-      </NewModal>
-    </Overlay>
-  );
-}
-
 function LandlordProperty() {
   const { currentUser } = useAuth();
   const [properties, setProperties] = useState([]);
-  const [openEdit, setOpenEdit] = useState(false);
-  const [openCreate, setOpenCreate] = useState(false);
   const [apartment, setApartment] = useState("");
   const [statusItem, setStatusItem] = useState("");
+
+  const [openModalType, setOpenModalType] = useState("");
+  const [confirmType, setConfirmType] = useState("");
   const [saved, setSaved] = useState(false);
-  const [confirmActive, setConfirmActive] = useState(false);
-  const [confirmInactive, setConfirmInactive] = useState(false);
+
   const [paging, setPaging] = useState(1);
   const itemsPerPage = 5;
+
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true);
@@ -235,32 +165,16 @@ function LandlordProperty() {
     return Array.from(Array(num).keys());
   }
 
-  function handleActiveStatus(status) {
-    if (status === 0) {
-      setConfirmActive(true);
-    } else {
-      setConfirmInactive(true);
-    }
-  }
-
   function Render(status) {
     const data = properties.filter((property) => property.status === status);
     return (
       <>
-        {confirmActive && (
+        {confirmType !== "" && (
           <ConfirmChangeStatus
-            currentStatus={0}
+            currentStatus={confirmType === "becomeActive" ? 0 : 1}
             item={statusItem}
-            setSaved={setSaved}
-            toggle={setConfirmActive}
-          />
-        )}
-        {confirmInactive && (
-          <ConfirmChangeStatus
-            currentStatus={1}
-            item={statusItem}
-            setSaved={setSaved}
-            toggle={setConfirmInactive}
+            successfullySaved={() => setSaved(true)}
+            toggle={() => setConfirmType("")}
           />
         )}
         <NewFlexWrapper>
@@ -287,7 +201,7 @@ function LandlordProperty() {
                   <EditWrapper>
                     <EditButton
                       onClick={() => {
-                        setOpenEdit(true);
+                        setOpenModalType("edit");
                         setApartment(item);
                       }}
                     >
@@ -297,7 +211,7 @@ function LandlordProperty() {
                       <StatusButton
                         onClick={() => {
                           setStatusItem(item);
-                          handleActiveStatus(status);
+                          setConfirmType("becomeActive");
                         }}
                       >
                         上架
@@ -306,7 +220,7 @@ function LandlordProperty() {
                       <StatusButton
                         onClick={() => {
                           setStatusItem(item);
-                          handleActiveStatus(status);
+                          setConfirmType("becomeInactive");
                         }}
                       >
                         下架
@@ -343,17 +257,17 @@ function LandlordProperty() {
 
   return (
     <>
-      {openEdit && (
+      {openModalType === "edit" && (
         <EditPropertyModal
-          toggle={setOpenEdit}
+          toggle={() => setOpenModalType("")}
           apartment={apartment}
           setSaved={setSaved}
           currentUser={currentUser}
         />
       )}
-      {openCreate && (
+      {openModalType === "create" && (
         <CreatePropertyModal
-          toggle={setOpenCreate}
+          toggle={() => setOpenModalType("")}
           setSaved={setSaved}
           currentUser={currentUser}
         />
@@ -362,7 +276,9 @@ function LandlordProperty() {
         <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
       )}
       <NewWrapper>
-        <NewButton onClick={() => setOpenCreate(true)}>新增房源</NewButton>
+        <NewButton onClick={() => setOpenModalType("create")}>
+          新增房源
+        </NewButton>
         <TabsWrapper>
           <Tab
             active={location.pathname === "/profile/apartments/active"}
