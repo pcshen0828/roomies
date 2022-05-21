@@ -164,9 +164,9 @@ function Community() {
     async function getAllUsers() {
       if (!mounted) return;
 
-      api.getAllDocsFromCollection("hobbies").then((res) => {
+      api.getAllDocsFromCollection("hobbies").then((allHobbies) => {
         if (!mounted) return;
-        setHobbies(res);
+        setHobbies(allHobbies);
       });
 
       setSearching(true);

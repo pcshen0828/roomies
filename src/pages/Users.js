@@ -29,12 +29,14 @@ function User() {
     let mounted = true;
     scrollToTop();
 
-    api.getDataWithSingleQuery("users", "uid", "==", id).then((res) => {
-      if (!res.length) return;
-      if (!mounted) return;
-      setTargetUser(res[0]);
-      setLoaded(true);
-    });
+    api
+      .getDataWithSingleQuery("users", "uid", "==", id)
+      .then((queriedUsers) => {
+        if (!queriedUsers.length) return;
+        if (!mounted) return;
+        setTargetUser(queriedUsers[0]);
+        setLoaded(true);
+      });
 
     return function cleanup() {
       mounted = false;

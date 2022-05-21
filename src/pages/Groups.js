@@ -223,9 +223,10 @@ function Groups() {
       if (!groupData) return;
       api
         .getDataWithSingleQuery("apartments", "id", "==", groupData.apartmentId)
-        .then((res) => {
-          setApartmentData(res[0]);
-          setOwner(res[0].owner);
+        .then((queriedApartments) => {
+          const queriedApartment = queriedApartments[0];
+          setApartmentData(queriedApartment);
+          setOwner(queriedApartment.owner);
           setLoading(false);
         });
       api
@@ -235,8 +236,8 @@ function Groups() {
           "in",
           groupData.members?.length ? groupData.members : [1]
         )
-        .then((res) => {
-          setMembers(res);
+        .then((queriedUsers) => {
+          setMembers(queriedUsers);
         });
       setGroupMembers(groupData.members);
     });
@@ -247,10 +248,12 @@ function Groups() {
     );
 
     Firebase.onSnapshot(query2, (snapshot) => {
-      const res = snapshot.docs.map((doc) => doc.data());
+      const invitations = snapshot.docs.map((doc) => doc.data());
       if (!mounted) return;
       setInvitation(
-        res.find((data) => data.receiver === (currentUser && currentUser.uid))
+        invitations.find(
+          (data) => data.receiver === (currentUser && currentUser.uid)
+        )
       );
     });
 

@@ -156,8 +156,8 @@ function Apartments() {
             .getAllDocsFromCollection(
               "apartments/" + apartment.id + `/${subCollection}`
             )
-            .then((res) => {
-              const properties = res
+            .then((docs) => {
+              const properties = docs
                 .filter((property) => property.value === true)
                 .map((item) => item.id);
               newData.conditions.push(...properties);
