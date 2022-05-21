@@ -19,12 +19,8 @@ function calcTimeGap(time) {
     : "現在";
 }
 
-function checkIsNaNOrNot(event, callback) {
-  callback("");
-  if (!/[0-9]/.test(event.key)) {
-    event.preventDefault();
-    callback("只能輸入數字！");
-  }
+function checkEventKeyIsNaN(event) {
+  return !/[0-9]/.test(event.key);
 }
 
-export { calcTimeGap, checkIsNaNOrNot };
+export { calcTimeGap, checkEventKeyIsNaN };

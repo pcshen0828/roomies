@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import styled from "styled-components";
-import { checkIsNaNOrNot } from "../../../utils/calculate";
+import { checkEventKeyIsNaN } from "../../../utils/calculate";
 
 import {
   SmallLabel,
@@ -91,7 +91,9 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
               value={info.value}
               onKeyPress={(event) => {
                 if (info.name === "所在樓層" || info.name === "坪數") {
-                  checkIsNaNOrNot(event, handleError);
+                  const bool = checkEventKeyIsNaN(event);
+                  if (bool) event.preventDefault();
+                  handleError(bool ? "只能輸入數字！" : "");
                 }
               }}
               onFocus={() => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { checkIsNaNOrNot } from "../../../utils/calculate";
+
 import api from "../../../utils/api";
 import {
   GoogleMap,
@@ -8,6 +8,7 @@ import {
 } from "@react-google-maps/api";
 import { googleMapsAppKey } from "../../../appkeys";
 import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
+import { checkEventKeyIsNaN } from "../../../utils/calculate";
 
 import styled from "styled-components";
 import { mainColor } from "../../../styles/GlobalStyle";
@@ -72,12 +73,7 @@ const SearchBox = styled.input`
 
 const libraries = ["places"];
 
-function EditPropertyPage1({
-  apartment,
-  basicInfo,
-  setBasicInfo,
-  handleError,
-}) {
+function EditPropertyPage1({ basicInfo, setBasicInfo, handleError }) {
   const coverFileRef = useRef(null);
   const [error, setError] = useState("");
 
@@ -85,7 +81,7 @@ function EditPropertyPage1({
   const [map, setMap] = useState(null);
   const [query, setQuery] = useState("");
 
-  const { isLoaded, loadError } = useLoadScript({
+  const { isLoaded } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: googleMapsAppKey,
     libraries,
@@ -226,7 +222,9 @@ function EditPropertyPage1({
           handleError("");
         }}
         onKeyPress={(event) => {
-          checkIsNaNOrNot(event, handleError);
+          const bool = checkEventKeyIsNaN(event);
+          if (bool) event.preventDefault();
+          handleError(bool ? "只能輸入數字！" : "");
         }}
         onChange={(e) => {
           if (!e.target.value.trim()) {

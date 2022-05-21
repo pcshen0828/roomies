@@ -18,8 +18,8 @@ import {
   Select,
   FlexColumn,
 } from "../../common/Components";
-import { checkIsNaNOrNot } from "../../../utils/calculate";
 import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
+import { checkEventKeyIsNaN } from "../../../utils/calculate";
 
 const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
@@ -216,7 +216,9 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
           handleError("");
         }}
         onKeyPress={(event) => {
-          checkIsNaNOrNot(event, handleError);
+          const bool = checkEventKeyIsNaN(event);
+          if (bool) event.preventDefault();
+          handleError(bool ? "只能輸入數字！" : "");
         }}
         onChange={(e) => {
           if (!e.target.value.trim()) {
