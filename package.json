@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@dhaiwat10/react-link-preview": "^1.14.0",
     "@emotion/styled": "^11.8.1",
     "@fullcalendar/core": "^5.11.0",
     "@fullcalendar/daygrid": "^5.11.0",
