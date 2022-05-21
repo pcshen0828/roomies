@@ -42,12 +42,27 @@ const Anchor = styled.div`
 
 const initialState = {
   allData: [],
-  filtered: [],
+  search: "",
   queryList: [],
   currentPage: 1,
   allPages: 1,
   itemsPerPage: 6,
 };
+
+function calculateSearchAllPages(allData, keyword, itemsPerPage) {
+  return Math.ceil(
+    allData.filter((item) => item.basic.title.includes(keyword)).length /
+      itemsPerPage
+  );
+}
+
+function calculateFilteredAllPages(allData, queryList, itemsPerPage) {
+  return Math.ceil(
+    allData.filter((item) =>
+      queryList.every((value) => item.conditions.includes(value))
+    ).length / itemsPerPage
+  );
+}
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -55,17 +70,18 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         allData: payload,
-        filtered: payload,
         allPages: Math.ceil(payload.length / state.itemsPerPage),
       };
 
     case "search":
       return {
         ...state,
-        filtered: state.allData.filter((item) =>
-          item.basic.title.includes(payload)
+        search: payload,
+        allPages: calculateSearchAllPages(
+          state.allData,
+          payload,
+          state.itemsPerPage
         ),
-        allPages: Math.ceil(state.filtered.length / state.itemsPerPage),
         currentPage: 1,
         queryList: [],
       };
@@ -74,10 +90,11 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         queryList: payload,
-        filtered: state.allData.filter((item) =>
-          payload.every((value) => item.conditions.includes(value))
+        allPages: calculateFilteredAllPages(
+          state.allData,
+          payload,
+          state.itemsPerPage
         ),
-        allPages: Math.ceil(state.filtered.length / state.itemsPerPage),
         currentPage: 1,
       };
 
@@ -85,10 +102,11 @@ const reducer = (state, { type, payload }) => {
       return {
         ...state,
         queryList: payload,
-        filtered: state.allData.filter((item) =>
-          payload.every((value) => item.conditions.includes(value))
+        allPages: calculateFilteredAllPages(
+          state.allData,
+          payload,
+          state.itemsPerPage
         ),
-        allPages: Math.ceil(state.filtered.length / state.itemsPerPage),
         currentPage: 1,
       };
 
@@ -177,6 +195,17 @@ function Apartments() {
     return () => intersectionObserver.disconnect();
   }, []);
 
+  const filterFunction = (item) => {
+    if (filterData.search) {
+      return item.basic.title.includes(filterData.search);
+    }
+    if (filterData.queryList) {
+      return filterData.queryList.every((value) =>
+        item.conditions.includes(value)
+      );
+    }
+  };
+
   return (
     <>
       <NewWrapper>
@@ -200,8 +229,9 @@ function Apartments() {
           </Cards>
         ) : (
           <Cards>
-            {filterData.filtered.length
-              ? filterData.filtered
+            {filterData.allData.filter(filterFunction).length
+              ? filterData.allData
+                  .filter(filterFunction)
                   .slice(0, filterData.itemsPerPage * filterData.currentPage)
                   .map((apartment) => (
                     <Card key={apartment.basic.id} detail={apartment.basic} />
