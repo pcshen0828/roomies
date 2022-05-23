@@ -215,18 +215,14 @@ export default function EditPostModal({
         <ConfirmBeforeActionModal
           toggle={() => setOpenConfirm(false)}
           message="尚未儲存，確認離開？"
-          action={() => {
-            toggle();
-          }}
+          action={toggle}
         />
       )}
       {postConfirm && (
         <ConfirmBeforeActionModal
           toggle={() => setPostConfirm(false)}
           message="確認更新？"
-          action={() => {
-            updatePost();
-          }}
+          action={updatePost}
         />
       )}
       <NewModal>

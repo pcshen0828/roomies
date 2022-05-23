@@ -250,7 +250,7 @@ function CreatePropertyModal({ toggle, setSaved, currentUser }) {
     api.setNewDoc(newGroupRef, {
       id: newGroupRef.id,
       apartmentId,
-      member: [],
+      members: [],
     });
 
     let promises = [];

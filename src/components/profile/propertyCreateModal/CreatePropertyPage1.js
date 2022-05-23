@@ -1,13 +1,13 @@
-import React, { useCallback, useRef, useState } from "react"
-import PropTypes from "prop-types"
-import api from "../../../utils/api"
+import React, { useCallback, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import api from "../../../utils/api";
 import {
   GoogleMap,
   useLoadScript,
   StandaloneSearchBox,
-} from "@react-google-maps/api"
+} from "@react-google-maps/api";
 
-import styled from "styled-components"
+import styled from "styled-components";
 import {
   SmallTitle,
   SmallLabel,
@@ -17,13 +17,13 @@ import {
   Select,
   FlexColumn,
   BackgroundImage,
-} from "../../common/Components"
-import { generateSelectOptionsByAmountNumber } from "../../../utils/generate"
-import { checkEventKeyIsNaN } from "../../../utils/calculate"
+} from "../../common/Components";
+import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
+import { checkEventKeyIsNaN } from "../../../utils/calculate";
 
 const CoverImageDisplayer = styled(FlexColumn)`
   margin-bottom: 10px;
-`
+`;
 
 const Image = styled(BackgroundImage)`
   width: 320px;
@@ -33,7 +33,7 @@ const Image = styled(BackgroundImage)`
     width: 240px;
     height: 135px;
   }
-`
+`;
 
 const ChooseImageButton = styled.label`
   width: 120px;
@@ -49,11 +49,11 @@ const ChooseImageButton = styled.label`
   &:hover {
     background: #dadada;
   }
-`
+`;
 
 const HiddenInputFilePicker = styled.input`
   display: none;
-`
+`;
 
 const SearchBox = styled.input`
   height: 30px;
@@ -67,54 +67,54 @@ const SearchBox = styled.input`
     outline: none;
     border: 1px solid #c1b18a;
   }
-`
+`;
 
-const libraries = ["places"]
+const libraries = ["places"];
 
 function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
-  const coverFileRef = useRef(null)
-  const [error, setError] = useState("")
-  const [searchBox, setSearchBox] = useState(null)
-  const [map, setMap] = useState(null)
+  const coverFileRef = useRef(null);
+  const [error, setError] = useState("");
+  const [searchBox, setSearchBox] = useState(null);
+  const [map, setMap] = useState(null);
 
   const { isLoaded } = useLoadScript({
     id: "google-map-script",
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries,
     language: "zh-TW",
-  })
+  });
 
   const onLoad = useCallback(function callback(map) {
-    setMap(map)
-  }, [])
+    setMap(map);
+  }, []);
 
   const onUnmount = useCallback(function callback(map) {
-    setMap(null)
-  }, [])
+    setMap(null);
+  }, []);
 
   const searchBoxOnLoad = (ref) => {
-    setSearchBox(ref)
-  }
+    setSearchBox(ref);
+  };
   const onPlacesChanged = () => {
-    const place = searchBox.getPlaces()[0]
+    const place = searchBox.getPlaces()[0];
     const newCenter = {
       lat: place.geometry.location.lat(),
       lng: place.geometry.location.lng(),
-    }
+    };
     setBasicInfo({
       ...basicInfo,
       address: place.formatted_address,
       query: place.formatted_address,
       geoLocation: newCenter,
-    })
-  }
+    });
+  };
 
   function handleUpload(file) {
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
-      setError("檔案過大，請重新上傳")
-      return
+      setError("檔案過大，請重新上傳");
+      return;
     }
-    setError("")
+    setError("");
     api
       .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, file)
       .then((downloadUrl) => {
@@ -122,9 +122,9 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
           ...basicInfo,
           coverImage: downloadUrl,
           coverFile: file,
-        })
-        coverFileRef.current.value = null
-      })
+        });
+        coverFileRef.current.value = null;
+      });
   }
 
   return (
@@ -141,7 +141,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
           type="file"
           accept="image/*"
           onChange={(e) => {
-            handleUpload(e.target.files[0])
+            handleUpload(e.target.files[0]);
           }}
         />
         {error && <Error>{error}</Error>}
@@ -154,12 +154,12 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
         id="title"
         value={basicInfo.title}
         onFocus={() => {
-          handleError("")
+          handleError("");
         }}
         onChange={(e) => {
-          setBasicInfo({ ...basicInfo, title: e.target.value })
+          setBasicInfo({ ...basicInfo, title: e.target.value });
           if (!e.target.value.trim()) {
-            handleError("請輸入房源名稱")
+            handleError("請輸入房源名稱");
           }
         }}
       />
@@ -178,12 +178,12 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
               id="geoLocation"
               value={basicInfo.query}
               onFocus={() => {
-                handleError("")
+                handleError("");
               }}
               onChange={(e) => {
-                setBasicInfo({ ...basicInfo, query: e.target.value })
+                setBasicInfo({ ...basicInfo, query: e.target.value });
                 if (!e.target.value.trim()) {
-                  handleError("請輸入房源地址")
+                  handleError("請輸入房源地址");
                 }
               }}
             />
@@ -209,22 +209,22 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
         type="tel"
         value={basicInfo.monthlyRent}
         onFocus={() => {
-          handleError("")
+          handleError("");
         }}
         onKeyPress={(event) => {
-          const bool = checkEventKeyIsNaN(event)
-          if (bool) event.preventDefault()
-          handleError(bool ? "只能輸入數字！" : "")
+          const bool = checkEventKeyIsNaN(event);
+          if (bool) event.preventDefault();
+          handleError(bool ? "只能輸入數字！" : "");
         }}
         onChange={(e) => {
           if (!e.target.value.trim()) {
-            handleError("請輸入每月房租")
+            handleError("請輸入每月房租");
           }
           if (parseInt(e.target.value) < 1) {
-            handleError("請輸入有效數值")
-            e.target.value = ""
+            handleError("請輸入有效數值");
+            e.target.value = "";
           }
-          setBasicInfo({ ...basicInfo, monthlyRent: e.target.value })
+          setBasicInfo({ ...basicInfo, monthlyRent: e.target.value });
         }}
       />
 
@@ -235,10 +235,10 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
         id="roomiesCount"
         value={basicInfo.roomiesCount}
         onFocus={() => {
-          handleError("")
+          handleError("");
         }}
         onChange={(e) => {
-          setBasicInfo({ ...basicInfo, roomiesCount: e.target.value })
+          setBasicInfo({ ...basicInfo, roomiesCount: e.target.value });
         }}
       >
         {generateSelectOptionsByAmountNumber(10)}
@@ -251,16 +251,16 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
         id="rooms"
         value={basicInfo.rooms}
         onFocus={() => {
-          handleError("")
+          handleError("");
         }}
         onChange={(e) => {
-          setBasicInfo({ ...basicInfo, rooms: e.target.value })
+          setBasicInfo({ ...basicInfo, rooms: e.target.value });
         }}
       >
         {generateSelectOptionsByAmountNumber(10)}
       </Select>
     </>
-  )
+  );
 }
 
 CreatePropertyPage1.propTypes = {
@@ -268,6 +268,6 @@ CreatePropertyPage1.propTypes = {
   setBasicInfo: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   handleError: PropTypes.func.isRequired,
-}
+};
 
-export default CreatePropertyPage1
+export default CreatePropertyPage1;

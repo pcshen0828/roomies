@@ -167,7 +167,7 @@ export default function TenantSchedule() {
                   <RequestDetailModal
                     members={item.members}
                     hostId={item.host}
-                    toggle={setCheckDetail}
+                    toggle={() => setCheckDetail(false)}
                   />
                 )}
                 <ScheduleInnerWrapper>

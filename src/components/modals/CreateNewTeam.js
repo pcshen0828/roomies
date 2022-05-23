@@ -181,7 +181,6 @@ function NewTeamModal({
         </NewBody>
         <Button
           onClick={() => {
-            if (!queriedUsers.length) return;
             if (!teamName) return;
             setOpenConfirm(true);
           }}

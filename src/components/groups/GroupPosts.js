@@ -109,7 +109,7 @@ export default function GroupPosts({ currentUser, groupID, setPostStatus }) {
             key={posts.find((post) => post.isOnTop).id}
             post={posts.find((post) => post.isOnTop)}
             currentUser={currentUser}
-            setDeleted={setPostStatus}
+            setPostStatus={setPostStatus}
           />
         ) : (
           "尚無貼文"
