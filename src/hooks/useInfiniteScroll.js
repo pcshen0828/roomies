@@ -20,6 +20,7 @@ export default function useInfiniteScroll({
       if (filterData.currentPage > filterData.allPages) return;
     });
 
+    if (!anchor.current) return;
     intersectionObserver.observe(anchor.current);
     return () => intersectionObserver.disconnect();
   }, [dependency]);

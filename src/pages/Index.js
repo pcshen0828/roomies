@@ -29,12 +29,13 @@ import mates from "../images/mates.png";
 import corner from "../images/corner.png";
 import down from "../images/down.svg";
 import checked from "../images/checked.svg";
+import { HeaderHeight } from "../styles/GlobalStyle";
 
 const banners = [banner5, banner1, banner3, banner2, banner4];
 
 const Wrapper = styled.div`
   width: 100%;
-  height: calc(100vh - 80px);
+  height: calc(100vh - ${HeaderHeight}px);
   position: relative;
   margin-bottom: 20px;
   background: #fff;

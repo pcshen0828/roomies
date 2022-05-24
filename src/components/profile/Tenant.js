@@ -15,10 +15,11 @@ import GroupAndTeam from "./GroupAndTeam";
 import TenantSchedule from "./TenantSchedule";
 import more from "../../images/more.svg";
 import less from "../../images/less.svg";
+import { FooterHeight, HeaderHeight } from "../../styles/GlobalStyle";
 
 const Wrapper = styled(BodyWrapper)`
   margin-top: 10px;
-  min-height: calc(100vh - 80px - 271px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
   width: 100%;
   @media screen and (max-width: 1279.98px) {
     flex-direction: cloumn;

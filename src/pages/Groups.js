@@ -6,7 +6,7 @@ import api from "../utils/api";
 import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
-import { mainColor } from "../styles/GlobalStyle";
+import { FooterHeight, HeaderHeight, mainColor } from "../styles/GlobalStyle";
 import {
   Button1,
   FlexWrapper,
@@ -32,9 +32,10 @@ const Wrapper = styled(FlexWrapper)`
   margin: 0 auto;
   padding: 20px 0;
   background: #f0f2f5;
+  border-bottom: 1px solid #424b5a4d;
   flex-direction: column;
   align-items: flex-start;
-  min-height: calc(100vh - 241px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
   position: relative;
 `;
 

@@ -3,7 +3,6 @@ import { Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
-import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import {
@@ -20,17 +19,16 @@ import Footer from "../components/layout/Footer";
 import Skeleton from "react-loading-skeleton";
 import search from "../images/search.svg";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
+import { FooterHeight, HeaderHeight } from "../styles/GlobalStyle";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
-  min-height: calc(100vh - 221px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
 `;
 
 const NewTitle = styled(Title)`
   margin: 0px 0 30px;
 `;
-
-const NewButton = styled(SearchButton)``;
 
 const HobbyTags = styled(FlexWrapper)`
   margin-top: 20px;
@@ -57,7 +55,7 @@ const Card = styled.div`
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 5px 10px;
-  margin: 0px 10px 10px 0;
+  margin: 0px 10px 30px 0;
   font-size: 14px;
   cursor: pointer;
   box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.06);
@@ -82,7 +80,7 @@ const initialState = {
   search: "",
   currentPage: 1,
   allPages: 1,
-  usersPerPage: 6,
+  usersPerPage: 9,
 };
 
 function calculateAllPages(allUsers, condition, payload, usersPerPage) {
@@ -259,7 +257,7 @@ function Community() {
                   searchUser(e.target.value);
                 }}
               />
-              <NewButton src={search} />
+              <SearchButton src={search} />
             </SearchWrapper>
             <HobbyTags>
               <Card

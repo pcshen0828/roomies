@@ -44,6 +44,7 @@ import fridge from "../../images/fridge.svg";
 import kitchen from "../../images/kitchen.svg";
 import wifi from "../../images/wifi.svg";
 import laundry from "../../images/laundry.svg";
+import { FooterHeight, HeaderHeight } from "../../styles/GlobalStyle";
 
 const icons = [
   { name: "bed", src: bed },
@@ -70,7 +71,7 @@ const icons = [
 const Wrapper = styled(FlexWrapper)`
   width: calc(100% - 48px);
   max-width: 1200px;
-  min-height: calc(100vh - 241px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
   margin: 20px auto;
   flex-direction: column;
   align-items: flex-start;

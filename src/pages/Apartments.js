@@ -1,7 +1,6 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Firebase } from "../utils/firebase";
 import api from "../utils/api";
-import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import { Wrapper, Title } from "../components/common/Components";
@@ -23,7 +22,7 @@ const NewTitle = styled(Title)`
 const Cards = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 340px);
+  grid-template-columns: repeat(auto-fill, 360px);
   justify-content: space-between;
   margin: -10px auto 0;
 

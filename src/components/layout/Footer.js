@@ -1,38 +1,58 @@
 import React from "react";
 import styled from "styled-components";
-import { FlexWrapper } from "../common/Components";
+import { subColor } from "../../styles/GlobalStyle";
+import { FlexWrapper, StyledLink } from "../common/Components";
+import github from "../../images/github.svg";
+import linkedin from "../../images/linkedin.svg";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
-  height: 100px;
-  background: #c1b18a;
+  height: 120px;
+  background: #f0f2f5;
   background-origin: border-box;
-  border-top: 1px solid #dadada;
-  padding: 20px 0 0px;
+  padding: 20px 0 5px;
 `;
 
 const InnerWrapper = styled(FlexWrapper)`
+  position: relative;
   width: calc(100% - 48px);
+  padding: 0 24px;
   max-width: 1200px;
+  height: calc(100% - 30px);
   margin: 20px auto;
   justify-content: space-between;
+  align-items: flex-start;
   @media screen and (max-width: 767.98px) {
-    align-items: flex-start;
     flex-direction: column;
   }
 `;
 
-const ContactWrapper = styled(FlexWrapper)`
-  width: 100%;
+const NewLink = styled(StyledLink)`
+  margin: 0 20px 0 0;
   font-size: 14px;
-  padding: 10px 0;
+  transition: color 0.2s ease;
+  &:hover {
+    border-bottom: 1px solid transparent;
+    color: ${subColor};
+  }
+`;
+
+const Icon = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
 `;
 
 const CopyrightWrapper = styled(FlexWrapper)`
-  width: 100%;
-  font-size: 14px;
-  padding: 10px 0;
+  width: calc(100% - 10px);
+  border-top: 1px solid #424b5a4d;
+  padding: 15px 10px 0 0;
+  font-size: 12px;
   justify-content: flex-end;
+  position: absolute;
+  right: 0;
+  bottom: 0;
 `;
 
 const year = new Date().getFullYear();
@@ -41,9 +61,19 @@ export default function Footer() {
   return (
     <Wrapper>
       <InnerWrapper>
-        <ContactWrapper>Contact me: michelleshen0828@gmail.com</ContactWrapper>
+        <FlexWrapper>
+          <NewLink to="/apartments">所有房源</NewLink>
+          <NewLink to="/explore">探索</NewLink>
+          <NewLink to="/">操作流程</NewLink>
+        </FlexWrapper>
         <CopyrightWrapper>
-          寓見 Roomies &copy; {year} All rights reserved.
+          <Link to="https://github.com/pcshen0828">
+            <Icon src={github} />
+          </Link>
+          <Link to="http://www.linkedin.com/in/michelle-shen-65509b201">
+            <Icon src={linkedin} />
+          </Link>
+          &copy; {year} 寓見 Roomies. All rights reserved.
         </CopyrightWrapper>
       </InnerWrapper>
     </Wrapper>

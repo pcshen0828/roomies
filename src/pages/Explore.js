@@ -10,12 +10,13 @@ import {
 } from "../components/common/Components";
 import MyMap from "../components/explore/Map";
 import Footer from "../components/layout/Footer";
+import { FooterHeight, HeaderHeight } from "../styles/GlobalStyle";
 
 const Container = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
   margin-bottom: 40px;
-  min-height: calc(100vh - 221px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
 `;
 
 const NewWrapper = styled(Wrapper)`
