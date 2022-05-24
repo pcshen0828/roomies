@@ -52,7 +52,7 @@ const Container = styled(FlexWrapper)`
   width: 100%;
   position: sticky;
   top: 80px;
-  padding: 20px 0 10px;
+  padding: 20px 0 20px;
   left: 0;
   z-index: 10;
   background: #fff;
