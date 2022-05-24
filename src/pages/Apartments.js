@@ -113,7 +113,7 @@ const reducer = (state, { type, payload }) => {
     case "reset":
       return {
         ...state,
-        filtered: state.allData,
+        search: "",
         queryList: [],
         currentPage: 1,
         allPages: Math.ceil(state.allData.length / state.itemsPerPage),
@@ -131,7 +131,6 @@ function Apartments() {
   const [filterData, dispatch] = useReducer(reducer, initialState);
 
   const anchor = useRef(null);
-  const filterAnchor = useRef(null);
   const firstRender = useRef();
 
   const query = Firebase.query(
@@ -211,12 +210,7 @@ function Apartments() {
     <>
       <NewWrapper>
         <NewTitle>立即開始，搜尋理想房源</NewTitle>
-        <Selector
-          anchor={filterAnchor}
-          filterData={filterData}
-          dispatch={dispatch}
-        />
-        <Anchor role="filter" ref={filterAnchor}></Anchor>
+        <Selector filterData={filterData} dispatch={dispatch} />
         {loading ? (
           <Cards>
             {Array.from(Array(6).keys()).map((number) => (

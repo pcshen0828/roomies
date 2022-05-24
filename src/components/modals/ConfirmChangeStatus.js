@@ -10,6 +10,11 @@ const NewModal = styled(Modal)`
   max-width: 600px;
 `;
 
+const ContentWrapper = styled(FlexWrapper)`
+  width: calc(100% - 40px);
+  padding: 20px 20px 0;
+`;
+
 const Buttons = styled(FlexWrapper)`
   align-self: end;
   margin-right: 20px;
@@ -35,9 +40,12 @@ export default function ConfirmChangeStatus({
     <Overlay>
       <NewModal>
         <Header>
-          <Title>確認更新？</Title>
+          <Title>更新房源狀態</Title>
           <CloseButton onClick={toggle}>×</CloseButton>
         </Header>
+        <ContentWrapper>
+          {currentStatus === 0 ? "確認上架？" : "確認下架？"}
+        </ContentWrapper>
         <Buttons>
           <Button1 onClick={updateStatus}>確認</Button1>
           <RejectButton onClick={toggle}>取消</RejectButton>

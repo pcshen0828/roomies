@@ -18,7 +18,7 @@ const HigherOverlay = styled(Overlay)`
 const NewModal = styled(Modal)`
   justify-content: center;
   align-items: center;
-  height: 160px;
+  min-height: 200px;
   padding: 0px 20px 0px;
   max-width: 500px;
   display: flex;
@@ -31,6 +31,11 @@ const NewHeader = styled(Header)`
   width: 100%;
   align-items: center;
   height: auto;
+`;
+
+const ContentWrapper = styled(FlexWrapper)`
+  width: 100%;
+  padding: 20px 0 0;
 `;
 
 const ButtonsWrapper = styled(FlexWrapper)`
@@ -49,9 +54,10 @@ export default function ConfirmBeforeActionModal({ message, action, toggle }) {
     <HigherOverlay out={false}>
       <NewModal>
         <NewHeader>
-          <Title>{message}</Title>
+          <Title>再次確認</Title>
           <CloseButton onClick={toggle}>×</CloseButton>
         </NewHeader>
+        <ContentWrapper>{message}</ContentWrapper>
         <ButtonsWrapper>
           <RejectButton onClick={toggle}>取消</RejectButton>
           <ConfirmButton

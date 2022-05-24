@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import styled, { keyframes } from "styled-components";
 import {
@@ -24,6 +24,7 @@ const fadeIn = keyframes`
 const Toggler = styled.div`
   width: 100%;
   height: 30px;
+  margin-bottom: 30px;
   position: sticky;
   top: 79.5px;
   padding: 20px 0;
@@ -47,6 +48,7 @@ const CloseButton = styled(Button1)`
 const Container = styled(FlexWrapper)`
   flex-direction: column;
   align-items: flex-start;
+  margin-bottom: 30px;
   width: 100%;
   position: sticky;
   top: 80px;
@@ -164,26 +166,9 @@ const furnitureList = {
   ],
 };
 
-function Selector({ filterData, dispatch, anchor }) {
-  const [isClose, setIsClose] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-    const intersectionObserver = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      if (!mounted) return;
-      if (entry.intersectionRatio <= 0) {
-        setIsClose(true);
-      } else {
-        setIsClose(false);
-      }
-    });
-    intersectionObserver.observe(anchor.current);
-
-    return function cleanup() {
-      mounted = false;
-    };
-  }, []);
+function Selector({ filterData, dispatch }) {
+  const [isClose, setIsClose] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   function showMatchedApartments({ value, name }) {
     dispatch({
@@ -202,12 +187,17 @@ function Selector({ filterData, dispatch, anchor }) {
 
   function displayAllApartments() {
     dispatch({ type: "reset" });
+    setSearchQuery("");
   }
 
   function RenderSelector() {
     return (
       <>
-        <SearchBox dispatch={dispatch} />
+        <SearchBox
+          dispatch={dispatch}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
         <Wrapper>
           <ClearAll onClick={displayAllApartments}>×清空條件</ClearAll>
           <ShowAll onClick={displayAllApartments}>顯示所有房源</ShowAll>
@@ -267,7 +257,6 @@ function Selector({ filterData, dispatch, anchor }) {
 Selector.propTypes = {
   filterData: PropTypes.object,
   dispatch: PropTypes.func,
-  anchor: PropTypes.shape({ current: PropTypes.instanceOf(HTMLDivElement) }),
 };
 
 export default Selector;

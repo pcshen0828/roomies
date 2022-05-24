@@ -273,7 +273,7 @@ function LandlordProperty() {
         />
       )}
       {saved && (
-        <SuccessfullySavedModal toggle={setSaved} message="儲存成功！" />
+        <SuccessfullySavedModal toggle={setSaved} message="更新成功！" />
       )}
       <NewWrapper>
         <NewButton onClick={() => setOpenModalType("create")}>

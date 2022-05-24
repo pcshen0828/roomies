@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import { SearchWrapper, SearchInput, SearchButton } from "../common/Components";
@@ -11,9 +11,7 @@ const StyldSearchWrapper = styled(SearchWrapper)`
 
 const NewButton = styled(SearchButton)``;
 
-function SearchBox({ dispatch }) {
-  const [searchQuery, setSearchQuery] = useState("");
-
+function SearchBox({ dispatch, searchQuery, setSearchQuery }) {
   function searchKeyWords(keyword) {
     if (!keyword.trim()) {
       dispatch({ type: "reset" });
@@ -37,6 +35,8 @@ function SearchBox({ dispatch }) {
 
 SearchBox.propTypes = {
   dispatch: PropTypes.func,
+  searchQuery: PropTypes.string.isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
 };
 
 export default SearchBox;
