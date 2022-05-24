@@ -19,6 +19,7 @@ import UserCard from "../components/community/UserCard";
 import Footer from "../components/layout/Footer";
 import Skeleton from "react-loading-skeleton";
 import search from "../images/search.svg";
+import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
@@ -193,21 +194,13 @@ function Community() {
     };
   }, []);
 
-  useEffect(() => {
-    scrollToTop();
-    const intersectionObserver = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      if (entry.intersectionRatio <= 0) return;
-      if (firstRender.current) return;
-
-      dispatch({ type: "updateCurrentPage", payload: 1 });
-      if (filterData.currentPage > filterData.allPages) return;
-    });
-    if (user) {
-      intersectionObserver.observe(anchor.current);
-    }
-    return () => intersectionObserver.disconnect();
-  }, [user]);
+  useInfiniteScroll({
+    firstRender,
+    dispatch,
+    filterData,
+    anchor,
+    dependency: user,
+  });
 
   function searchUser(queryName) {
     if (!queryName.trim()) {

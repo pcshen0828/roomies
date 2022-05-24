@@ -9,6 +9,7 @@ import Selector from "../components/apartments/ApartmentSelector";
 import Card from "../components/apartments/ApartmentCard";
 import Footer from "../components/layout/Footer";
 import Skeleton from "react-loading-skeleton";
+import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
 const NewWrapper = styled(Wrapper)`
   align-items: flex-start;
@@ -179,20 +180,12 @@ function Apartments() {
     });
   }, []);
 
-  useEffect(() => {
-    scrollToTop();
-    const intersectionObserver = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      if (entry.intersectionRatio <= 0) return;
-      if (firstRender.current) return;
-
-      dispatch({ type: "updateCurrentPage", payload: 1 });
-      if (filterData.currentPage > filterData.allPages) return;
-    });
-
-    intersectionObserver.observe(anchor.current);
-    return () => intersectionObserver.disconnect();
-  }, []);
+  useInfiniteScroll({
+    firstRender,
+    dispatch,
+    filterData,
+    anchor,
+  });
 
   const filterFunction = (item) => {
     if (filterData.search) {
