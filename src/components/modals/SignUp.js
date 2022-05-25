@@ -13,6 +13,8 @@ import {
   FlexWrapper,
   FlexColumn,
   TitleSub,
+  BackgroundImage,
+  Bold,
 } from "../common/Components";
 import signup from "../../images/tree.png";
 
@@ -53,18 +55,33 @@ const NewTitle = styled(TitleSub)`
   margin-bottom: 0;
 `;
 
-const BodyLeft = styled.div`
-  width: calc(40% - 8px);
+const BodyLeft = styled(BackgroundImage)`
+  width: calc(40% - 18px);
   align-self: stretch;
-  opacity: 0.2;
-  box-shadow: 0px 2px 30px rgba(0, 0, 0, 0.2);
-  background: ${(props) => (props.src ? `url(${props.src})` : "")};
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background: linear-gradient(
+    180deg,
+    rgba(66, 75, 90, 0.5) 0%,
+    rgba(66, 75, 90, 0.3) 0.01%,
+    rgba(193, 177, 138, 0.3) 100%
+  );
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
   @media screen and (max-width: 995.98px) {
     display: none;
   } ;
+`;
+
+const WelcomeText = styled(Bold)`
+  font-size: 60px;
+  background: linear-gradient(90.19deg, #424b5a 6.41%, #c1b18a 70.82%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+  opacity: 0.3;
+  margin-left: -16px;
 `;
 
 const NewInput = styled(Input)`
@@ -172,7 +189,15 @@ function SignUpModal({ toggle }) {
     <Overlay out={false}>
       <NewModal>
         <BodyWrapper>
-          <BodyLeft src={signup}></BodyLeft>
+          <BodyLeft src={signup}>
+            <WelcomeText>
+              Welcome
+              <br />
+              to
+              <br />
+              Roomies
+            </WelcomeText>
+          </BodyLeft>
           <NewBody>
             <BodyHeader>
               <NewTitle>註冊會員</NewTitle>
