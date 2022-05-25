@@ -1,10 +1,10 @@
 # Roomies
 
-![roomies](./src/images/readme.png)
+![roomies](./src/images/readme.png "This is a cover image.")
 
 **An online co-rent platform with social networking** designed for renters and landlords to easily find apartments and roommates!
 
-:point*right: Check the website *[Here](https://roomies-f03cd.web.app/)\_
+Check the website _[Here](https://roomies-f03cd.web.app/)_
 
 ## Main Features:
 
