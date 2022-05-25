@@ -15,6 +15,7 @@ const NewModal = styled(Modal)`
   height: 160px;
   padding: 0px 20px 0px;
   max-width: 500px;
+  height: 180px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -25,6 +26,10 @@ const NewHeader = styled(Header)`
   width: 100%;
   align-items: center;
   height: auto;
+`;
+
+const ContentWrapper = styled(FlexWrapper)`
+  width: 100%;
 `;
 
 const ButtonsWrapper = styled(FlexWrapper)`
@@ -52,9 +57,10 @@ function ConfirmBeforeQuitModal({ toggle, quit, apartmentId, file }) {
     <HigherOverlay out={false}>
       <NewModal>
         <NewHeader>
-          <Title>尚未儲存，確認離開？</Title>
+          <Title>再次確認</Title>
           <CloseButton onClick={toggle}>×</CloseButton>
         </NewHeader>
+        <ContentWrapper>尚未儲存，確認離開？</ContentWrapper>
         <ButtonsWrapper>
           <Button1 onClick={closeAndDeleteDoc}>確認</Button1>
           <RejectButton onClick={toggle}>取消</RejectButton>

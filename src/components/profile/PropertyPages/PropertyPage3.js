@@ -20,7 +20,7 @@ const CheckboxLabel = styled(SmallLabel)`
   margin: 3px 10px 5px 3px;
 `;
 
-function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
+function Page3({ otherInfo, setOtherInfo, handleError }) {
   const stringToBoolean = (string) => (string === "false" ? false : !!string);
 
   return (
@@ -134,10 +134,10 @@ function CreatePropertyPage3({ otherInfo, setOtherInfo, handleError }) {
   );
 }
 
-CreatePropertyPage3.apply.propTypes = {
+Page3.propTypes = {
   otherInfo: PropTypes.array.isRequired,
   setOtherInfo: PropTypes.func.isRequired,
   handleError: PropTypes.func.isRequired,
 };
 
-export default CreatePropertyPage3;
+export default Page3;

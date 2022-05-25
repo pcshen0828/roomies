@@ -26,7 +26,7 @@ const CheckboxLabel = styled(SmallLabel)`
   color: ${(props) => (props.checked ? "#fff" : mainColor)};
 `;
 
-function CreatePropertyPage2({
+function Page2({
   conditions,
   setConditions,
   facilities,
@@ -118,7 +118,7 @@ function CreatePropertyPage2({
   );
 }
 
-CreatePropertyPage2.propTypes = {
+Page2.propTypes = {
   conditions: PropTypes.array.isRequired,
   setConditions: PropTypes.func.isRequired,
   facilities: PropTypes.array.isRequired,
@@ -127,4 +127,4 @@ CreatePropertyPage2.propTypes = {
   setFurnitures: PropTypes.func.isRequired,
 };
 
-export default CreatePropertyPage2;
+export default Page2;

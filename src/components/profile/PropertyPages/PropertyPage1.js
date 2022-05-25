@@ -17,6 +17,7 @@ import {
   Select,
   FlexColumn,
   BackgroundImage,
+  HiddenInput,
 } from "../../common/Components";
 import { generateSelectOptionsByAmountNumber } from "../../../utils/generate";
 import { checkEventKeyIsNaN } from "../../../utils/calculate";
@@ -51,10 +52,6 @@ const ChooseImageButton = styled.label`
   }
 `;
 
-const HiddenInputFilePicker = styled.input`
-  display: none;
-`;
-
 const SearchBox = styled.input`
   height: 30px;
   border: 1px solid #dadada;
@@ -71,7 +68,7 @@ const SearchBox = styled.input`
 
 const libraries = ["places"];
 
-function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
+function Page1({ apartmentId, basicInfo, setBasicInfo, handleError }) {
   const coverFileRef = useRef(null);
   const [error, setError] = useState("");
   const [searchBox, setSearchBox] = useState(null);
@@ -116,7 +113,10 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
     }
     setError("");
     api
-      .uploadFileAndGetDownloadUrl(`apartments/${id}/cover/cover`, file)
+      .uploadFileAndGetDownloadUrl(
+        `apartments/${apartmentId}/cover/cover`,
+        file
+      )
       .then((downloadUrl) => {
         setBasicInfo({
           ...basicInfo,
@@ -135,7 +135,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
       <CoverImageDisplayer>
         <Image src={basicInfo.coverImage} />
         <ChooseImageButton htmlFor="coverImage">上傳封面照片</ChooseImageButton>
-        <HiddenInputFilePicker
+        <HiddenInput
           id="coverImage"
           ref={coverFileRef}
           type="file"
@@ -167,7 +167,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
       <SmallLabel htmlFor="geoLocation">
         房源地址<Required>*</Required>
       </SmallLabel>
-      {isLoaded ? (
+      {isLoaded && (
         <>
           <StandaloneSearchBox
             onLoad={searchBoxOnLoad}
@@ -199,7 +199,7 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
             zoom={17}
           ></GoogleMap>
         </>
-      ) : null}
+      )}
 
       <SmallLabel htmlFor="monthlyRent">
         每月房租（間）<Required>*</Required>
@@ -211,9 +211,9 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
         onFocus={() => {
           handleError("");
         }}
-        onKeyPress={(event) => {
-          const bool = checkEventKeyIsNaN(event);
-          if (bool) event.preventDefault();
+        onKeyPress={(e) => {
+          const bool = checkEventKeyIsNaN(e);
+          if (bool) e.preventDefault();
           handleError(bool ? "只能輸入數字！" : "");
         }}
         onChange={(e) => {
@@ -263,11 +263,11 @@ function CreatePropertyPage1({ basicInfo, setBasicInfo, id, handleError }) {
   );
 }
 
-CreatePropertyPage1.propTypes = {
+Page1.propTypes = {
+  apartmentId: PropTypes.string.isRequired,
   basicInfo: PropTypes.object.isRequired,
   setBasicInfo: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
   handleError: PropTypes.func.isRequired,
 };
 
-export default CreatePropertyPage1;
+export default Page1;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import CreatePropertyModal from "./CreateProperty";
 import { Firebase } from "../../utils/firebase";
 import { useAuth } from "../../context/AuthContext";
 import scrollToTop from "../../utils/scroll";
@@ -17,7 +16,7 @@ import {
   SmallText,
   FlexColumn,
 } from "../common/Components";
-import EditPropertyModal from "./EditProperty";
+import ManagePropertyModal from "./MangeProperty";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 import Skeleton from "react-loading-skeleton";
 import ConfirmChangeStatus from "../modals/ConfirmChangeStatus";
@@ -166,7 +165,9 @@ function LandlordProperty() {
   }
 
   function Render(status) {
-    const data = properties.filter((property) => property.status === status);
+    const filterdProperties = properties.filter(
+      (property) => property.status === status
+    );
     return (
       <>
         {confirmType !== "" && (
@@ -188,8 +189,8 @@ function LandlordProperty() {
                 style={{ margin: "0 15px 20px 0" }}
               />
             </div>
-          ) : data.length ? (
-            data
+          ) : filterdProperties.length ? (
+            filterdProperties
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)
               .map((item) => (
                 <Card key={item.id}>
@@ -233,21 +234,21 @@ function LandlordProperty() {
             <SmallText>尚無資料</SmallText>
           )}
           <PagingList>
-            {data.length
-              ? createPaging(Math.ceil(data.length / itemsPerPage)).map(
-                  (number, index) => (
-                    <PagingItem
-                      key={index}
-                      onClick={() => {
-                        setPaging(number + 1);
-                        scrollToTop();
-                      }}
-                      active={paging === number + 1}
-                    >
-                      {number + 1}
-                    </PagingItem>
-                  )
-                )
+            {filterdProperties.length
+              ? createPaging(
+                  Math.ceil(filterdProperties.length / itemsPerPage)
+                ).map((number, index) => (
+                  <PagingItem
+                    key={index}
+                    onClick={() => {
+                      setPaging(number + 1);
+                      scrollToTop();
+                    }}
+                    active={paging === number + 1}
+                  >
+                    {number + 1}
+                  </PagingItem>
+                ))
               : ""}
           </PagingList>
         </NewFlexWrapper>
@@ -257,17 +258,11 @@ function LandlordProperty() {
 
   return (
     <>
-      {openModalType === "edit" && (
-        <EditPropertyModal
+      {openModalType && (
+        <ManagePropertyModal
+          type={openModalType === "create" ? "create" : "edit"}
           toggle={() => setOpenModalType("")}
           apartment={apartment}
-          setSaved={setSaved}
-          currentUser={currentUser}
-        />
-      )}
-      {openModalType === "create" && (
-        <CreatePropertyModal
-          toggle={() => setOpenModalType("")}
           setSaved={setSaved}
           currentUser={currentUser}
         />

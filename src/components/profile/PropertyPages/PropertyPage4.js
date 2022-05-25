@@ -62,19 +62,21 @@ const UploadNewImage = styled.label`
   font-size: 60px;
 `;
 
-function CreatePropertyPage4({ id, images, setImages }) {
+function Page4({ apartmentId, images, setImages }) {
   const fileRef = useRef(null);
   const [error, setError] = useState("");
 
-  function uploadImageFile(e) {
-    const file = e.target.files[0];
+  function uploadImageFile(file) {
     if (!file) return;
     if ((file.size / 1024 / 1024).toFixed(4) >= 2) {
       setError("檔案過大，請重新上傳");
       return;
     }
     api
-      .uploadFileAndGetDownloadUrl(`apartments/${id}/${file.name}`, file)
+      .uploadFileAndGetDownloadUrl(
+        `apartments/${apartmentId}/${file.name}`,
+        file
+      )
       .then((downloadUrl) => {
         setImages((prev) => [...prev, { name: file.name, url: downloadUrl }]);
       })
@@ -88,7 +90,7 @@ function CreatePropertyPage4({ id, images, setImages }) {
     setImages((prev) => prev.filter((image, index) => index !== indexToDelete));
     const desertRef = Firebase.ref(
       Firebase.storage,
-      `apartments/${id}/${images[indexToDelete].name}`
+      `apartments/${apartmentId}/${images[indexToDelete].name}`
     );
     Firebase.deleteObject(desertRef).catch((error) => {
       setError(error);
@@ -113,8 +115,9 @@ function CreatePropertyPage4({ id, images, setImages }) {
             type="file"
             accept="image/*"
             ref={fileRef}
-            onChange={(event) => {
-              uploadImageFile(event);
+            onChange={(e) => {
+              const file = e.target.files[0];
+              uploadImageFile(file);
             }}
           />
         </FlexWrapper>
@@ -123,10 +126,10 @@ function CreatePropertyPage4({ id, images, setImages }) {
   );
 }
 
-CreatePropertyPage4.propTypes = {
-  id: PropTypes.string.isRequired,
+Page4.propTypes = {
+  apartmentId: PropTypes.string.isRequired,
   images: PropTypes.array.isRequired,
   setImages: PropTypes.func.isRequired,
 };
 
-export default CreatePropertyPage4;
+export default Page4;
