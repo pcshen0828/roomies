@@ -25,10 +25,10 @@ Check the website _[Here](https://roomies-f03cd.web.app/)_
 ### Cloud Services
 
 - Firebase
-- Firestore database
-- Storage
-- Auth
-- Hosting
+  - Firestore database
+  - Storage
+  - Auth
+  - Hosting
 
 ### Third-Party Libraries
 
