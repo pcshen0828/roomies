@@ -35,6 +35,7 @@ import {
   otherInfoList,
 } from "../../utils/apartmentSubCollections";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
+import Loader from "../common/Loader";
 
 const NewModal = styled(Modal)`
   width: 80%;
@@ -67,8 +68,8 @@ function ManagePropertyModal({
   type,
   toggle,
   setSaved,
-  currentUser, // create
-  apartment, // edit
+  currentUser,
+  apartment,
 }) {
   const [paging, setPaging] = useState(1);
   const [openConfirm, setOpenConfirm] = useState(false);
@@ -170,11 +171,14 @@ function ManagePropertyModal({
     let mounted = true;
     if (!mounted) return;
 
+    setIsLoading(true);
+
     if (type === "create") {
       setConditions(conditionList);
       setFacilities(facilityList);
       setFurnitures(furnitureList);
       setOtherInfo(otherInfoList);
+      setIsLoading(false);
     }
 
     if (type === "edit") {
@@ -193,6 +197,7 @@ function ManagePropertyModal({
           });
       });
       setImages(apartment.images);
+      setIsLoading(false);
     }
 
     return function cleanup() {
@@ -239,30 +244,35 @@ function ManagePropertyModal({
 
     setIsLoading(true);
 
+    const { title, address, geoLocation, coverImage } = basicInfo;
     const time = Firebase.Timestamp.fromDate(new Date());
     let promises = [];
+
+    const sharedInfo = {
+      updateTime: time,
+      address,
+      geoLocation,
+      monthlyRent: parseInt(basicInfo.monthlyRent),
+      roomiesCount: parseInt(basicInfo.roomiesCount),
+      rooms: parseInt(basicInfo.rooms),
+      title,
+      images,
+      coverImage,
+    };
 
     if (type === "create") {
       const newApartmentRef = api.createNewDocRefWithDocID(
         "apartments",
         newApartmentId
       );
-      const { title, address, geoLocation, coverImage } = basicInfo;
 
       api.setNewDoc(newApartmentRef, {
         id: newApartmentId,
         createTime: time,
-        updateTime: time,
         status: 0,
         owner: currentUser.uid,
-        title,
-        address,
-        geoLocation,
-        coverImage,
-        monthlyRent: parseInt(basicInfo.monthlyRent),
-        roomiesCount: parseInt(basicInfo.roomiesCount),
-        rooms: parseInt(basicInfo.rooms),
-        images,
+
+        ...sharedInfo,
       });
 
       const newGroupRef = api.createNewDocRef("groups");
@@ -330,17 +340,7 @@ function ManagePropertyModal({
     }
 
     if (type === "edit") {
-      api.updateDocData("apartments", apartment.id, {
-        updateTime: time,
-        address: basicInfo.address,
-        geoLocation: basicInfo.geoLocation,
-        monthlyRent: parseInt(basicInfo.monthlyRent),
-        roomiesCount: parseInt(basicInfo.roomiesCount),
-        rooms: parseInt(basicInfo.rooms),
-        title: basicInfo.title,
-        images,
-        coverImage: basicInfo.coverImage,
-      });
+      api.updateDocData("apartments", apartment.id, sharedInfo);
 
       conditions.forEach((condition) => {
         promises.push(
@@ -445,28 +445,32 @@ function ManagePropertyModal({
               ×
             </CloseButton>
           </Header>
-          <BodyInnerWrapper>
-            <EditStepsIndicator
-              pages={pages}
-              paging={paging}
-              setPaging={setPaging}
-            />
-            <NewBody>
-              {pages.map((page) => page.number === paging && page.component)}
-            </NewBody>
-            <BottomWrapper>
-              <ErrorMessage>{warning}</ErrorMessage>
-              <PropertyPagePrevNext
-                resetError={() => {
-                  setWarning("");
-                }}
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <BodyInnerWrapper>
+              <EditStepsIndicator
+                pages={pages}
                 paging={paging}
                 setPaging={setPaging}
-                loading={isLoading}
-                action={uploadApartmentData}
               />
-            </BottomWrapper>
-          </BodyInnerWrapper>
+              <NewBody>
+                {pages.map((page) => page.number === paging && page.component)}
+              </NewBody>
+              <BottomWrapper>
+                <ErrorMessage>{warning}</ErrorMessage>
+                <PropertyPagePrevNext
+                  resetError={() => {
+                    setWarning("");
+                  }}
+                  paging={paging}
+                  setPaging={setPaging}
+                  loading={isLoading}
+                  action={uploadApartmentData}
+                />
+              </BottomWrapper>
+            </BodyInnerWrapper>
+          )}
         </NewModal>
       </Overlay>
     </>
