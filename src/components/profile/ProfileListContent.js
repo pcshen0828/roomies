@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import styled from "styled-components";
 import {
@@ -10,9 +11,15 @@ import {
   Toggler,
   Toggle,
 } from "../common/Components";
+
+import TenantInfo from "./TenantInfo";
+import GroupAndTeam from "./GroupAndTeam";
+import TenantSchedule from "./TenantSchedule";
+
 import LandlordInfo from "./LandlordInfo";
 import LandlordProperty from "./LandlordProperty";
 import LandlordSchedule from "./LandlordSchedule";
+
 import more from "../../images/more.svg";
 import less from "../../images/less.svg";
 import { FooterHeight, HeaderHeight } from "../../styles/GlobalStyle";
@@ -27,7 +34,31 @@ const Wrapper = styled(BodyWrapper)`
   }
 `;
 
-const profilelist = [
+const tenantProfilelist = [
+  {
+    name: "會員基本資料",
+    id: 1,
+    to: "/profile/info",
+    defaultStatus: "edit",
+    component: <TenantInfo key="1" />,
+  },
+  {
+    name: "租屋活動管理",
+    id: 2,
+    to: "/profile/groupteam",
+    defaultStatus: "groups",
+    component: <GroupAndTeam key="3" />,
+  },
+  {
+    name: "預約看房管理",
+    id: 3,
+    to: "/profile/schedule",
+    defaultStatus: "pending",
+    component: <TenantSchedule key="4" />,
+  },
+];
+
+const landlordProfileList = [
   {
     name: "會員基本資料",
     id: 1,
@@ -51,19 +82,15 @@ const profilelist = [
   },
 ];
 
-function Landlord() {
-  const [listIndex, setListIndex] = useState(1);
+export default function ProfileListContent({ role }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, status } = useParams();
   const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    const current = profilelist.find(
-      (item) => item.to === `/profile/${id}/${status}`
-    );
-    setListIndex(current && current.id);
-  }, []);
+  function getRenderContent() {
+    if (role === "tenant") return tenantProfilelist;
+    if (role === "landlord") return landlordProfileList;
+  }
 
   return (
     <Wrapper>
@@ -76,13 +103,12 @@ function Landlord() {
         {show ? <Toggle src={less} /> : <Toggle src={more} />}
       </Toggler>
       <ProfileList show={show}>
-        {profilelist.map((item, index) => (
+        {getRenderContent().map((item, index) => (
           <ProfileItem
             key={index}
             active={location.pathname.startsWith(item.to)}
             onClick={() => {
               setShow(false);
-              setListIndex(item.id);
               navigate(`${item.to}/${item.defaultStatus}`);
             }}
           >
@@ -91,7 +117,7 @@ function Landlord() {
         ))}
       </ProfileList>
       <ProfileContent>
-        {profilelist.map(
+        {getRenderContent().map(
           (item) => location.pathname.startsWith(item.to) && item.component
         )}
       </ProfileContent>
@@ -99,4 +125,6 @@ function Landlord() {
   );
 }
 
-export default Landlord;
+ProfileListContent.propTypes = {
+  role: PropTypes.string.isRequired,
+};

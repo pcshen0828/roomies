@@ -7,8 +7,7 @@ import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
 import { FlexColumn, Title, Wrapper } from "../components/common/Components";
-import Tenant from "../components/profile/Tenant";
-import Landlord from "../components/profile/Landlord";
+import ProfileListContent from "../components/profile/ProfileListContent";
 import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
 
@@ -40,12 +39,10 @@ function Profile() {
       );
     }
     if (user) {
-      return (currentUser ? currentUser.role : "") === 1 ? (
-        <Tenant />
-      ) : (currentUser ? currentUser.role : "") === 2 ? (
-        <Landlord />
-      ) : (
-        ""
+      return (
+        <ProfileListContent
+          role={currentUser?.role === 1 ? "tenant" : "landlord"}
+        />
       );
     }
     if (error) {
