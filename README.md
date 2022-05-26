@@ -1,6 +1,7 @@
 # Roomies
 
 ![roomies](./src/images/readme.png "This is a cover image.")
+![Flow Chart](./flow.drawio.svg "Flow Chart")
 
 **An online co-rent platform with social networking** designed for renters and landlords to easily find apartments and roommates!
 
