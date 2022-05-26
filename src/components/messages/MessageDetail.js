@@ -94,9 +94,16 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
-  const messageTop = useRef(null);
-  const last = useRef();
   const [loading, setLoading] = useState(true);
+
+  const messagesEndRef = useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView();
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     let mounted = true;
@@ -113,8 +120,6 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
         if (!mounted) return;
         const fetchedMessages = snapshot.docs.map((doc) => doc.data());
         setMessages(fetchedMessages.reverse());
-        const lastVisible = snapshot.docs[snapshot.docs.length - 1];
-        last.current = lastVisible;
       });
       api
         .getDataWithSingleQuery(
@@ -183,7 +188,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
       )}
 
       <Messages>
-        <CreateTime ref={messageTop}>
+        <CreateTime>
           \ {generateReadableDate(chat.createTime)}建立聊天室 /
         </CreateTime>
         {messages.length
@@ -198,6 +203,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
               />
             ))
           : "查無聊天紀錄！"}
+        <div ref={messagesEndRef} />
       </Messages>
       <SendMessageBlock
         onSubmit={(e) => {

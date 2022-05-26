@@ -67,7 +67,6 @@ const Profile = styled(ProfileImage)`
 `;
 
 function MessageBar({ detail, myRole, members, self }) {
-  const scrollRef = useRef();
   const [myProfile, setMyProfile] = useState("");
   const [objectProfile, setObjectProfile] = useState("");
 
@@ -84,10 +83,6 @@ function MessageBar({ detail, myRole, members, self }) {
     };
   }, [self, members]);
 
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [detail]);
-
   function generateReadableTime(time) {
     const startIndex = new Date(time.toDate()).toLocaleString();
     return new Date(time.toDate()).toLocaleString().slice(startIndex, -3);
@@ -98,9 +93,7 @@ function MessageBar({ detail, myRole, members, self }) {
       <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
       <FlexWrapper>
         <MessageSentByMe>
-          <MessageInnerWrapperMe ref={scrollRef}>
-            {detail.content}
-          </MessageInnerWrapperMe>
+          <MessageInnerWrapperMe>{detail.content}</MessageInnerWrapperMe>
           <Profile src={myProfile && myProfile} />
         </MessageSentByMe>
       </FlexWrapper>
@@ -110,9 +103,7 @@ function MessageBar({ detail, myRole, members, self }) {
       <SendDate>{generateReadableTime(detail.timestamp)}</SendDate>
       <MessageSentByOthers>
         <Profile src={objectProfile && objectProfile} />
-        <MessageInnerWrapperOthers ref={scrollRef}>
-          {detail.content}
-        </MessageInnerWrapperOthers>
+        <MessageInnerWrapperOthers>{detail.content}</MessageInnerWrapperOthers>
       </MessageSentByOthers>
     </Wrapper>
   );

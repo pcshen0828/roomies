@@ -95,12 +95,14 @@ const Hint = styled(SmallText)`
 `;
 
 const NewButton = styled(Button)`
-  margin-right: 0;
+  margin: 10px 0 20px;
 `;
 
 const ErrorMessage = styled.div`
   color: #ed3636;
   font-size: 14px;
+  min-height: 20px;
+  margin-top: 10px;
 `;
 
 function SignInModal({ toggle }) {
@@ -150,7 +152,7 @@ function SignInModal({ toggle }) {
               <Hint>房客測試密碼：henry123</Hint>
               <Hint>屋主測試密碼：amy123</Hint>
             </form>
-            {errMessage && <ErrorMessage>{errMessage}</ErrorMessage>}
+            <ErrorMessage>{errMessage}</ErrorMessage>
             <NewButton
               onClick={() => {
                 if (!email.trim() || !password.trim()) return;
