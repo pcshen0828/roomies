@@ -25,6 +25,7 @@ import SuccessfullySavedModal from "../modals/SuccessfullySaved";
 
 import Creatable from "react-select/creatable";
 import scrollToTop from "../../utils/scroll";
+import Loader from "../common/Loader";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -55,6 +56,7 @@ const ImageWrapper = styled(FlexWrapper)`
   font-size: 14px;
   @media screen and (max-width: 767.98px) {
     flex-direction: column;
+    margin-top: 180px;
   }
   z-index: 1;
 `;
@@ -401,185 +403,188 @@ function TenantInfo() {
             toggle={setWarning}
           />
         )}
-
-        <Wrapper>
-          <CoverWrapper src={currentUser.coverImage}>
-            <ImageLabel htmlFor="coverImage">編輯封面照片</ImageLabel>
-            <HiddenInput
-              id="coverImage"
-              type="file"
-              accept="image/*"
-              ref={coverRef}
-              onChange={(e) => {
-                const file = e.target.files[0];
-                uploadCoverImage(file);
-              }}
-            />
-          </CoverWrapper>
-
-          <ImageWrapper>
-            <Profile src={profileImage} />
-            <Bold>{currentUser.email}</Bold>
-            <ImageButton onClick={() => setOpenModal(true)}>
-              更換大頭照
-            </ImageButton>
-          </ImageWrapper>
-          <InnerWrapper>
-            <Block>
-              <NewTitle>基本資訊</NewTitle>
-              {inputRenderList.map((info) => (
-                <Fragment key={info.id}>
-                  <SmallLabel htmlFor={info.id}>
-                    {info.name}
-                    {info.required && <Required>*</Required>}
-                  </SmallLabel>
-                  <Input
-                    id={info.id}
-                    placeholder={info.placeholder}
-                    value={basicInfo[info.id]}
-                    onFocus={() => {
-                      setError("");
-                    }}
-                    onChange={(e) => {
-                      basicInfo[info.id] = e.target.value;
-                      setBasicInfo({ ...basicInfo });
-                    }}
-                  />
-                </Fragment>
-              ))}
-
-              <SmallLabel htmlFor="gender">
-                生理性別<Required>*</Required>
-              </SmallLabel>
-              <Select
-                id="gender"
-                value={basicInfo.gender}
-                onFocus={() => {
-                  setError("");
-                }}
+        {currentUser ? (
+          <Wrapper>
+            <CoverWrapper src={currentUser.coverImage}>
+              <ImageLabel htmlFor="coverImage">編輯封面照片</ImageLabel>
+              <HiddenInput
+                id="coverImage"
+                type="file"
+                accept="image/*"
+                ref={coverRef}
                 onChange={(e) => {
-                  setBasicInfo((prev) => ({
-                    ...prev,
-                    gender: parseInt(e.target.value),
-                  }));
+                  const file = e.target.files[0];
+                  uploadCoverImage(file);
                 }}
-              >
-                {genders.map((g, index) => (
-                  <option key={index} value={g.value}>
-                    {g.name}
-                  </option>
+              />
+            </CoverWrapper>
+
+            <ImageWrapper>
+              <Profile src={profileImage} />
+              <Bold>{currentUser.email}</Bold>
+              <ImageButton onClick={() => setOpenModal(true)}>
+                更換大頭照
+              </ImageButton>
+            </ImageWrapper>
+            <InnerWrapper>
+              <Block>
+                <NewTitle>基本資訊</NewTitle>
+                {inputRenderList.map((info) => (
+                  <Fragment key={info.id}>
+                    <SmallLabel htmlFor={info.id}>
+                      {info.name}
+                      {info.required && <Required>*</Required>}
+                    </SmallLabel>
+                    <Input
+                      id={info.id}
+                      placeholder={info.placeholder}
+                      value={basicInfo[info.id]}
+                      onFocus={() => {
+                        setError("");
+                      }}
+                      onChange={(e) => {
+                        basicInfo[info.id] = e.target.value;
+                        setBasicInfo({ ...basicInfo });
+                      }}
+                    />
+                  </Fragment>
                 ))}
-              </Select>
-            </Block>
 
-            <Block>
-              <NewTitle>進階資訊</NewTitle>
+                <SmallLabel htmlFor="gender">
+                  生理性別<Required>*</Required>
+                </SmallLabel>
+                <Select
+                  id="gender"
+                  value={basicInfo.gender}
+                  onFocus={() => {
+                    setError("");
+                  }}
+                  onChange={(e) => {
+                    setBasicInfo((prev) => ({
+                      ...prev,
+                      gender: parseInt(e.target.value),
+                    }));
+                  }}
+                >
+                  {genders.map((g, index) => (
+                    <option key={index} value={g.value}>
+                      {g.name}
+                    </option>
+                  ))}
+                </Select>
+              </Block>
 
-              {creatableSelectList.map((select) => (
-                <Fragment key={select.id}>
-                  <SmallLabel htmlFor={select.id}>
-                    {select.name}
-                    <Required>*</Required>
-                  </SmallLabel>
-                  <Creatable
-                    id={select.id}
-                    isClearable
-                    isMulti={select.isMulti}
-                    placeholder={select.placeholder}
-                    styled={{ fontSize: "14px" }}
-                    onFocus={() => {
-                      setError("");
-                    }}
-                    onChange={(value) => {
-                      const newBasicInfo = { ...basicInfo };
-                      const newValue =
-                        select.id === "hobbies"
-                          ? value.map((item) => item.label)
-                          : value?.label || "";
-                      newBasicInfo[select.id] = newValue;
-                      setBasicInfo({ ...newBasicInfo });
-                    }}
-                    options={select.options}
-                    value={select.value}
-                    styles={customStyles}
-                  />
-                </Fragment>
-              ))}
+              <Block>
+                <NewTitle>進階資訊</NewTitle>
 
-              <SmallLabel htmlFor="employment">工作型態</SmallLabel>
-              <Select
-                id="employment"
-                name="employment"
-                value={basicInfo.employment}
-                onFocus={() => {
-                  setError("");
-                }}
-                onChange={(e) => {
-                  setBasicInfo((prev) => ({
-                    ...prev,
-                    employment: parseInt(e.target.value),
-                  }));
-                }}
-              >
-                {employments.map((e, index) => (
-                  <option key={index} value={e.value}>
-                    {e.name}
-                  </option>
+                {creatableSelectList.map((select) => (
+                  <Fragment key={select.id}>
+                    <SmallLabel htmlFor={select.id}>
+                      {select.name}
+                      <Required>*</Required>
+                    </SmallLabel>
+                    <Creatable
+                      id={select.id}
+                      isClearable
+                      isMulti={select.isMulti}
+                      placeholder={select.placeholder}
+                      styled={{ fontSize: "14px" }}
+                      onFocus={() => {
+                        setError("");
+                      }}
+                      onChange={(value) => {
+                        const newBasicInfo = { ...basicInfo };
+                        const newValue =
+                          select.id === "hobbies"
+                            ? value.map((item) => item.label)
+                            : value?.label || "";
+                        newBasicInfo[select.id] = newValue;
+                        setBasicInfo({ ...newBasicInfo });
+                      }}
+                      options={select.options}
+                      value={select.value}
+                      styles={customStyles}
+                    />
+                  </Fragment>
                 ))}
-              </Select>
 
-              <SmallLabel htmlFor="intro">
-                社群簡介<Required>*</Required>
-              </SmallLabel>
-              <Textarea
-                id="intro"
-                placeholder="介紹自己，讓其他人更認識你！"
-                value={basicInfo.selfIntro}
-                onFocus={() => {
-                  setError("");
-                }}
+                <SmallLabel htmlFor="employment">工作型態</SmallLabel>
+                <Select
+                  id="employment"
+                  name="employment"
+                  value={basicInfo.employment}
+                  onFocus={() => {
+                    setError("");
+                  }}
+                  onChange={(e) => {
+                    setBasicInfo((prev) => ({
+                      ...prev,
+                      employment: parseInt(e.target.value),
+                    }));
+                  }}
+                >
+                  {employments.map((e, index) => (
+                    <option key={index} value={e.value}>
+                      {e.name}
+                    </option>
+                  ))}
+                </Select>
+
+                <SmallLabel htmlFor="intro">
+                  社群簡介<Required>*</Required>
+                </SmallLabel>
+                <Textarea
+                  id="intro"
+                  placeholder="介紹自己，讓其他人更認識你！"
+                  value={basicInfo.selfIntro}
+                  onFocus={() => {
+                    setError("");
+                  }}
+                  onChange={(e) => {
+                    setBasicInfo((prev) => ({
+                      ...prev,
+                      selfIntro: e.target.value,
+                    }));
+                  }}
+                />
+              </Block>
+            </InnerWrapper>
+            <ConfirmWrapper>
+              <input
+                id="public"
+                type="checkbox"
+                checked={basicInfo.status === 1 ? true : false}
                 onChange={(e) => {
+                  if (
+                    !basicInfo.jobTitle ||
+                    !basicInfo.hobbies.length ||
+                    !basicInfo.selfIntro
+                  ) {
+                    setError(
+                      "公開個人資訊之前，請確認填寫興趣標籤、職稱和社群簡介喔！"
+                    );
+                    return;
+                  }
                   setBasicInfo((prev) => ({
                     ...prev,
-                    selfIntro: e.target.value,
+                    status: e.target.checked === true ? 1 : 0,
                   }));
                 }}
               />
-            </Block>
-          </InnerWrapper>
-          <ConfirmWrapper>
-            <input
-              id="public"
-              type="checkbox"
-              checked={basicInfo.status === 1 ? true : false}
-              onChange={(e) => {
-                if (
-                  !basicInfo.jobTitle ||
-                  !basicInfo.hobbies.length ||
-                  !basicInfo.selfIntro
-                ) {
-                  setError(
-                    "公開個人資訊之前，請確認填寫興趣標籤、職稱和社群簡介喔！"
-                  );
-                  return;
-                }
-                setBasicInfo((prev) => ({
-                  ...prev,
-                  status: e.target.checked === true ? 1 : 0,
-                }));
-              }}
-            />
-            <NewLabel htmlFor="public">
-              公開個人資訊（讓其他使用者可以看到你的職稱、興趣和簡介）
-            </NewLabel>
-          </ConfirmWrapper>
-          <ErrorMessage>{error}</ErrorMessage>
-          {isLoading ? (
-            <Loading>上傳中</Loading>
-          ) : (
-            <NewButton onClick={updateUserData}>儲存</NewButton>
-          )}
-        </Wrapper>
+              <NewLabel htmlFor="public">
+                公開個人資訊（讓其他使用者可以看到你的職稱、興趣和簡介）
+              </NewLabel>
+            </ConfirmWrapper>
+            <ErrorMessage>{error}</ErrorMessage>
+            {isLoading ? (
+              <Loading>上傳中</Loading>
+            ) : (
+              <NewButton onClick={updateUserData}>儲存</NewButton>
+            )}
+          </Wrapper>
+        ) : (
+          <Loader />
+        )}
       </>
     );
   }

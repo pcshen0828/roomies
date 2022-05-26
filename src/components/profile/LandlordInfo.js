@@ -1,5 +1,4 @@
-import React, { Fragment, useState } from "react";
-import { Firebase } from "../../utils/firebase";
+import React, { Fragment, useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import api from "../../utils/api";
 
@@ -18,6 +17,7 @@ import {
 } from "../common/Components";
 import ChangeProfileImageModal from "../modals/ChangeProfileImage";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
+import Loader from "../common/Loader";
 
 const Wrapper = styled(FlexColumn)`
   width: 100%;
@@ -99,24 +99,31 @@ function LandlordInfo() {
   const [openModal, setOpenModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [saved, setSaved] = useState(false);
-
-  const { name, alias, gender, birthday, phone, selfIntro, profileImage } =
-    currentUser;
-
   const [basicInfo, setBasicInfo] = useState({
-    name,
-    alias,
-    gender,
-    birthday,
-    phone,
-    selfIntro,
-    profileImage,
+    name: "",
+    alias: "",
+    gender: 0,
+    birthday: "",
+    phone: "",
+    selfIntro: "",
+    profileImage: "",
   });
 
-  const genders = [
-    { name: "女", value: 0 },
-    { name: "男", value: 1 },
-  ];
+  useEffect(() => {
+    if (currentUser) {
+      const { name, alias, gender, birthday, phone, selfIntro, profileImage } =
+        currentUser;
+      setBasicInfo({
+        name,
+        alias,
+        gender,
+        birthday,
+        phone,
+        selfIntro,
+        profileImage,
+      });
+    }
+  }, [currentUser]);
 
   function updateUserData() {
     setIsLoading(true);
@@ -124,6 +131,11 @@ function LandlordInfo() {
     setIsLoading(false);
     setSaved(true);
   }
+
+  const genders = [
+    { name: "女", value: 0 },
+    { name: "男", value: 1 },
+  ];
 
   const inputRenderList = [
     {
@@ -165,79 +177,83 @@ function LandlordInfo() {
             setSaved={setSaved}
           />
         )}
-        <Wrapper>
-          <ImageWrapper>
-            <Profile src={basicInfo.profileImage} />
-            <>{currentUser.email}</>
-            <ImageButton onClick={() => setOpenModal(true)}>
-              更換大頭照
-            </ImageButton>
-          </ImageWrapper>
-          <InnerWrapper>
-            <Block>
-              <NewTitle>基本資訊</NewTitle>
-              {inputRenderList.map((info) => (
-                <Fragment key={info.id}>
-                  <SmallLabel htmlFor={info.id}>
-                    {info.name}
-                    {info.required && <Required>*</Required>}
-                  </SmallLabel>
-                  <Input
-                    id={info.id}
-                    placeholder={info.placeholder}
-                    value={basicInfo[info.id]}
-                    onChange={(e) => {
-                      const newBasicInfo = { ...basicInfo };
-                      newBasicInfo[info.id] = e.target.value;
-                      setBasicInfo({ ...newBasicInfo });
-                    }}
-                  />
-                </Fragment>
-              ))}
-
-              <SmallLabel htmlFor="gender">
-                生理性別<Required>*</Required>
-              </SmallLabel>
-              <Select
-                id="gender"
-                value={basicInfo.gender}
-                onChange={(e) =>
-                  setBasicInfo((prev) => ({
-                    ...prev,
-                    gender: parseInt(e.target.value),
-                  }))
-                }
-              >
-                {genders.map((g, index) => (
-                  <option key={index} value={g.value}>
-                    {g.name}
-                  </option>
+        {basicInfo ? (
+          <Wrapper>
+            <ImageWrapper>
+              <Profile src={currentUser?.profileImage} />
+              <>{currentUser?.email}</>
+              <ImageButton onClick={() => setOpenModal(true)}>
+                更換大頭照
+              </ImageButton>
+            </ImageWrapper>
+            <InnerWrapper>
+              <Block>
+                <NewTitle>基本資訊</NewTitle>
+                {inputRenderList.map((info) => (
+                  <Fragment key={info.id}>
+                    <SmallLabel htmlFor={info.id}>
+                      {info.name}
+                      {info.required && <Required>*</Required>}
+                    </SmallLabel>
+                    <Input
+                      id={info.id}
+                      placeholder={info.placeholder}
+                      value={basicInfo[info.id]}
+                      onChange={(e) => {
+                        const newBasicInfo = { ...basicInfo };
+                        newBasicInfo[info.id] = e.target.value;
+                        setBasicInfo({ ...newBasicInfo });
+                      }}
+                    />
+                  </Fragment>
                 ))}
-              </Select>
-            </Block>
 
-            <Block>
-              <NewTitle>進階資訊</NewTitle>
-              <SmallLabel htmlFor="intro">社群簡介</SmallLabel>
-              <Textarea
-                id="intro"
-                placeholder="介紹自己，讓其他人更認識你！"
-                value={basicInfo.selfIntro}
-                onChange={(e) =>
-                  setBasicInfo((prev) => ({
-                    ...prev,
-                    selfIntro: e.target.value,
-                  }))
-                }
-              />
-            </Block>
-          </InnerWrapper>
-          {isLoading ? (
-            <Loading>上傳中</Loading>
-          ) : (
-            <NewButton onClick={updateUserData}>儲存</NewButton>
-          )}
-        </Wrapper>
+                <SmallLabel htmlFor="gender">
+                  生理性別<Required>*</Required>
+                </SmallLabel>
+                <Select
+                  id="gender"
+                  value={basicInfo.gender}
+                  onChange={(e) =>
+                    setBasicInfo((prev) => ({
+                      ...prev,
+                      gender: parseInt(e.target.value),
+                    }))
+                  }
+                >
+                  {genders.map((g, index) => (
+                    <option key={index} value={g.value}>
+                      {g.name}
+                    </option>
+                  ))}
+                </Select>
+              </Block>
+
+              <Block>
+                <NewTitle>進階資訊</NewTitle>
+                <SmallLabel htmlFor="intro">社群簡介</SmallLabel>
+                <Textarea
+                  id="intro"
+                  placeholder="介紹自己，讓其他人更認識你！"
+                  value={basicInfo.selfIntro}
+                  onChange={(e) =>
+                    setBasicInfo((prev) => ({
+                      ...prev,
+                      selfIntro: e.target.value,
+                    }))
+                  }
+                />
+              </Block>
+            </InnerWrapper>
+            {isLoading ? (
+              <Loading>上傳中</Loading>
+            ) : (
+              <NewButton onClick={updateUserData}>儲存</NewButton>
+            )}
+          </Wrapper>
+        ) : (
+          <Loader />
+        )}
       </>
     );
   }

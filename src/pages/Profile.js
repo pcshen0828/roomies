@@ -10,14 +10,15 @@ import { FlexColumn, Title, Wrapper } from "../components/common/Components";
 import ProfileListContent from "../components/profile/ProfileListContent";
 import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
+import { FooterHeight, HeaderHeight } from "../styles/GlobalStyle";
 
 const NewWrapper = styled(Wrapper)`
-  min-height: calc(100vh - 301px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
 `;
 
 const LoaderWrapper = styled(FlexColumn)`
   width: 100%;
-  min-height: calc(100vh - 80px - 121px);
+  min-height: calc(100vh - ${HeaderHeight + FooterHeight}px);
   justify-content: center;
 `;
 
