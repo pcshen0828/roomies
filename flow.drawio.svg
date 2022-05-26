@@ -1,0 +1,30 @@
+<mxfile host="65bd71144e">
+    <diagram id="trxEAUh9otkjgtyAXXz5" name="Flow Chart">
+        <mxGraphModel dx="1476" dy="808" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" background="#F2F7FA" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="7" value="" style="edgeStyle=none;html=1;fontFamily=Noto Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DNoto%2BSans;fontSize=16;fontColor=#fff;strokeColor=#000000;strokeWidth=2;" parent="1" target="6" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="960.3928571428569" y="170" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="6" value="&lt;font size=&quot;1&quot; face=&quot;Helvetica&quot;&gt;&lt;b style=&quot;font-size: 16px&quot;&gt;Login&lt;/b&gt;&lt;/font&gt;" style="whiteSpace=wrap;html=1;fontFamily=Noto Sans;fillColor=#d5e8d4;strokeWidth=1;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DNoto%2BSans;strokeColor=#82b366;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="250" width="120" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;span&gt;&lt;b&gt;&lt;font face=&quot;Helvetica&quot;&gt;Landing Page&lt;/font&gt;&lt;/b&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontFamily=Noto Sans;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DNoto%2BSans;fontSize=16;strokeWidth=1;glass=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+                    <mxGeometry x="890" y="130" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="swimlane;startSize=0;swimlaneLine=0;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="80" width="270" height="360" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;b&gt;Public Page&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;shadow=0;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="9" vertex="1">
+                    <mxGeometry x="65" y="30" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&lt;b&gt;User Actions&lt;/b&gt;" style="whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fillColor=#d5e8d4;strokeColor=#82b366;" parent="9" vertex="1">
+                    <mxGeometry x="65" y="110" width="140" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
