@@ -207,6 +207,7 @@ function ManagePropertyModal({
 
   function uploadApartmentData() {
     const { coverFile, coverFileRef, ...others } = basicInfo;
+
     if (Object.values(others).some((value) => !value)) {
       setWarning("請確認填寫基本資訊每一欄位！");
       return;
@@ -260,6 +261,13 @@ function ManagePropertyModal({
       coverImage,
     };
 
+    const subCollections = [
+      { name: "conditions", content: conditions },
+      { name: "facilities", content: facilities },
+      { name: "furnitures", content: furnitures },
+      { name: "otherInfo", content: otherInfo },
+    ];
+
     if (type === "create") {
       const newApartmentRef = api.createNewDocRefWithDocID(
         "apartments",
@@ -282,125 +290,42 @@ function ManagePropertyModal({
         members: [],
       });
 
-      conditions.forEach((condition) => {
-        const newDocRef = Firebase.doc(
-          Firebase.db,
-          `apartments/${newApartmentId}/conditions/${condition.id}`
-        );
-        promises.push(
-          api.setNewDoc(newDocRef, {
-            id: condition.id,
-            name: condition.name,
-            value: condition.value,
-          })
-        );
-      });
-
-      facilities.forEach((facility) => {
-        const newDocRef = Firebase.doc(
-          Firebase.db,
-          `apartments/${newApartmentId}/facilities/${facility.id}`
-        );
-        promises.push(
-          api.setNewDoc(newDocRef, {
-            id: facility.id,
-            name: facility.name,
-            value: facility.value,
-          })
-        );
-      });
-
-      furnitures.forEach((furniture) => {
-        const newDocRef = Firebase.doc(
-          Firebase.db,
-          `apartments/${newApartmentId}/furnitures/${furniture.id}`
-        );
-        promises.push(
-          api.setNewDoc(newDocRef, {
-            id: furniture.id,
-            name: furniture.name,
-            value: furniture.value,
-          })
-        );
-      });
-
-      otherInfo.forEach((item) => {
-        const newDocRef = Firebase.doc(
-          Firebase.db,
-          `apartments/${newApartmentId}/otherInfo/${item.id}`
-        );
-        promises.push(
-          api.setNewDoc(newDocRef, {
-            id: item.id,
-            name: item.name,
-            value: item.value,
-          })
-        );
+      subCollections.forEach((subCollection) => {
+        subCollection.content.forEach((item) => {
+          const newDocRef = Firebase.doc(
+            Firebase.db,
+            `apartments/${newApartmentId}/${subCollection.name}/${item.id}`
+          );
+          promises.push(
+            api.setNewDoc(newDocRef, {
+              id: item.id,
+              name: item.name,
+              value: item.value,
+            })
+          );
+        });
       });
     }
 
     if (type === "edit") {
       api.updateDocData("apartments", apartment.id, sharedInfo);
 
-      conditions.forEach((condition) => {
-        promises.push(
-          api.updateSubCollectionDocData(
-            "apartments",
-            apartment.id,
-            "conditions",
-            condition.id,
-            {
-              id: condition.id,
-              name: condition.name,
-              value: condition.value,
-            }
-          )
-        );
-      });
-      facilities.forEach((facility) => {
-        promises.push(
-          api.updateSubCollectionDocData(
-            "apartments",
-            apartment.id,
-            "facilities",
-            facility.id,
-            {
-              id: facility.id,
-              name: facility.name,
-              value: facility.value,
-            }
-          )
-        );
-      });
-      furnitures.forEach((furniture) => {
-        promises.push(
-          api.updateSubCollectionDocData(
-            "apartments",
-            apartment.id,
-            "furnitures",
-            furniture.id,
-            {
-              id: furniture.id,
-              name: furniture.name,
-              value: furniture.value,
-            }
-          )
-        );
-      });
-      otherInfo.forEach((info) => {
-        promises.push(
-          api.updateSubCollectionDocData(
-            "apartments",
-            apartment.id,
-            "otherInfo",
-            info.id,
-            {
-              id: info.id,
-              name: info.name,
-              value: info.value,
-            }
-          )
-        );
+      subCollections.forEach((subCollection) => {
+        subCollection.content.forEach((item) => {
+          promises.push(
+            api.updateSubCollectionDocData(
+              "apartments",
+              apartment.id,
+              subCollection.name,
+              item.id,
+              {
+                id: item.id,
+                name: item.name,
+                value: item.value,
+              }
+            )
+          );
+        });
       });
     }
 
