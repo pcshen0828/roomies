@@ -17,6 +17,28 @@
 
 ## Demo
 
+**Landing Page** >>
+
+![Landing Page](./README/landing.gif "Landing Page")
+
+> Welcome to Roomies! Start your journey from sign up / login, or feel free to look around as a visiter.
+
+**Apartments Page** >>
+
+![Apartments Page](./README/apartments.gif "Apartments Page")
+
+> Find the ideal apartment by filtering or searching by keywords.
+
+**Join Rental Group** >>
+![Join Group](./README/joingroup.gif "Join Group!")
+
+> Join apartment rental group after signed in and filled out required info of user profile.
+
+**Rental Group Page** >>
+![Group Page](./README/group.gif "Group Page")
+
+> Connect with members in the group, or invite other users to join the group! Create interactions through posts and messages.
+
 ---
 
 ## Techniques
@@ -63,7 +85,7 @@
 
 ### Flow Chart
 
-![Flow Chart](./flow.drawio.svg "Flow Chart")
+![Flow Chart](./README/flow.drawio.svg "Flow Chart")
 
 ## Future Features
 
