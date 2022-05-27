@@ -13,8 +13,6 @@
 - Implemented place searching feature with Google Maps API
 - Established shared components system to enhance development efficiency
 
----
-
 ## Demo
 
 - ### **Landing Page**
@@ -46,8 +44,6 @@
   > Manage team member list and invite other members in the group to join the team.
 
   ![Team Page](./README/team.gif "Team Page")
-
----
 
 ## Techniques
 
@@ -88,8 +84,6 @@
 - fullcalendar
 - swiper
 - uuid
-
----
 
 ### Flow Chart
 
