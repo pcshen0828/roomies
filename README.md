@@ -2,30 +2,33 @@
 
 ![roomies](./src/images/readme.png "This is a cover image.")
 
-> **An online co-rent platform with social networking** designed for renters and landlords to easily find apartments and roommates!\
+> **Roomies is an online co-rent platform with social networking**. Designed for renters and landlords to easily find apartments and roommates!\
 > [View Website >>](https://roomies-f03cd.web.app/)
 
-## Main Features:
+## Main Features
 
-- Built SPA based on React/ React Router
+- Built SPA based on React / React Router
 - Created notification system and chat room with Firebase Firestore Database
 - Fulfilled complex filter with useReducer
-- Implemented place autocomplete feature with Google Maps API
-- Established a dual membership system for renters and landlords to manage rental activities and apartment properties respectively
+- Implemented place searching feature with Google Maps API
+- Established shared components system to enhance development efficiency
 
-## Techniques:
+## Demo
 
-### Fundamental
+## Techniques
 
-- JavaScript
+### Front-End Fundamental
+
+- HTML
 - CSS
+- JavaScript
+- RWD
 
 ### Libraries
 
 - React
 - React Router
 - Styled Components
-- Google Maps API
 
 ### Cloud Services
 
@@ -34,6 +37,10 @@
   - Storage
   - Auth
   - Hosting
+
+### APIs
+
+- Google Maps API
 
 ### Packages
 
@@ -51,8 +58,6 @@
 ### Flow Chart
 
 ![Flow Chart](./flow.drawio.svg "Flow Chart")
-
-## Demo
 
 ## Future Features
 
