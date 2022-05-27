@@ -2,7 +2,7 @@
 
 ![roomies](./src/images/readme.png "This is a cover image.")
 
-> **Roomies is an online co-rent platform with social networking**. Designed for renters and landlords to easily find apartments and roommates!\
+> **Roomies is an online co-rent platform with social networking**. Designed for landlords to manage their apartment properties and for renters to easily find apartments and roommates!\
 > [View Website >>](https://roomies-f03cd.web.app/)
 
 ## Main Features
@@ -13,7 +13,11 @@
 - Implemented place searching feature with Google Maps API
 - Established shared components system to enhance development efficiency
 
+---
+
 ## Demo
+
+---
 
 ## Techniques
 
@@ -55,13 +59,19 @@
 - swiper
 - uuid
 
+---
+
 ### Flow Chart
 
 ![Flow Chart](./flow.drawio.svg "Flow Chart")
 
 ## Future Features
 
--
+- Online tool for renters to manage and split monthly utility fees
+- Rating system for users to filter unreliable renters / landlords
+- Living conventions for renters to co-edit (which can be downloaded as PDF files)
+- Advertisement services providing for landlords to let their apartment properties stand out from others
+- Other apartment rental services (e.g., filming) to give landlords more flexibility with their properties
 
 ## Contact
 
