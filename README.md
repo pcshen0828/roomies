@@ -35,9 +35,18 @@
 > Join apartment rental group after signed in and filled out required info of user profile.
 
 **Rental Group Page** >>
-![Group Page](./README/group.gif "Group Page")
 
 > Connect with members in the group, or invite other users to join the group! Create interactions through posts and messages.
+
+![Group Page](./README/group.gif "Group Page")
+
+**Create a co-rent Team** >>
+
+> Manage team member list and invite other members in the group to join the team.
+
+![Team Page](./README/team.gif "Team Page")
+
+> Check more features [Here](https://roomies-f03cd.web.app/)
 
 ---
 
