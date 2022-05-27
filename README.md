@@ -17,36 +17,35 @@
 
 ## Demo
 
-**Landing Page** >>
+- ### **Landing Page** >>
 
-![Landing Page](./README/landing.gif "Landing Page")
+  > Welcome to Roomies! Start your journey from sign up / login, or feel free to look around as a visiter.
 
-> Welcome to Roomies! Start your journey from sign up / login, or feel free to look around as a visiter.
+  ![Landing Page](./README/landing.gif "Landing Page")
 
-**Apartments Page** >>
+- ### **Apartments Page** >>
 
-![Apartments Page](./README/apartments.gif "Apartments Page")
+  > Find the ideal apartment by filtering or searching by keywords.
 
-> Find the ideal apartment by filtering or searching by keywords.
+  ![Apartments Page](./README/apartments.gif "Apartments Page")
 
-**Join Rental Group** >>
-![Join Group](./README/joingroup.gif "Join Group!")
+- ### **Join Rental Group** >>
 
-> Join apartment rental group after signed in and filled out required info of user profile.
+  > Join apartment rental group after signed in and filled out required info of user profile.
 
-**Rental Group Page** >>
+  ![Join Group](./README/joingroup.gif "Join Group!")
 
-> Connect with members in the group, or invite other users to join the group! Create interactions through posts and messages.
+- ### **Rental Group Page** >>
 
-![Group Page](./README/group.gif "Group Page")
+  > Connect with members in the group, or invite other users to join the group! Create interactions through posts and messages.
 
-**Create a co-rent Team** >>
+  ![Group Page](./README/group.gif "Group Page")
 
-> Manage team member list and invite other members in the group to join the team.
+- ### **Create a co-rent Team** >>
 
-![Team Page](./README/team.gif "Team Page")
+  > Manage team member list and invite other members in the group to join the team.
 
-> Check more features [Here](https://roomies-f03cd.web.app/)
+  ![Team Page](./README/team.gif "Team Page")
 
 ---
 
