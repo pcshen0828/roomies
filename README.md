@@ -1,11 +1,9 @@
 # Roomies
 
 ![roomies](./src/images/readme.png "This is a cover image.")
-![Flow Chart](./flow.drawio.svg "Flow Chart")
 
-**An online co-rent platform with social networking** designed for renters and landlords to easily find apartments and roommates!
-
-Check the website _[Here](https://roomies-f03cd.web.app/)_
+> **An online co-rent platform with social networking** designed for renters and landlords to easily find apartments and roommates!\
+> [View Website >>](https://roomies-f03cd.web.app/)
 
 ## Main Features:
 
@@ -15,13 +13,19 @@ Check the website _[Here](https://roomies-f03cd.web.app/)_
 - Implemented place autocomplete feature with Google Maps API
 - Established a dual membership system for renters and landlords to manage rental activities and apartment properties respectively
 
-## This project is built with:
+## Techniques:
 
 ### Fundamental
+
+- JavaScript
+- CSS
+
+### Libraries
 
 - React
 - React Router
 - Styled Components
+- Google Maps API
 
 ### Cloud Services
 
@@ -31,10 +35,30 @@ Check the website _[Here](https://roomies-f03cd.web.app/)_
   - Auth
   - Hosting
 
-### Third-Party Libraries
+### Packages
 
-- Google Maps API
+- react-google-maps/api
+- react-loading-skeleton
+- react-firebase-hooks
+- react-avatar-editor
+- mui/x-date-pickers
+- react-linkify
+- react-select
+- fullcalendar
+- swiper
+- uuid
 
-## A Quick Guide
+### Flow Chart
 
-### Function map
+![Flow Chart](./flow.drawio.svg "Flow Chart")
+
+## Demo
+
+## Future Features
+
+-
+
+## Contact
+
+Feel free to contact me if you have any questions :) \
+E-mail: michelleshen0828@gmail.com
