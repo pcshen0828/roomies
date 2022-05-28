@@ -45,6 +45,8 @@
 
   ![Team Page](./README/team.gif "Team Page")
 
+  [And a lot more for you to explore >>](https://roomies-f03cd.web.app/)
+
 ## Techniques
 
 ### Front-End Fundamental
@@ -91,6 +93,7 @@
 
 ## Future Features
 
+- Use guide for both renters and landlords
 - Online tool for renters to manage and split monthly utility fees
 - Rating system for users to filter unreliable renters / landlords
 - Living conventions for renters to co-edit (which can be downloaded as PDF files)
