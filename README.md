@@ -45,7 +45,25 @@
 
   ![Team Page](./README/team.gif "Team Page")
 
-  [And a lot more for you to explore >>](https://roomies-f03cd.web.app/)
+- ### **Schedule Property Viewing Event**
+
+  > When the rental team's joined members count is equal to the roomies count of the apartment, the host of the team can schedule a property viewing event to the landlord!
+
+  ![Schedule](./README/schedule.gif "Book A Schedule")
+
+- ### **Confirm The Property Viewing Request Sent By Renters**
+
+  > The landlord will receive a notification after the host sent the property viewing request, and can manage schedules in profile page.
+
+  ![Confirm](./README/confirm.gif "Confirm Request")
+
+- ### **Successfully Arranged The Pre-process of Renting!**
+
+  > Now the renters can view the apartment property with the landlord on scheduled time and continue the process of renting the apartment afterwards.
+
+  ![Finished](./README/finish.gif "Finished!")
+
+[Explore more >>](https://roomies-f03cd.web.app/)
 
 ## Techniques
 
@@ -76,16 +94,16 @@
 
 ### Packages
 
-- react-google-maps/api
-- react-loading-skeleton
-- react-firebase-hooks
-- react-avatar-editor
-- mui/x-date-pickers
-- react-linkify
-- react-select
-- fullcalendar
-- swiper
-- uuid
+- [react-google-maps/api](https://github.com/JustFly1984/react-google-maps-api)
+- [react-loading-skeleton](https://github.com/dvtng/react-loading-skeleton)
+- [react-firebase-hooks](https://github.com/csfrequency/react-firebase-hooks)
+- [react-avatar-editor](https://github.com/mosch/react-avatar-editor)
+- [mui/x-date-pickers](https://github.com/mui/mui-x)
+- [react-linkify](https://github.com/tasti/react-linkify)
+- [react-select](https://github.com/JedWatson/react-select)
+- [fullcalendar](https://github.com/fullcalendar/fullcalendar)
+- [swiper](https://github.com/nolimits4web/swiper)
+- [uuid](https://github.com/uuidjs/uuid)
 
 ### Flow Chart
 
