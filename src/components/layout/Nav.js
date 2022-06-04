@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";

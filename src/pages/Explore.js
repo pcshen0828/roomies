@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import scrollToTop from "../utils/scroll";
 import styled from "styled-components";
 import {

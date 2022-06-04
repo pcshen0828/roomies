@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { FlexWrapper, TitleSub } from "../common/Components";
 import { Link } from "react-router-dom";

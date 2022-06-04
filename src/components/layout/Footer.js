@@ -1,10 +1,8 @@
-import React from "react";
 import styled from "styled-components";
 import { subColor } from "../../styles/GlobalStyle";
 import { FlexWrapper, StyledLink } from "../common/Components";
 import github from "../../images/github.svg";
 import linkedin from "../../images/linkedin.svg";
-import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;

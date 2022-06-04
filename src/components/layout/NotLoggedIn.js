@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { FlexWrapper, Button1 } from "../common/Components";
 import SignInModal from "../modals/SignIn";

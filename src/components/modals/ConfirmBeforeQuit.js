@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { Firebase } from "../../utils/firebase";
 import styled from "styled-components";

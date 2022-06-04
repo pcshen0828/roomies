@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { NavLink, useLocation } from "react-router-dom";
 import { Firebase } from "../../utils/firebase";
