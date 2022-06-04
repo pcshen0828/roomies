@@ -6,6 +6,7 @@ import { Overlay, Modal, Header, Title, Button } from "./ModalElements";
 const NewHeader = styled(Header)`
   justify-content: center;
   padding: 40px 0 20px;
+  width: 100%;
 `;
 const CenterButton = styled(Button)`
   align-self: center;

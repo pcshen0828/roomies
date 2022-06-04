@@ -108,7 +108,7 @@ function JoinConfirmModal({ toggle, apartmentId, groupId }) {
 JoinConfirmModal.propTypes = {
   toggle: PropTypes.func.isRequired,
   apartmentId: PropTypes.string.isRequired,
-  groupId: PropTypes.string.isRequired,
+  groupId: PropTypes.string,
 };
 
 export default JoinConfirmModal;

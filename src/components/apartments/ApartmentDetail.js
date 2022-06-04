@@ -263,14 +263,16 @@ function ApartmentDetail({ details, loading }) {
   }
 
   function checkUserProfileBeforeJoinGroup() {
-    if (
-      !currentUser.hobbies.length ||
-      !currentUser.jobTitle ||
-      !currentUser.alias ||
-      currentUser.status === 0
-    ) {
-      setOpenWarning(true);
-      return;
+    if (currentUser) {
+      if (
+        !currentUser.hobbies.length ||
+        !currentUser.jobTitle ||
+        !currentUser.alias ||
+        currentUser.status === 0
+      ) {
+        setOpenWarning(true);
+        return;
+      }
     }
     openConfirmModal();
   }
