@@ -464,7 +464,7 @@ function ApartmentDetail({ details, loading }) {
                         : item.value === false
                         ? "否"
                         : item.id === "depositMonth"
-                        ? `${item.value}個月`
+                        ? item.value
                         : item.value}
                     </OtherInfo>
                   ))}

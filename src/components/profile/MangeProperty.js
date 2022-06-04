@@ -62,7 +62,7 @@ const NewBody = styled(Body)`
   }
 `;
 
-const newApartmentId = uuidv4();
+let newApartmentId = uuidv4();
 
 function ManagePropertyModal({
   type,
@@ -336,6 +336,7 @@ function ManagePropertyModal({
         navigate("/profile/apartments/inactive");
       }
       setSaved(true);
+      newApartmentId = uuidv4();
     });
   }
 
