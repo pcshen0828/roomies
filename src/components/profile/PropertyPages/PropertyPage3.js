@@ -101,12 +101,11 @@ function Page3({ otherInfo, setOtherInfo, handleError }) {
                 handleError("");
               }}
               onChange={(e) => {
-                if (
-                  (info.name === "所在樓層" || info.name === "坪數") &&
-                  parseInt(e.target.value) < 1
-                ) {
-                  handleError("請輸入有效數值");
-                  e.target.value = "";
+                if (info.name === "所在樓層" || info.name === "坪數") {
+                  if (parseInt(e.target.value) < 1 || isNaN(e.target.value)) {
+                    handleError("請輸入有效數值");
+                    e.target.value = "";
+                  }
                 }
                 if (
                   (info.id === "availableTime" ||

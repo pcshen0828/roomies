@@ -217,6 +217,10 @@ function Page1({ apartmentId, basicInfo, setBasicInfo, handleError }) {
           handleError(bool ? "只能輸入數字！" : "");
         }}
         onChange={(e) => {
+          if (isNaN(e.target.value)) {
+            handleError("只能輸入數字！");
+            e.target.value = "";
+          }
           if (!e.target.value.trim()) {
             handleError("請輸入每月房租");
           }
