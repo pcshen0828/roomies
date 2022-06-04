@@ -61,7 +61,7 @@ export default function Footer() {
       <InnerWrapper>
         <FlexWrapper>
           <NewLink to="/apartments">所有房源</NewLink>
-          <NewLink to="/explore">探索</NewLink>
+          <NewLink to="/explore">地圖探索</NewLink>
           <NewLink to="/">操作流程</NewLink>
         </FlexWrapper>
         <CopyrightWrapper>

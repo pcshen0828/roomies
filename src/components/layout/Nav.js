@@ -64,7 +64,7 @@ function NavBar() {
           to="/explore"
           style={location.pathname === "/explore" ? activeStyle : {}}
         >
-          探索
+          地圖探索
         </StyledNavLink>
       </>
     );

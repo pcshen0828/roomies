@@ -143,7 +143,7 @@ function MobileNavBar({ toggle }) {
           to="/explore"
           style={location.pathname === "/explore" ? activeStyle : {}}
         >
-          探索
+          地圖探索
         </StyledNavLink>
         {Render()}
       </MobileModal>
