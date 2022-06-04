@@ -15,6 +15,13 @@ const Wrapper = styled(FlexColumn)`
   flex-shrink: 0;
   background: #fff;
   align-items: stretch;
+  opacity: 0.9;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f0f2f5;
+    opacity: 1;
+  }
 `;
 
 const StyledLink = styled(Link)`
