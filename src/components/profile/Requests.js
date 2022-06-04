@@ -172,6 +172,6 @@ export default function Requests({ unConfirmed, user, loading }) {
 
 Requests.propTypes = {
   unConfirmed: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   loading: PropTypes.bool.isRequired,
 };

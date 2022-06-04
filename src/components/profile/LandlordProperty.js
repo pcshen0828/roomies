@@ -147,6 +147,7 @@ function LandlordProperty() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!currentUser) return;
     const query = Firebase.query(
       Firebase.collection(Firebase.db, "apartments"),
       Firebase.where("owner", "==", currentUser.uid),

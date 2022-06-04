@@ -37,6 +37,7 @@ function LandlordSchedule() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!currentUser) return;
     const query = api.createQuery("schedules", "owner", "==", currentUser.uid);
     const unsubscribe = Firebase.onSnapshot(query, (snapshot) => {
       const schedules = snapshot.docs.map((doc) => doc.data());
