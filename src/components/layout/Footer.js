@@ -67,12 +67,15 @@ export default function Footer() {
           <NewLink to="/">操作流程</NewLink>
         </FlexWrapper>
         <CopyrightWrapper>
-          <Link to="https://github.com/pcshen0828">
+          <a href="https://github.com/pcshen0828" target="_blank">
             <Icon src={github} />
-          </Link>
-          <Link to="http://www.linkedin.com/in/michelle-shen-65509b201">
+          </a>
+          <a
+            href="http://www.linkedin.com/in/michelle-shen-65509b201"
+            target="_blank"
+          >
             <Icon src={linkedin} />
-          </Link>
+          </a>
           &copy; {year} 寓見 Roomies. All rights reserved.
         </CopyrightWrapper>
       </InnerWrapper>
