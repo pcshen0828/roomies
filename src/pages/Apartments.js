@@ -46,7 +46,7 @@ const initialState = {
   queryList: [],
   currentPage: 1,
   allPages: 1,
-  itemsPerPage: 6,
+  itemsPerPage: 9,
 };
 
 function calculateSearchAllPages(allData, keyword, itemsPerPage) {
