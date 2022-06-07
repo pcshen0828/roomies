@@ -128,7 +128,6 @@ function SendMessageInput({ myRole, chatId }) {
 }
 
 function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
-  console.log("detail rendered");
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
