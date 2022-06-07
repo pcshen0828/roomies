@@ -90,8 +90,45 @@ const SendMessageButton = styled.img`
   cursor: pointer;
 `;
 
-function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
+function SendMessageInput({ myRole, chatId }) {
   const [message, setMessage] = useState("");
+
+  async function updateChat() {
+    if (!message.trim()) return;
+    const time = Firebase.Timestamp.fromDate(new Date());
+    const newMessage = {
+      content: message,
+      sender: myRole,
+      timestamp: time,
+    };
+    api.updateDocData("chats", chatId, {
+      latestMessage: newMessage,
+      updateTime: time,
+      status: 0,
+    });
+    api.addNewDoc("chats/" + chatId + "/messages", newMessage);
+    setMessage("");
+  }
+
+  return (
+    <SendMessageBlock
+      onSubmit={(e) => {
+        e.preventDefault();
+        updateChat();
+      }}
+    >
+      <MessageInput
+        placeholder="Aa"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+      <SendMessageButton onClick={updateChat} src={send} />
+    </SendMessageBlock>
+  );
+}
+
+function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
+  console.log("detail rendered");
   const [messages, setMessages] = useState([]);
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -137,23 +174,6 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
       mounted = false;
     };
   }, [chatId]);
-
-  async function updateChat() {
-    if (!message.trim()) return;
-    const time = Firebase.Timestamp.fromDate(new Date());
-    const newMessage = {
-      content: message,
-      sender: myRole,
-      timestamp: time,
-    };
-    api.updateDocData("chats", chatId, {
-      latestMessage: newMessage,
-      updateTime: time,
-      status: 0,
-    });
-    api.addNewDoc("chats/" + chatId + "/messages", newMessage);
-    setMessage("");
-  }
 
   function generateReadableDate(time) {
     const endIndex = new Date(time.toDate()).toLocaleString().indexOf("午") - 1;
@@ -205,20 +225,7 @@ function MessageDetail({ currentUser, chats, chatId, chat, myRole }) {
           : "查無聊天紀錄！"}
         <div ref={messagesEndRef} />
       </Messages>
-      <SendMessageBlock
-        onSubmit={(e) => {
-          e.preventDefault();
-
-          updateChat();
-        }}
-      >
-        <MessageInput
-          placeholder="Aa"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <SendMessageButton onClick={updateChat} src={send} />
-      </SendMessageBlock>
+      <SendMessageInput myRole={myRole} chatId={chatId} />
     </MessageContent>
   );
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Navigate, Link, useParams } from "react-router-dom";
 import { Firebase } from "../utils/firebase";
 import { useAuth } from "../context/AuthContext";
@@ -84,6 +84,8 @@ const DefaultMessage = styled(FlexWrapper)`
   }
 `;
 
+const MemoedDetail = memo(MessageDetail);
+
 function Messages() {
   const { id } = useParams();
   const { currentUser, user, loading, error } = useAuth();
@@ -112,10 +114,8 @@ function Messages() {
         const data = querySnapshot.docs.map((doc) => doc.data());
         if (data.length) {
           setChats(data);
-          setLoaded(true);
-        } else {
-          setLoaded(true);
         }
+        setLoaded(true);
       });
     }
 
@@ -127,7 +127,7 @@ function Messages() {
         });
       }
     };
-  }, [currentUser, id, loading, user, myRole, selectedChat]);
+  }, [currentUser, id]);
 
   function RenderLoader() {
     return (
@@ -194,7 +194,6 @@ function Messages() {
         <InnerWrapper>
           <ListWrapper>
             <Title>聊天室</Title>
-
             <MessageList>
               {loaded ? (
                 <List chats={chats} setChatId={setChatId} usage="page" />
@@ -214,7 +213,7 @@ function Messages() {
           {id === "all" ? (
             <DefaultMessage>點擊聊天室開始</DefaultMessage>
           ) : (
-            <MessageDetail
+            <MemoedDetail
               chats={chats}
               currentUser={user}
               chatId={chatId}
