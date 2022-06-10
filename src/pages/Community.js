@@ -12,6 +12,7 @@ import {
   SearchInput,
   SearchButton,
   FlexWrapper,
+  SkeletonWrapper,
 } from "../components/common/Components";
 import HobbyCard from "../components/community/HobbyCard";
 import UserCard from "../components/community/UserCard";
@@ -225,7 +226,7 @@ function Community() {
       return (
         <>
           <NewWrapper>
-            <div style={{ width: "100%" }}>
+            <SkeletonWrapper>
               <Skeleton
                 width={320}
                 height={30}
@@ -236,7 +237,7 @@ function Community() {
                 width="100%"
                 style={{ marginBottom: "10px" }}
               />
-            </div>
+            </SkeletonWrapper>
           </NewWrapper>
           <Footer />
         </>

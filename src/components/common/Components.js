@@ -682,6 +682,24 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
+const SkeletonWrapper = styled.div`
+  width: 100%;
+`;
+
+const SkeletonWrapperGrid = styled.div`
+  width: 100%;
+  display: grid;
+`;
+
+const SkeletonWrapperFlex = styled(FlexWrapper)`
+  width: 100%;
+  justify-content: space-between;
+`;
+
+const SkeletonWrapperWidth = styled.div`
+  width: ${(props) => props.width && props.width};
+`;
+
 export {
   Wrapper,
   BannerTitle,
@@ -747,4 +765,8 @@ export {
   BottomWrapper,
   ButtonWrapper,
   HiddenInput,
+  SkeletonWrapper,
+  SkeletonWrapperGrid,
+  SkeletonWrapperFlex,
+  SkeletonWrapperWidth,
 };

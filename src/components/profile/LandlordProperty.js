@@ -15,6 +15,7 @@ import {
   PagingItem,
   SmallText,
   FlexColumn,
+  SkeletonWrapper,
 } from "../common/Components";
 import ManagePropertyModal from "./MangeProperty";
 import SuccessfullySavedModal from "../modals/SuccessfullySaved";
@@ -181,7 +182,7 @@ function LandlordProperty() {
         )}
         <NewFlexWrapper>
           {loading ? (
-            <div style={{ width: "100%" }}>
+            <SkeletonWrapper>
               <Skeleton
                 width="100%"
                 height={90}
@@ -189,7 +190,7 @@ function LandlordProperty() {
                 borderRadius={20}
                 style={{ margin: "0 15px 20px 0" }}
               />
-            </div>
+            </SkeletonWrapper>
           ) : filterdProperties.length ? (
             filterdProperties
               .slice((paging - 1) * itemsPerPage, paging * itemsPerPage)

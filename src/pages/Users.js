@@ -6,7 +6,7 @@ import api from "../utils/api";
 import scrollToTop from "../utils/scroll";
 
 import styled from "styled-components";
-import { Wrapper } from "../components/common/Components";
+import { SkeletonWrapper, Wrapper } from "../components/common/Components";
 import UserInfo from "../components/users/UserInfo";
 import Loader from "../components/common/Loader";
 import Footer from "../components/layout/Footer";
@@ -16,6 +16,11 @@ const NewWrapper = styled(Wrapper)`
   min-height: calc(100vh - 271px);
   @media screen and (max-width: 1279.98px) {
   }
+`;
+
+const NewSkeletonWrapper = styled(SkeletonWrapper)`
+  min-height: calc(100vh - 441px);
+  margin: 50px 0;
 `;
 
 function User() {
@@ -45,15 +50,9 @@ function User() {
 
   function generateSkeleton() {
     return (
-      <div
-        style={{
-          width: "100%",
-          minHeight: "calc(100vh - 441px)",
-          margin: "50px 0",
-        }}
-      >
+      <NewSkeletonWrapper>
         <Skeleton width={300} style={{ marginBottom: "20px" }} />
-        <div style={{ width: "100%" }}>
+        <SkeletonWrapper>
           <Skeleton
             inline={true}
             width="60%"
@@ -66,8 +65,8 @@ function User() {
             height={500}
             style={{ marginBottom: "20px" }}
           />
-        </div>
-      </div>
+        </SkeletonWrapper>
+      </NewSkeletonWrapper>
     );
   }
 

@@ -12,6 +12,9 @@ import {
   FlexWrapper,
   Title,
   FlexColumn,
+  SkeletonWrapper,
+  SkeletonWrapperFlex,
+  SkeletonWrapperWidth,
 } from "../components/common/Components";
 import List from "../components/messages/MessageList";
 import MessageDetail from "../components/messages/MessageDetail";
@@ -84,6 +87,14 @@ const DefaultMessage = styled(FlexWrapper)`
   }
 `;
 
+const SkeletonWrapperMarginTop = styled(SkeletonWrapper)`
+  margin-top: 20px;
+`;
+
+const SkeletonWrapperFlexMarginTop = styled(SkeletonWrapperFlex)`
+  margin-top: 20px;
+`;
+
 const MemoedDetail = memo(MessageDetail);
 
 function Messages() {
@@ -133,12 +144,7 @@ function Messages() {
     return (
       <InnerWrapper>
         {matchMedia("(max-width: 996px)").matches ? (
-          <div
-            style={{
-              width: "100%",
-              marginTop: "20px",
-            }}
-          >
+          <SkeletonWrapperMarginTop>
             <Skeleton
               width="100%"
               count={6}
@@ -146,17 +152,10 @@ function Messages() {
               borderRadius={10}
               style={{ marginBottom: "10px" }}
             />
-          </div>
+          </SkeletonWrapperMarginTop>
         ) : (
-          <div
-            style={{
-              width: "100%",
-              marginTop: "20px",
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <div style={{ width: "30%" }}>
+          <SkeletonWrapperFlexMarginTop>
+            <SkeletonWrapperWidth width="30%">
               <Skeleton
                 width="100%"
                 height={80}
@@ -164,8 +163,8 @@ function Messages() {
                 borderRadius={10}
                 style={{ marginBottom: "10px" }}
               />
-            </div>
-            <div style={{ width: "65%" }}>
+            </SkeletonWrapperWidth>
+            <SkeletonWrapperWidth width="65%">
               <Skeleton
                 width="100%"
                 count={6}
@@ -173,8 +172,8 @@ function Messages() {
                 borderRadius={10}
                 style={{ marginBottom: "10px" }}
               />
-            </div>
-          </div>
+            </SkeletonWrapperWidth>
+          </SkeletonWrapperFlexMarginTop>
         )}
       </InnerWrapper>
     );

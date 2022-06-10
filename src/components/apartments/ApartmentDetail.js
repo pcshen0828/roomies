@@ -8,7 +8,15 @@ import { useAuth } from "../../context/AuthContext";
 import Skeleton from "react-loading-skeleton";
 import CompleteProfileBeforeJoinModal from "../modals/CompleteProfileBeforeJoin";
 
-import { Button1, FlexColumn, FlexWrapper, Title } from "../common/Components";
+import {
+  Button1,
+  FlexColumn,
+  FlexWrapper,
+  SkeletonWrapper,
+  SkeletonWrapperFlex,
+  SkeletonWrapperWidth,
+  Title,
+} from "../common/Components";
 import Carousel from "./ApartmentCarousel";
 import OwnerCard from "./ApartmentOwner";
 import ApartmentMap from "./ApartmentMap";
@@ -148,7 +156,7 @@ const ActionArea = styled(FlexWrapper)`
 `;
 
 const MembersCount = styled(FlexWrapper)`
-  align-itmes: center;
+  align-items: center;
   margin-left: 20px;
 `;
 
@@ -296,7 +304,7 @@ function ApartmentDetail({ details, loading }) {
         <Wrapper>
           <Head>
             {matchMedia("(max-width: 1280px)").matches ? (
-              <div style={{ width: "100%" }}>
+              <SkeletonWrapper>
                 <Skeleton
                   width="100%"
                   inline={true}
@@ -304,19 +312,13 @@ function ApartmentDetail({ details, loading }) {
                   style={{ marginRight: "10px" }}
                 />
                 <Skeleton width="100%" height={40} count={3} inline={false} />
-              </div>
+              </SkeletonWrapper>
             ) : (
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div style={{ width: "57%" }}>
+              <SkeletonWrapperFlex>
+                <SkeletonWrapperWidth width="57%">
                   <Skeleton width="100%" inline={true} height={420} />
-                </div>
-                <div style={{ width: "40%" }}>
+                </SkeletonWrapperWidth>
+                <SkeletonWrapperWidth width="40%">
                   <Skeleton
                     width="100%"
                     height={40}
@@ -330,8 +332,8 @@ function ApartmentDetail({ details, loading }) {
                     inline={true}
                     style={{ margin: "60px 10px 0 0" }}
                   />
-                </div>
-              </div>
+                </SkeletonWrapperWidth>
+              </SkeletonWrapperFlex>
             )}
           </Head>
         </Wrapper>

@@ -7,6 +7,7 @@ import {
   FlexColumn,
   FlexWrapper,
   ProfileImage,
+  SkeletonWrapper,
 } from "../common/Components";
 import { calcTimeGap } from "../../utils/calculate";
 import ImagesDisplayer from "./ImagesDisplayer";
@@ -271,9 +272,9 @@ export default function Post({ post, currentUser, setPostStatus }) {
   }
 
   return loading ? (
-    <div width="100%">
+    <SkeletonWrapper>
       <Skeleton width="100%" height={450} borderRadius={10} />
-    </div>
+    </SkeletonWrapper>
   ) : (
     <Wrapper
       onClick={() => {

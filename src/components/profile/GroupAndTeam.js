@@ -21,6 +21,8 @@ import {
   PagingItem,
   BackgroundImage,
   ProfileImage,
+  SkeletonWrapper,
+  SkeletonWrapperGrid,
 } from "../common/Components";
 import ManageTeamModal from "../modals/ManageTeam";
 import ConfirmBeforeActionModal from "../modals/ConfirmBeforeAction";
@@ -420,7 +422,7 @@ function GroupAndTeam() {
 
       <GroupsWrapper>
         {loading ? (
-          <div style={{ width: "100%" }}>
+          <SkeletonWrapper>
             {Array.from(Array(2).keys()).map((loader, index) => (
               <Skeleton
                 key={index}
@@ -430,7 +432,7 @@ function GroupAndTeam() {
                 style={{ margin: "0 10px 20px 0", padding: "10px 20px" }}
               />
             ))}
-          </div>
+          </SkeletonWrapper>
         ) : (
           location.pathname === "/profile/groupteam/groups" && (
             <>
@@ -456,7 +458,7 @@ function GroupAndTeam() {
 
       <TeamsWrapper>
         {loading ? (
-          <div style={{ width: "100%", display: "grid" }}>
+          <SkeletonWrapperGrid>
             {Array.from(Array(2).keys()).map((loader, index) => (
               <Skeleton
                 key={index}
@@ -466,7 +468,7 @@ function GroupAndTeam() {
                 style={{ margin: "0 10px 20px 0", padding: "10px 20px" }}
               />
             ))}
-          </div>
+          </SkeletonWrapperGrid>
         ) : (
           location.pathname === "/profile/groupteam/teams" && (
             <>

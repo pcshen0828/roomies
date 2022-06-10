@@ -194,6 +194,11 @@ const Tab = styled.div`
   }
 `;
 
+const SkeletonWrapper = styled.div`
+  width: calc(100% - 48px);
+  margin: 0 auto;
+`;
+
 function Groups() {
   const { id } = useParams();
   const [apartmentData, setApartmentData] = useState({});
@@ -419,28 +424,28 @@ function Groups() {
         </BreadCrumb>
 
         {loading ? (
-          <div style={{ width: "calc(100% - 48px)", margin: "0 auto" }}>
+          <SkeletonWrapper>
             <Skeleton
               width="100%"
               height={300}
               borderRadius={10}
               style={{ marginBottom: "20px" }}
             />{" "}
-          </div>
+          </SkeletonWrapper>
         ) : (
           <Banner src={apartmentData.coverImage} ref={anchor} />
         )}
 
         <HeaderBody>
           {loading ? (
-            <div style={{ width: "calc(100% - 48px)", margin: "0 auto" }}>
+            <SkeletonWrapper>
               <Skeleton
                 width="100%"
                 height={100}
                 borderRadius={10}
                 style={{ marginBottom: "20px" }}
               />{" "}
-            </div>
+            </SkeletonWrapper>
           ) : (
             <GroupHeader
               currentUser={currentUser}
@@ -469,7 +474,7 @@ function Groups() {
           </TabsWrapper>
 
           {loading ? (
-            <div style={{ width: "calc(100% - 48px)", margin: "0 auto" }}>
+            <SkeletonWrapper>
               <Skeleton
                 width="100%"
                 height={30}
@@ -477,7 +482,7 @@ function Groups() {
                 borderRadius={10}
                 style={{ marginBottom: "20px" }}
               />{" "}
-            </div>
+            </SkeletonWrapper>
           ) : apartmentData.owner === currentUser?.uid ||
             members.find((member) => member.uid === currentUser.uid) ? (
             <GroupBody>
