@@ -118,7 +118,7 @@ function MyMap() {
     setMap(map);
   }, []);
 
-  const onUnmount = useCallback(function callback(map) {
+  const onUnmount = useCallback(function callback() {
     setMap(null);
   }, []);
 

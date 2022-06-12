@@ -85,7 +85,7 @@ function Page1({ apartmentId, basicInfo, setBasicInfo, handleError }) {
     setMap(map);
   }, []);
 
-  const onUnmount = useCallback(function callback(map) {
+  const onUnmount = useCallback(function callback() {
     setMap(null);
   }, []);
 
